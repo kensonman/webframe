@@ -1,0 +1,12 @@
+{%extends 'webframe/base.html'%}{%load i18n%}
+
+{%block body%}
+<div id="pnl_root">
+	{%block header%}{%include 'advform/header.html'%}{%endblock%}
+	{%block content%}<div id="pnl_body" class="jumbotron pnl-content">
+		<h1>Content Block</h1><hr/>
+		<p>This is the content block. Please kindly to override this block to show your content here.</p>
+	</div>{%endblock%}
+	{%block footer%}{%include 'advform/footer.html'%}{%endblock%}
+</div>
+{%endblock%}
