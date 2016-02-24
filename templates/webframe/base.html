@@ -5,7 +5,7 @@
 	<meta charset="utf-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	{%block title%}<title>{{_title|default:'NoTitle'}}</title>{%endblock%}
+	{%block title%}<title>{{wf_title|default:'NoTitle'}}</title>{%endblock%}
 
 	{%block scripts%}
 	<script src="https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -19,9 +19,9 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/animatecss/3.5.1/animate.min.css"/>
 	{%block themes%}
-		<link rel="stylesheet" href="{%static css/base-theme.css%}"/>
+		<link rel="stylesheet" href="{%static 'css/base-theme.css'%}"/>
 		<style type="text/css">
-		{{_theme_styles|safe}}
+		{{wf_theme_styles|safe}}
 		</style>
 	{%endblock%}
 <script type="text/javascript"><!--
