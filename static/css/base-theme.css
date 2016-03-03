@@ -2,3 +2,8 @@
 #pnl_body{margin-bottom:0px;}
 #pnl_footer{ padding: 20px; }
 .navbar{ margin-bottom: 0px; }
+
+/* Mobile Device */
+@media screen and (max-device-width: 799px){
+	.jumbotron .row form, .jumbotron from{ padding: 5px 30px; }
+}
