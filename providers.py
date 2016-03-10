@@ -1,4 +1,5 @@
 from django.conf import settings
+from datetime import datetime
 
 def absolute_path(req):
 	'''
@@ -19,6 +20,7 @@ def absolute_path(req):
 		''' url.index('%s') will raise the ValueError if string not found '''
 		pass
 	RST['ABSOLUTE_PATH']=url
+	RST['now']=datetime.now()
 	return RST
 
 def template_injection(req):

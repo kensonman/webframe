@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-01 17:04+0800\n"
+"POT-Creation-Date: 2016-03-09 15:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/webframe/base.html:46
+#: webframe/templates/webframe/base.html:51
 msgid "Javascript is required"
 msgstr ""
 
-#: templates/webframe/base.html:47
+#: webframe/templates/webframe/base.html:52
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
 msgstr ""
 
-#: templates/webframe/base.html:48
+#: webframe/templates/webframe/base.html:53
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
 msgstr ""
 
-#: templates/webframe/pagination.html:18
+#: webframe/templates/webframe/pagination.html:18
 #, python-format
 msgid "Showing %(per_page)s of %(total)s; Page %(x)s of %(y)s"
-msgstr "共有 %(total)s 項資料;每頁顯示 %(per_page)s 項;第 %(x)s 頁，共 %(y)s 頁"
+msgstr ""
 
-#: templates/webframe/pagination.html:37
+#: webframe/templates/webframe/pagination.html:37
 msgid "pagination-norecord"
-msgstr "沒有資料"
+msgstr ""
