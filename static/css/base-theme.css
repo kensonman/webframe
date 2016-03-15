@@ -2,8 +2,12 @@
 #pnl_body{margin-bottom:0px;}
 #pnl_footer{ padding: 20px; font-size:9px;}
 .navbar{ margin-bottom: 0px; }
+.panel-default {padding: 20px;}
+div.field{margin: 20px 0px; }
+div.pnl-btns{ margin: 20px 10px; text-align: right; }
 
 /* Mobile Device */
 @media screen and (max-device-width: 799px){
 	.jumbotron .row form, .jumbotron from{ padding: 5px 30px; }
 }
+
