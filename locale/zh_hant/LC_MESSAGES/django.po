@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-09 15:16+0800\n"
+"POT-Creation-Date: 2016-03-15 17:02+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,12 +32,26 @@ msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
 msgstr ""
+"按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</"
+"a> 查看如何打開 JavaScript 支援."
+
+#: webframe/templates/webframe/footer.html:3
+msgid "All copyright reservied."
+msgstr "版權所有"
+
+#: webframe/templates/webframe/footer.html:5
+msgid "version"
+msgstr "版本"
+
+#: webframe/templates/webframe/footer.html:6
+msgid "render-date"
+msgstr "輸出日期"
 
 #: webframe/templates/webframe/pagination.html:18
 #, python-format
 msgid "Showing %(per_page)s of %(total)s; Page %(x)s of %(y)s"
-msgstr ""
+msgstr "正顯示 %(total)s 中的 %(per_page)s 項資料。第 %(x)s 頁,共 %(y)s 頁。"
 
 #: webframe/templates/webframe/pagination.html:37
 msgid "pagination-norecord"
-msgstr ""
+msgstr "找不到相關資料"
