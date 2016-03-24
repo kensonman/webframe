@@ -10,7 +10,7 @@ class LangMiddleware(object):
 		'''
 		Get the lang information from req.GET or settings, then inject into the session
 		'''
-		lang=getattr(settings, 'LANGUAGE_CODE', None)
+		lang=req.session.get(LANGUAGE_SESSION_KEY, getattr(settings, 'LANGUAGE_CODE', None))
 		if req.method=='GET' and 'lang' in req.GET:
 			lang=req.GET['lang']
 		req.session[LANGUAGE_SESSION_KEY]=lang
