@@ -16,6 +16,11 @@ Configuration
 
 		#file: settings.py
 		INSTALLED_APPS += ('webframe')
+
+
+
+
+
 2. Add the ABSOLUTE_PATH provider:
 
 		#file: settings.py #in Django 1.9
@@ -28,3 +33,10 @@ Configuration
 		   ]
 		]
 
+3. Install the Middleware
+
+		#file: settings.py
+		MIDDLEWARE_CLASSES += [
+			'webframe.LangMiddleware.LangMiddleware',
+			'django.middleware.locale.LocaleMiddleware',
+		]

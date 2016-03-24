@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.translation import LANGUAGE_SESSION_KEY
 from datetime import datetime
 
 def absolute_path(req):
@@ -21,6 +22,7 @@ def absolute_path(req):
 		pass
 	RST['ABSOLUTE_PATH']=url
 	RST['now']=datetime.now()
+	RST['lang']=req.session[LANGUAGE_SESSION_KEY]
 	return RST
 
 def template_injection(req):
