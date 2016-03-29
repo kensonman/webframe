@@ -11,11 +11,11 @@
 {%endblock%}
 </head>
 <body>
-<noscript style="padding: 50px;">
-	<h1 style="padding: 0px 50px;">{%blocktrans%}Javascript is required{%endblocktrans%}</h1>
-	<p style="padding: 0px 50px;">{%blocktrans%}The javascript must be enabled in this site to have the best browsing experience.{%endblocktrans%}</p>
-	<p style="padding: 0px 50px;">{%blocktrans%}Click <a href="http://www.enable-javascript.com/" target="_blank">here</a> to see how to enable the javascript in your browser.{%endblocktrans%}</p>
-</noscript>
+<noscript><div class="noscript" style="display:block; width:80%; margin:50px auto;">{%block noscript%}
+	<h1>{%blocktrans%}Javascript is required{%endblocktrans%}</h1>
+	<p>{%blocktrans%}The javascript must be enabled in this site to have the best browsing experience.{%endblocktrans%}</p>
+	<p>{%blocktrans%}Click <a href="http://www.enable-javascript.com/" target="_blank">here</a> to see how to enable the javascript in your browser.{%endblocktrans%}</p>
+{%endblock%}</div></noscript>
 {%block body%}<div>Body block will be here.</div>{%endblock%}
 </body>
 </html>

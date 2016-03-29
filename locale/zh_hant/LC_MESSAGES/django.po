@@ -19,13 +19,13 @@ msgstr ""
 
 #: webframe/templates/webframe/base.html:51
 msgid "Javascript is required"
-msgstr ""
+msgstr "無法正常顯示網頁"
 
 #: webframe/templates/webframe/base.html:52
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
-msgstr ""
+msgstr "這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網頁能正確顯示."
 
 #: webframe/templates/webframe/base.html:53
 msgid ""
