@@ -29,7 +29,7 @@
 {%endblock%}
 <script type="text/javascript"><!--
 $(document).ready(function(){
-$('#pnl_root').css('display', 'block').addClass('animated').addClass('slideInDown');
+$('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
 });
 //--></script>
 <script src="{%static 'js/bs.dropdown.js'%}"></script>
