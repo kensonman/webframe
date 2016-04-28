@@ -5,6 +5,7 @@
 .panel-default {padding: 20px;}
 div.field{margin: 20px 0px; }
 div.pnl-btns{ margin: 20px 10px; text-align: right; }
+.wf_dropdown_lbl{ margin: 0px 20px; }
 
 /* Mobile Device */
 @media screen and (max-device-width: 799px){
