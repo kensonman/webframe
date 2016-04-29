@@ -42,13 +42,14 @@
 		onclick: function( evt ){
 			var element=$(this).parents('.wf_dropdown:first');
 			var value=null;
-			if(typeof($(this).attr('value'))=='undefined')
+			if(typeof($(this).attr('val'))=='undefined')
 				value=$(this).text();
 			else
-				value=$(this).attr('value');
+				value=$(this).attr('val');
 			$(element)
 				.find($(element).attr('value')).val(value).end()
 				.find('.wf_dropdown_lbl').text($(this).text()).end()
+				.trigger('change')
 			;
 		},
 	}});
