@@ -1,1 +1,17 @@
 #pnl_root{display:none;}
+#pnl_body{margin-bottom:0px;}
+#pnl_footer{ padding: 20px; font-size:12px;}
+.navbar{ margin-bottom: 0px; }
+.panel-default {padding: 20px;}
+div.field{margin: 20px 0px; }
+div.pnl-btns{ margin: 20px 10px; text-align: right; }
+.wf_dropdown_lbl{ margin: 0px 20px; }
+.required{color: blue;}
+.error{color: red; font-weight:900;}
+label[for]{cursor:pointer;}
+
+/* Mobile Device */
+@media screen and (max-device-width: 799px){
+	.jumbotron .row form, .jumbotron from{ padding: 5px 30px; }
+}
+
