@@ -13,5 +13,12 @@ label[for]{cursor:pointer;}
 /* Mobile Device */
 @media screen and (max-device-width: 799px){
 	.jumbotron .row form, .jumbotron from{ padding: 5px 30px; }
+	.pnl-padding{ padding: 10px; }
 }
+
+/* Desktop Device */
+@media screen and (min-device-width: 800px){
+	.pnl-padding{ padding: 20px; }
+}
+
 
