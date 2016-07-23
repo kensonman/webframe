@@ -1,0 +1,24 @@
+{%extends 'webframe/base.html'%}{%load i18n%}
+
+{%block body%}
+<div class="jumbotron pnl-padding">
+
+	<div class="row">
+		<div class="col-md-4 col-md-offset-4 col-xs-12"><form method="POST" id="loginFrm">
+			<h1>{%trans 'Login Required'%}</h1>
+			<div class="field">
+				<label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
+				<input type="text" name="username" id="usernameFld" class="form-control" placeholder="{%trans 'username'%}" required="required"/>
+			</div>
+			<div class="field">
+				<label for="passwordFld" class="desktop-only">{%trans 'password'%}</label>
+				<input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
+			</div>
+			<div class="pnl-btns">
+				<button class="btn btn-success" type="submit">{%trans 'submit'%}</button>
+			</div>
+		</form></div>
+	</div>
+	
+</div>
+{%endblock%}
