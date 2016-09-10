@@ -5,7 +5,7 @@ class CurrentUserMiddleware(object):
 	The middleware to put the current user into local-thread
 	'''
 
-	def process_request(self, user):
+	def process_request(self, req):
 		'''
 		Handling the request
 		'''
