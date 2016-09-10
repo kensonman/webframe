@@ -15,7 +15,7 @@ Configuration
 1. Add the `webframe` into `INSTALLED_APPS`:
 
 		#file: settings.py
-		INSTALLED_APPS += ('webframe')
+		INSTALLED_APPS += ('webframe',)
 
 
 
@@ -38,5 +38,25 @@ Configuration
 		#file: settings.py
 		MIDDLEWARE_CLASSES += [
 			'webframe.LangMiddleware.LangMiddleware',
+			'webframe.CurrentUserMiddleware.CurrentUserMiddle',
 			'django.middleware.locale.LocaleMiddleware',
 		]
+
+Application
+----
+1. You can use the below script to get the current user. It very useful to implement the last_modified_by in model.
+
+		#file: modles.py
+		def get_current_user():
+			from threading import local
+			thread=local()
+			if hasattr(thread, 'user'):
+				return thread.user
+			else:
+				from django.contrib.auth.models import AnonymousUser
+				return AnonymousUser()
+
+		...
+		class MyModel(models.Model):
+			last_modify_by = models.ForeignKey(settings.AUTH_USER_MODEL,default=get_current_user)
+		...
