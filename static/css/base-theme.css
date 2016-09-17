@@ -12,6 +12,23 @@ div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 .error{color: red; font-weight:900;}
 label[for]{cursor:pointer;}
 
+/* If the file control in the input-group, hide the control */
+.input-group input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+
 /* Mobile Device */
 @media screen and (max-device-width: 799px){
 	.jumbotron .row form, .jumbotron from{ padding: 5px 30px; }
