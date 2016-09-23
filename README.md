@@ -47,14 +47,7 @@ Application
 1. You can use the below script to get the current user. It very useful to implement the last_modified_by in model.
 
 		#file: modles.py
-		def get_current_user():
-			from threading import local
-			thread=local()
-			if hasattr(thread, 'user'):
-				return thread.user
-			else:
-				from django.contrib.auth.models import AnonymousUser
-				return AnonymousUser()
+		from webframe.CurrentUserMiddleware import get_current_user
 
 		...
 		class MyModel(models.Model):
