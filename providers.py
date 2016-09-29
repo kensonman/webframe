@@ -55,7 +55,7 @@ def fmt_injection(req):
 	'''
 	RST={}
 	RST['FMT_DATE']= getattr(settings, 'FMT_DATE', '%Y-%m-%d')
-	RST['FMT_TIME']= getattr(settings, 'FMT_TIME', '%H:%M')
+	RST['FMT_TIME']= getattr(settings, 'FMT_TIME', '%H:%M:%S')
 	RST['FMT_DATETIME']= getattr(settings, 'FMT_DATETIME', '%s %s'%(RST['FMT_DATE'], RST['FMT_TIME']))
 
 	RST['FMT_JSDATE']= getattr(settings, 'FMT_JSDATE', 'YYYY-MM-DD')
