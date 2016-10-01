@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 17:02+0800\n"
+"POT-Creation-Date: 2016-10-02 00:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,41 +17,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: webframe/templates/webframe/base.html:51
+#: models.py:19
+msgid "Preference.id"
+msgstr "Pref#"
+
+#: templates/webframe/base.html:15
 msgid "Javascript is required"
 msgstr "無法正常顯示網頁"
 
-#: webframe/templates/webframe/base.html:52
+#: templates/webframe/base.html:16
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
-msgstr "這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網頁能正確顯示."
+msgstr ""
+"這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
+"頁能正確顯示."
 
-#: webframe/templates/webframe/base.html:53
+#: templates/webframe/base.html:17
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
 msgstr ""
-"按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</"
-"a> 查看如何打開 JavaScript 支援."
+"按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</a> "
+"查看如何打開 JavaScript 支援."
 
-#: webframe/templates/webframe/footer.html:3
-msgid "All copyright reservied."
-msgstr "版權所有"
+#: templates/webframe/footer.html:3
+msgid "%(year)s&copy; All copyright reservied."
+msgstr "%(year)s &copy; 版權所有"
 
-#: webframe/templates/webframe/footer.html:5
+#: templates/webframe/footer.html:5
 msgid "version"
 msgstr "版本"
 
-#: webframe/templates/webframe/footer.html:6
+#: templates/webframe/footer.html:6
 msgid "render-date"
 msgstr "輸出日期"
 
-#: webframe/templates/webframe/pagination.html:18
+#: templates/webframe/login.html:8
+msgid "Login Required"
+msgstr "登入"
+
+#: templates/webframe/login.html:10 templates/webframe/login.html.py:11
+msgid "username"
+msgstr "用戶名稱"
+
+#: templates/webframe/login.html:14 templates/webframe/login.html.py:15
+msgid "password"
+msgstr "密碼"
+
+#: templates/webframe/login.html:18
+msgid "submit"
+msgstr "送出"
+
+#: templates/webframe/pagination.html:18
 #, python-format
 msgid "Showing %(per_page)s of %(total)s; Page %(x)s of %(y)s"
 msgstr "正顯示 %(total)s 中的 %(per_page)s 項資料。第 %(x)s 頁,共 %(y)s 頁。"
 
-#: webframe/templates/webframe/pagination.html:37
+#: templates/webframe/pagination.html:40
 msgid "pagination-norecord"
 msgstr "找不到相關資料"

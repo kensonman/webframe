@@ -1,6 +1,6 @@
 {%load i18n%}{%load pydate%}
 <div id="pnl_footer">
-	<div class="footer copyright">{%trans 'All copyright reservied.'%}</div>
+	<div class="footer copyright">{%blocktrans with year=now|pydate:'%Y'%}{{year}}&copy; All copyright reservied.{%endblocktrans%}</div>
 	<div class="footer version">
 		<span class="version"><label>{%trans 'version'%}:</label> {{VERSION|default:'beta-v0.1'}}</span>
 		<span class="date"><label>{%trans 'render-date'%}:</label> {{now|pydate:'%Y-%m-%d %H:%M:%S.%f'}}</span>
