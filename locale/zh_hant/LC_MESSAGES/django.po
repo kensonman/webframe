@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-02 00:27+0800\n"
+"POT-Creation-Date: 2016-10-08 16:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,92 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: models.py:19
+#: models.py:10
+msgid "ValueObject"
+msgstr "VO"
+
+#: models.py:11
+msgid "ValueObjects"
+msgstr "VOs"
+
+#: models.py:13
+msgid "ValueObject.enabled"
+msgstr "啟用"
+
+#: models.py:13
+msgid "ValueObject.enabled.helptext"
+msgstr "這項資料是否啟用"
+
+#: models.py:14
+msgid "ValueObject.lmb"
+msgstr "最後修改人"
+
+#: models.py:14
+msgid "ValueObject.lmb.helptext"
+msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
+
+#: models.py:15
+msgid "ValueObject.lmd"
+msgstr "最後修改日期"
+
+#: models.py:15
+msgid "ValueObject.lmd.helptext"
+msgstr ""
+"這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
+
+#: models.py:47 templates/webframe/preference.html.py:27
+#: templates/webframe/preference.html:28
 msgid "Preference.id"
 msgstr "Pref#"
+
+#: models.py:47
+msgid "Preference.id.helptext"
+msgstr "這個設定的系統識別號碼。"
+
+#: models.py:48 templates/webframe/preference.html.py:35
+#: templates/webframe/preference.html:36
+msgid "Preference.name"
+msgstr "設定名稱"
+
+#: models.py:48
+msgid "Preference.name.helptext"
+msgstr "這個設定的的名稱。"
+
+#: models.py:49 templates/webframe/preference.html.py:39
+#: templates/webframe/preference.html:40
+msgid "Preference.value"
+msgstr "值"
+
+#: models.py:49
+msgid "Preference.value.helptext"
+msgstr "這個設定的值。請參考系說明"
+
+#: models.py:50
+msgid "Preference.owner"
+msgstr "擁有人"
+
+#: models.py:50
+msgid "Preference.owner.helptext"
+msgstr ""
+"這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
+"個系統。"
+
+#: models.py:51 templates/webframe/preference.html.py:31
+#: templates/webframe/preference.html:32
+msgid "Preference.parent"
+msgstr "歸類"
+
+#: models.py:51
+msgid "Preference.parent.helptext"
+msgstr "這個設定屬於那一個歸類。"
+
+#: models.py:52 templates/webframe/preference.html.py:43
+msgid "Preference.sequence"
+msgstr "排序"
+
+#: models.py:52
+msgid "Preference.sequence.helptext"
+msgstr "這個設定的排序（這對有歸類的設有效）"
 
 #: templates/webframe/base.html:15
 msgid "Javascript is required"
@@ -42,6 +125,7 @@ msgstr ""
 "查看如何打開 JavaScript 支援."
 
 #: templates/webframe/footer.html:3
+#, python-format
 msgid "%(year)s&copy; All copyright reservied."
 msgstr "%(year)s &copy; 版權所有"
 
@@ -77,3 +161,81 @@ msgstr "正顯示 %(total)s 中的 %(per_page)s 項資料。第 %(x)s 頁,共 %(
 #: templates/webframe/pagination.html:40
 msgid "pagination-norecord"
 msgstr "找不到相關資料"
+
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:22
+msgid "Preference.new"
+msgstr "新的設定"
+
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:22
+#, python-format
+msgid "%(pref)s - Preferences"
+msgstr "%(pref)s - 設定"
+
+#: templates/webframe/preference.html:3
+msgid "brand"
+msgstr "WebFrame"
+
+#: templates/webframe/preference.html:44
+#: templates/webframe/preferences.html:24
+#: templates/webframe/preferences.html:25
+msgid "BTUser.re-password"
+msgstr "確認密碼"
+
+#: templates/webframe/preference.html:47
+msgid "Preference.actions.delete"
+msgstr "刪除設定"
+
+#: templates/webframe/preference.html:48
+msgid "Preference.actions.save"
+msgstr "存儲設定"
+
+#: templates/webframe/preference.html:53
+msgid "Preference.childs"
+msgstr "歸類到這個設定的設定"
+
+#: templates/webframe/preference.html:56
+msgid "Preference.actions.addChild"
+msgstr "新增一個歸類到這個設定的設定"
+
+#: templates/webframe/preferences.html:3 templates/webframe/preferences.html:6
+#, python-format
+msgid "%(user)s's preferences"
+msgstr "%(user)s的設定"
+
+#: templates/webframe/preferences.html:12
+msgid "Preference.sections.changePassword"
+msgstr "設定密碼"
+
+#: templates/webframe/preferences.html:15
+#: templates/webframe/preferences.html:16
+msgid "BTUser.old-password"
+msgstr "舊密碼"
+
+#: templates/webframe/preferences.html:20
+#: templates/webframe/preferences.html:21
+msgid "BTUser.password"
+msgstr "密碼"
+
+#: templates/webframe/preferences.html:28
+msgid "Preference.actions.changePassword"
+msgstr "更新密碼"
+
+#: templates/webframe/preferences.html:33
+msgid "Preference.sections.config"
+msgstr "系統設定"
+
+#: templates/webframe/preferences.html:36
+msgid "Preference.actions.addConfig"
+msgstr "新增系統設定"
+
+#: templates/webframe/preferences.html:40
+msgid "Preference.sections.preference"
+msgstr "個人設定"
+
+#: templates/webframe/preferences.html:43
+msgid "Preference.actions.addPref"
+msgstr "新增個人設定"
+
+#: views.py:76
+msgid "Preference.msg.confirmDelete"
+msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"

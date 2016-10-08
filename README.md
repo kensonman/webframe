@@ -12,16 +12,16 @@ Installation
 
 Configuration
 ----
-1. Add the `webframe` into `INSTALLED_APPS`:
+1. Install the django_tables2 package:
+
+		sudo pip install django_tables2
+
+2. Add the `webframe` into `INSTALLED_APPS`:
 
 		#file: settings.py
 		INSTALLED_APPS += ('webframe',)
 
-
-
-
-
-2. Add the ABSOLUTE_PATH provider:
+3. Install the context-processors:
 
 		#file: settings.py #in Django 1.9
 		TEMPLATES = [
@@ -33,7 +33,7 @@ Configuration
 		   ]
 		]
 
-3. Install the Middleware
+4. Install the Middleware
 
 		#file: settings.py
 		MIDDLEWARE_CLASSES += [
@@ -53,3 +53,38 @@ Application
 		class MyModel(models.Model):
 			last_modify_by = models.ForeignKey(settings.AUTH_USER_MODEL,default=get_current_user)
 		...
+
+Preference (optional)
+----
+The WEBFRAME also support the preference model and related layout. This can be applied into wirely type of application.
+
+To use the preference, following the steps:
+
+1. Add the `django_tables2` into `INSTALLED_APPS`:
+
+		#file: settings.py
+		INSTALLED_APPS += ('django_tables2',)
+
+2. Install the context-processors:
+
+		#file: settings.py #in Django 1.9
+		TEMPLATES = [
+		   #...
+		   'context_processors':[
+		   	#...
+			'django.template.context_processors.request',
+			#...
+		   ]
+		]
+
+3. Setup the preference views
+
+		#urls.py
+		from webframe import views as webframe_view
+
+		urlpatterns = [
+			#...
+			url(r'^users/(?P<user>[^/]+)/prefs/?$', webframe_view.prefs, name='preferences'),
+			url(r'^users/(?P<user>[^/]+)/prefs/(?P<prefId>[^/]+)/?$', webframe_view.pref, name='preference'),
+			#...
+		]

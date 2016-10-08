@@ -1,23 +1,62 @@
-{%extends TMPL_BASE%}{%load i18n%}
+{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}{%load method_override%}
 
-{%block title%}{%blocktrans with pref=target.name%}[{pref}} - Preferences - ADVForm{%endblocktrans%}{%endblock%}
+{%block title%}{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%} - {%trans 'brand'%}{%endblock%}
+
+{%block scripts%}{{block.super}}
+<script type="text/javascript" src="{% url 'webframe-javascript-catalog' %}"></script>
+<script type="text/javascript"><!--
+$(document).ready(function(){
+	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
+		window.location.href='{{ABSOLUTE_PATH}}users/{{currentuser.username}}/prefs/'+$(this).attr('prefId')+'/';
+	});
+	//Delete Logic: {%if not target.isNew%}
+		$('#deleteBtn').click(function(){ 
+			if(confirm(gettext('Preference.msg.confirmDelete')))
+				$(this).parents('form:first')
+					.find('input[name=_method]').val('DELETE').end()
+					.submit();
+		});
+	//{%endif%}End Delete Logic
+});
+//--></script>
+{%endblock%}
 
 {%block content%}<div class="jumbotron"><div class="pnl pnl-padding">
+	<h1>{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}</h1>
 	<form method="POST">{%csrf_token%}
-		<div class="field">
+		{% method_override 'POST'%}
+		{%if target.parent%}<input type="hidden" name="parent" value="{{target.parent.id.hex}}"/>{%endif%}
+		{%if not target.isNew%}<div class="field">
 			<label for="idFld">{%trans 'Preference.id'%}</label>
-			<input name="id" id="idFld" class="form-control" required="true" placeholder="{%trans 'Preference.id'%}"/>
-		</div>
+			<input name="id" id="idFld" class="form-control" value="{{target.id.hex|default:''}}" readonly="readonly" required="true" placeholder="{%trans 'Preference.id'%}"/>
+		</div>{%endif%}
+		{%if target.parent%}<div class="field">
+			<label for="parentFld">{%trans 'Preference.parent'%}</label>
+			<input name="parent" id="parentFld" class="form-control" value="{{target.parent.id.hex}}" readonly="readonly" required="true" placeholder="{%trans 'Preference.parent'%}"/>
+		</div>{%endif%}
 		<div class="field">
 			<label for="nameFld">{%trans 'Preference.name'%}</label>
-			<input name="name" id="nameFld" class="form-control" required="true" placeholder="{%trans 'Preference.name'%}"/>
+			<input name="name" id="nameFld" class="form-control" value="{{target.name|default:''}}" required="true" placeholder="{%trans 'Preference.name'%}"/>
 		</div>
 		<div class="field">
 			<label for="valueFld">{%trans 'Preference.value'%}</label>
-			<textarea name="value" id="valueFld" class="form-control" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
+			<textarea name="value" id="valueFld" class="form-control" required="true" placeholder="{%trans 'Preference.value'%}">{{target.value|default:''|safe}}</textarea>
+		</div>
+		<div class="field">
+			<label for="sequenceFld">{%trans 'Preference.sequence'%}</label>
+			<input type="number" name="sequence" id="sequenceFld" class="form-control" value="{{target.sequence|floatformat:0|default:'0'}}" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
 		</div>
 		<div class="pnl pnl-btns">
-			<button type="submit" class="btn btn-primary">{%trans 'submit'%}</button>
+			{%if not target.isNew%}<button type="button" class="btn btn-danger" id="deleteBtn"><i class="fa fa-trash"></i> {%trans 'Preference.actions.delete'%}</button>{%endif%}
+			<button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> {%trans 'Preference.actions.save'%}</button>
 		</div>
 	</form>
+
+	{%if not target.isNew%}<div class="field">
+		<label>{%trans 'Preference.childs'%}</label>
+		{%render_table childs%}
+		<div class="pnl pnl-btns">
+			<a href="{{ABSOLUTE_PATH}}users/{{currentuser.username}}/prefs/add/?parent={{target.id.hex}}" class="btn btn-primary"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addChild'%}</a>
+		</div>
+	</div>{%endif%}
 </div></div>{%endblock%}
