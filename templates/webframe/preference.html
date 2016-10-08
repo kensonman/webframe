@@ -23,7 +23,8 @@ $(document).ready(function(){
 
 {%block content%}<div class="jumbotron"><div class="pnl pnl-padding">
 	<h1>{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}</h1>
-	<form method="POST">{%csrf_token%}
+	<form method="POST">
+		{%csrf_token%}
 		{% method_override 'POST'%}
 		{%if target.parent%}<input type="hidden" name="parent" value="{{target.parent.id.hex}}"/>{%endif%}
 		{%if not target.isNew%}<div class="field">

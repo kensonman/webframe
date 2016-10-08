@@ -1,4 +1,4 @@
-{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}
+{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}{%load method_override%}
 
 {%block title%}{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}{%endblock%}
 
@@ -38,6 +38,27 @@ $(document).ready(function(){
 				<button type="submit" class="btn btn-warning">{%trans 'Preference.actions.changePassword'%}</button>
 			</div>
 		</form>
+
+		<h2>{%trans 'Preference.sections.pin'%}</h2>
+		{%with target=currentuser%}<form id="userFrm" method="POST" action="{{ABSOLUTE_PATH}}users/{{target.username|default:'add'}}/">
+			{%csrf_token%}
+			{%method_override 'PUT'%}
+			<div class="field">
+				<label for="first_nameFld">{%trans 'first name'%}</label>
+				<input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
+			</div>
+			<div class="field">
+				<label for="last_nameFld">{%trans 'last name'%}</label>
+				<input name="last_name" value="{{target.last_name|default:''}}" class="form-control" placeholder="{%trans 'last name'%}" required="true"/>
+			</div>
+			<div class="field">
+				<label for="emailFld">{%trans 'email address'%}</label>
+				<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
+			</div>
+			<div class="pnl pnl-btns">
+				<button type="submit" class="btn btn-warning"><i class="fa fa-user"></i> {%trans 'User.actions.update'%}</button>
+			</div>
+		</form>{%endwith%}
 
 		{%if user.is_superuser%}
 		<h2>{%trans 'Preference.sections.config'%}</h2>

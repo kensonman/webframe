@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-08 19:00+0800\n"
+"POT-Creation-Date: 2016-10-09 01:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,8 +50,8 @@ msgid "ValueObject.lmd.helptext"
 msgstr ""
 "這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:47 templates/webframe/preference.html.py:30
-#: templates/webframe/preference.html:31
+#: models.py:47 templates/webframe/preference.html.py:31
+#: templates/webframe/preference.html:32
 msgid "Preference.id"
 msgstr "Pref#"
 
@@ -59,8 +59,8 @@ msgstr "Pref#"
 msgid "Preference.id.helptext"
 msgstr "這個設定的系統識別號碼。"
 
-#: models.py:48 templates/webframe/preference.html.py:38
-#: templates/webframe/preference.html:39
+#: models.py:48 templates/webframe/preference.html.py:39
+#: templates/webframe/preference.html:40
 msgid "Preference.name"
 msgstr "設定名稱"
 
@@ -68,8 +68,8 @@ msgstr "設定名稱"
 msgid "Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:49 templates/webframe/preference.html.py:42
-#: templates/webframe/preference.html:43
+#: models.py:49 templates/webframe/preference.html.py:43
+#: templates/webframe/preference.html:44
 msgid "Preference.value"
 msgstr "值"
 
@@ -87,8 +87,8 @@ msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:51 templates/webframe/preference.html.py:34
-#: templates/webframe/preference.html:35
+#: models.py:51 templates/webframe/preference.html.py:35
+#: templates/webframe/preference.html:36
 msgid "Preference.parent"
 msgstr "歸類"
 
@@ -96,7 +96,7 @@ msgstr "歸類"
 msgid "Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:52 templates/webframe/preference.html.py:46
+#: models.py:52 templates/webframe/preference.html.py:47
 msgid "Preference.sequence"
 msgstr "排序"
 
@@ -176,25 +176,25 @@ msgstr "%(pref)s - 設定"
 msgid "brand"
 msgstr "WebFrame"
 
-#: templates/webframe/preference.html:47
+#: templates/webframe/preference.html:48
 #: templates/webframe/preferences.html:34
 #: templates/webframe/preferences.html:35
 msgid "BTUser.re-password"
 msgstr "確認密碼"
 
-#: templates/webframe/preference.html:50
+#: templates/webframe/preference.html:51
 msgid "Preference.actions.delete"
 msgstr "刪除設定"
 
-#: templates/webframe/preference.html:51
+#: templates/webframe/preference.html:52
 msgid "Preference.actions.save"
 msgstr "存儲設定"
 
-#: templates/webframe/preference.html:56
+#: templates/webframe/preference.html:57
 msgid "Preference.childs"
 msgstr "歸類到這個設定的設定"
 
-#: templates/webframe/preference.html:59
+#: templates/webframe/preference.html:60
 msgid "Preference.actions.addChild"
 msgstr "新增一個歸類到這個設定的設定"
 
@@ -222,26 +222,33 @@ msgstr "密碼"
 msgid "Preference.actions.changePassword"
 msgstr "更新密碼"
 
-#: templates/webframe/preferences.html:43
+#: templates/webframe/preferences.html:42
+msgid "Preference.sections.pin"
+msgstr "個人資料"
+
+#: templates/webframe/preferences.html:59
+msgid "User.actions.update"
+msgstr "更新使用者"
+
+#: templates/webframe/preferences.html:64
 msgid "Preference.sections.config"
 msgstr "系統設定"
 
-#: templates/webframe/preferences.html:46
+#: templates/webframe/preferences.html:67
 msgid "Preference.actions.addConfig"
 msgstr "新增系統設定"
 
-#: templates/webframe/preferences.html:50
+#: templates/webframe/preferences.html:71
 msgid "Preference.sections.preference"
 msgstr "個人設定"
 
-#: templates/webframe/preferences.html:53
+#: templates/webframe/preferences.html:74
 msgid "Preference.actions.addPref"
 msgstr "新增個人設定"
 
 #: templates/webframe/user.html:3 templates/webframe/user.html.py:22
 msgid "User.new"
 msgstr "新的用戶"
-
 
 #: templates/webframe/user.html:61
 msgid "User.actions.delete"
@@ -251,14 +258,14 @@ msgstr "刪除使用者"
 msgid "User.actions.save"
 msgstr "存儲使用者"
 
-#: templates/webframe/users.html:21
+#: templates/webframe/users.html:30
 msgid "User.actions.new"
 msgstr "新增使用者"
 
-#: views.py:51
+#: views.py:49
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:148
+#: views.py:161
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"

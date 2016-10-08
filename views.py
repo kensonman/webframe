@@ -16,12 +16,10 @@ def users(req):
 	# Check permission
 	if req.user.is_superuser:
 		pass
-	elif req.user.username==username:
-		pass
 	elif req.user.has_perms('auth.browse_user'):
 		pass
 	else:
-		return HttpResponseForbidden()
+		return HttpResponseForbidden('<h1>403 - Forbidden</h1>')
 
 	params=dict()
 	params['target']=UserTable(get_user_model().objects.all())
@@ -55,14 +53,14 @@ def user(req, user):
 		# Check permission
 		if req.user.is_superuser:
 			pass
-		elif req.user.username==username:
+		elif req.user==user:
 			pass
 		elif user.id is None and req.user.has_perms('auth.add_user'):
 			pass
 		elif user.id is not None and req.user.has_perms('auth.change_user'):
 			pass
 		else:
-			return HttpResponseForbidden()
+			return HttpResponseForbidden('<h1>403 - Forbidden</h1>')
 
 		user.first_name=req.POST.get('first_name', None)
 		user.last_name=req.POST.get('last_name', None)
@@ -72,6 +70,22 @@ def user(req, user):
 			user.is_superuser = req.POST.get('is_superuser', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
 			user.is_active = req.POST.get('is_active', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
 			user.is_staff = req.POST.get('is_staff', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
+		user.save()
+		return redirect('users')
+	elif req.method=='PUT': #The PUT method is used for user to update their own personal information, webframe/preferences.html
+		# Check permission
+		if req.user.is_superuser:
+			pass
+		elif req.user==user:
+			pass
+		elif user.id is not None and req.user.has_perms('auth.change_user'):
+			pass
+		else:
+			return HttpResponseForbidden('<h1>403 - Forbidden</h1>')
+
+		user.first_name=req.POST.get('first_name', None)
+		user.last_name=req.POST.get('last_name', None)
+		user.email=req.POST.get('email', None)
 		user.save()
 		return redirect('users')
 
