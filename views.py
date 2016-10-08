@@ -9,6 +9,73 @@ from .models import *
 from .tables import *
 
 @login_required
+def users(req):
+	'''
+	Show the users page. It is supported to the default User Model (django.contrib.auth.models.User)
+	'''
+	# Check permission
+	if req.user.is_superuser:
+		pass
+	elif req.user.username==username:
+		pass
+	elif req.user.has_perms('auth.browse_user'):
+		pass
+	else:
+		return HttpResponseForbidden()
+
+	params=dict()
+	params['target']=UserTable(get_user_model().objects.all())
+	rc=RequestConfig(req)
+	return render(req, 'webframe/users.html', params)
+
+@login_required
+def user(req, user):
+	user=get_user_model()() if user=='add' else getObj(get_user_model(), username=user)
+	params=dict()
+
+	if req.method=='GET':
+		# Check permission
+		if req.user.is_superuser:
+			pass
+		elif req.user.username==username:
+			pass
+		elif req.user.has_perms('auth.browse_user'):
+			pass
+		else:
+			return HttpResponseForbidden()
+
+		# Generate the result
+		params['target']=user
+		return render(req, 'webframe/user.html', params)
+	elif req.method=='DELETE':
+		_('User.msg.confirmDelete')
+		user.delete()
+		return redirect('users')
+	elif req.method=='POST':
+		# Check permission
+		if req.user.is_superuser:
+			pass
+		elif req.user.username==username:
+			pass
+		elif user.id is None and req.user.has_perms('auth.add_user'):
+			pass
+		elif user.id is not None and req.user.has_perms('auth.change_user'):
+			pass
+		else:
+			return HttpResponseForbidden()
+
+		user.first_name=req.POST.get('first_name', None)
+		user.last_name=req.POST.get('last_name', None)
+		user.email=req.POST.get('email', None)
+		if req.user.is_superuser or req.user.has_perms('auth.add_user') or req.user.has_perms('auth.change_user'):
+			user.username=req.POST.get('username', None)
+			user.is_superuser = req.POST.get('is_superuser', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
+			user.is_active = req.POST.get('is_active', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
+			user.is_staff = req.POST.get('is_staff', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
+		user.save()
+		return redirect('users')
+
+@login_required
 def prefs(req, user=None):
 	'''
 	Show the preference page of the specified user. 

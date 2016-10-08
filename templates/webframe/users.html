@@ -1,0 +1,31 @@
+{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}
+
+{%block title%}{%trans 'users'%}{%endblock%}
+
+{%block scripts%}{{block.super}}
+<style type="text/css">
+/* Mobile Device */
+@media screen and (max-device-width: 799px){
+	.is_active{display: none;}
+	.is_staff{display: none;}
+	.is_superuser{display: none;}
+	.date_joined{display: none;}
+}
+</style>
+<script type="text/javascript"><!--
+$(document).ready(function(){
+	$('tr[username]')
+		.hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer')
+		.click(function(){
+			window.location.href='{{ABSOLUTE_PATH}}users/'+$(this).attr('username')+'/';
+		});
+});
+//--></script>
+{%endblock%}
+
+{%block content%}<div class="jumbotron"><div class="pnl-padding">
+<h1>{%trans 'users'%}</h1><hr/>
+{%render_table target%}
+<div class="pnl pnl-btns">
+	{%if perms.auth.add_user%}<a href="{{ABSOLUTE_PATH}}users/add/" class="btn btn-primary"><i class="fa fa-user-plus"></i> {%trans 'User.actions.new'%}</a>{%endif%}
+</div></div>{%endblock%}
