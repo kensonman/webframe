@@ -1,0 +1,47 @@
+{%extends TMPL_BASE%}{%load i18n%}
+
+{%block title%}{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}{%endblock%}
+
+{%block content%}<div class="jumbotron">
+	<h1>{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}</h1>
+	<hr/>
+
+	<form id="changePwdFrm" method="POST" class="pnl-padding">
+		{%csrf_token%}
+		<div class="field">
+			<label for="oldPwdFld">{%trans 'BTUser.old-password'%}</label>
+			<input type="password" name="oldPwd" id="oldPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.old-password'%}"/>
+		</div>
+		<div class="field">
+			<label for="newPwdFld">{%trans 'BTUser.password'%}</label>
+			<input type="password" name="newPwd" id="newPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.password'%}"/>
+		</div>
+		<div class="field">
+			<label for="rePwdFld">{%trans 'BTUser.re-password'%}</label>
+			<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
+		</div>
+		<div class="pnl pnl-btns">
+			<button type="submit" class="btn btn-primary">{%trans 'submit'%}</button>
+		</div>
+	</form>
+
+	<h2>{%trans 'Preference'%}</h2>
+	<table class="table">
+	<tr class="row-header">
+		<th>{%trans 'Preference.name'%}</th>
+		<th>{%trans 'Preference.value'%}</th>
+		<th>{%trans 'Preference.enabled'%}</th>
+		<th>{%trans 'Preference.lmb'%}</th>
+		<th>{%trans 'Preference.lmd'%}</th>
+	</tr>{%for p in target%}<tr class="row-data">
+		<td>{{p.name}}</td>
+		<td>{{p.value}}</td>
+		<td>{{p.enabled}}</td>
+		<td>{{p.lmb}</td>
+		<td>{{p.lmd}}</td>
+	</tr>{%endfor%}
+	</table>
+	<div class="pnl pnl-btns">
+		<a class="btn btn-success" href="add/"><i class="fa fa-plus"></i> {%trans 'add'%}</a>
+	</div>
+</div>{%endblock%}

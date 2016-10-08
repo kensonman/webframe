@@ -1,0 +1,23 @@
+{%extends TMPL_BASE%}{%load i18n%}
+
+{%block title%}{%blocktrans with pref=target.name%}[{pref}} - Preferences - ADVForm{%endblocktrans%}{%endblock%}
+
+{%block content%}<div class="jumbotron"><div class="pnl pnl-padding">
+	<form method="POST">{%csrf_token%}
+		<div class="field">
+			<label for="idFld">{%trans 'Preference.id'%}</label>
+			<input name="id" id="idFld" class="form-control" required="true" placeholder="{%trans 'Preference.id'%}"/>
+		</div>
+		<div class="field">
+			<label for="nameFld">{%trans 'Preference.name'%}</label>
+			<input name="name" id="nameFld" class="form-control" required="true" placeholder="{%trans 'Preference.name'%}"/>
+		</div>
+		<div class="field">
+			<label for="valueFld">{%trans 'Preference.value'%}</label>
+			<textarea name="value" id="valueFld" class="form-control" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
+		</div>
+		<div class="pnl pnl-btns">
+			<button type="submit" class="btn btn-primary">{%trans 'submit'%}</button>
+		</div>
+	</form>
+</div></div>{%endblock%}
