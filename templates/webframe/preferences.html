@@ -68,19 +68,23 @@ $(document).ready(function(){
 
 		{%if user.is_superuser%}
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
-			<h2>{%trans 'Preference.sections.config'%}</h2>
-			{%render_table config%}
-			<div class="pnl pnl-btns">
-				<a class="btn btn-primary" href="add/?mode={{csrf_token}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+			<div class="panel-heading">{%trans 'Preference.sections.config'%}</div>
+			<div class="panel-body">
+				{%render_table config%}
+				<div class="pnl pnl-btns">
+					<a class="btn btn-primary" href="add/?mode={{csrf_token}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+				</div>
 			</div>
 		</div></div>
 		{%endif%}
 
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
-			<h2>{%trans 'Preference.sections.preference'%}</h2>
-			{%render_table preference%}
-			<div class="pnl pnl-btns">
-				<a class="btn btn-primary" href="add/"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
+			<div class="panel-heading">{%trans 'Preference.sections.preference'%}</div>
+			<div class="panel-body">
+				{%render_table preference%}
+				<div class="pnl pnl-btns">
+					<a class="btn btn-primary" href="add/"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
+				</div>
 			</div>
 		</div></div>
 	</div></div>
