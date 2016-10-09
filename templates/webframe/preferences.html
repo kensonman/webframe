@@ -13,65 +13,75 @@ $(document).ready(function(){
 {%endblock%}
 
 {%block content%}<div class="jumbotron">
-	<h1>{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}</h1>
-	<hr/>
+	<h1>{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}</h1><hr/>
 
-	<div class="pnl-padding">
-		<form id="changePwdFrm" method="POST">
+	<div class="pnl-padding"><div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><form id="changePwdFrm" method="POST" class="panel panel-warning">
 			{%csrf_token%}
-			<h2>{%trans 'Preference.sections.changePassword'%}</h2>
-			{%if not user.is_superuser%}
-			<div class="field">
-				<label for="oldPwdFld">{%trans 'BTUser.old-password'%}</label>
-				<input type="password" name="oldPwd" id="oldPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.old-password'%}"/>
+			<div class="panel-heading">{%trans 'Preference.sections.changePassword'%}</div>
+			<div class="panel-body">
+				{%if not user.is_superuser%}
+				<div class="field">
+					<label for="oldPwdFld">{%trans 'BTUser.old-password'%}</label>
+					<input type="password" name="oldPwd" id="oldPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.old-password'%}"/>
+				</div>
+				{%endif%}
+				<div class="field">
+					<label for="newPwdFld">{%trans 'BTUser.password'%}</label>
+					<input type="password" name="newPwd" id="newPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.password'%}"/>
+				</div>
+				<div class="field">
+					<label for="rePwdFld">{%trans 'BTUser.re-password'%}</label>
+					<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
+				</div>
+				<div class="pnl pnl-btns">
+					<button type="submit" class="btn btn-warning">{%trans 'Preference.actions.changePassword'%}</button>
+				</div>
 			</div>
-			{%endif%}
-			<div class="field">
-				<label for="newPwdFld">{%trans 'BTUser.password'%}</label>
-				<input type="password" name="newPwd" id="newPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.password'%}"/>
-			</div>
-			<div class="field">
-				<label for="rePwdFld">{%trans 'BTUser.re-password'%}</label>
-				<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
-			</div>
-			<div class="pnl pnl-btns">
-				<button type="submit" class="btn btn-warning">{%trans 'Preference.actions.changePassword'%}</button>
-			</div>
-		</form>
+		</form></div>
 
-		<h2>{%trans 'Preference.sections.pin'%}</h2>
-		{%with target=currentuser%}<form id="userFrm" method="POST" action="{{ABSOLUTE_PATH}}users/{{target.username|default:'add'}}/">
-			{%csrf_token%}
-			{%method_override 'PUT'%}
-			<div class="field">
-				<label for="first_nameFld">{%trans 'first name'%}</label>
-				<input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
-			</div>
-			<div class="field">
-				<label for="last_nameFld">{%trans 'last name'%}</label>
-				<input name="last_name" value="{{target.last_name|default:''}}" class="form-control" placeholder="{%trans 'last name'%}" required="true"/>
-			</div>
-			<div class="field">
-				<label for="emailFld">{%trans 'email address'%}</label>
-				<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
-			</div>
-			<div class="pnl pnl-btns">
-				<button type="submit" class="btn btn-warning"><i class="fa fa-user"></i> {%trans 'User.actions.update'%}</button>
-			</div>
-		</form>{%endwith%}
+
+		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+			{%with target=currentuser%}<form id="userFrm" method="POST" action="{{ABSOLUTE_PATH}}users/{{target.username|default:'add'}}/" class="panel panel-warning">
+				{%csrf_token%}
+				{%method_override 'PUT'%}
+				<div class="panel-heading">{%trans 'Preference.sections.pin'%}</div>
+				<div class="panel-body">
+					<div class="field">
+						<label for="first_nameFld">{%trans 'first name'%}</label>
+						<input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
+					</div>
+					<div class="field">
+						<label for="last_nameFld">{%trans 'last name'%}</label>
+						<input name="last_name" value="{{target.last_name|default:''}}" class="form-control" placeholder="{%trans 'last name'%}" required="true"/>
+					</div>
+					<div class="field">
+						<label for="emailFld">{%trans 'email address'%}</label>
+						<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
+					</div>
+					<div class="pnl pnl-btns">
+						<button type="submit" class="btn btn-warning"><i class="fa fa-user"></i> {%trans 'User.actions.update'%}</button>
+					</div>
+				</div>
+			</form>{%endwith%}
+		</div>
 
 		{%if user.is_superuser%}
-		<h2>{%trans 'Preference.sections.config'%}</h2>
-		{%render_table config%}
-		<div class="pnl pnl-btns">
-			<a class="btn btn-primary" href="add/?mode={{csrf_token}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
-		</div>
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
+			<h2>{%trans 'Preference.sections.config'%}</h2>
+			{%render_table config%}
+			<div class="pnl pnl-btns">
+				<a class="btn btn-primary" href="add/?mode={{csrf_token}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+			</div>
+		</div></div>
 		{%endif%}
 
-		<h2>{%trans 'Preference.sections.preference'%}</h2>
-		{%render_table preference%}
-		<div class="pnl pnl-btns">
-			<a class="btn btn-primary" href="add/"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
-		</div>
-	</div>
+		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
+			<h2>{%trans 'Preference.sections.preference'%}</h2>
+			{%render_table preference%}
+			<div class="pnl pnl-btns">
+				<a class="btn btn-primary" href="add/"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
+			</div>
+		</div></div>
+	</div></div>
 </div>{%endblock%}

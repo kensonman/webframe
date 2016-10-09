@@ -24,7 +24,7 @@ def users(req):
 	params=dict()
 	params['target']=UserTable(get_user_model().objects.all())
 	rc=RequestConfig(req)
-	return render(req, 'webframe/users.html', params)
+	return render(req, getattr(settings, 'TMPL_USERS', 'webframe/users.html'), params)
 
 @login_required
 def user(req, user):
@@ -44,7 +44,7 @@ def user(req, user):
 
 		# Generate the result
 		params['target']=user
-		return render(req, 'webframe/user.html', params)
+		return render(req, getattr(settings, 'TMPL_USER', 'webframe/user.html'), params)
 	elif req.method=='DELETE':
 		_('User.msg.confirmDelete')
 		user.delete()
@@ -107,7 +107,7 @@ def prefs(req, user=None):
 	rc.configure(params['preference'])
 	rc.configure(params['config'])
 	params['currentuser']=user
-	return render(req, 'webframe/preferences.html', params)
+	return render(req, getattr(settings, 'TMPL_PREFERENCES', 'webframe/preferences.html'), params)
 
 @login_required
 def pref(req, user=None, prefId=None):
@@ -138,7 +138,7 @@ def pref(req, user=None, prefId=None):
 		params['target']=pref
 		params['childs']=PreferenceTable(pref.childs())
 		params['currentuser']=user
-		return render(req, 'webframe/preference.html', params)
+		return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
 	elif req.method=='POST':
 		# Saving
 		if req.user.is_superuser:
