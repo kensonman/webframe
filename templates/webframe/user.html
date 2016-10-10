@@ -3,7 +3,7 @@
 {%block title%}{%trans 'User.new' as newuser%}{{target.username|default:newuser}} - {%trans 'users'%}{%endblock%}
 
 {%block scripts%}{{block.super}}
-<script type="text/javascript" src="{% url 'webframe-javascript-catalog' %}"></script>
+<script type="text/javascript" src="{% url 'webframe-js' %}"></script>
 <script type="text/javascript"><!--
 $(document).ready(function(){
 	$('input[type=checkbox]').bootstrapSwitch();

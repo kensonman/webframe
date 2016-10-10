@@ -3,7 +3,7 @@
 {%block title%}{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%} - {%trans 'brand'%}{%endblock%}
 
 {%block scripts%}{{block.super}}
-<script type="text/javascript" src="{% url 'webframe-javascript-catalog' %}"></script>
+<script type="text/javascript" src="{% url 'webframe-js' %}"></script>
 <script type="text/javascript"><!--
 $(document).ready(function(){
 	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){

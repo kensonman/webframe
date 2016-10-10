@@ -54,6 +54,23 @@ Application
 			last_modify_by = models.ForeignKey(settings.AUTH_USER_MODEL,default=get_current_user)
 		...
 
+Javascript Translation (optionsal)
+----
+The WEBFRAME also support the javascript translation. Just add the belows statement into your code.
+1. Setup the preference views
+
+		#urls.py
+		urlpatterns = [
+			#...
+			url(r'^jsi18n/webframe/$', javascript_catalog, {'packages':('webframe',),'domain':'django'}, name='webframe-js'),
+			#...
+		]
+
+2. In HTML code add
+
+		<script type="text/javascript" src="{%url 'webframe-js'%}"></script>
+
+
 Preference (optional)
 ----
 The WEBFRAME also support the preference model and related layout. This can be applied into wirely type of application.
@@ -86,5 +103,41 @@ To use the preference, following the steps:
 			#...
 			url(r'^users/(?P<user>[^/]+)/prefs/?$', webframe_view.prefs, name='preferences'),
 			url(r'^users/(?P<user>[^/]+)/prefs/(?P<prefId>[^/]+)/?$', webframe_view.pref, name='preference'),
+			#...
+		]
+
+
+Users (optional)
+----
+The WEBFRAME also support the User model and related layout. This can be applied into wirely type of application.
+
+To use the preference, following the steps:
+
+1. Add the `django_tables2` into `INSTALLED_APPS`:
+
+		#file: settings.py
+		INSTALLED_APPS += ('django_tables2',)
+
+2. Install the context-processors:
+
+		#file: settings.py #in Django 1.9
+		TEMPLATES = [
+		   #...
+		   'context_processors':[
+		   	#...
+			'django.template.context_processors.request',
+			#...
+		   ]
+		]
+
+3. Setup the preference views
+
+		#urls.py
+		from webframe import views as webframe_view
+
+		urlpatterns = [
+			#...
+			url(r'^users/?$', webframe_view.users, name='users'),
+			url(r'^users/(?P<user>[^/]+)/?$', webframe_view.user, name='user'),
 			#...
 		]
