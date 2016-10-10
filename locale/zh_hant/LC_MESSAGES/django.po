@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-09 01:27+0800\n"
+"POT-Creation-Date: 2016-10-10 20:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,90 +17,131 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: models.py:10
-msgid "ValueObject"
-msgstr "VO"
-
 #: models.py:11
+msgid "ValueObject"
+msgstr "ValueObject"
+
+#: models.py:12
 msgid "ValueObjects"
-msgstr "VOs"
+msgstr "ValueObjects"
 
-#: models.py:13
-msgid "ValueObject.enabled"
-msgstr "啟用"
+#: models.py:19
+msgid "ValueObject.id"
+msgstr "ID"
 
-#: models.py:13
-msgid "ValueObject.enabled.helptext"
-msgstr "這項資料是否啟用"
+#: models.py:20
+msgid "ValueObject.id.helptext"
+msgstr ""
+"用作系統識別。使用 UUID 格式。"
 
-#: models.py:14
-msgid "ValueObject.lmb"
-msgstr "最後修改人"
-
-#: models.py:14
-msgid "ValueObject.lmb.helptext"
-msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
-
-#: models.py:15
+#: models.py:24
 msgid "ValueObject.lmd"
 msgstr "最後修改日期"
 
-#: models.py:15
+#: models.py:25
 msgid "ValueObject.lmd.helptext"
 msgstr ""
 "這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:47 templates/webframe/preference.html.py:31
-#: templates/webframe/preference.html:32
-msgid "Preference.id"
-msgstr "Pref#"
+#: models.py:33
+msgid "ValueObject.lmb"
+msgstr "最後修改人"
+
+#: models.py:34
+msgid "ValueObject.lmb.helptext"
+msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
+
+#: models.py:38
+msgid "ValueObject.cd"
+msgstr "建立日期"
+
+#: models.py:39
+msgid "ValueObject.cd.helptext"
+msgstr ""
+"這項資料的建立日期。"
 
 #: models.py:47
-msgid "Preference.id.helptext"
-msgstr "這個設定的系統識別號碼。"
+msgid "ValueObject.cb"
+msgstr "建立人"
 
-#: models.py:48 templates/webframe/preference.html.py:39
+#: models.py:48
+msgid "ValueObject.cb.helptext"
+msgstr "這項資料的建立人。"
+
+#: models.py:72
+msgid "AliveObject"
+msgstr "生命週期物件"
+
+#: models.py:73
+msgid "AliveObjects"
+msgstr "生命週期物件"
+
+#: models.py:77
+msgid "AliveObject.effDate"
+msgstr "有效日期"
+
+#: models.py:78
+msgid "AliveObject.effDate.helptext"
+msgstr "這項資料的有效日期"
+
+#: models.py:83
+msgid "AliveObject.expDate"
+msgstr "失效日期"
+
+#: models.py:84
+msgid "AliveObject.expDate.helptext"
+msgstr "這項資料的失效日期"
+
+#: models.py:88
+msgid "AliveObject.enabled"
+msgstr "啟用"
+
+#: models.py:89
+msgid "AliveObject.enabled.helptext"
+msgstr "這項資料是否啟用"
+
+#: models.py:142 templates/webframe/preference.html.py:39
 #: templates/webframe/preference.html:40
 msgid "Preference.name"
 msgstr "設定名稱"
 
-#: models.py:48
+#: models.py:142
 msgid "Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:49 templates/webframe/preference.html.py:43
+#: models.py:143 templates/webframe/preference.html.py:43
 #: templates/webframe/preference.html:44
 msgid "Preference.value"
 msgstr "值"
 
-#: models.py:49
+#: models.py:143
 msgid "Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:50
+#: models.py:144
 msgid "Preference.owner"
 msgstr "擁有人"
 
-#: models.py:50
+#: models.py:144
 msgid "Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:51 templates/webframe/preference.html.py:35
+#: models.py:145 templates/webframe/preference.html.py:35
 #: templates/webframe/preference.html:36
 msgid "Preference.parent"
 msgstr "歸類"
 
-#: models.py:51
+#: models.py:145
 msgid "Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:52 templates/webframe/preference.html.py:47
+#: models.py:146 templates/webframe/preference.html.py:47
 msgid "Preference.sequence"
 msgstr "排序"
 
-#: models.py:52
+#: models.py:146
 msgid "Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
@@ -176,6 +217,10 @@ msgstr "%(pref)s - 設定"
 msgid "brand"
 msgstr "WebFrame"
 
+#: templates/webframe/preference.html:31 templates/webframe/preference.html:32
+msgid "Preference.id"
+msgstr "Pref#"
+
 #: templates/webframe/preference.html:48
 #: templates/webframe/preferences.html:34
 #: templates/webframe/preferences.html:35
@@ -204,7 +249,7 @@ msgstr "新增一個歸類到這個設定的設定"
 msgid "%(user)s's preferences"
 msgstr "%(user)s的設定"
 
-#: templates/webframe/preferences.html:22
+#: templates/webframe/preferences.html:21
 msgid "Preference.sections.changePassword"
 msgstr "設定密碼"
 
@@ -222,27 +267,27 @@ msgstr "密碼"
 msgid "Preference.actions.changePassword"
 msgstr "更新密碼"
 
-#: templates/webframe/preferences.html:42
+#: templates/webframe/preferences.html:48
 msgid "Preference.sections.pin"
 msgstr "個人資料"
 
-#: templates/webframe/preferences.html:59
+#: templates/webframe/preferences.html:63
 msgid "User.actions.update"
 msgstr "更新使用者"
 
-#: templates/webframe/preferences.html:64
+#: templates/webframe/preferences.html:71
 msgid "Preference.sections.config"
 msgstr "系統設定"
 
-#: templates/webframe/preferences.html:67
+#: templates/webframe/preferences.html:75
 msgid "Preference.actions.addConfig"
 msgstr "新增系統設定"
 
-#: templates/webframe/preferences.html:71
+#: templates/webframe/preferences.html:82
 msgid "Preference.sections.preference"
 msgstr "個人設定"
 
-#: templates/webframe/preferences.html:74
+#: templates/webframe/preferences.html:86
 msgid "Preference.actions.addPref"
 msgstr "新增個人設定"
 
@@ -262,10 +307,10 @@ msgstr "存儲使用者"
 msgid "User.actions.new"
 msgstr "新增使用者"
 
-#: views.py:49
+#: views.py:50
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:161
+#: views.py:162
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
