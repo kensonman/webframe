@@ -10,6 +10,8 @@ div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 .wf_dropdown_lbl{ margin: 0px 20px; }
 .required{color: blue;}
 .error{color: red; font-weight:900;}
+.deleted{color: gray; text-decoration: line-through;}
+.helptext{color:gray;display:block;%}
 label[for]{cursor:pointer;}
 
 /* If the file control in the input-group, hide the control */
