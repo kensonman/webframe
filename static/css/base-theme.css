@@ -11,8 +11,9 @@ div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 .required{color: blue;}
 .error{color: red; font-weight:900;}
 .deleted{color: gray; text-decoration: line-through;}
-.helptext{color:gray;display:block;%}
+.helptext{color:gray;display:block;}
 label[for]{cursor:pointer;}
+.label-error{background-color:#d9534f;}
 
 /* If the file control in the input-group, hide the control */
 .input-group input[type=file] {
