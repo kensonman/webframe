@@ -84,8 +84,8 @@ class AliveObjectManager(models.Manager):
 			models.Q(enabled=False)|
 			models.Q(effDate__gt=now)|
 			(
-				models.Q(expDate__isnull=False)
-				models.Q(expDate__lt=now)&
+				models.Q(expDate__isnull=False)&
+				models.Q(expDate__lt=now)
 			)
 		).order_by('-effDate')
 
