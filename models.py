@@ -62,9 +62,32 @@ class ValueObject(models.Model):
 		super(ValueObject, self).save()
 
 class AliveObjectManager(models.Manager):
-	def living(self):
-		now=tz.now()
+	def living(self, timestamp=None):
+		'''
+		The alias of alive for backward compatibility.
+		'''
+		return self.alive(timestamp)
+
+	def alive(self, timestamp=None):
+		'''
+		Return the alive objects according to the specified timestamp.
+		'''
+		now=tz.now() if timestamp is None else timestamp
 		return self.filter(enabled=True,effDate__lte=now).filter(models.Q(expDate__isnull=True)|models.Q(expDate__gt=now)).order_by('-effDate')
+
+	def dead(self, timestamp=None):
+		'''
+		Return the dead objects according to the specified timestamp.
+		'''
+		now=tz.now() if timestamp is None else timestamp
+		return self.filter(
+			models.Q(enabled=False)|
+			models.Q(effDate__gt=now)|
+			(
+				models.Q(expDate__isnull=False)
+				models.Q(expDate__lt=now)&
+			)
+		).order_by('-effDate')
 
 class AliveObject(models.Model):
 	class Meta(object):
