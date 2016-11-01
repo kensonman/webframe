@@ -23,7 +23,7 @@ def absolute_path(req):
 	RST['ABSOLUTE_PATH']=url
 	RST['now']=datetime.now()
 	RST['lang']=req.session[LANGUAGE_SESSION_KEY]
-	RST['VERSION']=settings.get('VERSION', 'v0.1.0-beta')
+	RST['VERSION']=getattr(settings, 'VERSION', 'v0.1.0-beta')
 	return RST
 
 def template_injection(req):
