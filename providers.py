@@ -22,7 +22,7 @@ def absolute_path(req):
 		pass
 	RST['ABSOLUTE_PATH']=url
 	RST['now']=datetime.now()
-	RST['lang']=req.session[LANGUAGE_SESSION_KEY]
+	RST['lang']=req.session.get(LANGUAGE_SESSION_KEY, 'en-US')
 	RST['VERSION']=getattr(settings, 'VERSION', 'v0.1.0-beta')
 	return RST
 
