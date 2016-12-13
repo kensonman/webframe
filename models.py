@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone as tz
 from django.utils.translation import ugettext_lazy as _
@@ -8,21 +9,21 @@ import math, uuid
 class ValueObject(models.Model):
 	class Meta(object):
 		abstract		= True
-		verbose_name		= _('ValueObject')
-		verbose_name_plural	= _('ValueObjects')
+		verbose_name		= _('webframe.models.ValueObject')
+		verbose_name_plural	= _('webframe.models.ValueObjects')
 		permissions		= ( ('view_%(class)s', 'Can view this model without ownership'), )
 
 	id					= models.UUIDField(
 							primary_key=True,
 							default=uuid.uuid4,
 							editable=False,
-							verbose_name=_('ValueObject.id'),
-							help_text=_('ValueObject.id.helptext'),
+							verbose_name=_('webframe.models.ValueObject.id'),
+							help_text=_('webframe.models.ValueObject.id.helptext'),
 						)
 	lmd					= models.DateTimeField(
 							auto_now=True,
-							verbose_name=_('ValueObject.lmd'),
-							help_text=_('ValueObject.lmd.helptext'),
+							verbose_name=_('webframe.models.ValueObject.lmd'),
+							help_text=_('webframe.models.ValueObject.lmd.helptext'),
 						)
 	lmb					= models.ForeignKey(
 							settings.AUTH_USER_MODEL,
@@ -30,13 +31,13 @@ class ValueObject(models.Model):
 							null=True,
 							blank=True,
 							related_name='%(class)s_lmb',
-							verbose_name=_('ValueObject.lmb'),
-							help_text=_('ValueObject.lmb.helptext'),
+							verbose_name=_('webframe.models.ValueObject.lmb'),
+							help_text=_('webframe.models.ValueObject.lmb.helptext'),
 						)
 	cd					= models.DateTimeField(
 							auto_now_add=True,
-							verbose_name=_('ValueObject.cd'),
-							help_text=_('ValueObject.cd.helptext'),
+							verbose_name=_('webframe.models.ValueObject.cd'),
+							help_text=_('webframe.models.ValueObject.cd.helptext'),
 						)
 	cb					= models.ForeignKey(
 							settings.AUTH_USER_MODEL,
@@ -44,8 +45,8 @@ class ValueObject(models.Model):
 							null=True,
 							blank=True,
 							related_name='%(class)s_cb',
-							verbose_name=_('ValueObject.cb'),
-							help_text=_('ValueObject.cb.helptext'),
+							verbose_name=_('webframe.models.ValueObject.cb'),
+							help_text=_('webframe.models.ValueObject.cb.helptext'),
 						)
 
 	def isNew(self):
@@ -92,24 +93,24 @@ class AliveObjectManager(models.Manager):
 class AliveObject(models.Model):
 	class Meta(object):
 		abstract			= True
-		verbose_name		= _('AliveObject')
-		verbose_name_plural	= _('AliveObjects')
+		verbose_name		= _('webframe.models.AliveObject')
+		verbose_name_plural	= _('webframe.models.AliveObjects')
 	
 	effDate					= models.DateTimeField(
 							default=tz.now,
-							verbose_name=_('AliveObject.effDate'),
-							help_text=_('AliveObject.effDate.helptext'),
+							verbose_name=_('webframe.models.AliveObject.effDate'),
+							help_text=_('webframe.models.AliveObject.effDate.helptext'),
 						)
 	expDate					= models.DateTimeField(
 							null=True,
 							blank=True,
-							verbose_name=_('AliveObject.expDate'),
-							help_text=_('AliveObject.expDate.helptext'),
+							verbose_name=_('webframe.models.AliveObject.expDate'),
+							help_text=_('webframe.models.AliveObject.expDate.helptext'),
 						)
 	enabled					= models.BooleanField(
 							default=True,
-							verbose_name=_('AliveObject.enabled'),
-							help_text=_('AliveObject.enabled.helptext'),
+							verbose_name=_('webframe.models.AliveObject.enabled'),
+							help_text=_('webframe.models.AliveObject.enabled.helptext'),
 						)
 
 	def isNew(self):
@@ -162,11 +163,11 @@ class Preference(ValueObject):
 			('browse_config', 'Can browse system configuration'),
 			('browse_preference', 'Can browse other preferences'),
 		)
-	name					= models.CharField(max_length=100,verbose_name=_('Preference.name'),help_text=_('Preference.name.helptext'))
-	value					= models.CharField(max_length=1024,verbose_name=_('Preference.value'),help_text=_('Preference.value.helptext'))
-	owner					= models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True,related_name='preference_owner',verbose_name=_('Preference.owner'),help_text=_('Preference.owner.helptext'))
-	parent					= models.ForeignKey('self',null=True,blank=True,verbose_name=_('Preference.parent'),help_text=_('Preference.parent.helptext'))
-	sequence				= models.FloatField(default=0.5,verbose_name=_('Preference.sequence'),help_text=_('Preference.sequence.helptext'))
+	name					= models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
+	value					= models.CharField(max_length=1024,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
+	owner					= models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True,related_name='preference_owner',verbose_name=_('Pwebframe.models.reference.owner'),help_text=_('webframe.models.Preference.owner.helptext'))
+	parent					= models.ForeignKey('self',null=True,blank=True,verbose_name=_('webframe.models.Preference.parent'),help_text=_('webframe.models.Preference.parent.helptext'))
+	sequence				= models.FloatField(default=0.5,verbose_name=_('webframe.models.Preference.sequence'),help_text=_('webframe.models.Preference.sequence.helptext'))
 	objects					= PrefManager()
 
 	def __str__(self):
@@ -191,3 +192,22 @@ class Preference(ValueObject):
 		else:
 			self.sequence=math.ceil(self.sequence)
 			super(Preference, self).save()
+
+class Privilege(models.Model):
+	class Meta(object):
+		verbose_name			= _('webframe.models.Privilege')
+		verbose_name_plural		= _('webframe.models.Privileges')
+
+	contenttype				= models.ForeignKey(ContentType)
+	name					= models.CharField(max_length=50,verbose_name=_('webframe.models.Privilege.name'))
+	desc					= models.TextField(max_length=200,null=True,blank=True,verbose_name=_('webframe.models.Privilege.desc'))
+
+class GrantedPrivilege(models.Model):
+	class Meta(object):
+		verbose_name			= _('webframe.models.GrantedPrivilege')
+		verbose_name_plural		= _('webframe.models.GrantedPrivilege')
+
+	owner					= models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name=_('webframe.models.GrantedPrivilege.owner'))
+	privilege				= models.ForeignKey(Privilege,verbose_name=_('webframe.models.GrantedPrivilege.privilege'))
+	item					= models.UUIDField(verbose_name=_('webframe.models.GrantedPrivilege.item'))
+	

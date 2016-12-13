@@ -31,222 +31,215 @@ msgstr "ID"
 
 #: models.py:21
 msgid "webframe.models.ValueObject.id.helptext"
-msgstr "用作系統識別。使用 UUID 格式。"
+msgstr "The id of the value-object"
 
 #: models.py:25
 msgid "webframe.models.ValueObject.lmd"
-msgstr "最後修改日期"
+msgstr "Last Modify Date"
 
 #: models.py:26
 msgid "webframe.models.ValueObject.lmd.helptext"
-msgstr ""
-"這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
+msgstr "The last modify date of the value-object"
 
 #: models.py:34
 msgid "webframe.models.ValueObject.lmb"
-msgstr "最後修改人"
+msgstr "Last Modify By"
 
 #: models.py:35
 msgid "webframe.models.ValueObject.lmb.helptext"
-msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
+msgstr "The person that modified the value-object last time"
 
 #: models.py:39
 msgid "webframe.models.ValueObject.cd"
-msgstr "建立日期"
+msgstr "Create Date"
 
 #: models.py:40
 msgid "webframe.models.ValueObject.cd.helptext"
-msgstr "這項資料的建立日期。"
+msgstr "The creation date of the value-object"
 
 #: models.py:48
 msgid "webframe.models.ValueObject.cb"
-msgstr "建立人"
+msgstr "Created By"
 
 #: models.py:49
 msgid "webframe.models.ValueObject.cb.helptext"
-msgstr "這項資料的建立人。"
+msgstr "The person that create this value-object"
 
 #: models.py:96
 msgid "webframe.models.AliveObject"
-msgstr "Alive Object"
+msgstr "AliveObject"
 
 #: models.py:97
 msgid "webframe.models.AliveObjects"
-msgstr "生命週期物件"
+msgstr "AliveObject"
 
 #: models.py:101
 msgid "webframe.models.AliveObject.effDate"
-msgstr "有效日期"
+msgstr "Effective Date"
 
 #: models.py:102
 msgid "webframe.models.AliveObject.effDate.helptext"
-msgstr "這項資料的有效日期"
+msgstr "The date(Included) to start the life-cycle of the object"
 
 #: models.py:107
 msgid "webframe.models.AliveObject.expDate"
-msgstr "失效日期"
+msgstr "Expiry Date"
 
 #: models.py:108
 msgid "webframe.models.AliveObject.expDate.helptext"
-msgstr "這項資料的失效日期"
+msgstr "The date(Excluded) to end the life-cycle of the object"
 
 #: models.py:112
 msgid "webframe.models.AliveObject.enabled"
-msgstr "啟用"
+msgstr "Enabled"
 
 #: models.py:113
 msgid "webframe.models.AliveObject.enabled.helptext"
-msgstr "這項資料是否啟用"
+msgstr "The enabling status of the object"
 
 #: models.py:166 templates/webframe/preference.html:39
 #: templates/webframe/preference.html:40
 msgid "webframe.models.Preference.name"
-msgstr "設定名稱"
+msgstr "Name"
 
 #: models.py:166
 msgid "webframe.models.Preference.name.helptext"
-msgstr "這個設定的的名稱。"
+msgstr "The name of the preference"
 
 #: models.py:167 templates/webframe/preference.html:43
 #: templates/webframe/preference.html:44
 msgid "webframe.models.Preference.value"
-msgstr "值"
+msgstr "Value"
 
 #: models.py:167
 msgid "webframe.models.Preference.value.helptext"
-msgstr "這個設定的值。請參考系說明"
+msgstr "The value of the perference"
 
 #: models.py:168
 msgid "Pwebframe.models.reference.owner"
-msgstr "擁有人"
+msgstr "Owner"
 
 #: models.py:168
 msgid "webframe.models.Preference.owner.helptext"
-msgstr ""
-"這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
-"個系統。"
+msgstr "The owner of the perference"
 
 #: models.py:169 templates/webframe/preference.html:35
 #: templates/webframe/preference.html:36
 msgid "webframe.models.Preference.parent"
-msgstr "歸類"
+msgstr "Parent"
 
 #: models.py:169
 msgid "webframe.models.Preference.parent.helptext"
-msgstr "這個設定屬於那一個歸類。"
+msgstr "The parent preference; Used for lookup"
 
 #: models.py:170 templates/webframe/preference.html:47
 #: templates/webframe/preference.html:48
 msgid "webframe.models.Preference.sequence"
-msgstr "排序"
+msgstr "Sequence"
 
 #: models.py:170
 msgid "webframe.models.Preference.sequence.helptext"
-msgstr "這個設定的排序（這對有歸類的設有效）"
+msgstr "The sequence of the perference; Used for lookup"
 
 #: models.py:198
 msgid "webframe.models.Privilege"
-msgstr "權限"
+msgstr "Privilege"
 
 #: models.py:199
 msgid "webframe.models.Privileges"
-msgstr "權限"
+msgstr "Privileges"
 
 #: models.py:202
 msgid "webframe.models.Privilege.name"
-msgstr "權限名稱"
+msgstr "Name"
 
 #: models.py:203
 msgid "webframe.models.Privilege.desc"
-msgstr "說明"
+msgstr "Desc"
 
 #: models.py:207 models.py:208
 msgid "webframe.models.GrantedPrivilege"
-msgstr "授權"
+msgstr "GrantedPrivilege"
 
 #: models.py:210
 msgid "webframe.models.GrantedPrivilege.owner"
-msgstr "被授權者"
+msgstr "Owner"
 
 #: models.py:211
 msgid "webframe.models.GrantedPrivilege.privilege"
-msgstr "權限"
+msgstr "Priviege"
 
 #: models.py:212
 msgid "webframe.models.GrantedPrivilege.item"
-msgstr "對像資料"
+msgstr "Item"
 
 #: templates/webframe/base.html:15
 msgid "Javascript is required"
-msgstr "無法正常顯示網頁"
+msgstr ""
 
 #: templates/webframe/base.html:16
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
 msgstr ""
-"這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
-"頁能正確顯示."
 
 #: templates/webframe/base.html:17
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
 msgstr ""
-"按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</a> "
-"查看如何打開 JavaScript 支援."
 
 #: templates/webframe/footer.html:3
 #, python-format
 msgid "%(year)s&copy; All copyright reservied."
-msgstr "%(year)s &copy; 版權所有"
+msgstr ""
 
 #: templates/webframe/footer.html:5
 msgid "version"
-msgstr "版本"
+msgstr "Version"
 
 #: templates/webframe/footer.html:6
 msgid "render-date"
-msgstr "輸出日期"
+msgstr "Render Date"
 
 #: templates/webframe/login.html:8
 msgid "Login Required"
-msgstr "登入"
+msgstr ""
 
 #: templates/webframe/login.html:10 templates/webframe/login.html:11
 #: templates/webframe/user.html:31 templates/webframe/user.html:32
 msgid "username"
-msgstr "用戶名稱"
+msgstr "Username"
 
 #: templates/webframe/login.html:14 templates/webframe/login.html:15
 msgid "password"
-msgstr "密碼"
+msgstr "Password"
 
 #: templates/webframe/login.html:18
 msgid "submit"
-msgstr "送出"
+msgstr "Submit"
 
 #: templates/webframe/pagination.html:18
 #, python-format
 msgid "Showing %(per_page)s of %(total)s; Page %(x)s of %(y)s"
-msgstr "正顯示 %(total)s 中的 %(per_page)s 項資料。第 %(x)s 頁,共 %(y)s 頁。"
+msgstr ""
 
 #: templates/webframe/pagination.html:40
 msgid "pagination-norecord"
-msgstr "找不到相關資料"
+msgstr "No Record Found"
 
 #: templates/webframe/preference.html:3 templates/webframe/preference.html:25
 msgid "Preference.new"
-msgstr "新的設定"
+msgstr "New Preference"
 
 #: templates/webframe/preference.html:3 templates/webframe/preference.html:25
 #, python-format
 msgid "%(pref)s - Preferences"
-msgstr "%(pref)s - 設定"
+msgstr ""
 
 #: templates/webframe/preference.html:3
 msgid "brand"
-msgstr "WebFrame"
+msgstr ""
 
 #: templates/webframe/preference.html:31 templates/webframe/preference.html:32
 msgid "webframe.models.Preference.id"
@@ -254,99 +247,99 @@ msgstr "ID"
 
 #: templates/webframe/preference.html:51
 msgid "Preference.actions.delete"
-msgstr "刪除設定"
+msgstr "Delete Preference"
 
 #: templates/webframe/preference.html:52
 msgid "Preference.actions.save"
-msgstr "存儲設定"
+msgstr "Save Preference"
 
 #: templates/webframe/preference.html:57
 msgid "Preference.childs"
-msgstr "歸類到這個設定的設定"
+msgstr "Lookup"
 
 #: templates/webframe/preference.html:60
 msgid "Preference.actions.addChild"
-msgstr "新增一個歸類到這個設定的設定"
+msgstr "Add Lookup"
 
 #: templates/webframe/preferences.html:3
 #: templates/webframe/preferences.html:16
 #, python-format
 msgid "%(user)s's preferences"
-msgstr "%(user)s的設定"
+msgstr ""
 
 #: templates/webframe/preferences.html:21
 msgid "Preference.sections.changePassword"
-msgstr "設定密碼"
+msgstr "Change Password"
 
 #: templates/webframe/preferences.html:25
 #: templates/webframe/preferences.html:26
 msgid "BTUser.old-password"
-msgstr "舊密碼"
+msgstr "Old Password"
 
 #: templates/webframe/preferences.html:30
 #: templates/webframe/preferences.html:31
 msgid "BTUser.password"
-msgstr "密碼"
+msgstr "Password"
 
 #: templates/webframe/preferences.html:34
 #: templates/webframe/preferences.html:35
 msgid "BTUser.re-password"
-msgstr "確認密碼"
+msgstr "Reconfirm Password"
 
 #: templates/webframe/preferences.html:38
 msgid "Preference.actions.changePassword"
-msgstr "更新密碼"
+msgstr "Change Password"
 
 #: templates/webframe/preferences.html:48
 msgid "Preference.sections.pin"
-msgstr "個人資料"
+msgstr "PIN"
 
 #: templates/webframe/preferences.html:51
 #: templates/webframe/preferences.html:52 templates/webframe/user.html:39
 #: templates/webframe/user.html:40
 msgid "first name"
-msgstr ""
+msgstr "First Name"
 
 #: templates/webframe/preferences.html:55
 #: templates/webframe/preferences.html:56 templates/webframe/user.html:43
 #: templates/webframe/user.html:44
 msgid "last name"
-msgstr ""
+msgstr "Last Name"
 
 #: templates/webframe/preferences.html:59
 #: templates/webframe/preferences.html:60 templates/webframe/user.html:35
 #: templates/webframe/user.html:36
 msgid "email address"
-msgstr ""
+msgstr "Email Address"
 
 #: templates/webframe/preferences.html:63
 msgid "User.actions.update"
-msgstr "更新使用者"
+msgstr "Update User"
 
 #: templates/webframe/preferences.html:71
 msgid "Preference.sections.config"
-msgstr "系統設定"
+msgstr "Config"
 
 #: templates/webframe/preferences.html:75
 msgid "Preference.actions.addConfig"
-msgstr "新增系統設定"
+msgstr "Add Config"
 
 #: templates/webframe/preferences.html:82
 msgid "Preference.sections.preference"
-msgstr "個人設定"
+msgstr "Preference"
 
 #: templates/webframe/preferences.html:86
 msgid "Preference.actions.addPref"
-msgstr "新增個人設定"
+msgstr "Add Preference"
 
 #: templates/webframe/user.html:3 templates/webframe/user.html:22
 msgid "User.new"
-msgstr "新的用戶"
+msgstr "Add User"
 
 #: templates/webframe/user.html:3 templates/webframe/user.html:22
 #: templates/webframe/users.html:3 templates/webframe/users.html:27
 msgid "users"
-msgstr "使用者"
+msgstr "Users"
 
 #: templates/webframe/user.html:27
 msgid "id"
@@ -358,49 +351,28 @@ msgstr "Active"
 
 #: templates/webframe/user.html:52
 msgid "staff status"
-msgstr "是否員工"
+msgstr "Staff Status"
 
 #: templates/webframe/user.html:56
 msgid "superuser status"
-msgstr "是否超及用戶"
+msgstr "Superuser Status"
 
 #: templates/webframe/user.html:61
 msgid "User.actions.delete"
-msgstr "刪除使用者"
+msgstr "Delete User"
 
 #: templates/webframe/user.html:62
 msgid "User.actions.save"
-msgstr "存儲使用者"
+msgstr "Save User"
 
 #: templates/webframe/users.html:30
 msgid "User.actions.new"
-msgstr "新增使用者"
+msgstr "New User"
 
 #: views.py:50
 msgid "User.msg.confirmDelete"
-msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
+msgstr "Are you user to delete this user? This action can not be un-do."
 
 #: views.py:162
 msgid "Preference.msg.confirmDelete"
-msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
-
-#~ msgid "Preference.id"
-#~ msgstr "Pref#"
-
-#~ msgid "Preference.parent"
-#~ msgstr "歸類"
-
-#~ msgid "Preference.name"
-#~ msgstr "設定名稱"
-
-#~ msgid "Preference.value"
-#~ msgstr "值"
-
-#~ msgid "Preference.sequence"
-#~ msgstr "排序"
-
-#~ msgid "ValueObject"
-#~ msgstr "ValueObject"
-
-#~ msgid "AliveObject"
-#~ msgstr "生命週期物件"
+msgstr "Are you user to delete this preference? This action can not be un-do."
