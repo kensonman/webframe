@@ -37,8 +37,9 @@ Configuration
 
 		#file: settings.py
 		MIDDLEWARE_CLASSES += [
+			'method_override.middleware.MethodOverrideMiddleware',
 			'webframe.LangMiddleware.LangMiddleware',
-			'webframe.CurrentUserMiddleware.CurrentUserMiddle',
+			'webframe.CurrentUserMiddleware.CurrentUserMiddleware',
 			'django.middleware.locale.LocaleMiddleware',
 		]
 

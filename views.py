@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, QueryDict
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django_tables2 import RequestConfig
@@ -31,6 +31,7 @@ def users(req):
 def user(req, user):
 	user=get_user_model()() if user=='add' else getObj(get_user_model(), username=user)
 	params=dict()
+	args=QueryDict(req.body)
 
 	if req.method=='GET':
 		# Check permission
@@ -49,7 +50,7 @@ def user(req, user):
 	elif req.method=='DELETE':
 		_('User.msg.confirmDelete')
 		user.delete()
-		return redirect('users')
+		return redirect(args.get('next', 'users'))
 	elif req.method=='POST':
 		# Check permission
 		if req.user.is_superuser:
@@ -67,12 +68,12 @@ def user(req, user):
 		user.last_name=req.POST.get('last_name', None)
 		user.email=req.POST.get('email', None)
 		if req.user.is_superuser or req.user.has_perms('auth.add_user') or req.user.has_perms('auth.change_user'):
-			user.username=req.POST.get('username', None)
+			user.username=req.POST.get('username', user.username)
 			user.is_superuser = req.POST.get('is_superuser', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
 			user.is_active = req.POST.get('is_active', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
 			user.is_staff = req.POST.get('is_staff', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
 		user.save()
-		return redirect('users')
+		return redirect(args.get('next', 'users'))
 	elif req.method=='PUT': #The PUT method is used for user to update their own personal information, webframe/preferences.html
 		# Check permission
 		if req.user.is_superuser:
@@ -88,7 +89,7 @@ def user(req, user):
 		user.last_name=req.POST.get('last_name', None)
 		user.email=req.POST.get('email', None)
 		user.save()
-		return redirect('users')
+		return redirect(args.get('next', 'users'))
 
 @login_required
 def prefs(req, user=None):
