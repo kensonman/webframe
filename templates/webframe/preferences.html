@@ -6,7 +6,7 @@
 <script type="text/javascript"><!--
 $(document).ready(function(){
 	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
-		window.location.href='{{ABSOLUTE_PATH}}users/{{currentuser.username}}/prefs/'+$(this).attr('prefId')+'/';
+		window.location.href="{%url 'preference' user=currentuser.username prefId='%s'%}".replace('%s', $(this).attr('prefId'));
 	});
 });
 //--></script>
@@ -42,7 +42,7 @@ $(document).ready(function(){
 
 
 		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			{%with target=currentuser%}<form id="userFrm" method="POST" action="{{ABSOLUTE_PATH}}users/{{target.username|default:'add'}}/" class="panel panel-warning">
+			{%with target=currentuser%}<form id="userFrm" method="POST" action="{%url 'user' user=target.username|default:'add'%}" class="panel panel-warning">
 				{%csrf_token%}
 				{%method_override 'PUT'%}
 				<input type="hidden" name="next" value="{%url 'preferences' target.username%}"/>
@@ -73,7 +73,7 @@ $(document).ready(function(){
 			<div class="panel-body">
 				{%render_table config%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="add/?mode={{csrf_token}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+					<a class="btn btn-primary" href="{%url 'preference' user=currentuser.username prefId='add'%}?mode={{csrf_token}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
 				</div>
 			</div>
 		</div></div>
@@ -84,7 +84,7 @@ $(document).ready(function(){
 			<div class="panel-body">
 				{%render_table preference%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="add/"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
+					<a class="btn btn-primary" href="{%url 'preference' user=currentuser.username prefId='add'%}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
 				</div>
 			</div>
 		</div></div>

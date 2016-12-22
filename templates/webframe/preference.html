@@ -7,7 +7,7 @@
 <script type="text/javascript"><!--
 $(document).ready(function(){
 	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
-		window.location.href='{{ABSOLUTE_PATH}}users/{{currentuser.username}}/prefs/'+$(this).attr('prefId')+'/';
+		window.location.href="{%url 'preference' user=currentuser.username prefId='%s'%}".replace('%s', $(this).attr('prefId'));
 	});
 	//Delete Logic: {%if not target.isNew%}
 		$('#deleteBtn').click(function(){ 
@@ -22,7 +22,11 @@ $(document).ready(function(){
 {%endblock%}
 
 {%block content%}<div class="jumbotron"><div class="pnl pnl-padding">
-	<h1>{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}</h1>
+	<h1>{%if target.user%}
+		{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}
+	{%else%}
+		{%trans 'Config.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Configuration{%endblocktrans%}
+	{%endif%}</h1>
 	<form method="POST">
 		{%csrf_token%}
 		{% method_override 'POST'%}
@@ -57,7 +61,9 @@ $(document).ready(function(){
 		<label>{%trans 'Preference.childs'%}</label>
 		{%render_table childs%}
 		<div class="pnl pnl-btns">
-			<a href="{{ABSOLUTE_PATH}}users/{{currentuser.username}}/prefs/add/?parent={{target.id.hex}}" class="btn btn-primary"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addChild'%}</a>
+			<a href="{%url 'preference' user=currentuser.username prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
+				<i class="fa fa-plus"></i> {%if target.user%}{%trans 'Preference.actions.addChild'%}{%else%}{%trans 'Config.actions.addChild'%}{%endif%}
+			</a>
 		</div>
 	</div>{%endif%}
 </div></div>{%endblock%}

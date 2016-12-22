@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 {%block content%}<div class="jumbotron"><div class="pnl-padding">
 <h1>{%trans 'User.new' as newuser%}{{target.username|default:newuser}} - {%trans 'users'%}</h1>
-<form id="userFrm" method="POST" action="{{ABSOLUTE_PATH}}users/{{target.username|default:'add'}}/">
+<form id="userFrm" method="POST" action="{%url 'user' user=target.username|default:'add'%}">
 	{%csrf_token%}
 	{%method_override 'POST'%}
 	{%if target.id%}<div class="field">

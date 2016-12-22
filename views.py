@@ -29,7 +29,7 @@ def users(req):
 
 @login_required
 def user(req, user):
-	user=get_user_model()() if user=='add' else getObj(get_user_model(), username=user)
+	user=get_user_model()() if user=='add' or user=='new' else getObj(get_user_model(), username=user)
 	params=dict()
 	args=QueryDict(req.body)
 
@@ -123,7 +123,7 @@ def pref(req, user=None, prefId=None):
 	user=getObj(get_user_model(), username=user)
 
 	# Get the target preference
-	if prefId=='add':
+	if prefId=='add' or prefId=='new':
 		pref=Preference()
 		pref.isNew=True
 		if 'mode' in req.GET and req.GET.get('mode', None)==getCSRF(req):
