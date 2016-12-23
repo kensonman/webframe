@@ -12,7 +12,7 @@ def absolute_path(req):
 		if not url:
 			host=req.build_absolute_uri()
 			host=host[0:host.index('/', 9)]
-			url=host+'/'
+			url=host
 		elif url.index('%s')>=0:
 			host=req.build_absolute_uri()
 			host=host[0:host.index('/', 9)]
