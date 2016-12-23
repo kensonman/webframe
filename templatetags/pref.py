@@ -16,9 +16,9 @@ def pref(prefName, **kwargs):
 
 		All the parameters can be references webframe.models.PrefManager.pref
 
-			@param defval The default value. If the preference/config not found, return the default value instead;
-			@param user The owner of this preference. If you would like to access the config, setup this parameter to None;
-			@param returnValue The template-tag parameter. It will told the template-tag to return the preference's value instead of the preference instead;
+			@param defval      The default value. If the preference/config not found, return the default value instead;
+			@param user        The owner of this preference. If you would like to access the config, setup this parameter to None;
+			@param returnValue It will told the template-tag to return the preference's value instead of the preference instead;
 
 	'''
 	try:
@@ -30,8 +30,6 @@ def pref(prefName, **kwargs):
 		else:
 			kwargs['user']=get_current_user()
 		pref=Preference.objects.pref(prefName, **kwargs)
-		if str(kwargs.get('returnValue', 'False')).upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
-			return pref.value
 		return pref
 	except Preference.DoesNotExist:
 		return "{Pref<%s> Not Found}"

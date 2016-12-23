@@ -153,9 +153,12 @@ class PrefManager(models.Manager):
 		if user: rst=rst.filter(owner=user)
 		rst=rst.order_by('owner')
 		if len(rst)>0:
-			return rst[0]
+			rst=rst[0]
 		else:
-			return Preference(name=name, value=defval)
+			rst=Preference(name=name, value=defval)
+		if kwargs.get('returnValue', 'False').upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
+			return rst.value
+		return rst
 
 class Preference(ValueObject):
 	class Meta(object):
