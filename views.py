@@ -126,21 +126,22 @@ def pref(req, user=None, prefId=None):
 	Showing the preference form for input.
 	'''
 	# Declare the preference's owner
-	if user==None: user=req.user.username
+	if user==None or user=='None': user=req.user.username
 	if user!=req.user.username and not req.user.is_superuser:
 		if req.user.username!=user: return HttpResponseForbidden()
 	user=getObj(get_user_model(), username=user)
 	params=dict()
+	m=hashlib.md5()
+	m.update(user.username.encode('utf-8'))
+	m.update(CONFIG_KEY.encode('utf-8'))
+	params['config_key']=m.hexdigest()
 
 	# Get the target preference
 	if prefId=='add' or prefId=='new':
 		pref=Preference()
 		pref.owner=user
 		if 'config_key' in req.GET:
-			m=hashlib.md5()
-			m.update(user.username.encode('utf-8'))
-			m.update(CONFIG_KEY.encode('utf-8'))
-			if m.hexdigest()==req.GET['config_key']:
+			if params['config_key']==req.GET['config_key']:
 				pref.owner=None
 				params['config_key']=m.hexdigest()
 		if 'parent' in req.GET: pref.parent=getObj(Preference, id=req.GET['parent'])
@@ -164,7 +165,6 @@ def pref(req, user=None, prefId=None):
 				return HttpResponseForbidden()
 			pref.owner=getObj(get_user_model(), username=req.POST['user'])
 		else:
-			import pdb; pdb.set_trace()
 			if pref.isNew() and req.user.has_perms('webframe.add_config'):
 				pass #Allow to add config 
 			elif (not pref.isNew()) and req.user.has_perms('webframe.change_config'):

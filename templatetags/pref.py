@@ -36,3 +36,10 @@ def pref(prefName, **kwargs):
 	except Preference.DoesNotExist:
 		return "{Pref<%s> Not Found}"
 	
+@register.filter
+def boolean(value):
+	'''
+	Cast the value into bool
+	'''
+	if not value: return False
+	return str(value).upper() in ['TRUE', 'T', 'YES', 'Y', '1']

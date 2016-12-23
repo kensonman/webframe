@@ -73,7 +73,7 @@ $(document).ready(function(){
 			<div class="panel-body">
 				{%render_table config%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'preference' user=currentuser.username prefId='add'%}?config_key={{config_key}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+					<a class="btn btn-primary" href="{%url 'preference' user=user.username prefId='add'%}?config_key={{config_key}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
 				</div>
 			</div>
 		</div></div>
