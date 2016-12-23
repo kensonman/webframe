@@ -156,7 +156,7 @@ class PrefManager(models.Manager):
 			rst=rst[0]
 		else:
 			rst=Preference(name=name, value=defval)
-		if kwargs.get('returnValue', 'False').upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
+		if str(kwargs.get('returnValue', 'False')).upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
 			return rst.value
 		return rst
 
