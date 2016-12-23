@@ -67,18 +67,19 @@ $(document).ready(function(){
 			</form>{%endwith%}
 		</div>
 
-		{%if user.is_superuser%}
+		{%if user.is_superuser or perms.webframe.add_config or perms.webframe.change_config or perms.webframe.browse_config%}
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
 			<div class="panel-heading">{%trans 'Preference.sections.config'%}</div>
 			<div class="panel-body">
 				{%render_table config%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'preference' user=currentuser.username prefId='add'%}?mode={{csrf_token}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+					<a class="btn btn-primary" href="{%url 'preference' user=currentuser.username prefId='add'%}?config_key={{config_key}}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
 				</div>
 			</div>
 		</div></div>
 		{%endif%}
 
+		{%if perms.webframe.add_preference or perms.webframe.change_preference or perms.webframe.browse_preference%}
 		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
 			<div class="panel-heading">{%trans 'Preference.sections.preference'%}</div>
 			<div class="panel-body">
@@ -88,5 +89,6 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div></div>
+		{%endif%}
 	</div></div>
 </div></div>{%endblock%}

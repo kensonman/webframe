@@ -30,7 +30,9 @@ $(document).ready(function(){
 	<form method="POST">
 		{%csrf_token%}
 		{% method_override 'POST'%}
+		{%if target.user%}<input type="hidden" name="user" value="{{target.user.username}}"/>{%endif%}
 		{%if target.parent%}<input type="hidden" name="parent" value="{{target.parent.id.hex}}"/>{%endif%}
+		{%if config_key%}<input type="hidden" name="config_key" value="{{config_key}}"/>{%endif%}
 		{%if not target.isNew%}<div class="field">
 			<label for="idFld">{%trans 'webframe.models.Preference.id'%}</label>
 			<input name="id" id="idFld" class="form-control" value="{{target.id.hex|default:''}}" readonly="readonly" required="true" placeholder="{%trans 'webframe.models.Preference.id'%}"/>

@@ -8,6 +8,9 @@ from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _
 from .models import *
 from .tables import *
+import hashlib
+
+CONFIG_KEY='ConfigKey'
 
 @login_required
 def users(req):
@@ -110,6 +113,11 @@ def prefs(req, user=None):
 	rc.configure(params['preference'])
 	rc.configure(params['config'])
 	params['currentuser']=user
+	if req.user.has_perms('webframe.add_config') or req.user.has_perms('webframe.change.config'):
+		m=hashlib.md5()
+		m.update(user.username.encode('utf-8'))
+		m.update(CONFIG_KEY.encode('utf-8'))
+		params['config_key']=m.hexdigest()
 	return render(req, getattr(settings, 'TMPL_PREFERENCES', 'webframe/preferences.html'), params)
 
 @login_required
@@ -122,42 +130,60 @@ def pref(req, user=None, prefId=None):
 	if user!=req.user.username and not req.user.is_superuser:
 		if req.user.username!=user: return HttpResponseForbidden()
 	user=getObj(get_user_model(), username=user)
+	params=dict()
 
 	# Get the target preference
 	if prefId=='add' or prefId=='new':
 		pref=Preference()
-		pref.isNew=True
-		if 'mode' in req.GET and req.GET.get('mode', None)==getCSRF(req):
-			pref.user=None
-		else:
-			pref.user=user
+		pref.owner=user
+		if 'config_key' in req.GET:
+			m=hashlib.md5()
+			m.update(user.username.encode('utf-8'))
+			m.update(CONFIG_KEY.encode('utf-8'))
+			if m.hexdigest()==req.GET['config_key']:
+				pref.owner=None
+				params['config_key']=m.hexdigest()
 		if 'parent' in req.GET: pref.parent=getObj(Preference, id=req.GET['parent'])
 	else:
 		pref=getObj(Preference, id=prefId)
 	
 	if req.method=='GET':
 		# Preparing the form view
-		params=dict()
 		params['target']=pref
 		params['childs']=PreferenceTable(pref.childs())
 		params['currentuser']=user
 		return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
 	elif req.method=='POST':
-		# Saving
-		if req.user.is_superuser:
-			pass #Allow superuser
-		elif pref.isNew() and req.user.has_perms('webframe.add_preference'):
-			pass #Allow to add preference
-		elif (not pref.isNew()) and req.user.has_perms('webframe.change_preference'):
-			pass #Allow to change preference
+		# Security Checking
+		if req.POST.get('user', None):
+			if pref.isNew() and req.user.has_perms('webframe.add_preference'):
+				pass #Allow to add preference
+			elif (not pref.isNew()) and req.user.has_perms('webframe.change_preference'):
+				pass #Allow to change preference
+			else:
+				return HttpResponseForbidden()
+			pref.owner=getObj(get_user_model(), username=req.POST['user'])
 		else:
-			return HttpResponseForbidden()
+			import pdb; pdb.set_trace()
+			if pref.isNew() and req.user.has_perms('webframe.add_config'):
+				pass #Allow to add config 
+			elif (not pref.isNew()) and req.user.has_perms('webframe.change_config'):
+				pass #Allow to change config 
+			else:
+				return HttpResponseForbidden()
+			m=hashlib.md5()
+			m.update(user.username.encode('utf-8'))
+			m.update(CONFIG_KEY.encode('utf-8'))
+			if m.hexdigest()!=req.POST.get('config_key', None):
+				print('Invalid config_key')
+				return HttpResponseForbidden()
+			pref.owner=None
 
+		# Saving
 		pref.name=req.POST['name']
 		pref.value=req.POST['value']
 		pref.sequence=int(req.POST['sequence'])
 		pref.parent=None if req.POST.get('parent') is None else getObj(Preference, id=req.POST['parent'])
-		pref.owner=user
 		pref.save()
 	elif req.method=='DELETE':
 		# Delete the method

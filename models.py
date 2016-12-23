@@ -160,6 +160,9 @@ class PrefManager(models.Manager):
 class Preference(ValueObject):
 	class Meta(object):
 		permissions			= (
+			('add_config',	'Can add configuration'),
+			('change_config', 'Can change configuration'),
+			('delete_config', 'Can delete configuration'),
 			('browse_config', 'Can browse system configuration'),
 			('browse_preference', 'Can browse other preferences'),
 		)
@@ -171,10 +174,10 @@ class Preference(ValueObject):
 	objects					= PrefManager()
 
 	def __str__(self):
-		return self.value
+		return '(None)' if self.value is None else str(self.value)
 
 	def __unicode__(self):
-		return self.value
+		return '(None)' if self.value is None else unicode(self.value)
 
 	def childs(self):
 		return Preference.objects.filter(parent=self).order_by('sequence')
