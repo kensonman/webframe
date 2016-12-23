@@ -5,6 +5,7 @@ from django.http import HttpResponseForbidden, QueryDict
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django_tables2 import RequestConfig
+from django.utils.translation import ugettext_lazy as _
 from .models import *
 from .tables import *
 
