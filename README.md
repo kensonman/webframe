@@ -19,7 +19,7 @@ Configuration
 2. Add the `webframe` into `INSTALLED_APPS`:
 
 		#file: settings.py
-		INSTALLED_APPS += ('webframe',)
+		INSTALLED_APPS += ('webframe', 'method_override')
 
 3. Install the context-processors:
 
@@ -37,7 +37,8 @@ Configuration
 
 		#file: settings.py
 		MIDDLEWARE_CLASSES += [
-			'method_override.middleware.MethodOverrideMiddleware',
+			'method_override.middleware.MethodOverrideMiddleware', #django 1.9 or belows
+			'webframe.methodoverridemiddleware.MethodOverrideMiddleware', #django 1.10 or aboves
 			'webframe.LangMiddleware.LangMiddleware',
 			'webframe.CurrentUserMiddleware.CurrentUserMiddleware',
 			'django.middleware.locale.LocaleMiddleware',

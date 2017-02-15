@@ -1,6 +1,7 @@
 #
 # URL: https://blndxp.wordpress.com/2016/03/04/django-get-current-user-anywhere-in-your-code-using-a-middleware/
 #
+import django
 
 VAR_REQUEST='request'
 VAR_USER='user'
@@ -23,21 +24,46 @@ def get_current_user():
       return getattr(request, VAR_USER, None)
    return None
 
-class CurrentUserMiddleware(object):
-   '''
-   The middleware to put the current user into local-thread
-   '''
 
-   def process_request(self, req):
+if django.VERSION[1]<10:
+   class CurrentUserMiddleware(object):
       '''
-      Handling the request
+      The middleware to put the current user into local-thread
       '''
-      _thread_locals.request = req 
 
-   def process_response(self, request, response):
+      def process_request(self, req):
+         '''
+         Handling the request
+         '''
+         _thread_locals.request = req 
+
+      def process_response(self, request, response):
+         '''
+         Remove the local variable from ram
+         '''
+         if hasattr(_thread_locals, VAR_REQUEST):
+            del _thread_locals.request
+         return response
+else:
+   class CurrentUserMiddleware(object):
       '''
-      Remove the local variable from ram
+      The middleware to put the current user into local-thread
       '''
-      if hasattr(_thread_locals, VAR_REQUEST):
-         del _thread_locals.request
-      return response
+      def __init__(self, get_response):
+         self.get_response=get_response
+
+      def __call__(self, req):
+         '''
+         Handling the request
+         '''
+         _thread_locals.request = req 
+
+         rep=self.get_response(req)
+
+         '''
+         Remove the local variable from ram
+         '''
+         if hasattr(_thread_locals, VAR_REQUEST):
+            del _thread_locals.request
+         return rep 
+
