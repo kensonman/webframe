@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, QueryDict
 from django.middleware.csrf import get_token as getCSRF
@@ -11,6 +11,14 @@ from .tables import *
 import hashlib
 
 CONFIG_KEY='ConfigKey'
+
+def logout(req):
+    '''
+    Logout the session.
+    '''
+    auth_logout(req)
+    next=req.POST.get('next', req.GET.get('next', '/'))
+    return redirect(next)
 
 @login_required
 def users(req):

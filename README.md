@@ -56,24 +56,15 @@ Application
 			last_modify_by = models.ForeignKey(settings.AUTH_USER_MODEL,default=get_current_user)
 		...
 
-Javascript Translation (optionsal)
-----
-The WEBFRAME also support the javascript translation. Just add the belows statement into your code.
-1. Setup the preference views
+2. Provide the logout features (Optional)
 
-		#urls.py
-		urlpatterns = [
-			#...
-			url(r'^jsi18n/webframe/$', javascript_catalog, {'packages':('webframe',),'domain':'django'}, name='webframe-js'),
-			#...
-		]
+        #file: urls.py
+        from webframe import views as webframe_views
 
-2. In HTML code add
+        urlpatterns += url(r'^logout/?$', webframe_views.logout, name='logout'),
+        urlpatterns += url(r'^logout/?$', webframe_views.logout, name='login'),
 
-		<script type="text/javascript" src="{%url 'webframe-js'%}"></script>
-
-
-Preference (optional)
+Preference
 ----
 The WEBFRAME also support the preference model and related layout. This can be applied into wirely type of application.
 
@@ -84,7 +75,7 @@ To use the preference, following the steps:
 		#file: settings.py
 		INSTALLED_APPS += ('django_tables2',)
 
-2. Install the context-processors:
+2. Make sure the context-processor is installed:
 
 		#file: settings.py #in Django 1.9
 		TEMPLATES = [
@@ -109,7 +100,7 @@ To use the preference, following the steps:
 		]
 
 
-Users (optional)
+Users
 ----
 The WEBFRAME also support the User model and related layout. This can be applied into wirely type of application.
 
@@ -120,7 +111,7 @@ To use the preference, following the steps:
 		#file: settings.py
 		INSTALLED_APPS += ('django_tables2',)
 
-2. Install the context-processors:
+2. Make sure the context-processor is installed:
 
 		#file: settings.py #in Django 1.9
 		TEMPLATES = [
@@ -143,3 +134,21 @@ To use the preference, following the steps:
 			url(r'^users/(?P<user>[^/]+)/?$', webframe_view.user, name='user'),
 			#...
 		]
+
+Javascript Translation (optionsal)
+----
+The WEBFRAME also support the javascript translation. Just add the belows statement into your code.
+1. Setup the preference views
+
+		#urls.py
+		urlpatterns = [
+			#...
+			url(r'^jsi18n/webframe/$', javascript_catalog, {'packages':('webframe',),'domain':'django'}, name='webframe-js'),
+			#...
+		]
+
+2. In HTML code add
+
+		<script type="text/javascript" src="{%url 'webframe-js'%}"></script>
+
+
