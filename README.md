@@ -135,12 +135,14 @@ To use the preference, following the steps:
 			#...
 		]
 
-Javascript Translation (optionsal)
+Javascript Translation
 ----
 The WEBFRAME also support the javascript translation. Just add the belows statement into your code.
 1. Setup the preference views
 
 		#urls.py
+      from django.views.i18n import javascript_catalog
+
 		urlpatterns = [
 			#...
 			url(r'^jsi18n/webframe/$', javascript_catalog, {'packages':('webframe',),'domain':'django'}, name='webframe-js'),

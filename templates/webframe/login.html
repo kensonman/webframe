@@ -5,6 +5,8 @@
 
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 col-xs-12"><form method="POST" id="loginFrm">
+         {%csrf_token%}
+         <input type="hidden" name="next" value="{{next|default:'/'}}"/>
 			<h1>{%trans 'Login Required'%}</h1>
 			<div class="field">
 				<label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
