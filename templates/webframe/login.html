@@ -8,6 +8,8 @@
          {%csrf_token%}
          <input type="hidden" name="next" value="{{next|default:'/'}}"/>
 			<h1>{%trans 'Login Required'%}</h1>
+            {%csrf_token%}
+            <input type="hidden" name="next" value="{{next|default:'/'}}"/>
 			<div class="field">
 				<label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
 				<input type="text" name="username" id="usernameFld" class="form-control" placeholder="{%trans 'username'%}" required="required"/>
