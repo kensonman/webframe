@@ -14,6 +14,7 @@ div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 .helptext{color:gray;display:block;}
 label[for]{cursor:pointer;}
 .label-error{background-color:#d9534f;}
+.debug{ display: none; }
 
 /* If the file control in the input-group, hide the control */
 .input-group input[type=file] {

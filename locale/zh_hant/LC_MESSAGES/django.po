@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-13 11:59+0800\n"
+"POT-Creation-Date: 2017-04-11 09:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,113 +66,113 @@ msgstr "建立人"
 msgid "webframe.models.ValueObject.cb.helptext"
 msgstr "這項資料的建立人。"
 
-#: models.py:96
+#: models.py:100
 msgid "webframe.models.AliveObject"
 msgstr "Alive Object"
 
-#: models.py:97
+#: models.py:101
 msgid "webframe.models.AliveObjects"
 msgstr "生命週期物件"
 
-#: models.py:101
+#: models.py:105
 msgid "webframe.models.AliveObject.effDate"
 msgstr "有效日期"
 
-#: models.py:102
+#: models.py:106
 msgid "webframe.models.AliveObject.effDate.helptext"
 msgstr "這項資料的有效日期"
 
-#: models.py:107
+#: models.py:111
 msgid "webframe.models.AliveObject.expDate"
 msgstr "失效日期"
 
-#: models.py:108
+#: models.py:112
 msgid "webframe.models.AliveObject.expDate.helptext"
 msgstr "這項資料的失效日期"
 
-#: models.py:112
+#: models.py:116
 msgid "webframe.models.AliveObject.enabled"
 msgstr "啟用"
 
-#: models.py:113
+#: models.py:117
 msgid "webframe.models.AliveObject.enabled.helptext"
 msgstr "這項資料是否啟用"
 
-#: models.py:166 templates/webframe/preference.html:39
-#: templates/webframe/preference.html:40
+#: models.py:176 templates/webframe/preference.html:45
+#: templates/webframe/preference.html:46
 msgid "webframe.models.Preference.name"
 msgstr "設定名稱"
 
-#: models.py:166
+#: models.py:176
 msgid "webframe.models.Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:167 templates/webframe/preference.html:43
-#: templates/webframe/preference.html:44
+#: models.py:177 templates/webframe/preference.html:49
+#: templates/webframe/preference.html:50
 msgid "webframe.models.Preference.value"
 msgstr "值"
 
-#: models.py:167
+#: models.py:177
 msgid "webframe.models.Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:168
+#: models.py:178
 msgid "Pwebframe.models.reference.owner"
 msgstr "擁有人"
 
-#: models.py:168
+#: models.py:178
 msgid "webframe.models.Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:169 templates/webframe/preference.html:35
-#: templates/webframe/preference.html:36
+#: models.py:179 templates/webframe/preference.html:41
+#: templates/webframe/preference.html:42
 msgid "webframe.models.Preference.parent"
 msgstr "歸類"
 
-#: models.py:169
+#: models.py:179
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:170 templates/webframe/preference.html:47
-#: templates/webframe/preference.html:48
+#: models.py:180 templates/webframe/preference.html:53
+#: templates/webframe/preference.html:54
 msgid "webframe.models.Preference.sequence"
 msgstr "排序"
 
-#: models.py:170
+#: models.py:180
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
-#: models.py:198
+#: models.py:208
 msgid "webframe.models.Privilege"
 msgstr "權限"
 
-#: models.py:199
+#: models.py:209
 msgid "webframe.models.Privileges"
 msgstr "權限"
 
-#: models.py:202
+#: models.py:212
 msgid "webframe.models.Privilege.name"
 msgstr "權限名稱"
 
-#: models.py:203
+#: models.py:213
 msgid "webframe.models.Privilege.desc"
 msgstr "說明"
 
-#: models.py:207 models.py:208
+#: models.py:217 models.py:218
 msgid "webframe.models.GrantedPrivilege"
 msgstr "授權"
 
-#: models.py:210
+#: models.py:220
 msgid "webframe.models.GrantedPrivilege.owner"
 msgstr "被授權者"
 
-#: models.py:211
+#: models.py:221
 msgid "webframe.models.GrantedPrivilege.privilege"
 msgstr "權限"
 
-#: models.py:212
+#: models.py:222
 msgid "webframe.models.GrantedPrivilege.item"
 msgstr "對像資料"
 
@@ -209,20 +209,54 @@ msgstr "版本"
 msgid "render-date"
 msgstr "輸出日期"
 
-#: templates/webframe/login.html:8
-msgid "Login Required"
+#: templates/webframe/header.html:29 templates/webframe/user.html:3
+#: templates/webframe/user.html:22 templates/webframe/users.html:3
+#: templates/webframe/users.html:27
+msgid "users"
+msgstr "使用者"
+
+#: templates/webframe/header.html:32 templates/webframe/header.html:38
+#, fuzzy, python-format
+#| msgid "username"
+msgid "Hi, %(username)s"
+msgstr "用戶名稱"
+
+#: templates/webframe/header.html:35
+#, fuzzy
+#| msgid "Preference.id"
+msgid "preferences"
+msgstr "Pref#"
+
+#: templates/webframe/header.html:36
+msgid "logout"
+msgstr "登出"
+
+#: templates/webframe/header.html:40
+msgid "login"
 msgstr "登入"
 
-#: templates/webframe/login.html:10 templates/webframe/login.html:11
+#: templates/webframe/login.html:3 templates/webframe/login.html:10
+msgid "Login Required"
+msgstr "請先登入"
+
+#: templates/webframe/login.html:14
+msgid "debug.csrf"
+msgstr "CSRF Token"
+
+#: templates/webframe/login.html:16 templates/webframe/login.html:17
+msgid "ipaddr"
+msgstr "網絡地址"
+
+#: templates/webframe/login.html:20 templates/webframe/login.html:21
 #: templates/webframe/user.html:31 templates/webframe/user.html:32
 msgid "username"
 msgstr "用戶名稱"
 
-#: templates/webframe/login.html:14 templates/webframe/login.html:15
+#: templates/webframe/login.html:24 templates/webframe/login.html:25
 msgid "password"
 msgstr "密碼"
 
-#: templates/webframe/login.html:18
+#: templates/webframe/login.html:28
 msgid "submit"
 msgstr "送出"
 
@@ -235,37 +269,49 @@ msgstr "正顯示 %(total)s 中的 %(per_page)s 項資料。第 %(x)s 頁,共 %(
 msgid "pagination-norecord"
 msgstr "找不到相關資料"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:25
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:26
 msgid "Preference.new"
 msgstr "新的設定"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:25
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:26
 #, python-format
 msgid "%(pref)s - Preferences"
-msgstr "%(pref)s - 設定"
+msgstr "%(pref)s - 喜好"
 
 #: templates/webframe/preference.html:3
 msgid "brand"
 msgstr "WebFrame"
 
-#: templates/webframe/preference.html:31 templates/webframe/preference.html:32
+#: templates/webframe/preference.html:28
+msgid "Config.new"
+msgstr "新增設定"
+
+#: templates/webframe/preference.html:28
+msgid "%(pref)s - Configuration"
+msgstr "%(pref)s - 設定"
+
+#: templates/webframe/preference.html:37 templates/webframe/preference.html:38
 msgid "webframe.models.Preference.id"
 msgstr "ID"
 
-#: templates/webframe/preference.html:51
+#: templates/webframe/preference.html:57
 msgid "Preference.actions.delete"
 msgstr "刪除設定"
 
-#: templates/webframe/preference.html:52
+#: templates/webframe/preference.html:58
 msgid "Preference.actions.save"
 msgstr "存儲設定"
 
-#: templates/webframe/preference.html:57
+#: templates/webframe/preference.html:63
 msgid "Preference.childs"
 msgstr "歸類到這個設定的設定"
 
-#: templates/webframe/preference.html:60
+#: templates/webframe/preference.html:67
 msgid "Preference.actions.addChild"
+msgstr "新增一個歸類到這個設定的設定"
+
+#: templates/webframe/preference.html:67
+msgid "Config.actions.addChild"
 msgstr "新增一個歸類到這個設定的設定"
 
 #: templates/webframe/preferences.html:3
@@ -297,56 +343,51 @@ msgstr "確認密碼"
 msgid "Preference.actions.changePassword"
 msgstr "更新密碼"
 
-#: templates/webframe/preferences.html:48
+#: templates/webframe/preferences.html:49
 msgid "Preference.sections.pin"
 msgstr "個人資料"
 
-#: templates/webframe/preferences.html:51
-#: templates/webframe/preferences.html:52 templates/webframe/user.html:39
+#: templates/webframe/preferences.html:52
+#: templates/webframe/preferences.html:53 templates/webframe/user.html:39
 #: templates/webframe/user.html:40
 msgid "first name"
 msgstr ""
 
-#: templates/webframe/preferences.html:55
-#: templates/webframe/preferences.html:56 templates/webframe/user.html:43
+#: templates/webframe/preferences.html:56
+#: templates/webframe/preferences.html:57 templates/webframe/user.html:43
 #: templates/webframe/user.html:44
 msgid "last name"
 msgstr ""
 
-#: templates/webframe/preferences.html:59
-#: templates/webframe/preferences.html:60 templates/webframe/user.html:35
+#: templates/webframe/preferences.html:60
+#: templates/webframe/preferences.html:61 templates/webframe/user.html:35
 #: templates/webframe/user.html:36
 msgid "email address"
 msgstr ""
 
-#: templates/webframe/preferences.html:63
+#: templates/webframe/preferences.html:64
 msgid "User.actions.update"
 msgstr "更新使用者"
 
-#: templates/webframe/preferences.html:71
+#: templates/webframe/preferences.html:72
 msgid "Preference.sections.config"
 msgstr "系統設定"
 
-#: templates/webframe/preferences.html:75
+#: templates/webframe/preferences.html:76
 msgid "Preference.actions.addConfig"
 msgstr "新增系統設定"
 
-#: templates/webframe/preferences.html:82
+#: templates/webframe/preferences.html:84
 msgid "Preference.sections.preference"
 msgstr "個人設定"
 
-#: templates/webframe/preferences.html:86
+#: templates/webframe/preferences.html:88
 msgid "Preference.actions.addPref"
 msgstr "新增個人設定"
 
 #: templates/webframe/user.html:3 templates/webframe/user.html:22
 msgid "User.new"
 msgstr "新的用戶"
-
-#: templates/webframe/user.html:3 templates/webframe/user.html:22
-#: templates/webframe/users.html:3 templates/webframe/users.html:27
-msgid "users"
-msgstr "使用者"
 
 #: templates/webframe/user.html:27
 msgid "id"
@@ -376,16 +417,13 @@ msgstr "存儲使用者"
 msgid "User.actions.new"
 msgstr "新增使用者"
 
-#: views.py:50
+#: views.py:63
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:162
+#: views.py:198
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
-
-#~ msgid "Preference.id"
-#~ msgstr "Pref#"
 
 #~ msgid "Preference.parent"
 #~ msgstr "歸類"

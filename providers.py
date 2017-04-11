@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from datetime import datetime
+from .functions import getClientIP
 
 def absolute_path(req):
 	'''
@@ -24,6 +25,7 @@ def absolute_path(req):
 	RST['now']=datetime.now()
 	RST['lang']=req.session.get(LANGUAGE_SESSION_KEY, 'en-US')
 	RST['VERSION']=getattr(settings, 'VERSION', 'v0.1.0-beta')
+	RST['IPAddr']=getClientIP(req)
 	return RST
 
 def template_injection(req):
