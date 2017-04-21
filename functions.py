@@ -1,4 +1,6 @@
 #-*- coding: utf-8 -*-
+from django.http import HttpRequest
+from netaddr import IPAddress, IPNetwork
 
 def getClientIP( req ):
 	'''
@@ -12,6 +14,24 @@ def getClientIP( req ):
 	else:
 		ip=req.META.get('REMOTE_ADDR')
 	return ip
+
+def inNetworks( ipaddr, networks=['192.168.0.0/255.255.255.0',]):
+    '''
+    Returns TRUE if the specified IP address is belongs to one of the specified networks.
+
+    @param ipaddr The instance of netaddr.IPAddress or an instance of HttpRequest;
+    @param networks An array of the acceptant networks (e.g.: '192.168.0.0/255.255.255.0' or '192.168.1.0/24');
+    '''
+    if isinstance(ipaddr, HttpRequest):
+        ipaddr=IPAddress(getClientIP(ipaddr))
+    for network in networks:
+        if not isinstance(network, IPNetwork):
+            '''Cast the network into IPNetwork instance'''
+            network=IPNetwork(str(network))
+
+        if ipaddr in network:
+            return True
+    return False
 
 def getBool( val, defVal=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T'] ):
 	'''
