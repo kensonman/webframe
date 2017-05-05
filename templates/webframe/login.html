@@ -11,7 +11,10 @@
          <div class="panel-body">
             {%csrf_token%}
             <input type="hidden" name="next" value="{{next|default:'/'}}"/>
-            <input type="hidden" name="ipaddr" value="{{IPAddr}}"/>
+            <div class="field">
+               <label for="IPAddrFld" class="desktop-only">{%trans 'IPAddr'%}</label>
+               <input type="text" name="ipaddr" value="{{IPAddr}}" class="form-control" readonly="readonly" required="required"/>
+            </div>
             <div class="field">
                <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
                <input type="text" name="username" id="usernameFld" class="form-control" placeholder="{%trans 'username'%}" required="required"/>
