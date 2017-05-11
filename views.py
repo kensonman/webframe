@@ -1,16 +1,39 @@
+# -*- coding: utf-8 -*-
+# File: views.py
+# Author: Kenson Man
+# Date: 2017-05-11 11:53
+# Desc: The webframe default views.
 from django.conf import settings
-from django.contrib.auth import get_user_model, logout as auth_logout
+from django.contrib import messages
+from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, QueryDict
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django_tables2 import RequestConfig
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext as gettext
+from django.urls import reverse
 from .models import *
 from .tables import *
 import hashlib
 
 CONFIG_KEY='ConfigKey'
+
+def login( req ):
+    '''
+    Login the session.
+    '''
+    params=dict()
+    params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
+    if req.method=='POST':
+        username=req.POST['username']
+        password=req.POST['password']
+        u=authenticate(req, username=username, password=password)
+        if u:
+            auth_login(req, u)
+            return redirect(params['next'])
+        messages.warning(req, gettext('Invalid username or password'))
+    return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
 def logout(req):
     '''
