@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 09:00+0000\n"
+"POT-Creation-Date: 2017-05-19 17:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,16 +209,12 @@ msgid "users"
 msgstr "Users"
 
 #: templates/webframe/header.html:32 templates/webframe/header.html:38
-#, fuzzy, python-format
-#| msgid "username"
 msgid "Hi, %(username)s"
-msgstr "Username"
+msgstr "Hi, %(username)s"
 
 #: templates/webframe/header.html:35
-#, fuzzy
-#| msgid "Preference.new"
 msgid "preferences"
-msgstr "New Preference"
+msgstr "Preferences"
 
 #: templates/webframe/header.html:36
 msgid "logout"
@@ -232,24 +228,21 @@ msgstr "Login"
 msgid "Login Required"
 msgstr "Login Required"
 
-#: templates/webframe/login.html:14
-msgid "debug.csrf"
-msgstr "CSRF Token"
+#: templates/webframe/login.html:15
+msgid "IPAddr"
+msgstr ""
 
-#: templates/webframe/login.html:16 templates/webframe/login.html:17
-msgid "ipaddr"
-msgstr "IP Address"
-
-#: templates/webframe/login.html:20 templates/webframe/login.html:21
+#: templates/webframe/login.html:19 templates/webframe/login.html:20
 #: templates/webframe/user.html:31 templates/webframe/user.html:32
 msgid "username"
 msgstr "Username"
 
-#: templates/webframe/login.html:24 templates/webframe/login.html:25
+#: templates/webframe/login.html:23 templates/webframe/login.html:24
+#: templates/webframe/user.html:35 templates/webframe/user.html:36
 msgid "password"
 msgstr "Password"
 
-#: templates/webframe/login.html:28
+#: templates/webframe/login.html:27
 msgid "submit"
 msgstr "Submit"
 
@@ -305,10 +298,8 @@ msgid "Preference.actions.addChild"
 msgstr "Add Lookup"
 
 #: templates/webframe/preference.html:67
-#, fuzzy
-#| msgid "Preference.actions.addChild"
 msgid "Config.actions.addChild"
-msgstr "Add Lookup"
+msgstr "Add Config"
 
 #: templates/webframe/preferences.html:3
 #: templates/webframe/preferences.html:16
@@ -344,20 +335,20 @@ msgid "Preference.sections.pin"
 msgstr "PIN"
 
 #: templates/webframe/preferences.html:52
-#: templates/webframe/preferences.html:53 templates/webframe/user.html:39
-#: templates/webframe/user.html:40
+#: templates/webframe/preferences.html:53 templates/webframe/user.html:48
+#: templates/webframe/user.html:49
 msgid "first name"
 msgstr "First Name"
 
 #: templates/webframe/preferences.html:56
-#: templates/webframe/preferences.html:57 templates/webframe/user.html:43
-#: templates/webframe/user.html:44
+#: templates/webframe/preferences.html:57 templates/webframe/user.html:52
+#: templates/webframe/user.html:53
 msgid "last name"
 msgstr "Last Name"
 
 #: templates/webframe/preferences.html:60
-#: templates/webframe/preferences.html:61 templates/webframe/user.html:35
-#: templates/webframe/user.html:36
+#: templates/webframe/preferences.html:61 templates/webframe/user.html:44
+#: templates/webframe/user.html:45
 msgid "email address"
 msgstr "Email Address"
 
@@ -389,23 +380,35 @@ msgstr "Add User"
 msgid "id"
 msgstr "ID"
 
-#: templates/webframe/user.html:48
+#: templates/webframe/user.html:37
+msgid "input to change password"
+msgstr ""
+
+#: templates/webframe/user.html:39 templates/webframe/user.html:40
+msgid "confirm password"
+msgstr "Reconfirm Password"
+
+#: templates/webframe/user.html:41
+msgid "reinput password to re-confirm"
+msgstr "Input the new password if you would like to change password"
+
+#: templates/webframe/user.html:57
 msgid "active"
 msgstr "Active"
 
-#: templates/webframe/user.html:52
+#: templates/webframe/user.html:61
 msgid "staff status"
 msgstr "Staff Status"
 
-#: templates/webframe/user.html:56
+#: templates/webframe/user.html:65
 msgid "superuser status"
 msgstr "Superuser Status"
 
-#: templates/webframe/user.html:61
+#: templates/webframe/user.html:70
 msgid "User.actions.delete"
 msgstr "Delete User"
 
-#: templates/webframe/user.html:62
+#: templates/webframe/user.html:71
 msgid "User.actions.save"
 msgstr "Save User"
 
@@ -413,10 +416,20 @@ msgstr "Save User"
 msgid "User.actions.new"
 msgstr "New User"
 
-#: views.py:63
+#: views.py:35
+msgid "Invalid username or password"
+msgstr ""
+
+#: views.py:86
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:198
+#: views.py:221
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
+
+#~ msgid "debug.csrf"
+#~ msgstr "CSRF Token"
+
+#~ msgid "ipaddr"
+#~ msgstr "IP Address"

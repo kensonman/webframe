@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-11 09:00+0000\n"
+"POT-Creation-Date: 2017-05-19 17:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,16 +216,12 @@ msgid "users"
 msgstr "使用者"
 
 #: templates/webframe/header.html:32 templates/webframe/header.html:38
-#, fuzzy, python-format
-#| msgid "username"
 msgid "Hi, %(username)s"
-msgstr "用戶名稱"
+msgstr "你好，%(username)s"
 
 #: templates/webframe/header.html:35
-#, fuzzy
-#| msgid "Preference.id"
 msgid "preferences"
-msgstr "Pref#"
+msgstr "喜好"
 
 #: templates/webframe/header.html:36
 msgid "logout"
@@ -239,24 +235,21 @@ msgstr "登入"
 msgid "Login Required"
 msgstr "請先登入"
 
-#: templates/webframe/login.html:14
-msgid "debug.csrf"
-msgstr "CSRF Token"
+#: templates/webframe/login.html:15
+msgid "IPAddr"
+msgstr ""
 
-#: templates/webframe/login.html:16 templates/webframe/login.html:17
-msgid "ipaddr"
-msgstr "網絡地址"
-
-#: templates/webframe/login.html:20 templates/webframe/login.html:21
+#: templates/webframe/login.html:19 templates/webframe/login.html:20
 #: templates/webframe/user.html:31 templates/webframe/user.html:32
 msgid "username"
 msgstr "用戶名稱"
 
-#: templates/webframe/login.html:24 templates/webframe/login.html:25
+#: templates/webframe/login.html:23 templates/webframe/login.html:24
+#: templates/webframe/user.html:35 templates/webframe/user.html:36
 msgid "password"
 msgstr "密碼"
 
-#: templates/webframe/login.html:28
+#: templates/webframe/login.html:27
 msgid "submit"
 msgstr "送出"
 
@@ -287,6 +280,7 @@ msgid "Config.new"
 msgstr "新增設定"
 
 #: templates/webframe/preference.html:28
+#, python-format
 msgid "%(pref)s - Configuration"
 msgstr "%(pref)s - 設定"
 
@@ -348,20 +342,20 @@ msgid "Preference.sections.pin"
 msgstr "個人資料"
 
 #: templates/webframe/preferences.html:52
-#: templates/webframe/preferences.html:53 templates/webframe/user.html:39
-#: templates/webframe/user.html:40
+#: templates/webframe/preferences.html:53 templates/webframe/user.html:48
+#: templates/webframe/user.html:49
 msgid "first name"
 msgstr ""
 
 #: templates/webframe/preferences.html:56
-#: templates/webframe/preferences.html:57 templates/webframe/user.html:43
-#: templates/webframe/user.html:44
+#: templates/webframe/preferences.html:57 templates/webframe/user.html:52
+#: templates/webframe/user.html:53
 msgid "last name"
 msgstr ""
 
 #: templates/webframe/preferences.html:60
-#: templates/webframe/preferences.html:61 templates/webframe/user.html:35
-#: templates/webframe/user.html:36
+#: templates/webframe/preferences.html:61 templates/webframe/user.html:44
+#: templates/webframe/user.html:45
 msgid "email address"
 msgstr ""
 
@@ -393,23 +387,35 @@ msgstr "新的用戶"
 msgid "id"
 msgstr "ID"
 
-#: templates/webframe/user.html:48
+#: templates/webframe/user.html:37
+msgid "input to change password"
+msgstr "如需更變密碼，請在這裏輸入新密碼"
+
+#: templates/webframe/user.html:39 templates/webframe/user.html:40
+msgid "confirm password"
+msgstr "確認密碼"
+
+#: templates/webframe/user.html:41
+msgid "reinput password to re-confirm"
+msgstr "請再輸入一次新密碼，以確認無誤"
+
+#: templates/webframe/user.html:57
 msgid "active"
 msgstr "Active"
 
-#: templates/webframe/user.html:52
+#: templates/webframe/user.html:61
 msgid "staff status"
 msgstr "是否員工"
 
-#: templates/webframe/user.html:56
+#: templates/webframe/user.html:65
 msgid "superuser status"
 msgstr "是否超及用戶"
 
-#: templates/webframe/user.html:61
+#: templates/webframe/user.html:70
 msgid "User.actions.delete"
 msgstr "刪除使用者"
 
-#: templates/webframe/user.html:62
+#: templates/webframe/user.html:71
 msgid "User.actions.save"
 msgstr "存儲使用者"
 
@@ -417,28 +423,14 @@ msgstr "存儲使用者"
 msgid "User.actions.new"
 msgstr "新增使用者"
 
-#: views.py:63
+#: views.py:35
+msgid "Invalid username or password"
+msgstr "使用者名稱或密碼有誤"
+
+#: views.py:86
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:198
+#: views.py:221
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
-
-#~ msgid "Preference.parent"
-#~ msgstr "歸類"
-
-#~ msgid "Preference.name"
-#~ msgstr "設定名稱"
-
-#~ msgid "Preference.value"
-#~ msgstr "值"
-
-#~ msgid "Preference.sequence"
-#~ msgstr "排序"
-
-#~ msgid "ValueObject"
-#~ msgstr "ValueObject"
-
-#~ msgid "AliveObject"
-#~ msgstr "生命週期物件"

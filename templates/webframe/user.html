@@ -31,6 +31,15 @@ $(document).ready(function(){
 		<label for="usernameFld">{%trans 'username'%}</label>
 		<input name="username" value="{{target.username|default:''}}" class="form-control" placeholder="{%trans 'username'%}" required="true"/>
 	</div>
+	{%if AUTH_PASSWORD_REQUIRED%}<div class="field">
+		<label for="passwordFld">{%trans 'password'%}</label>
+		<input name="password" class="form-control" placeholder="{%trans 'password'%}" type="password"/>
+        <div class="desc">{%trans 'input to change password'%}</div>
+	</div><div class="field">
+		<label for="confirmPasswdFld">{%trans 'confirm password'%}</label>
+        <input name="confirmPasswd" class="form-control" placeholder="{%trans 'confirm password'%}" type="password" equalTo="input[name=password]"/>
+        <div class="desc">{%trans 'reinput password to re-confirm'%}</div>
+	</div>{%endif%}
 	<div class="field">
 		<label for="emailFld">{%trans 'email address'%}</label>
 		<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>

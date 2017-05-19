@@ -107,6 +107,9 @@ def user(req, user):
 			user.is_superuser = req.POST.get('is_superuser', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
 			user.is_active = req.POST.get('is_active', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
 			user.is_staff = req.POST.get('is_staff', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
+        password=req.POST.get('password', None)
+        if password:
+            user.set_password(password)
 		user.save()
 		return redirect(args.get('next', 'users'))
 	elif req.method=='PUT': #The PUT method is used for user to update their own personal information, webframe/preferences.html
