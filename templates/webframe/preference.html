@@ -7,7 +7,7 @@
 <script type="text/javascript"><!--
 $(document).ready(function(){
 	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
-		window.location.href="{%url 'preference' user=currentuser.username prefId='%s'%}".replace('%s', $(this).attr('prefId'));
+		window.location.href="{%url 'preference' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
 	});
 	//Delete Logic: {%if not target.isNew%}
 		$('#deleteBtn').click(function(){ 

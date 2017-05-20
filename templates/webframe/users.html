@@ -17,7 +17,7 @@ $(document).ready(function(){
 	$('tr[username]')
 		.hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer')
 		.click(function(){
-			window.location.href="{%url 'user' user='%s'%}".replace('%s', $(this).attr('username'));
+			window.location.href="{%url 'user' user='_userId_'%}".replace('_userId_', $(this).attr('username'));
 		});
 });
 //--></script>
