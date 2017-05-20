@@ -52,6 +52,11 @@ class ValueObject(models.Model):
     def isNew(self):
         return self.lmd is None
 
+    def id_or_new(self):
+        if self.isNew():
+            return 'new'
+        return self.id.hex
+
     def save(self):
         '''
         Saving the value-object. The method will setup the lmb default value
