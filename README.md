@@ -58,11 +58,13 @@ Application
 
 2. Provide the logout features (Optional)
 
-        #file: urls.py
-        from webframe import views as webframe_views
+		#urls.py
+      from webframe.views import urlpatterns as wf_urls
 
-        urlpatterns += url(r'^logout/?$', webframe_views.logout, name='logout'),
-        urlpatterns += url(r'^logout/?$', webframe_views.logout, name='login'),
+		urlpatterns = [
+			#...
+		]
+      urlpatterns += wf_urls
 
 Preference
 ----
@@ -90,14 +92,12 @@ To use the preference, following the steps:
 3. Setup the preference views
 
 		#urls.py
-		from webframe import views as webframe_view
+      from webframe.views import urlpatterns as wf_urls
 
 		urlpatterns = [
 			#...
-			url(r'^users/(?P<user>[^/]+)/prefs/?$', webframe_view.prefs, name='preferences'),
-			url(r'^users/(?P<user>[^/]+)/prefs/(?P<prefId>[^/]+)/?$', webframe_view.pref, name='preference'),
-			#...
 		]
+      urlpatterns += wf_urls
 
 
 Users
@@ -126,14 +126,12 @@ To use the preference, following the steps:
 3. Setup the preference views
 
 		#urls.py
-		from webframe import views as webframe_view
+      from webframe.views import urlpatterns as wf_urls
 
 		urlpatterns = [
 			#...
-			url(r'^users/?$', webframe_view.users, name='users'),
-			url(r'^users/(?P<user>[^/]+)/?$', webframe_view.user, name='user'),
-			#...
 		]
+      urlpatterns += wf_urls
 
 Javascript Translation
 ----
@@ -141,13 +139,12 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
 1. Setup the preference views
 
 		#urls.py
-      from django.views.i18n import javascript_catalog
+      from webframe.views import urlpatterns as wf_urls
 
 		urlpatterns = [
 			#...
-			url(r'^jsi18n/webframe/$', javascript_catalog, {'packages':('webframe',),'domain':'django'}, name='webframe-js'),
-			#...
 		]
+      urlpatterns += wf_urls
 
 2. In HTML code add
 
