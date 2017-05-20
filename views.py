@@ -31,7 +31,8 @@ def login( req ):
         u=authenticate(req, username=username, password=password)
         if u:
             auth_login(req, u)
-            return redirect(params['next'])
+            nextUrl=params.get('next', reverse('index'))
+            return redirect(nextUrl)
         messages.warning(req, gettext('Invalid username or password'))
     return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
