@@ -34,6 +34,7 @@ def login( req ):
             nextUrl=params.get('next', reverse('index'))
             return redirect(nextUrl)
         messages.warning(req, gettext('Invalid username or password'))
+        params['username']=username
     return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
 def logout(req):
