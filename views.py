@@ -61,7 +61,7 @@ def users(req):
 
     params=dict()
     params['target']=UserTable(get_user_model().objects.all())
-    params['btns']=getattr(settings, 'USER_BTNS', None)
+    params['btns']=getattr(settings, 'USERS_BTNS', None)
     rc=RequestConfig(req)
     rc.configure(params['target'])
     return render(req, getattr(settings, 'TMPL_USERS', 'webframe/users.html'), params)
