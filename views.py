@@ -15,9 +15,10 @@ from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
 from .models import *
 from .tables import *
-import hashlib
+import hashlib, logging
 
 CONFIG_KEY='ConfigKey'
+logger=logging.getLogger('webframe.views')
 
 def login( req ):
     '''
@@ -60,6 +61,7 @@ def users(req):
 
     params=dict()
     params['target']=UserTable(get_user_model().objects.all())
+    params['btns']=getattr(settings, 'USER_BTNS', None)
     rc=RequestConfig(req)
     rc.configure(params['target'])
     return render(req, getattr(settings, 'TMPL_USERS', 'webframe/users.html'), params)
@@ -83,6 +85,8 @@ def user(req, user):
 
         # Generate the result
         params['target']=user
+        params['btns']=getattr(settings, 'USER_BTNS', None)
+        logger.info('btns: %s'%params['btns'])
         return render(req, getattr(settings, 'TMPL_USER', 'webframe/user.html'), params)
     elif req.method=='DELETE':
         _('User.msg.confirmDelete')

@@ -18,57 +18,60 @@ $(document).ready(function(){
 //--></script>
 {%endblock%}
 
-{%block content%}<div class="jumbotron"><div class="pnl-padding">
-<h1>{%trans 'User.new' as newuser%}{{target.username|default:newuser}} - {%trans 'users'%}</h1>
-<form id="userFrm" method="POST" action="{%url 'user' user=target.username|default:'add'%}">
-	{%csrf_token%}
-	{%method_override 'POST'%}
-	{%if target.id%}<div class="field">
-		<label for="idFld">{%trans 'id'%}</label>
-		<input name="id" value="{{target.id}}" readonly="readonly" class="form-control"/>
-	</div>{%endif%}
-	<div class="field">
-		<label for="usernameFld">{%trans 'username'%}</label>
-		<input name="username" value="{{target.username|default:''}}" class="form-control" placeholder="{%trans 'username'%}" required="true"/>
-	</div>
-	{%if AUTH_PASSWORD_REQUIRED%}<div class="field">
-		<label for="passwordFld">{%trans 'password'%}</label>
-		<input name="password" class="form-control" placeholder="{%trans 'password'%}" type="password"/>
-        <div class="desc">{%trans 'input to change password'%}</div>
-	</div><div class="field">
-		<label for="confirmPasswdFld">{%trans 'confirm password'%}</label>
-        <input name="confirmPasswd" class="form-control" placeholder="{%trans 'confirm password'%}" type="password" equalTo="input[name=password]"/>
-        <div class="desc">{%trans 'reinput password to re-confirm'%}</div>
-	</div>{%endif%}
-	<div class="field">
-		<label for="emailFld">{%trans 'email address'%}</label>
-		<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
-	</div>
-	<div class="field">
-		<label for="first_nameFld">{%trans 'first name'%}</label>
-		<input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
-	</div>
-	<div class="field">
-		<label for="last_nameFld">{%trans 'last name'%}</label>
-		<input name="last_name" value="{{target.last_name|default:''}}" class="form-control" placeholder="{%trans 'last name'%}" required="true"/>
-	</div>
-	{%if perms.auth%}{%if perms.auth.add_user or perms.auth.change_user%}
-	<div class="field">
-		<div><label for="is_activeFld">{%trans 'active'%}</label></div>
-		<input type="checkbox" name="is_active" value="True"{%if target.is_active%} checked="checked"{%endif%}/>
-	</div>
-	<div class="field">
-		<div><label for="is_staffFld">{%trans 'staff status'%}</label></div>
-		<input type="checkbox" name="is_staff" value="True"{%if target.is_staff%} checked="checked"{%endif%}/>
-	</div>
-	<div class="field">
-		<div><label for="is_superuserFld">{%trans 'superuser status'%}</label></div>
-		<input type="checkbox" name="is_superuser" value="True"{%if target.is_superuser%} checked="checked"{%endif%}/>
-	</div>
-	{%endif%}{%endif%}
-	<div class="pnl pnl-btns">
-		{%if target.id and perms.auth and perms.auth.delete_user%}<button class="btn btn-danger" id="deleteBtn"><i class="fa fa-user-times"></i> {%trans 'User.actions.delete'%}</button>{%endif%}
-		<button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> {%trans 'User.actions.save'%}</button>
-	</div>
-</form>
-</div></div>{%endblock%}
+{%block content%}<div class="panel panel-default">
+<div class="panel-body">
+    <h1>{%trans 'User.new' as newuser%}{{target.username|default:newuser}} - {%trans 'users'%}</h1>
+    <form id="userFrm" method="POST" action="{%url 'user' user=target.username|default:'add'%}">
+        {%csrf_token%}
+        {%method_override 'POST'%}
+        {%if target.id%}<div class="field">
+            <label for="idFld">{%trans 'id'%}</label>
+            <input name="id" value="{{target.id}}" readonly="readonly" class="form-control"/>
+        </div>{%endif%}
+        <div class="field">
+            <label for="usernameFld">{%trans 'username'%}</label>
+            <input name="username" value="{{target.username|default:''}}" class="form-control" placeholder="{%trans 'username'%}" required="true"/>
+        </div>
+        {%if AUTH_PASSWORD_REQUIRED%}<div class="field">
+            <label for="passwordFld">{%trans 'password'%}</label>
+            <input name="password" class="form-control" placeholder="{%trans 'password'%}" type="password"/>
+            <div class="desc">{%trans 'input to change password'%}</div>
+        </div><div class="field">
+            <label for="confirmPasswdFld">{%trans 'confirm password'%}</label>
+            <input name="confirmPasswd" class="form-control" placeholder="{%trans 'confirm password'%}" type="password" equalTo="input[name=password]"/>
+            <div class="desc">{%trans 'reinput password to re-confirm'%}</div>
+        </div>{%endif%}
+        <div class="field">
+            <label for="emailFld">{%trans 'email address'%}</label>
+            <input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
+        </div>
+        <div class="field">
+            <label for="first_nameFld">{%trans 'first name'%}</label>
+            <input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
+        </div>
+        <div class="field">
+            <label for="last_nameFld">{%trans 'last name'%}</label>
+            <input name="last_name" value="{{target.last_name|default:''}}" class="form-control" placeholder="{%trans 'last name'%}" required="true"/>
+        </div>
+        {%if perms.auth%}{%if perms.auth.add_user or perms.auth.change_user%}
+        <div class="field">
+            <div><label for="is_activeFld">{%trans 'active'%}</label></div>
+            <input type="checkbox" name="is_active" value="True"{%if target.is_active%} checked="checked"{%endif%}/>
+        </div>
+        <div class="field">
+            <div><label for="is_staffFld">{%trans 'staff status'%}</label></div>
+            <input type="checkbox" name="is_staff" value="True"{%if target.is_staff%} checked="checked"{%endif%}/>
+        </div>
+        <div class="field">
+            <div><label for="is_superuserFld">{%trans 'superuser status'%}</label></div>
+            <input type="checkbox" name="is_superuser" value="True"{%if target.is_superuser%} checked="checked"{%endif%}/>
+        </div>
+        {%endif%}{%endif%}
+        <div class="pnl pnl-btns">
+            {%for b in btns%}<a href="{%url b.href username=target.username%}" class="btn btn-{{b.lv|default:'info'}}">{%trans b.label%}</a>{%endfor%}
+            {%if target.id and perms.auth and perms.auth.delete_user%}<button class="btn btn-danger" id="deleteBtn"><i class="fa fa-user-times"></i> {%trans 'User.actions.delete'%}</button>{%endif%}
+            <button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> {%trans 'User.actions.save'%}</button>
+        </div>
+    </form>
+</div>
+</div>{%endblock%}
