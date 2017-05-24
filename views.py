@@ -86,7 +86,7 @@ def user(req, user):
         # Generate the result
         params['target']=user
         params['btns']=getattr(settings, 'USER_BTNS', None)
-        logger.info('btns: %s'%params['btns'])
+        logger.debug('btns: %s'%params['btns'])
         return render(req, getattr(settings, 'TMPL_USER', 'webframe/user.html'), params)
     elif req.method=='DELETE':
         _('User.msg.confirmDelete')
