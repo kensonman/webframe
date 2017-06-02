@@ -7,57 +7,59 @@ from .CurrentUserMiddleware import get_current_user
 import math, uuid
 
 class ValueObject(models.Model):
-    class Meta(object):
-        abstract        = True
-        verbose_name        = _('webframe.models.ValueObject')
-        verbose_name_plural = _('webframe.models.ValueObjects')
-        permissions     = ( ('view_%(class)s', 'Can view this model without ownership'), )
+   CACHED='__CACHED__'
 
-    id                  = models.UUIDField(
-                            primary_key=True,
-                            default=uuid.uuid4,
-                            editable=False,
-                            verbose_name=_('webframe.models.ValueObject.id'),
-                            help_text=_('webframe.models.ValueObject.id.helptext'),
-                        )
-    lmd                 = models.DateTimeField(
-                            auto_now=True,
-                            verbose_name=_('webframe.models.ValueObject.lmd'),
-                            help_text=_('webframe.models.ValueObject.lmd.helptext'),
-                        )
-    lmb                 = models.ForeignKey(
-                            settings.AUTH_USER_MODEL,
-                            default=get_current_user,
-                            null=True,
-                            blank=True,
-                            related_name='%(class)s_lmb',
-                            verbose_name=_('webframe.models.ValueObject.lmb'),
-                            help_text=_('webframe.models.ValueObject.lmb.helptext'),
-                        )
-    cd                  = models.DateTimeField(
-                            auto_now_add=True,
-                            verbose_name=_('webframe.models.ValueObject.cd'),
-                            help_text=_('webframe.models.ValueObject.cd.helptext'),
-                        )
-    cb                  = models.ForeignKey(
-                            settings.AUTH_USER_MODEL,
-                            default=get_current_user,
-                            null=True,
-                            blank=True,
-                            related_name='%(class)s_cb',
-                            verbose_name=_('webframe.models.ValueObject.cb'),
-                            help_text=_('webframe.models.ValueObject.cb.helptext'),
-                        )
+   class Meta(object):
+      abstract        = True
+      verbose_name        = _('webframe.models.ValueObject')
+      verbose_name_plural = _('webframe.models.ValueObjects')
+      permissions     = ( ('view_%(class)s', 'Can view this model without ownership'), )
 
-    def isNew(self):
+   id                  = models.UUIDField(
+      primary_key=True,
+      default=uuid.uuid4,
+      editable=False,
+      verbose_name=_('webframe.models.ValueObject.id'),
+      help_text=_('webframe.models.ValueObject.id.helptext'),
+   )
+   lmd                 = models.DateTimeField(
+      auto_now=True,
+      verbose_name=_('webframe.models.ValueObject.lmd'),
+      help_text=_('webframe.models.ValueObject.lmd.helptext'),
+   )
+   lmb                 = models.ForeignKey(
+      settings.AUTH_USER_MODEL,
+      default=get_current_user,
+      null=True,
+      blank=True,
+      related_name='%(class)s_lmb',
+      verbose_name=_('webframe.models.ValueObject.lmb'),
+      help_text=_('webframe.models.ValueObject.lmb.helptext'),
+   )
+   cd                  = models.DateTimeField(
+      auto_now_add=True,
+      verbose_name=_('webframe.models.ValueObject.cd'),
+      help_text=_('webframe.models.ValueObject.cd.helptext'),
+   )
+   cb                  = models.ForeignKey(
+      settings.AUTH_USER_MODEL,
+      default=get_current_user,
+      null=True,
+      blank=True,
+      related_name='%(class)s_cb',
+      verbose_name=_('webframe.models.ValueObject.cb'),
+      help_text=_('webframe.models.ValueObject.cb.helptext'),
+   )
+
+   def isNew(self):
         return self.lmd is None
 
-    def id_or_new(self):
+   def id_or_new(self):
         if self.isNew():
             return 'new'
         return self.id.hex
 
-    def save(self):
+   def save(self):
         '''
         Saving the value-object. The method will setup the lmb default value
         '''
@@ -70,6 +72,24 @@ class ValueObject(models.Model):
         except TypeError:
             self.cb=user
         super(ValueObject, self).save()
+
+   def cached(self, name, fn, useCache=True):
+      '''
+      Retrieve the value from cache. This is used to cache and retrieve the specific data from the object cache. 
+      If the specific data is existed, the function will return the cached value directly. Otherwise, the fn will be invited
+      and save the result as a cache for next time.
+
+      @param name The name of the cache
+      @param fn The target function to retrieve the value. e.g.: lambda: self.__class__.objects.filter(id=123)
+      @param useCache Force to clear the cache when this is Flase
+      '''
+      if not hasattr(self, ValueObject.CACHED): setattr(self, ValueObject.CACHED, dict()) #Create the cache dict if not exists
+      c=getattr(self, ValueObject.CACHED) #Retrieve the caches
+      if (not useCache) and name in c: del c[name] #Remove the cache if not useCache
+
+      if name not in c: c[name]=fn()
+
+      return c[name]
 
 class AliveObjectManager(models.Manager):
     def living(self, timestamp=None):
