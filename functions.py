@@ -33,7 +33,7 @@ def inNetworks( ipaddr, networks=['192.168.0.0/255.255.255.0',]):
             return True
     return False
 
-def getBool( val, defVal=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T'] ):
+def getBool( val, defVal=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
 	'''
 	Retrieve the boolean value from string
 
