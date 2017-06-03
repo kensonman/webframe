@@ -106,10 +106,11 @@ The WEBFRAME also support the User model and related layout. This can be applied
 
 To use the preference, following the steps:
 
-1. Add the `django_tables2` into `INSTALLED_APPS`:
+1. Add the `django_tables2` into `INSTALLED_APPS` and showing the password field for user:
 
 		#file: settings.py
 		INSTALLED_APPS += ('django_tables2',)
+      AUTH_PASSWORD_REQUIRED=True
 
 2. Make sure the context-processor is installed:
 

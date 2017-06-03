@@ -30,7 +30,6 @@ $(document).ready(function(){
 	<form method="POST">
 		{%csrf_token%}
 		{% method_override 'POST'%}
-		{%if target.user%}<input type="hidden" name="user" value="{{target.user.username}}"/>{%endif%}
 		{%if target.parent%}<input type="hidden" name="parent" value="{{target.parent.id.hex}}"/>{%endif%}
 		{%if config_key%}<input type="hidden" name="config_key" value="{{config_key}}"/>{%endif%}
 		{%if not target.isNew%}<div class="field">
@@ -40,6 +39,11 @@ $(document).ready(function(){
 		{%if target.parent%}<div class="field">
 			<label for="parentFld">{%trans 'webframe.models.Preference.parent'%}</label>
 			<input name="parent" id="parentFld" class="form-control" value="{{target.parent.id.hex}}" readonly="readonly" required="true" placeholder="{%trans 'webframe.models.Preference.parent'%}"/>
+		</div>{%endif%}
+		{%if target.owner%}<div class="field">
+			<label for="usernameFld">{%trans 'webframe.models.Preference.owner'%}</label>
+	   	<input name="username" id="usernameFld" class="form-control" value="{{target.owner.username|default:''}}" readonly="readonly" placeholder="{%trans 'webframe.models.Preference.owner'%}"/>
+	   	<input type="hidden" name="owner" id="ownerFld" value="{{target.owner.id}}"/>
 		</div>{%endif%}
 		<div class="field">
 			<label for="nameFld">{%trans 'webframe.models.Preference.name'%}</label>

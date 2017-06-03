@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
+from .functions import getBool
 from .models import *
 from .tables import *
 import hashlib, logging
@@ -54,7 +55,7 @@ def users(req):
     # Check permission
     if req.user.is_superuser:
         pass
-    elif req.user.has_perms('auth.browse_user'):
+    elif req.user.has_perm('auth.browse_user'):
         pass
     else:
         return HttpResponseForbidden('<h1>403 - Forbidden</h1>')
@@ -78,14 +79,15 @@ def user(req, user):
             pass
         elif req.user.username==username:
             pass
-        elif req.user.has_perms('auth.browse_user'):
+        elif req.user.has_perm('auth.browse_user'):
             pass
         else:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden('<h1>403-Forbidden</h1>')
 
         # Generate the result
         params['target']=user
         params['btns']=getattr(settings, 'USER_BTNS', None)
+        params['AUTH_PASSWORD_REQUIRED']=getBool(getattr(settings, 'AUTH_PASSWORD_REQUIRED', False))
         logger.debug('btns: %s'%params['btns'])
         return render(req, getattr(settings, 'TMPL_USER', 'webframe/user.html'), params)
     elif req.method=='DELETE':
@@ -98,9 +100,9 @@ def user(req, user):
             pass
         elif req.user==user:
             pass
-        elif user.id is None and req.user.has_perms('auth.add_user'):
+        elif user.id is None and req.user.has_perm('auth.add_user'):
             pass
-        elif user.id is not None and req.user.has_perms('auth.change_user'):
+        elif user.id is not None and req.user.has_perm('auth.change_user'):
             pass
         else:
             return HttpResponseForbidden('<h1>403 - Forbidden</h1>')
@@ -108,7 +110,7 @@ def user(req, user):
         user.first_name=req.POST.get('first_name', None)
         user.last_name=req.POST.get('last_name', None)
         user.email=req.POST.get('email', None)
-        if req.user.is_superuser or req.user.has_perms('auth.add_user') or req.user.has_perms('auth.change_user'):
+        if req.user.is_superuser or req.user.has_perm('auth.add_user') or req.user.has_perm('auth.change_user'):
             user.username=req.POST.get('username', user.username)
             user.is_superuser = req.POST.get('is_superuser', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
             user.is_active = req.POST.get('is_active', '').upper() in ['TRUE', 'T', 'YES', 'Y', '1']
@@ -124,7 +126,7 @@ def user(req, user):
             pass
         elif req.user==user:
             pass
-        elif user.id is not None and req.user.has_perms('auth.change_user'):
+        elif user.id is not None and req.user.has_perm('auth.change_user'):
             pass
         else:
             return HttpResponseForbidden('<h1>403 - Forbidden</h1>')
@@ -144,7 +146,7 @@ def prefs(req, user=None):
     '''
     if user==None: user=req.user.username
     if user!=req.user.username and not req.user.is_superuser:
-        if req.user.username!=user: return HttpResponseForbidden()
+        if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
     user=getObj(get_user_model(), username=user)
     params=dict()
     params['preference']=PreferenceTable(Preference.objects.filter(owner=req.user, parent__isnull=True))
@@ -153,7 +155,7 @@ def prefs(req, user=None):
     rc.configure(params['preference'])
     rc.configure(params['config'])
     params['currentuser']=user
-    if req.user.has_perms('webframe.add_config') or req.user.has_perms('webframe.change.config'):
+    if req.user.has_perm('webframe.add_config') or req.user.has_perm('webframe.change.config'):
         m=hashlib.md5()
         m.update(user.username.encode('utf-8'))
         m.update(CONFIG_KEY.encode('utf-8'))
@@ -168,27 +170,27 @@ def pref(req, user=None, prefId=None):
     # Declare the preference's owner
     if user==None or user=='None': user=req.user.username
     if user!=req.user.username and not req.user.is_superuser:
-        if req.user.username!=user: return HttpResponseForbidden()
+        if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
     user=getObj(get_user_model(), username=user)
     params=dict()
-    m=hashlib.md5()
-    m.update(user.username.encode('utf-8'))
-    m.update(CONFIG_KEY.encode('utf-8'))
-    params['config_key']=m.hexdigest()
 
     # Get the target preference
     if prefId=='add' or prefId=='new':
         pref=Preference()
         pref.owner=user
-        if 'config_key' in req.GET:
-            if params['config_key']==req.GET['config_key']:
-                pref.owner=None
-                params['config_key']=m.hexdigest()
         if 'parent' in req.GET: pref.parent=getObj(Preference, id=req.GET['parent'])
     else:
         pref=getObj(Preference, id=prefId)
     
     if req.method=='GET':
+        isConfig=getBool(req.GET.get('config', 'False'))
+        if isConfig:
+            if not (req.user.has_perm('webframe.add_config') or req.user.has_perm('webframe.change_config')):
+               # Returns 403 if user cannot edit config
+               return HttpResponseForbidden('<h1>403-Forbidden</h1>')
+            pref.owner=None
+        else:
+            pref.owner=user
         # Preparing the form view
         params['target']=pref
         params['childs']=PreferenceTable(pref.childs())
@@ -196,27 +198,23 @@ def pref(req, user=None, prefId=None):
         return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
     elif req.method=='POST':
         # Security Checking
-        if req.POST.get('user', None):
-            if pref.isNew() and req.user.has_perms('webframe.add_preference'):
+        if req.POST.get('owner', None):
+            if pref.isNew() and req.user.has_perm('webframe.add_preference'):
                 pass #Allow to add preference
-            elif (not pref.isNew()) and req.user.has_perms('webframe.change_preference'):
+            elif (not pref.isNew()) and req.user.has_perm('webframe.change_preference'):
                 pass #Allow to change preference
             else:
-                return HttpResponseForbidden()
-            pref.owner=getObj(get_user_model(), username=req.POST['user'])
+                logger.warning('Forbidden to add or change preference')
+                return HttpResponseForbidden('<h1>403-Forbidden</h1>')
+            pref.owner=getObj(get_user_model(), id=req.POST['owner'])
         else:
-            if pref.isNew() and req.user.has_perms('webframe.add_config'):
+            if pref.isNew() and req.user.has_perm('webframe.add_config'):
                 pass #Allow to add config 
-            elif (not pref.isNew()) and req.user.has_perms('webframe.change_config'):
+            elif (not pref.isNew()) and req.user.has_perm('webframe.change_config'):
                 pass #Allow to change config 
             else:
-                return HttpResponseForbidden()
-            m=hashlib.md5()
-            m.update(user.username.encode('utf-8'))
-            m.update(CONFIG_KEY.encode('utf-8'))
-            if m.hexdigest()!=req.POST.get('config_key', None):
-                print('Invalid config_key')
-                return HttpResponseForbidden()
+                logger.warning('Forbidden to add or change config')
+                return HttpResponseForbidden('<h1>403-Forbidden</h1>')
             pref.owner=None
 
         # Saving
