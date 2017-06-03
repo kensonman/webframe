@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.db import transaction
 from django.http import HttpResponseForbidden, QueryDict
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
@@ -67,6 +69,7 @@ def users(req):
     rc.configure(params['target'])
     return render(req, getattr(settings, 'TMPL_USERS', 'webframe/users.html'), params)
 
+@transaction.atomic
 @login_required
 def user(req, user):
     user=get_user_model()() if user=='add' or user=='new' else getObj(get_user_model(), username=user)
@@ -168,6 +171,7 @@ def prefs(req, user=None):
         params['config_key']=m.hexdigest()
     return render(req, getattr(settings, 'TMPL_PREFERENCES', 'webframe/preferences.html'), params)
 
+@transaction.atomic
 @login_required
 def pref(req, user=None, prefId=None):
     '''
