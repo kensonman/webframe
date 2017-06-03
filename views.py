@@ -119,6 +119,12 @@ def user(req, user):
         if password:
             user.set_password(password)
         user.save()
+
+        if hasattr(settings, 'AUTH_DEFAULT_GROUPS'):
+            for g in getattr(settings, 'AUTH_DEFAULT_GROUPS', list()):
+               gp=Group.objects.filter(name=g)
+               if gp.count()==1:
+                  gp[0].user_set.add(user)
         return redirect(args.get('next', 'users'))
     elif req.method=='PUT': #The PUT method is used for user to update their own personal information, webframe/preferences.html
         # Check permission
