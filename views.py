@@ -32,7 +32,11 @@ def login( req ):
     if req.method=='POST':
         username=req.POST['username']
         password=req.POST['password']
-        u=authenticate(req, username=username, password=password)
+        try:
+           u=authenticate(req, username=username, password=password)
+        except:
+           logger.debug('Failed to login')
+           u=None
         if u:
             auth_login(req, u)
             nextUrl=params.get('next', reverse('index'))
