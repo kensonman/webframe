@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from .CurrentUserMiddleware import get_current_user
 import math, uuid
 
+fmt=lambda d: 'null' if d is None else d.strftime('%Y-%m-%d %H:%M:%S.%fT%z')
+
 class ValueObject(models.Model):
    CACHED='__CACHED__'
 
@@ -58,6 +60,9 @@ class ValueObject(models.Model):
         if self.isNew():
             return 'new'
         return self.id.hex
+
+   def asDict(self):
+      return {'id': self.id.hex, 'lmd':fmt(self.lmd), 'lmb':self.lmb.username, 'cd':fmt(self.cd), 'cb':self.cb.username}
 
    def save(self):
         '''
@@ -172,7 +177,9 @@ class AliveObject(models.Model):
         Determinate the objct was dead (is-not-effective).
         '''
         return not self.isAlive(now)
-        
+
+    def asDict(self):
+        return {'effDate':fmt(self.effDate), 'expDate':fmt(self.expDate), 'enabled':self.enabled}
 
 class PrefManager(models.Manager):
     def pref(self, name, **kwargs):

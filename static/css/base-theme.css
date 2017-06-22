@@ -1,9 +1,12 @@
+@import url('typeahead.css');
+
 #pnl_root{display:none;}
 #pnl_body{margin-bottom:0px;}
 #pnl_footer{ padding: 20px; font-size:12px;}
 .navbar{ margin-bottom: 0px; }
 div.field{margin: 20px 0px; padding: 0px 10px;}
 div.field .desc{color:gray; font-size:10px;}
+div.field > .twitter-typeahead { width: 100%; }
 div.pnl-btns{margin: 20px 10px; text-align:right;}
 div.pnl-lbtns{margin: 20px 10px;}
 div.pnl-rbtns{margin: 20px 10px; text-align:right;}
@@ -43,4 +46,5 @@ label[for]{cursor:pointer;}
 @media screen and (min-device-width: 800px){
 	.pnl-padding{ padding: 20px; }
 }
+
 
