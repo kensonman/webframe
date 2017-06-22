@@ -4,7 +4,9 @@ from django.db import models
 from django.utils import timezone as tz
 from django.utils.translation import ugettext_lazy as _
 from .CurrentUserMiddleware import get_current_user
-import math, uuid
+import math, uuid, logging
+
+logger=logging.getLogger('webframe.models')
 
 fmt=lambda d: 'null' if d is None else d.strftime('%Y-%m-%d %H:%M:%S.%fT%z')
 
@@ -183,9 +185,10 @@ class AliveObject(models.Model):
 
 class PrefManager(models.Manager):
     def pref(self, name, **kwargs):
-        defval=kwargs.get('defval', None)
-        user=kwargs.get('user', None)
-        rst=self.filter(name=name)
+      defval=kwargs.get('defval', None)
+      user=kwargs.get('user', None)
+      rst=self.filter(name=name)
+      try:
         if user: rst=rst.filter(owner=user)
         rst=rst.order_by('owner')
         if len(rst)>0:
@@ -195,6 +198,9 @@ class PrefManager(models.Manager):
         if str(kwargs.get('returnValue', 'False')).upper() in ['TRUE', 'T', 'YES', 'Y', '1', 'ON']:
             return rst.value
         return rst
+      except:
+        logger.exception('Cannot get preferences<%s>'%name)
+        return defval
 
 class Preference(ValueObject):
     class Meta(object):
