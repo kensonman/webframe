@@ -1,14 +1,90 @@
+from datetime import datetime
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone as tz
+from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
+from json import JSONEncoder, JSONDecoder
 from .CurrentUserMiddleware import get_current_user
-import math, uuid, logging
+from .functions import getBool, getClass
+import math, uuid, logging, json
 
 logger=logging.getLogger('webframe.models')
 
 fmt=lambda d: 'null' if d is None else d.strftime('%Y-%m-%d %H:%M:%S.%fT%z')
+
+class ModelEncoder(JSONEncoder, JSONDecoder):
+
+   def __init__(self):
+      self.DATE_FORMAT='%Y-%m-%dT%H:%M:%S.%f%z'
+
+   def valueOf(self, val):
+      '''
+      Parse the value into dumpable format
+      '''
+      if val is None:
+         rst='null'
+      elif isinstance(val, bool):
+         rst='true' if val else 'false'
+      elif isinstance(val, datetime):
+         rst=json.dumps(val.strftime(self.DATE_FORMAT))
+      elif isinstance(val, get_user_model()):
+         rst=json.dumps(val.username)
+      elif isinstance(val, str):
+         rst=json.dumps(val)
+      elif isinstance(val, uuid.UUID):
+         rst=json.dumps(val.hex)
+      else:
+         rst=str(val)
+      return rst
+
+   def parseVal(self, field, val):
+      '''
+      Parse the value from dumpable format
+      '''
+      typ=field.get_internal_type()
+      if val is None:
+         return None
+      elif typ is 'DateTimeField':
+         return datetime.strptime(val, self.DATE_FORMAT)
+      elif typ is 'BooleanField':
+         return getBool(val)
+      elif field.related_model is get_user_model():
+         return getObj(get_user_model(), username=val)
+      return str(val)
+
+   def default(self, obj):
+      if isinstance(obj, models.Model):
+         rst="\"type\": \"%s.%s\",\n"%(obj.__class__.__module__, obj.__class__.__name__)
+         for f in obj.__class__._meta.get_fields():
+            if isinstance(f, models.Field):
+               n=f.name
+               v=getattr(obj, n)
+               rst+="%s: %s,\n"%(json.dumps(n), self.valueOf(v))
+         rst=rst.strip()
+         if rst.endswith(','): rst=rst[0:-1]
+         return '{%s}'%rst
+      else:
+         raise TypeError('Support an instance of Model only')
+
+   def decode(self, val):
+      '''
+      Return the python object that representation the val.
+      '''
+      val=val.replace('\n', '')
+      params=json.loads(val)
+      if 'type' in params:
+         clazz=getClass(params['type'])
+         rst=clazz()
+         for f in clazz._meta.get_fields():
+            if isinstance(f, models.Field):
+               v=self.parseVal(f, params.get(f.name, None))
+               setattr(rst, f.name, v)
+         return rst
+      else:
+         raise TypeError('No type found')
 
 class ValueObject(models.Model):
    CACHED='__CACHED__'
