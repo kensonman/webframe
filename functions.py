@@ -2,6 +2,16 @@
 from django.http import HttpRequest
 from netaddr import IPAddress, IPNetwork
 
+def getClass( cls ):
+   '''
+   Get the class from a string.
+   '''
+   parts=cls.split('.')
+   m=__import__('.'.join(parts[:-1]))
+   for c in parts[1:]:
+      m=getattr(m, c)
+   return m
+
 def getClientIP( req ):
    '''
    Get the client ip address
