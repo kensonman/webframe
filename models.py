@@ -47,12 +47,22 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
       typ=field.get_internal_type()
       if val is None:
          return None
-      elif typ is 'DateTimeField':
-         return datetime.strptime(val, self.DATE_FORMAT)
+      elif typ in ['AutoField', 'IntegerField', 'SmallIntegerField']:
+         return int(val)
+      elif typ in ['BigAutoField', 'BigIntegerField']:
+         return long(val)
+      elif typ in ['FloatField', 'DecimalField']:
+         return float(val)
       elif typ is 'BooleanField':
          return getBool(val)
-      elif field.related_model is get_user_model():
-         return getObj(get_user_model(), username=val)
+      elif typ in ['CharField', 'TextField', 'EmailField', 'URLField', 'UUIDField']:
+         return str(val)
+      elif typ is 'DateTimeField':
+         return datetime.strptime(val, self.DATE_FORMAT)
+      elif typ is 'ForeignKey':
+         if field.related_model is get_user_model():
+            return getObj(get_user_model(), username=val)
+         return getObj(field.related_model, id=val)
       return str(val)
 
    def default(self, obj):
@@ -66,6 +76,11 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
          rst=rst.strip()
          if rst.endswith(','): rst=rst[0:-1]
          return '{%s}'%rst
+      elif isinstance(obj, list):
+         rst=''
+         for o in obj:
+            rst+='%s,'%self.default(o)
+         return '[%s]'%rst
       else:
          raise TypeError('Support an instance of Model only')
 
@@ -84,7 +99,7 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
                setattr(rst, f.name, v)
          return rst
       else:
-         raise TypeError('No type found')
+         return params
 
 class ValueObject(models.Model):
    CACHED='__CACHED__'
