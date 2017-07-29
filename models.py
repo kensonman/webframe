@@ -36,6 +36,8 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
          rst=json.dumps(val)
       elif isinstance(val, uuid.UUID):
          rst=json.dumps(val.hex)
+      elif isinstance(val, ValueObject):
+         rst=self.valueOf(val.id)
       else:
          rst=str(val)
       return rst
@@ -67,7 +69,7 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
 
    def default(self, obj):
       if isinstance(obj, models.Model):
-         rst="\"type\": \"%s.%s\",\n"%(obj.__class__.__module__, obj.__class__.__name__)
+         rst="\"_type_\": \"%s.%s\",\n"%(obj.__class__.__module__, obj.__class__.__name__)
          for f in obj.__class__._meta.get_fields():
             if isinstance(f, models.Field):
                n=f.name
@@ -80,9 +82,11 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
          rst=''
          for o in obj:
             rst+='%s,'%self.default(o)
+         rst=rst.strip()
+         if rst.endswith(','): rst=rst[0:-1]
          return '[%s]'%rst
       else:
-         raise TypeError('Support an instance of Model only')
+         raise TypeError('Support an instance of Model, list; but: %s'%type(obj))
 
    def decode(self, val):
       '''
@@ -90,8 +94,8 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
       '''
       val=val.replace('\n', '')
       params=json.loads(val)
-      if 'type' in params:
-         clazz=getClass(params['type'])
+      if '_type_' in params:
+         clazz=getClass(params['_type_'])
          rst=clazz()
          for f in clazz._meta.get_fields():
             if isinstance(f, models.Field):
