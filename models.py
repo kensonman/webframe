@@ -16,6 +16,7 @@ logger=logging.getLogger('webframe.models')
 fmt=lambda d: 'null' if d is None else d.strftime('%Y-%m-%d %H:%M:%S.%fT%z')
 
 class ModelEncoder(JSONEncoder, JSONDecoder):
+   META_TYPE='_type_'
 
    def __init__(self):
       self.DATE_FORMAT='%Y-%m-%dT%H:%M:%S.%f%z'
@@ -69,7 +70,7 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
 
    def default(self, obj):
       if isinstance(obj, models.Model):
-         rst="\"_type_\": \"%s.%s\",\n"%(obj.__class__.__module__, obj.__class__.__name__)
+         rst="\"%s\": \"%s.%s\",\n"%(ModelEncoder.META_TYPE, obj.__class__.__module__, obj.__class__.__name__)
          for f in obj.__class__._meta.get_fields():
             if isinstance(f, models.Field):
                n=f.name
@@ -94,8 +95,8 @@ class ModelEncoder(JSONEncoder, JSONDecoder):
       '''
       val=val.replace('\n', '')
       params=json.loads(val)
-      if '_type_' in params:
-         clazz=getClass(params['_type_'])
+      if ModelEncoder.META_TYPE in params:
+         clazz=getClass(params[ModelEncoder.META_TYPE])
          rst=clazz()
          for f in clazz._meta.get_fields():
             if isinstance(f, models.Field):
