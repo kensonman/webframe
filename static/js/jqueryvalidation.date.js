@@ -4,7 +4,7 @@
 //Description: The file provide the date validation rules for (jqueryvalidation)[https://jqueryvalidation.org]
 //
 //Required: 
-//    - (monent.js)[http://momentjs.com]
+//    - (moment.js)[http://momentjs.com]
 //
 //Methods:
 //     dateformat:  Used to required the input must be fit with specific date-format[http://momentjs.com/docs/#/displaying/].
@@ -32,15 +32,14 @@ jQuery.validator.addMethod('mindate', function(val, element, params){
 	if(typeof(params)=='undefined')
 		params='{}';
    try{
-      params=JSON.parse(params);
-      params=jQuery.extend({}, JSON.parse(params), {"dateformat":"YYYY-MM-DD", "value":monent().format("YYYY-MM-DD")});
-      params.value=monent(params.value, params.dateformat, true);
+      params=jQuery.extend({}, {"dateformat":"YYYY-MM-DD", "value":moment().format("YYYY-MM-DD")}, JSON.parse(params));
+      params.value=moment(params.value, params.dateformat, true);
       val=moment(val, params.dateformat, true);
       return val.isSame(params.value) || params.value.isBefore(val);
    }catch(err){
       return false;
    }
-}, 'Please enter the value in valid date-format');
+}, jQuery.validator.format('The minimum value is {0}'));
 
 jQuery.validator.addMethod('maxdate', function(val, element, params){
    val=val.trim();
@@ -48,12 +47,11 @@ jQuery.validator.addMethod('maxdate', function(val, element, params){
 	if(typeof(params)=='undefined')
 		params='{}';
    try{
-      params=JSON.parse(params);
-      params=jQuery.extend({}, JSON.parse(params), {"dateformat":"YYYY-MM-DD", "value":monent().format("YYYY-MM-DD")});
-      params.value=monent(params.value, params.dateformat, true);
+      params=jQuery.extend({}, {"dateformat":"YYYY-MM-DD", "value":moment().format("YYYY-MM-DD")}, JSON.parse(params));
+      params.value=moment(params.value, params.dateformat, true);
       val=moment(val, params.dateformat, true);
       return val.isSame(params.value) || params.value.isAfter(val);
    }catch(err){
       return false;
    }
-}, 'Please enter the value in valid date-format');
+}, jQuery.validator.format('The maximum valud is {0}'));
