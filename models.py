@@ -17,6 +17,7 @@ fmt=lambda d: 'null' if d is None else d.strftime('%Y-%m-%d %H:%M:%S.%fT%z')
 
 class ModelEncoder(JSONEncoder, JSONDecoder):
    META_TYPE='_type_'
+   META_VERS='_vers_'
 
    def __init__(self):
       self.DATE_FORMAT='%Y-%m-%dT%H:%M:%S.%f%z'
