@@ -6,107 +6,104 @@ from django.db import models
 from django.utils import timezone as tz
 from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
-from json import JSONEncoder, JSONDecoder
 from .CurrentUserMiddleware import get_current_user
 from .functions import getBool, getClass
 import math, uuid, logging, json
 
 logger=logging.getLogger('webframe.models')
 
-fmt=lambda d: 'null' if d is None else d.strftime('%Y-%m-%d %H:%M:%S.%fT%z')
+DATEFMT='%Y-%m-%d %H:%M:%S.%fT%z'
+fmt=lambda d: 'null' if d is None else d.strftime(DATEFMT)
+rfmt=lambda d: None if d=='null' else datetime.strptime(d, DATEFMT)
 
-class ModelEncoder(JSONEncoder, JSONDecoder):
+def valueOf(val):
+   '''
+   Parse the value into string format
+   '''
+   if isinstance(val, datetime):
+      rst=fmt(val)
+   elif isinstance(val, get_user_model()):
+      rst=val.username
+   elif isinstance(val, uuid.UUID):
+      rst=val.hex
+   elif isinstance(val, ValueObject):
+      rst=val.id.hex
+   else:
+      rst=val
+   return rst
+
+def parseVal(field, val):
+   '''
+   Parse the value from dumpable format
+   '''
+   typ=field.get_internal_type()
+   if val is None:
+      return None
+   elif typ in ['AutoField', 'IntegerField', 'SmallIntegerField']:
+      return int(val)
+   elif typ in ['BigAutoField', 'BigIntegerField']:
+      return long(val)
+   elif typ in ['FloatField', 'DecimalField']:
+      return float(val)
+   elif typ is 'BooleanField':
+      return getBool(val)
+   elif typ in ['CharField', 'TextField', 'EmailField', 'URLField', 'UUIDField']:
+      return str(val)
+   elif typ is 'DateTimeField':
+      return datetime.strptime(val, DATEFMT)
+   elif typ is 'ForeignKey':
+      if field.related_model is get_user_model():
+         return getObj(get_user_model(), username=val)
+      return getObj(field.related_model, id=val)
+   return str(val)
+
+
+class Dictable(object):
+   '''
+   The class to provide the import/export json method.
+   '''
+
    META_TYPE='_type_'
 
-   def __init__(self):
-      self.DATE_FORMAT='%Y-%m-%dT%H:%M:%S.%f%z'
-
-   def valueOf(self, val):
+   def expDict(self, **kwargs):
       '''
-      Parse the value into dumpable format
+      The method to export dictionary.
       '''
-      if val is None:
-         rst='null'
-      elif isinstance(val, bool):
-         rst='true' if val else 'false'
-      elif isinstance(val, datetime):
-         rst=json.dumps(val.strftime(self.DATE_FORMAT))
-      elif isinstance(val, get_user_model()):
-         rst=json.dumps(val.username)
-      elif isinstance(val, str):
-         rst=json.dumps(val)
-      elif isinstance(val, uuid.UUID):
-         rst=json.dumps(val.hex)
-      elif isinstance(val, ValueObject):
-         rst=self.valueOf(val.id)
-      else:
-         rst=str(val)
+      rst=dict((k,v) for k, v in self.__dict__.items() if not k.startswith('_'))
+      rst[Dictable.META_TYPE]="%s.%s"%(self.__class__.__module__, self.__class__.__name__)
+      rst[Dictable.META_VERS]=self._getDictVers()
+      for f in self.__class__._meta.get_fields():
+         if isinstance(f, models.Field):
+            n=f.name
+            v=getattr(self, n)
+            rst[n]=valueOf(v)
       return rst
 
-   def parseVal(self, field, val):
+   def impDict(self, data, **kwargs):
       '''
-      Parse the value from dumpable format
+      The method to import from dictionary.
       '''
-      typ=field.get_internal_type()
-      if val is None:
-         return None
-      elif typ in ['AutoField', 'IntegerField', 'SmallIntegerField']:
-         return int(val)
-      elif typ in ['BigAutoField', 'BigIntegerField']:
-         return long(val)
-      elif typ in ['FloatField', 'DecimalField']:
-         return float(val)
-      elif typ is 'BooleanField':
-         return getBool(val)
-      elif typ in ['CharField', 'TextField', 'EmailField', 'URLField', 'UUIDField']:
-         return str(val)
-      elif typ is 'DateTimeField':
-         return datetime.strptime(val, self.DATE_FORMAT)
-      elif typ is 'ForeignKey':
-         if field.related_model is get_user_model():
-            return getObj(get_user_model(), username=val)
-         return getObj(field.related_model, id=val)
-      return str(val)
+      if not Dictable.META_TYPE in data: raise TypeError('This is not the dictionary created by asDict. No type information found')
+      if not isinstance(self, getClass(data[Dictable.META_TYPE])): raise TypeError('Cannot import %s as %s'%(data[Dictable.META_TYPE], self.__class__))
+      if hasattr(self, Dictable.META_VERS):
+         if self._getDictVers() != data[Dictable.META_VERS]: raise IOError('Version mismatched. Requesting %s but %s'%(getattr(self, Dictable.META_VERS), data[Dictable.META_VERS]))
 
-   def default(self, obj):
-      if isinstance(obj, models.Model):
-         rst="\"%s\": \"%s.%s\",\n"%(ModelEncoder.META_TYPE, obj.__class__.__module__, obj.__class__.__name__)
-         for f in obj.__class__._meta.get_fields():
-            if isinstance(f, models.Field):
-               n=f.name
-               v=getattr(obj, n)
-               rst+="%s: %s,\n"%(json.dumps(n), self.valueOf(v))
-         rst=rst.strip()
-         if rst.endswith(','): rst=rst[0:-1]
-         return '{%s}'%rst
-      elif isinstance(obj, list):
-         rst=''
-         for o in obj:
-            rst+='%s,'%self.default(o)
-         rst=rst.strip()
-         if rst.endswith(','): rst=rst[0:-1]
-         return '[%s]'%rst
-      else:
-         raise TypeError('Support an instance of Model, list; but: %s'%type(obj))
+      for f in self.__class__._meta.get_fields():
+         if isinstance(f, models.Field):
+            n=f.name
+            v=parseVal(f, data.get(n, None))
+            setattr(self, n, v)
+      if getBool(kwargs.get('createNew', 'false')): self.id=None
+      if getBool(kwargs.get('autoSave', 'false')): self.save()
+      return self
 
-   def decode(self, val):
+   def _getDictVers(self):
       '''
-      Return the python object that representation the val.
+      Getter of the dictionary version. It is used to limit the version of dict.
       '''
-      val=val.replace('\n', '')
-      params=json.loads(val)
-      if ModelEncoder.META_TYPE in params:
-         clazz=getClass(params[ModelEncoder.META_TYPE])
-         rst=clazz()
-         for f in clazz._meta.get_fields():
-            if isinstance(f, models.Field):
-               v=self.parseVal(f, params.get(f.name, None))
-               setattr(rst, f.name, v)
-         return rst
-      else:
-         return params
+      return getattr(self, Dictable.META_VERS, '1')
 
-class ValueObject(models.Model):
+class ValueObject(models.Model, Dictable):
    CACHED='__CACHED__'
 
    class Meta(object):
@@ -161,6 +158,13 @@ class ValueObject(models.Model):
 
    def asDict(self):
       return {'id': self.id.hex, 'lmd':fmt(self.lmd), 'lmb':self.lmb.username, 'cd':fmt(self.cd), 'cb':self.cb.username}
+
+   def fromDict(self, data):
+      self.id=data['id']
+      self.lmd=rfmt(data['lmd'])
+      self.lmb=getObj(get_user_model(), username=data['lmb'])
+      self.cd=rfmt(data['cd'])
+      self.cb=getObj(get_user_model(), username=data['cb'])
 
    def save(self):
         '''
@@ -222,7 +226,7 @@ class AliveObjectManager(models.Manager):
             )
         ).order_by('-effDate')
 
-class AliveObject(models.Model):
+class AliveObject(models.Model, Dictable):
     class Meta(object):
         abstract            = True
         verbose_name        = _('webframe.models.AliveObject')
@@ -278,6 +282,11 @@ class AliveObject(models.Model):
 
     def asDict(self):
         return {'effDate':fmt(self.effDate), 'expDate':fmt(self.expDate), 'enabled':self.enabled}
+
+    def fromDict(self, data):
+        self.effDate=rfmt(data['effDate'])
+        self.expDate=rfmt(data['expDate'])
+        self.enabled=getBool(data['enabled'])
 
 class PrefManager(models.Manager):
     def pref(self, name, **kwargs):
