@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone as tz
 from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
+from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
 from .functions import getBool, getClass
 import math, uuid, logging, json
@@ -57,6 +58,12 @@ def parseVal(field, val):
       return getObj(field.related_model, id=val)
    return str(val)
 
+class ValueEncoder(JSONEncoder):
+   def default(self, o):
+      if isinstance(o, uuid.UUID):
+         return o.hex
+      return super(ValueEncoder, self).default(o)
+
 class Dictable(object):
    '''
    The class to provide the import/export json method.
@@ -67,9 +74,16 @@ class Dictable(object):
 
    def expDict(self, **kwargs):
       '''
-      The method to export dictionary.
+      The method to export dictionary. It will ignore the properties that:
+        - prefix with "_"
+        - subfix with "_id"
       '''
-      rst=dict((k,v) for k, v in self.__dict__.items() if not k.startswith('_'))
+      src=self.__dict__
+      rst=dict()
+      for k in src:
+         if k.startswith('_'): continue
+         if k.endswith('_id'): continue
+         rst[k]=src[k]
       rst[Dictable.META_TYPE]="%s.%s"%(self.__class__.__module__, self.__class__.__name__)
       rst[Dictable.META_VERS]=self._getDictVers()
       for f in self.__class__._meta.get_fields():
