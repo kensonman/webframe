@@ -57,13 +57,13 @@ def parseVal(field, val):
       return getObj(field.related_model, id=val)
    return str(val)
 
-
 class Dictable(object):
    '''
    The class to provide the import/export json method.
    '''
 
    META_TYPE='_type_'
+   META_VERS='_vers_'
 
    def expDict(self, **kwargs):
       '''
