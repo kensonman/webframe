@@ -43,6 +43,9 @@ def login( req ):
             return redirect(nextUrl)
         messages.warning(req, gettext('Invalid username or password'))
         params['username']=username
+    params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
+    params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
+    params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
     return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
 def logout(req):
