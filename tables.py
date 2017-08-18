@@ -10,7 +10,7 @@ class PreferenceTable(tables.Table):
 		model=Preference
 		fields=('name', 'sequence', 'value')
 		attrs={	'class': 'table', }
-		row_attrs={ 'prefId': lambda pref: pref.id.hex }
+		row_attrs={ 'prefId': lambda record: record.id.hex }
 
 class UserTable(tables.Table):
 	username=tables.LinkColumn('user', args=[A('username'),])
@@ -19,4 +19,4 @@ class UserTable(tables.Table):
 		model=User
 		fields=('username', 'email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined')
 		attrs={	'class': 'table', }
-		row_attrs={ 'username': lambda user: user.username, 'userId': lambda user: user.id}
+		row_attrs={ 'username': lambda record: record.username, 'userId': lambda record: record.id}
