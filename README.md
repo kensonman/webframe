@@ -152,3 +152,6 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
 		<script type="text/javascript" src="{%url 'webframe-js'%}"></script>
 
 
+Social Authentication
+------
+The social authentication can be supported by django-social-app-auth. The Instruction can be found (here)[https://simpleisbetterthancomplex.com/tutorial/2016/10/24/how-to-add-social-login-to-django.html].
