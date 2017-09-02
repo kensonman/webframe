@@ -54,7 +54,12 @@ def parseVal(field, val):
       return datetime.strptime(val, DATEFMT)
    elif typ is 'ForeignKey':
       if field.related_model is get_user_model():
-         return getObj(get_user_model(), username=val)
+         try:
+            return get_user_model().objects.get(username=val)
+         except get_user_model().DoesNotExist:
+            rst=get_current_user()
+            logger.warning('Specify user<%s> not found, use current user<%s> instead.'%(val, rst))
+            return rst
       return getObj(field.related_model, id=val)
    return str(val)
 
