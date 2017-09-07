@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from datetime import datetime
-from .functions import getClientIP
+from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME
 
 def absolute_path(req):
     '''
@@ -58,9 +58,9 @@ def fmt_injection(req):
     momentjs format can be found more here: http://momentjs.com/docs/#/use-it/
     '''
     RST={}
-    RST['FMT_DATE']= getattr(settings, 'FMT_DATE', '%Y-%m-%d')
-    RST['FMT_TIME']= getattr(settings, 'FMT_TIME', '%H:%M:%S')
-    RST['FMT_DATETIME']= getattr(settings, 'FMT_DATETIME', '%s %s'%(RST['FMT_DATE'], RST['FMT_TIME']))
+    RST['FMT_DATE']= getattr(settings, 'FMT_DATE', FMT_DATE)
+    RST['FMT_TIME']= getattr(settings, 'FMT_TIME', FMT_TIME)
+    RST['FMT_DATETIME']= getattr(settings, 'FMT_DATETIME', FMT_DATETIME)
 
     RST['FMT_JSDATE']= getattr(settings, 'FMT_JSDATE', 'YYYY-MM-DD')
     RST['FMT_JSTIME']= getattr(settings, 'FMT_JSTIME', 'HH:mm:ss')
