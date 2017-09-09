@@ -5,7 +5,7 @@ from netaddr import IPAddress, IPNetwork
 
 FMT_DATE='%Y-%m-%d'
 FMT_TIME='%H:%M:%S'
-FMT_DATETIME='%s %s'%(RST['FMT_DATE'], RST['FMT_TIME'])
+FMT_DATETIME='%s %s'%(FMT_DATE, FMT_TIME)
 
 def getClass( cls ):
    '''
