@@ -1,6 +1,11 @@
 #-*- coding: utf-8 -*-
+from datetime import datetime
 from django.http import HttpRequest
 from netaddr import IPAddress, IPNetwork
+
+FMT_DATE='%Y-%m-%d'
+FMT_TIME='%H:%M:%S'
+FMT_DATETIME='%s %s'%(FMT_DATE, FMT_TIME)
 
 def getClass( cls ):
    '''
@@ -57,6 +62,41 @@ def getBool( val, defVal=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
    if val:
       return str(val).upper() in trueOpts
    return defVal 
+
+def getDate( val, defVal=None, fmt=FMT_DATE ):
+   '''
+   Retrieve the date from string.
+
+   @param val The value to be parse to bool
+   @param defVal The default value if the val is None
+   @param fmt The specified format according to Python: datetime.strptime
+   '''
+   if not val: return defVal
+   if isinstance(val, datetime): return val
+   try:
+      return datetime.strptime(val, fmt)
+   except ValueError:
+      return defVal
+
+def getTime( val, defVal=None, fmt=FMT_TIME ):
+   '''
+   Retrieve the time from string.
+
+   @param val The value to be parse to bool
+   @param defVal The default value if the val is None
+   @param fmt The specified format according to Python: datetime.strptime
+   '''
+   return getTime(val, defVal=defVal, fmt=fmt)
+
+def getDateTime( val, defVal=None, fmt=FMT_DATETIME ):
+   '''
+   Retrieve the datetime from string.
+
+   @param val The value to be parse to bool
+   @param defVal The default value if the val is None
+   @param fmt The specified format according to Python: datetime.strptime
+   '''
+   return getTime(val, defVal=defVal, fmt=fmt)
 
 def checkRecaptcha( req, secret, simple=True ):
    '''
