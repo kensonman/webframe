@@ -58,7 +58,14 @@
 	$.fn.wfdropdown = function(params) {
 		// merge default and user parameters
 		params = $.extend({'items':'a.item','value':'input:first','onclick':jQuery.wf_dropdown.onclick}, params);
-		var text=$(this).find('button:first').html();
+		var text=$(this).find(params['value']).val();
+      var val=$(this).find('a[val="'+text+'"]').html();
+      if(val){
+         $(this).find(params['value']).val(text);
+         text=val;
+      }else{
+         text=$(this).find('button:first').html();
+      }
 		
 		$(this)
 			.find('button').empty().append('<span class="wf_dropdown_lbl">'+text+'</span><span class="caret"></span>').end()
