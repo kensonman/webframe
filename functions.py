@@ -1,8 +1,11 @@
 #-*- coding: utf-8 -*-
 from datetime import datetime
+from django.conf import settings
 from django.http import HttpRequest
 from netaddr import IPAddress, IPNetwork
+import os, logging
 
+logger=logging.getLogger('webframe.functions')
 FMT_DATE='%Y-%m-%d'
 FMT_TIME='%H:%M:%S'
 FMT_DATETIME='%s %s'%(FMT_DATE, FMT_TIME)
@@ -116,3 +119,27 @@ def checkRecaptcha( req, secret, simple=True ):
    if simple:
       return getBool(rst.get('success', 'False'))
    return r.json()
+
+def link_callback(uri, rel):
+   '''
+   Translate the link to the local resources (Used for PDF generating).
+   '''
+   # use short variable names
+   sUrl = settings.STATIC_URL      # Typically /static/
+   sRoot = settings.STATIC_ROOT   # Typically /home/userX/project_static/
+   mUrl = settings.MEDIA_URL       # Typically /static/media/
+   mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
+
+   # convert URIs to absolute system paths
+   if uri.startswith(mUrl):
+      path = os.path.join(os.getcwd(), mRoot, uri.replace(mUrl, ""))
+   elif uri.startswith(sUrl):
+      path = os.path.join(os.getcwd(), sRoot, uri.replace(sUrl, ""))
+   else:
+      path=uri
+
+   # make sure that file exists
+   if not os.path.isfile(path):
+      raise Exception('media URI must start with %s or %s, but %s' % (sUrl, mUrl, path))
+   logger.debug('Translate URL: %s => %s'%(uri, path))
+   return path

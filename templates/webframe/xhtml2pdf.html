@@ -1,0 +1,46 @@
+<!DOCTYPE html>{%load staticfiles%}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+{%if title%}<title>{{title|default:''}}</title>{%endif%}
+{%block scripts%}
+<style type="text/css">
+@font-face {
+   font-family: TCFont;
+   src: url("{%static 'fonts/CODE2000.TTF'%}");
+}
+@page {
+   size: A4 portrait;
+   @frame header_frame {
+      -pdf-frame-content: pnlHeader;
+      left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+   }
+   @frame content_frame {
+      left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+   }
+   @frame footer_frame {
+      -pdf-frame-content: pnlFooter;
+      left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+   }
+}
+html {
+    font-family: TCFont;
+}
+</style>
+{%endblock%}
+</head>
+<body>{%block body%}
+   <div id="pnlHeader">{%block header%}{%endblock%}</div>
+   
+   <div id="pnlContent">{%block content%}
+      <div class="row jumbotron">
+         <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+            <h1>xHTML2PDF</h1>
+            <p>The report has not been implemented yet. It will be comming soon!</span></p>
+         </div>
+      </div>
+   {%endblock%}</div>
+   
+   <div id="pnlFooter">{%block footer%}Page <pdf:pagenumber/> of <pdf:pagecount/> {%endblock%}</div>
+{%endblock%}</body>
+</html>
