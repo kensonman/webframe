@@ -34,7 +34,7 @@ def template_injection(req):
     Inject the TMPL_BASE, TMPL_HEADER, TMPL_FOOTER and TMP_PAGINATION settings into the request
     '''
     RST={
-        'TMPL_BASE': getattr(settings, 'TMPL_BASE', 'webframe/framework.html'),
+        'TMPL_BASE': getattr(settings, 'TMPL_BASE', 'webframe/empty.html'),
         'TMPL_HEADER': getattr(settings, 'TMPL_HEADER', 'webframe/header.html'),
         'TMPL_FOOTER': getattr(settings, 'TMPL_FOOTER', 'webframe/footer.html'),
         'TMPL_SCRIPTS': getattr(settings, 'TMPL_SCRIPTS', 'webframe/scripts.html'),
