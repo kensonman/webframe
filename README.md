@@ -59,12 +59,12 @@ Application
 2. Provide the logout features (Optional)
 
 		#urls.py
-      from webframe.views import urlpatterns as wf_urls
+      from django.conf.urls import url, include
 
 		urlpatterns = [
 			#...
+         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
 		]
-      urlpatterns += wf_urls
 
 Preference
 ----
@@ -92,12 +92,12 @@ To use the preference, following the steps:
 3. Setup the preference views
 
 		#urls.py
-      from webframe.views import urlpatterns as wf_urls
+      from django.conf.urls import url, include
 
 		urlpatterns = [
 			#...
+         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
 		]
-      urlpatterns += wf_urls
 
 
 Users
@@ -127,12 +127,12 @@ To use the preference, following the steps:
 3. Setup the preference views
 
 		#urls.py
-      from webframe.views import urlpatterns as wf_urls
+      from django.conf.urls import url, include
 
 		urlpatterns = [
 			#...
+         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
 		]
-      urlpatterns += wf_urls
 
 Javascript Translation
 ----
@@ -140,16 +140,16 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
 1. Setup the preference views
 
 		#urls.py
-      from webframe.views import urlpatterns as wf_urls
+      from django.conf.urls import url, include
 
 		urlpatterns = [
 			#...
+         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
 		]
-      urlpatterns += wf_urls
 
 2. In HTML code add
 
-		<script type="text/javascript" src="{%url 'webframe-js'%}"></script>
+		<script type="text/javascript" src="{%url 'webframe:js'%}"></script>
 
 
 Social Authentication

@@ -11,5 +11,5 @@ urlpatterns=[
    url(r'^users/(?P<user>[^/]*)/prefs/?$', views.prefs, name='prefs'),
    url(r'^users/(?P<user>[^/]*)/prefs/(?P<prefId>[^/]*)/?$', views.pref, name='pref'),
 
-   url(r'^jsi18n/webframe/$', javascript_catalog, {'packages':('webframe',),'domain':'django'}, name='webframe-js'),
+   url(r'^jsi18n/webframe/$', javascript_catalog, {'packages':('webframe',),'domain':'django'}, name='js'),
 ] 

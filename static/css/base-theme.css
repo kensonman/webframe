@@ -4,7 +4,6 @@
 #pnl_body{margin-bottom:0px;}
 #pnl_footer{ padding: 20px; font-size:12px;}
 .navbar{ margin-bottom: 0px; }
-div.field{margin: 20px 0px; padding: 0px 10px;}
 div.field .desc{color:gray; font-size:10px;}
 div.field > .twitter-typeahead { width: 100%; }
 div.pnl-btns{margin: 20px 10px; text-align:right;}
@@ -72,9 +71,11 @@ label[for]{cursor:pointer;}
    font-size: 60px;
 }
 @media screen and (max-width: 767px) {
+   div.field{margin: 10px 0px; padding: 0px 10px;}
    .overlay .content { width: 90%; }
 }
 @media screen and (min-width: 768px) {
+   div.field{margin: 20px 0px; padding: 0px 10px;}
    .overlay .content { width: 80%; }
 }
 /********** End of Overlay styles **********/

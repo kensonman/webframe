@@ -28,7 +28,7 @@ def login( req ):
     Login the session.
     '''
     params=dict()
-    params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
+    params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
     if req.method=='POST':
         username=req.POST['username']
         password=req.POST['password']
@@ -39,7 +39,7 @@ def login( req ):
            u=None
         if u:
             auth_login(req, u)
-            nextUrl=params.get('next', reverse('index'))
+            nextUrl=params.get('next', reverse('dashboard'))
             return redirect(nextUrl)
         messages.warning(req, gettext('Invalid username or password'))
         params['username']=username

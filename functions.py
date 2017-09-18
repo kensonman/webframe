@@ -1,9 +1,10 @@
 #-*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.http import HttpRequest
+from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
-import os, logging
+import os, logging, pytz
 
 logger=logging.getLogger('webframe.functions')
 FMT_DATE='%Y-%m-%d'
@@ -74,12 +75,7 @@ def getDate( val, defVal=None, fmt=FMT_DATE ):
    @param defVal The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   if not val: return defVal
-   if isinstance(val, datetime): return val
-   try:
-      return datetime.strptime(val, fmt)
-   except ValueError:
-      return defVal
+   return getTime(val, defVal=defVal, fmt=fmt)
 
 def getTime( val, defVal=None, fmt=FMT_TIME ):
    '''
@@ -89,7 +85,13 @@ def getTime( val, defVal=None, fmt=FMT_TIME ):
    @param defVal The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   return getTime(val, defVal=defVal, fmt=fmt)
+   if not val: return defVal
+   if isinstance(val, datetime): return val
+   try:
+      rst=datetime.strptime(val, fmt)
+      return timezone.make_aware(rst)
+   except ValueError:
+      return defVal
 
 def getDateTime( val, defVal=None, fmt=FMT_DATETIME ):
    '''
@@ -119,6 +121,10 @@ def checkRecaptcha( req, secret, simple=True ):
    if simple:
       return getBool(rst.get('success', 'False'))
    return r.json()
+
+def getEndOfDay(date):
+   rst=date+timedelta(days=1)
+   return rst-timedelta(milliseconds=1)
 
 def link_callback(uri, rel):
    '''
