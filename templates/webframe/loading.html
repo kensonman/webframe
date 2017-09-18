@@ -1,5 +1,4 @@
 {%load staticfiles%}
-<script src="https://cdn.jsdelivr.net/jquery/2.2.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.14.0/additional-methods.min.js"></script>
@@ -18,3 +17,8 @@
 <script type="text/javascript" src="{%static 'js/jquery.fileupload.js'%}"></script>
 <script type="text/javascript" src="{%static 'js/jqueryvalidation.date.js'%}"></script>
 <script type="text/javascript" src="{%static 'js/jqueryvalidation.regex.js'%}"></script>
+<script type="text/javascript"><!--
+$(document).ready(function(){
+$('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
+});
+//--></script>
