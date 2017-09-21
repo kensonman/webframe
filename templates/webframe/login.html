@@ -36,19 +36,21 @@ $(document).ready(function(){
                <label for="passwordFld" class="desktop-only">{%trans 'password'%}</label>
                <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
             </div>
-            <div class="pnl-socialAuth row">
-               {%if socialLogin_facebook%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+            <div class="pnl-socialAuth">
+               {%block loginMethods%}
+               {%if socialLogin_facebook%}
                   <a href="{%url 'social:begin' 'facebook'%}"><img src="{%static 'img/login-facebook.png'%}" class="btn-login" alt="{%trans 'login-facebook'%}"/></a>
-               </div>{%endif%}
-               {%if socialLogin_twitter%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+               {%endif%}
+               {%if socialLogin_twitter%}
                   <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter'%}" class="btn-login" alt="{%trans 'login-twitter'%}"/></a>
-               </div>{%endif%}
-               {%if socialLogin_github%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+               {%endif%}
+               {%if socialLogin_github%}
                   <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github'%}" class="btn-login" alt="{%trans 'login-github'%}"/></a>
-               </div>{%endif%}
-               {%if socialLogin_google%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+               {%endif%}
+               {%if socialLogin_google%}
                   <a href="{%url 'social:begin' 'google'%}"><img src="{%static 'img/login-google'%}" class="btn-login" alt="{%trans 'login-google'%}"/></a>
-               </div>{%endif%}
+               {%endif%}
+               {%endblock%}
             </div>
             <div class="pnl-btns">
                <button class="btn btn-success" type="submit">{%trans 'submit'%}</button>
