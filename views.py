@@ -46,6 +46,7 @@ def login( req ):
     params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
     params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
     params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
+    logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
     return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
 def logout(req):
@@ -103,7 +104,7 @@ def user(req, user):
     elif req.method=='DELETE':
         _('User.msg.confirmDelete')
         user.delete()
-        return redirect(args.get('next', 'users'))
+        return redirect(args.get('next', 'webframe:users'))
     elif req.method=='POST':
         # Check permission
         if req.user.is_superuser:
