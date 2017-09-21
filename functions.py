@@ -123,6 +123,11 @@ def checkRecaptcha( req, secret, simple=True ):
    return r.json()
 
 def getEndOfDay(date):
+   '''
+   Get the end of the date.
+
+   e.g.: getEndOfDay('2017-09-03') => '2017-09-03 23:59:59.999'
+   '''
    rst=date+timedelta(days=1)
    return rst-timedelta(milliseconds=1)
 
@@ -149,3 +154,26 @@ def link_callback(uri, rel):
       raise Exception('media URI must start with %s or %s, but %s' % (sUrl, mUrl, path))
    logger.debug('Translate URL: %s => %s'%(uri, path))
    return path
+
+def getChoices(choices, val):
+   '''
+   Translate the choices.
+
+   e.g.:
+   Giving EXAMPLE=( (0, 'zero'), (1, 'one'), (4, 'two'), (3, 'three'), )
+      - getChoices(EXAMPLE, 0) => 'zero'
+      - getChoices(EXAMPLE, 3) => 'three'
+      - getChoices(EXAMPLE, 'one') => 1 (Index of 'one' element)
+      - getChoices(EXAMPLE, 'two') => 4 (Index of 'two' element)
+   '''
+   if isinstance(val, int):
+      return choices[val][1]
+   else:
+      val=str(val).upper()
+      cnt=0
+      for s in choices:
+         if s[1].upper()==val:
+            return cnt
+         cnt+=1
+      return -1
+
