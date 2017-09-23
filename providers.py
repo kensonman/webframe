@@ -66,4 +66,6 @@ def fmt_injection(req):
     RST['FMT_JSDATE']= getattr(settings, 'FMT_JSDATE', 'YYYY-MM-DD')
     RST['FMT_JSTIME']= getattr(settings, 'FMT_JSTIME', 'HH:mm:ss')
     RST['FMT_JSDATETIME']= getattr(settings, 'FMT_JSDATETIME', '%s %s'%(RST['FMT_JSDATE'], RST['FMT_JSTIME'])) 
+
+    RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fa fa-shield"></i></span>')
     return RST
