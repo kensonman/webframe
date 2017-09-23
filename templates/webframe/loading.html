@@ -22,7 +22,7 @@ $(document).ready(function(){
    $('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
    $('form > .field').each(function(){
       $(this).find('input[required],textarea[required],select[required]').each(function(){
-         $(this).parents('.field:first').find('label:first').prepend('{{INDICATOR_MANDATORY|safe}}');
+         $(this).parents('.field:first').find('label:first').append('{{INDICATOR_MANDATORY|safe}}');
       });
    });
 });
