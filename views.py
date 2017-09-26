@@ -99,7 +99,7 @@ def user(req, user):
         params['target']=user
         params['groups']=Group.objects.all()
         params['btns']=getattr(settings, 'USER_BTNS', None)
-        params['AUTH_PASSWORD_REQUIRED']=getBool(getattr(settings, 'AUTH_PASSWORD_REQUIRED', False))
+        params['AUTH_PASSWORD_REQUIRED']=getBool(getattr(settings, 'AUTH_PASSWORD_REQUIRED', True))
         logger.debug('btns: %s'%params['btns'])
         return render(req, getattr(settings, 'TMPL_USER', 'webframe/user.html'), params)
     elif req.method=='DELETE':
