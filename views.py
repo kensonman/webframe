@@ -97,6 +97,7 @@ def user(req, user):
 
         # Generate the result
         params['target']=user
+        params['groups']=Group.objects.all()
         params['btns']=getattr(settings, 'USER_BTNS', None)
         params['AUTH_PASSWORD_REQUIRED']=getBool(getattr(settings, 'AUTH_PASSWORD_REQUIRED', False))
         logger.debug('btns: %s'%params['btns'])
@@ -131,12 +132,18 @@ def user(req, user):
             user.set_password(password)
         user.save()
 
+        #2017-09-26 17:21, Kenson Man
+        #Implement the groups logic
+        user.groups.clear()
+        for gid in req.POST.getlist('groups'):
+            Group.objects.get(id=gid).user_set.add(user)
+
         if hasattr(settings, 'AUTH_DEFAULT_GROUPS'):
             for g in getattr(settings, 'AUTH_DEFAULT_GROUPS', list()):
                gp=Group.objects.filter(name=g)
                if gp.count()==1:
                   gp[0].user_set.add(user)
-        return redirect(args.get('next', 'users'))
+        return redirect(args.get('next', 'webframe:users'))
     elif req.method=='PUT': #The PUT method is used for user to update their own personal information, webframe/preferences.html
         # Check permission
         if req.user.is_superuser:
