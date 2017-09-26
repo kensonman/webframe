@@ -68,7 +68,7 @@ $(document).ready(function(){
       </div>
       {%endif%}{%endif%}
 
-      {%if groups%}<div class="field">
+      {%if groups and target.id%}<div class="field">
          <label>{%trans 'user.group'%}</label>
          {%for g in groups%}<div class="input-group">
             <span class="input-group-addon">
