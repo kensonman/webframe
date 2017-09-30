@@ -366,20 +366,37 @@ class Preference(ValueObject):
             super(Preference, self).save()
 
 class Privilege(models.Model):
-    class Meta(object):
-        verbose_name            = _('webframe.models.Privilege')
-        verbose_name_plural     = _('webframe.models.Privileges')
+   class Meta(object):
+      verbose_name            = _('webframe.models.Privilege')
+      verbose_name_plural     = _('webframe.models.Privileges')
 
-    contenttype             = models.ForeignKey(ContentType)
-    name                    = models.CharField(max_length=50,verbose_name=_('webframe.models.Privilege.name'))
-    desc                    = models.TextField(max_length=200,null=True,blank=True,verbose_name=_('webframe.models.Privilege.desc'))
+   contenttype             = models.ForeignKey(ContentType)
+   name                    = models.CharField(max_length=50,verbose_name=_('webframe.models.Privilege.name'))
+   desc                    = models.TextField(max_length=200,null=True,blank=True,verbose_name=_('webframe.models.Privilege.desc'))
 
 class GrantedPrivilege(models.Model):
-    class Meta(object):
-        verbose_name            = _('webframe.models.GrantedPrivilege')
-        verbose_name_plural     = _('webframe.models.GrantedPrivilege')
+   class Meta(object):
+      verbose_name            = _('webframe.models.GrantedPrivilege')
+      verbose_name_plural     = _('webframe.models.GrantedPrivilege')
 
-    owner                   = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name=_('webframe.models.GrantedPrivilege.owner'))
-    privilege               = models.ForeignKey(Privilege,verbose_name=_('webframe.models.GrantedPrivilege.privilege'))
-    item                    = models.UUIDField(verbose_name=_('webframe.models.GrantedPrivilege.item'))
+   owner                   = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name=_('webframe.models.GrantedPrivilege.owner'))
+   privilege               = models.ForeignKey(Privilege,verbose_name=_('webframe.models.GrantedPrivilege.privilege'))
+   item                    = models.UUIDField(verbose_name=_('webframe.models.GrantedPrivilege.item'))
     
+class AsyncManipulationObject(models.Model):
+   class Meta(object):
+      verbose_name            = _('webframe.models.AsyncManipulationObject')
+      verbose_name_plural     = _('webframe.models.AsyncManipulationObjects')
+      abstract        = True
+
+   task_id                    = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('AsyncManipulationObject.task_id'))
+
+   @property
+   def is_processing(self):
+      _('AsyncManipulationObject.is_processing')
+      return self.task_id is not None
+
+   @property
+   def is_ready(self):
+      _('AsyncManipulationObject.is_ready')
+      return self.task_id is None

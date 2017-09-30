@@ -32,6 +32,20 @@ def login( req ):
    if req.method=='POST':
       username=req.POST['username']
       password=req.POST['password']
+
+      ## 2017-09-30 10:44, Kenson Man
+      ## Let the first login user be the system administrator
+      User=get_user_model()
+      if User.objects.all().count()<1:
+         u=User()
+         u.username=username
+         u.first_name='System'
+         u.last_name='Administrator'
+         u.is_staff=True
+         u.is_superuser=True
+         u.set_password(password)
+         u.save()
+
       try:
          u=authenticate(req, username=username, password=password)
       except:

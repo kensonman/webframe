@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-26 18:08+0800\n"
+"POT-Creation-Date: 2017-09-30 10:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,6 +175,26 @@ msgstr "權限"
 #: models.py:384
 msgid "webframe.models.GrantedPrivilege.item"
 msgstr "對像資料"
+
+#: models.py:388
+msgid "webframe.models.AsyncManipulationObject"
+msgstr "異步程序物件"
+
+#: models.py:389
+msgid "webframe.models.AsyncManipulationObjects"
+msgstr "異步程序物件"
+
+#: models.py:392
+msgid "AsyncManipulationObject.task_id"
+msgstr "異步程序#"
+
+#: models.py:396
+msgid "AsyncManipulationObject.is_processing"
+msgstr "異步程序進行中⋯⋯"
+
+#: models.py:401
+msgid "AsyncManipulationObject.is_ready"
+msgstr "異步程序已準備就緒"
 
 #: templates/webframe/base.html:15
 msgid "Javascript is required"
@@ -452,14 +472,14 @@ msgstr "存儲使用者"
 msgid "User.actions.new"
 msgstr "新增使用者"
 
-#: views.py:44
+#: views.py:58
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:106
+#: views.py:129
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:253
+#: views.py:276
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"

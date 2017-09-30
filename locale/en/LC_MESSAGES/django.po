@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-26 18:08+0800\n"
+"POT-Creation-Date: 2017-09-30 10:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,6 +172,26 @@ msgstr "Priviege"
 #: models.py:384
 msgid "webframe.models.GrantedPrivilege.item"
 msgstr "Item"
+
+#: models.py:388
+msgid "webframe.models.AsyncManipulationObject"
+msgstr "Asynchronously Handling Object"
+
+#: models.py:389
+msgid "webframe.models.AsyncManipulationObjects"
+msgstr "Asynchronously Handling Object"
+
+#: models.py:392
+msgid "AsyncManipulationObject.task_id"
+msgstr "Async Task#"
+
+#: models.py:396
+msgid "AsyncManipulationObject.is_processing"
+msgstr "Async Task is under processing..."
+
+#: models.py:401
+msgid "AsyncManipulationObject.is_ready"
+msgstr "Async Task is completed"
 
 #: templates/webframe/base.html:15
 msgid "Javascript is required"
@@ -445,15 +465,15 @@ msgstr "Save User"
 msgid "User.actions.new"
 msgstr "New User"
 
-#: views.py:44
+#: views.py:58
 msgid "Invalid username or password"
 msgstr ""
 
-#: views.py:106
+#: views.py:129
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:253
+#: views.py:276
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
 
