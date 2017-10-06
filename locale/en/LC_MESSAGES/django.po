@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-30 10:51+0800\n"
+"POT-Creation-Date: 2017-10-06 16:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -241,7 +241,7 @@ msgstr "Preferences"
 msgid "logout"
 msgstr "Logout"
 
-#: templates/webframe/header.html:40
+#: templates/webframe/header.html:40 templates/webframe/login.html:58
 msgid "login"
 msgstr "Login"
 
@@ -249,39 +249,39 @@ msgstr "Login"
 msgid "Login Required"
 msgstr "Login Required"
 
-#: templates/webframe/login.html:28
-msgid "IPAddr"
-msgstr ""
+#: templates/webframe/login.html:23
+msgid "login-title"
+msgstr "Login"
 
-#: templates/webframe/login.html:32 templates/webframe/login.html:33
+#: templates/webframe/login.html:30
+msgid "IPAddr"
+msgstr "IPAddr"
+
+#: templates/webframe/login.html:34 templates/webframe/login.html:35
 #: templates/webframe/user.html:32 templates/webframe/user.html:33
 msgid "username"
 msgstr "Username"
 
-#: templates/webframe/login.html:36 templates/webframe/login.html:37
+#: templates/webframe/login.html:38 templates/webframe/login.html:39
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "Password"
 
-#: templates/webframe/login.html:42
+#: templates/webframe/login.html:44
 msgid "login-facebook"
 msgstr ""
 
-#: templates/webframe/login.html:45
+#: templates/webframe/login.html:47
 msgid "login-twitter"
 msgstr ""
 
-#: templates/webframe/login.html:48
+#: templates/webframe/login.html:50
 msgid "login-github"
 msgstr ""
 
-#: templates/webframe/login.html:51
+#: templates/webframe/login.html:53
 msgid "login-google"
 msgstr ""
-
-#: templates/webframe/login.html:56
-msgid "submit"
-msgstr "Submit"
 
 #: templates/webframe/pagination.html:18
 #, python-format
@@ -476,6 +476,9 @@ msgstr "Are you user to delete this user? This action can not be un-do."
 #: views.py:276
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
+
+#~ msgid "submit"
+#~ msgstr "Submit"
 
 #~ msgid "debug.csrf"
 #~ msgstr "CSRF Token"

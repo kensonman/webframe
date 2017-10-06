@@ -20,6 +20,9 @@ $(document).ready(function(){
          <div class="panel-heading">{%trans 'Login Required'%}</div>
          <div class="panel-body">
             {%csrf_token%}
+            
+            {%block login-title%}{%trans 'login-title' as title%}{{title|default:''|safe}}{%endblock%}
+
             <input type="hidden" name="next" value="{{next|default:'/'}}"/>
             {%block messages%}{%if messages%}<div><ul>{%for msg in messages%}
                 <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
@@ -53,7 +56,7 @@ $(document).ready(function(){
                {%endblock%}
             </div>
             <div class="pnl-btns">
-               <button class="btn btn-success" type="submit">{%trans 'submit'%}</button>
+               <button class="btn btn-success" type="submit">{%trans 'login'%}</button>
             </div>
          </div>
 		</form></div>
