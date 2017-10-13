@@ -16,6 +16,8 @@ if django.VERSION[1]<10:
          lang=req.session.get(LANGUAGE_SESSION_KEY, getattr(settings, 'LANGUAGE_CODE', None))
          if req.method=='GET' and 'lang' in req.GET:
             lang=req.GET['lang']
+         if hasattr(settings, 'FORCE_LANGUAGE_CODE'):
+            lang=getattr(settings, 'FORCE_LANGUAGE_CODE')
          req.session[LANGUAGE_SESSION_KEY]=lang
 else:
    class LangMiddleware(object):
@@ -29,6 +31,8 @@ else:
          lang=req.session.get(LANGUAGE_SESSION_KEY, getattr(settings, 'LANGUAGE_CODE', None))
          if req.method=='GET' and 'lang' in req.GET:
             lang=req.GET['lang']
+         if hasattr(settings, 'FORCE_LANGUAGE_CODE'):
+            lang=getattr(settings, 'FORCE_LANGUAGE_CODE')
          req.session[LANGUAGE_SESSION_KEY]=lang
          
          return self.get_response(req)
