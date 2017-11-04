@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-06 16:41+0000\n"
+"POT-Creation-Date: 2017-10-13 16:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -248,47 +248,51 @@ msgstr "喜好"
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header.html:40 templates/webframe/login.html:58
+#: templates/webframe/header.html:40 templates/webframe/login.html:68
 msgid "login"
 msgstr "登入"
 
-#: templates/webframe/login.html:3 templates/webframe/login.html:20
+#: templates/webframe/login.html:3 templates/webframe/login.html:24
 msgid "Login Required"
 msgstr "請先登入"
 
-#: templates/webframe/login.html:23
+#: templates/webframe/login.html:28
 msgid "login-title"
 msgstr "登入"
 
-#: templates/webframe/login.html:30
+#: templates/webframe/login.html:34
+msgid "login-facebook"
+msgstr ""
+
+#: templates/webframe/login.html:37
+msgid "login-twitter"
+msgstr ""
+
+#: templates/webframe/login.html:40
+msgid "login-github"
+msgstr ""
+
+#: templates/webframe/login.html:43
+msgid "login-google"
+msgstr ""
+
+#: templates/webframe/login.html:48
+msgid "OR"
+msgstr "使用者登入"
+
+#: templates/webframe/login.html:56
 msgid "IPAddr"
 msgstr ""
 
-#: templates/webframe/login.html:34 templates/webframe/login.html:35
+#: templates/webframe/login.html:60 templates/webframe/login.html:61
 #: templates/webframe/user.html:32 templates/webframe/user.html:33
 msgid "username"
 msgstr "用戶名稱"
 
-#: templates/webframe/login.html:38 templates/webframe/login.html:39
+#: templates/webframe/login.html:64 templates/webframe/login.html:65
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
-
-#: templates/webframe/login.html:44
-msgid "login-facebook"
-msgstr ""
-
-#: templates/webframe/login.html:47
-msgid "login-twitter"
-msgstr ""
-
-#: templates/webframe/login.html:50
-msgid "login-github"
-msgstr ""
-
-#: templates/webframe/login.html:53
-msgid "login-google"
-msgstr ""
 
 #: templates/webframe/pagination.html:18
 #, python-format
