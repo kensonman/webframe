@@ -4,6 +4,7 @@ from django.conf import settings
 from django.http import HttpRequest
 from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
+from ddeprecation import deprecated
 import os, logging, pytz
 
 logger=logging.getLogger('webframe.functions')
@@ -155,7 +156,7 @@ def link_callback(uri, rel):
    logger.debug('Translate URL: %s => %s'%(uri, path))
    return path
 
-def getChoices(choices, val):
+def getChoice(choices, val):
    '''
    Translate the choices.
 
@@ -176,3 +177,10 @@ def getChoices(choices, val):
             return cnt
          cnt+=1
       return -1
+
+@deprecated(deprecated_in='1.0', removed_in='2.0', details='Use getChoice(choices, val) instead')
+def getChoices(choices, val):
+   '''
+   Alias of getChoice(choices, val) for backward compatible
+   '''
+   return getChoice(choices, val)
