@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import HttpRequest
 from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
-from ddeprecation import deprecated
+from deprecation import deprecated
 import os, logging, pytz
 
 logger=logging.getLogger('webframe.functions')
