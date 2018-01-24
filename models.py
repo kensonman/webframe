@@ -148,6 +148,7 @@ class ValueObject(models.Model, Dictable):
       default=get_current_user,
       null=True,
       blank=True,
+      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
       related_name='%(class)s_lmb',
       verbose_name=_('webframe.models.ValueObject.lmb'),
       help_text=_('webframe.models.ValueObject.lmb.helptext'),
@@ -162,6 +163,7 @@ class ValueObject(models.Model, Dictable):
       default=get_current_user,
       null=True,
       blank=True,
+      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
       related_name='%(class)s_cb',
       verbose_name=_('webframe.models.ValueObject.cb'),
       help_text=_('webframe.models.ValueObject.cb.helptext'),
@@ -337,9 +339,27 @@ class Preference(ValueObject):
         )
     name                    = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
     value                   = models.CharField(max_length=1024,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
-    owner                   = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True,related_name='preference_owner',verbose_name=_('Pwebframe.models.reference.owner'),help_text=_('webframe.models.Preference.owner.helptext'))
-    parent                  = models.ForeignKey('self',null=True,blank=True,verbose_name=_('webframe.models.Preference.parent'),help_text=_('webframe.models.Preference.parent.helptext'))
-    sequence                = models.FloatField(default=0.5,verbose_name=_('webframe.models.Preference.sequence'),help_text=_('webframe.models.Preference.sequence.helptext'))
+    owner                   = models.ForeignKey(
+      settings.AUTH_USER_MODEL,null=True,
+      blank=True,
+      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
+      related_name='preference_owner',
+      verbose_name=_('Pwebframe.models.reference.owner'),
+      help_text=_('webframe.models.Preference.owner.helptext'),
+    )
+    parent                  = models.ForeignKey(
+      'self',
+      null=True,
+      blank=True,
+      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
+      verbose_name=_('webframe.models.Preference.parent'),
+      help_text=_('webframe.models.Preference.parent.helptext'),
+    )
+    sequence                = models.FloatField(
+      default=0.5,
+      verbose_name=_('webframe.models.Preference.sequence'),
+      help_text=_('webframe.models.Preference.sequence.helptext'),
+    )
     objects                 = PrefManager()
 
     def __str__(self):
@@ -370,7 +390,10 @@ class Privilege(models.Model):
         verbose_name            = _('webframe.models.Privilege')
         verbose_name_plural     = _('webframe.models.Privileges')
 
-    contenttype             = models.ForeignKey(ContentType)
+    contenttype             = models.ForeignKey(
+      ContentType, 
+      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
+    )
     name                    = models.CharField(max_length=50,verbose_name=_('webframe.models.Privilege.name'))
     desc                    = models.TextField(max_length=200,null=True,blank=True,verbose_name=_('webframe.models.Privilege.desc'))
 
@@ -379,7 +402,15 @@ class GrantedPrivilege(models.Model):
         verbose_name            = _('webframe.models.GrantedPrivilege')
         verbose_name_plural     = _('webframe.models.GrantedPrivilege')
 
-    owner                   = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name=_('webframe.models.GrantedPrivilege.owner'))
-    privilege               = models.ForeignKey(Privilege,verbose_name=_('webframe.models.GrantedPrivilege.privilege'))
+    owner                   = models.ForeignKey(
+      settings.AUTH_USER_MODEL,
+      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
+      verbose_name=_('webframe.models.GrantedPrivilege.owner'),
+    )
+    privilege               = models.ForeignKey(
+      Privilege,
+      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
+      verbose_name=_('webframe.models.GrantedPrivilege.privilege'),
+    )
     item                    = models.UUIDField(verbose_name=_('webframe.models.GrantedPrivilege.item'))
     
