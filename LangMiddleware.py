@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils import translation
 import django
 
 
@@ -13,12 +13,22 @@ if django.VERSION[1]<10:
          '''
          Get the lang information from req.GET or settings, then inject into the session
          '''
-         lang=req.session.get(LANGUAGE_SESSION_KEY, getattr(settings, 'LANGUAGE_CODE', None))
+         lang=req.session.get(translation.LANGUAGE_SESSION_KEY, getattr(settings, 'LANGUAGE_CODE', None))
          if req.method=='GET' and 'lang' in req.GET:
             lang=req.GET['lang']
-         req.session[LANGUAGE_SESSION_KEY]=lang
+         if hasattr(settings, 'FORCE_LANGUAGE_CODE'):
+            if 'HTTP_ACCEPT_LANGUAGE' in req.META:
+               del req.META['HTTP_ACCEPT_LANGUAGE']
+            lang=getattr(settings, 'FORCE_LANGUAGE_CODE')
+
+         req.session[translation.LANGUAGE_SESSION_KEY]=lang
+         translation.activate(lang)
 else:
    class LangMiddleware(object):
+      '''
+      Inject the lang information into session
+      '''
+
       def __init__(self, get_response):
          self.get_response=get_response
 
@@ -26,9 +36,16 @@ else:
          '''
          Get the lang information from req.GET or settings, then inject into the session
          '''
-         lang=req.session.get(LANGUAGE_SESSION_KEY, getattr(settings, 'LANGUAGE_CODE', None))
+         lang=req.session.get(translation.LANGUAGE_SESSION_KEY, getattr(settings, 'LANGUAGE_CODE', None))
          if req.method=='GET' and 'lang' in req.GET:
             lang=req.GET['lang']
-         req.session[LANGUAGE_SESSION_KEY]=lang
+         if hasattr(settings, 'FORCE_LANGUAGE_CODE'):
+            if 'HTTP_ACCEPT_LANGUAGE' in req.META:
+               del req.META['HTTP_ACCEPT_LANGUAGE']
+            lang=getattr(settings, 'FORCE_LANGUAGE_CODE')
+
+         req.session[translation.LANGUAGE_SESSION_KEY]=lang
+         translation.activate(lang)
          
          return self.get_response(req)
+

@@ -20,15 +20,15 @@
         <input type="hidden" name="field-name" value="default-value"/>
         <button type="button" data-toggle="dropdown">Label</button>
         <ul class="dropdown-menu">
-                <li><a href="#" class="item">Opt1</a></li>
-                <li><a href="#" class="item">Opt2</a></li>
-                <li><a href="#" class="item">Opt3</a></li>
-                <li><a href="#" class="item">Opt4</a></li>
+                <li><a href="#" class="item" val="1">Opt1</a></li>
+                <li><a href="#" class="item" val="two">Opt2</a></li>
+                <li><a href="#" class="item" val="value will be here">Opt3</a></li>
+                <li><a href="#" class="item">Opt4</a></li><!-- def value is the "Opt4" -->
         </ul>
      </div>
     <script type="text/javascript"><!--
     $(document).ready(function(){
-        $('div.dropdown').wf_dropdown({
+        $('div.dropdown').wfdropdown({
                 'items':'a.item',
                 'onclick':jQuery.wf_dropdown.onclick,
                 'value': 'input:first',
@@ -38,27 +38,27 @@
 */
 
 ;(function($) {
-	$.extend($, {wf_dropdown:{
-		onclick: function( evt ){
-			var element=$(this).parents('.wf_dropdown:first');
-			var value=null;
-			if(typeof($(this).attr('val'))=='undefined')
-				value=$(this).text();
-			else
-				value=$(this).attr('val');
-			$(element)
-				.find($(element).attr('value')).val(value).end()
-				.find('.wf_dropdown_lbl').text($(this).text()).end()
-				.trigger('change')
-			;
-		},
-	}});
-	
-	// jQuery plugin definition
-	$.fn.wfdropdown = function(params) {
-		// merge default and user parameters
-		params = $.extend({'items':'a.item','value':'input:first','onclick':jQuery.wf_dropdown.onclick}, params);
-		var text=$(this).find(params['value']).val();
+   $.extend($, {wf_dropdown:{
+      onclick: function( evt ){
+         var element=$(this).parents('.wf_dropdown:first');
+         var value=null;
+         if(typeof($(this).attr('val'))=='undefined')
+            value=$(this).text();
+         else
+            value=$(this).attr('val');
+         $(element)
+            .find($(element).attr('value')).val(value).end()
+            .find('.wf_dropdown_lbl').text($(this).text()).end()
+            .trigger('change')
+         ;
+      },
+   }});
+   
+   // jQuery plugin definition
+   $.fn.wfdropdown = function(params) {
+      // merge default and user parameters
+      params = $.extend({'items':'a.item','value':'input:first','onclick':jQuery.wf_dropdown.onclick}, params);
+      var text=$(this).find(params['value']).val();
       var val=$(this).find('a[val="'+text+'"]').html();
       if(val){
          $(this).find(params['value']).val(text);
@@ -66,14 +66,14 @@
       }else{
          text=$(this).find('button:first').html();
       }
-		
-		$(this)
-			.find('button').empty().append('<span class="wf_dropdown_lbl">'+text+'</span><span class="caret"></span>').end()
-			.addClass('wf_dropdown')
-			.attr({'value':params.value})
-			.find(params.items).click(params.onclick);
-		
-		// allow jQuery chaining
-		return this;
-	};
+      
+      $(this)
+         .find('button').empty().append('<span class="wf_dropdown_lbl">'+text+'</span><span class="caret"></span>').end()
+         .addClass('wf_dropdown')
+         .attr({'value':params.value})
+         .find(params.items).click(params.onclick);
+      
+      // allow jQuery chaining
+      return this;
+   };
 })(jQuery);

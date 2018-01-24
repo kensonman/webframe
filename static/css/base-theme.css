@@ -93,3 +93,10 @@ label[for]{cursor:pointer;}
 }
 
 
+/* ********** Input-Group-Dropdown ********** */
+.input-group-dropdown button {width:100%; text-align:left;}
+.input-group-dropdown .caret {position:absolute; right:10px; margin-top:10px;}
+.input-group-dropdown .input-group-addon{border-radius: 4px 0px 0px 4px !important;}
+.input-group-dropdown .form-control{border-radius: 0px 4px 4px 0px !important;}
+.input-group-dropdown ul{ width:100%; margin-left;10px; }
+.input-group-dropdown .option {width:100%;}

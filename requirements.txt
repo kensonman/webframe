@@ -3,3 +3,4 @@ pillow
 six
 pytz
 netaddr
+deprecation

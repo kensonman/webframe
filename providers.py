@@ -38,6 +38,7 @@ def template_injection(req):
         'TMPL_HEADER': getattr(settings, 'TMPL_HEADER', 'webframe/header.html'),
         'TMPL_FOOTER': getattr(settings, 'TMPL_FOOTER', 'webframe/footer.html'),
         'TMPL_SCRIPTS': getattr(settings, 'TMPL_SCRIPTS', 'webframe/scripts.html'),
+        'TMPL_LOADING': getattr(settings, 'TMPL_SCRIPTS', 'webframe/loading.html'),
         'TMPL_PAGINATION': getattr(settings, 'TMPL_PAGINATION', 'webframe/pagination.html'),
         'URL_LOGIN': getattr(settings, 'URL_LOGIN', '/login/'),
         'URL_LOGOUT': getattr(settings, 'URL_LOGOUT', '/logout/'),
@@ -65,4 +66,6 @@ def fmt_injection(req):
     RST['FMT_JSDATE']= getattr(settings, 'FMT_JSDATE', 'YYYY-MM-DD')
     RST['FMT_JSTIME']= getattr(settings, 'FMT_JSTIME', 'HH:mm:ss')
     RST['FMT_JSDATETIME']= getattr(settings, 'FMT_JSDATETIME', '%s %s'%(RST['FMT_JSDATE'], RST['FMT_JSTIME'])) 
+
+    RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fa fa-shield"></i></span>')
     return RST

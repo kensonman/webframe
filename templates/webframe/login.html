@@ -4,7 +4,10 @@
 
 {%block scripts%}{{block.super}}
 <style type="text/css">
-.btn-login{ width: 200px; height: 40px; }
+.btn-login{ min-width: 200px; min-height: 40px; display:inline-block;}
+
+.seperator{ border-bottom: 1px solid black; text-align: center; margin-bottom:20px;}
+.seperator span{ position:relative; top:1rem; background-color:white; padding:10px;}
 </style>
 <script type="text/javascript"><!--
 $(document).ready(function(){
@@ -16,45 +19,59 @@ $(document).ready(function(){
 {%block body%}
 <div class="jumbotron">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-xs-12"><form method="POST" id="loginFrm" class="panel panel-danger">
-         <div class="panel-heading">{%trans 'Login Required'%}</div>
-         <div class="panel-body">
-            {%csrf_token%}
-            <input type="hidden" name="next" value="{{next|default:'/'}}"/>
-            {%block messages%}{%if messages%}<div><ul>{%for msg in messages%}
-                <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
-            {%endfor%}</ul></div>{%endif%}{%endblock%}
-            <div class="field">
-               <label for="IPAddrFld" class="desktop-only">{%trans 'IPAddr'%}</label>
-               <input type="text" name="ipaddr" value="{{IPAddr}}" class="form-control" readonly="readonly" required="required"/>
+		<div class="col-md-6 col-md-offset-3 col-xs-12">
+         <form method="POST" id="loginFrm" class="panel panel-danger">
+            <div class="panel-heading">{%trans 'Login Required'%}</div>
+            <div class="panel-body">
+               {%csrf_token%}
+               
+               {%block login-title%}{%trans 'login-title' as title%}{{title|default:''|safe}}{%endblock%}
+
+               {%block socialLogin%}
+               <div class="pnl-socialAuth">
+                  {%block loginMethods%}
+                  {%if socialLogin_facebook%}<div class="btn-login">
+                     <a href="{%url 'social:begin' 'facebook'%}"><img src="{%static 'img/login-facebook.png'%}" alt="{%trans 'login-facebook'%}"/></a>
+                  </div>{%endif%}
+                  {%if socialLogin_twitter%}<div class="btn-login">
+                     <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter'%}" alt="{%trans 'login-twitter'%}"/></a>
+                  </div>{%endif%}
+                  {%if socialLogin_github%}<div class="btn-login">
+                     <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github'%}" alt="{%trans 'login-github'%}"/></a>
+                  </div>{%endif%}
+                  {%if socialLogin_google%}<div class="btn-login">
+                     <a href="{%url 'social:begin' 'google'%}"><img src="{%static 'img/login-google'%}" alt="{%trans 'login-google'%}"/></a>
+                  </div>{%endif%}
+                  {%endblock%}
+               </div>
+
+               <div class="seperator"><span>{%trans 'OR'%}</span></div>
+               {%endblock%}
+
+               <input type="hidden" name="next" value="{{next|default:'/'}}"/>
+               {%block messages%}{%if messages%}<div><ul>{%for msg in messages%}
+                   <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
+               {%endfor%}</ul></div>{%endif%}{%endblock%}
+               <div class="field">
+                  <label for="IPAddrFld" class="desktop-only">{%trans 'IPAddr'%}</label>
+                  <input type="text" name="ipaddr" value="{{IPAddr}}" class="form-control" readonly="readonly" required="required"/>
+               </div>
+               <div class="field">
+                  <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
+                  <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
+               </div>
+               <div class="field">
+                  <label for="passwordFld" class="desktop-only">{%trans 'password'%}</label>
+                  <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
+               </div>
+               <div class="pnl-btns">
+                  <button class="btn btn-success" type="submit">{%trans 'login'%}</button>
+               </div>
             </div>
-            <div class="field">
-               <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
-               <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
-            </div>
-            <div class="field">
-               <label for="passwordFld" class="desktop-only">{%trans 'password'%}</label>
-               <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
-            </div>
-            <div class="pnl-socialAuth row">
-               {%if socialLogin_facebook%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
-                  <a href="{%url 'social:begin' 'facebook'%}"><img src="{%static 'img/login-facebook.png'%}" class="btn-login" alt="{%trans 'login-facebook'%}"/></a>
-               </div>{%endif%}
-               {%if socialLogin_twitter%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
-                  <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter'%}" class="btn-login" alt="{%trans 'login-twitter'%}"/></a>
-               </div>{%endif%}
-               {%if socialLogin_github%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
-                  <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github'%}" class="btn-login" alt="{%trans 'login-github'%}"/></a>
-               </div>{%endif%}
-               {%if socialLogin_google%}<div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
-                  <a href="{%url 'social:begin' 'google'%}"><img src="{%static 'img/login-google'%}" class="btn-login" alt="{%trans 'login-google'%}"/></a>
-               </div>{%endif%}
-            </div>
-            <div class="pnl-btns">
-               <button class="btn btn-success" type="submit">{%trans 'submit'%}</button>
-            </div>
-         </div>
-		</form></div>
+         </form>
+
+         <div class="pnl-footer">{%block login_footer%}{%endblock%}
+      </div>
 	</div>
 	
 </div>

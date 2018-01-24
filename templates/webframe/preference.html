@@ -3,11 +3,11 @@
 {%block title%}{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%} - {%trans 'brand'%}{%endblock%}
 
 {%block scripts%}{{block.super}}
-<script type="text/javascript" src="{% url 'webframe-js' %}"></script>
+<script type="text/javascript" src="{% url 'webframe:js' %}"></script>
 <script type="text/javascript"><!--
 $(document).ready(function(){
 	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
-		window.location.href="{%url 'preference' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
+		window.location.href="{%url 'webframe:preference' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
 	});
 	//Delete Logic: {%if not target.isNew%}
 		$('#deleteBtn').click(function(){ 
@@ -67,7 +67,7 @@ $(document).ready(function(){
 		<label>{%trans 'Preference.childs'%}</label>
 		{%render_table childs%}
 		<div class="pnl pnl-btns">
-			<a href="{%url 'preference' user=currentuser.username prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
+			<a href="{%url 'webframe:preference' user=currentuser.username prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
 				<i class="fa fa-plus"></i> {%if target.user%}{%trans 'Preference.actions.addChild'%}{%else%}{%trans 'Config.actions.addChild'%}{%endif%}
 			</a>
 		</div>

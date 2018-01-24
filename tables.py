@@ -4,7 +4,7 @@ from .models import *
 import django_tables2 as tables
 
 class PreferenceTable(tables.Table):
-	name=tables.LinkColumn('preference', args=[A('owner.username'), A('id.hex')])
+	name=tables.LinkColumn('webframe:preference', args=[A('owner.username'), A('id.hex')])
 
 	class Meta(object):
 		model=Preference
@@ -13,7 +13,7 @@ class PreferenceTable(tables.Table):
 		row_attrs={ 'prefId': lambda record: record.id.hex }
 
 class UserTable(tables.Table):
-	username=tables.LinkColumn('user', args=[A('username'),])
+	username=tables.LinkColumn('webframe:user', args=[A('username'),])
 
 	class Meta(object):
 		model=User
