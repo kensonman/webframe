@@ -9,7 +9,7 @@ logger=logging.getLogger('webframe.templatetags')
 
 register=template.Library()
 
-@register.assignment_tag
+@register.simple_tag
 def pref(prefName, **kwargs):
    '''
    Retrieve the preference from the database.

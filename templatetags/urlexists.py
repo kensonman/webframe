@@ -1,5 +1,8 @@
 from django import template
-from django.core.urlresolvers import reverse, NoReverseMatch 
+try:
+   from django.urls import reverse, NoReverseMatch
+except ImportError:
+   from django.core.urlresolvers import reverse, NoReverseMatch 
 from django.template.defaultfilters import stringfilter
 
 register=template.Library()
