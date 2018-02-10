@@ -431,3 +431,26 @@ class AsyncManipulationObject(models.Model):
    def is_ready(self):
       _('AsyncManipulationObject.is_ready')
       return self.task_id is None
+
+# The abstract value=object that provide the sequence field and related ordering features
+class OrderableValueObject(ValueObject):
+    sequence        = models.FloatField(default=1,verbose_name=_('OrderableValueObject.sequence'))
+
+    class Meta:
+        abstract    = True
+        ordering    = ['sequence', 'id',]
+
+    # Get the ordering features
+    def __get_ordered_list__(self):
+        return self.__class__.objects.all().order_by('sequence')
+
+    # Saving and reorder the models
+    def save(self):
+        if not self.sequence: self.sequence=1
+        self.sequence-=0.5
+        ValueObject.save(self)
+        counter=1
+        for i in self.__get_ordered_list__():
+            i.sequence=counter
+            counter+=1
+            ValueObject.save(i)
