@@ -25,45 +25,40 @@ def get_current_user():
    return None
 
 
-if django.VERSION[1]<10:
-   class CurrentUserMiddleware(object):
+class CurrentUserMiddleware(object):
+   '''
+   The middleware to put the current user into local-thread
+   '''
+   def __init__(self, get_response):
+      self.get_response=get_response
+
+   def __call__(self, req):
       '''
-      The middleware to put the current user into local-thread
+      Handling the request
       '''
+      _thread_locals.request = req 
 
-      def process_request(self, req):
-         '''
-         Handling the request
-         '''
-         _thread_locals.request = req 
+      rep=self.get_response(req)
 
-      def process_response(self, request, response):
-         '''
-         Remove the local variable from ram
-         '''
-         if hasattr(_thread_locals, VAR_REQUEST):
-            del _thread_locals.request
-         return response
-else:
-   class CurrentUserMiddleware(object):
       '''
-      The middleware to put the current user into local-thread
+      Remove the local variable from ram
       '''
-      def __init__(self, get_response):
-         self.get_response=get_response
+      if hasattr(_thread_locals, VAR_REQUEST):
+         del _thread_locals.request
+      return rep 
 
-      def __call__(self, req):
-         '''
-         Handling the request
-         '''
-         _thread_locals.request = req 
+   # ##### ##### Backward compatibility django 1.9 or older
+   def process_request(self, req):
+      '''
+      Handling the request
+      '''
+      _thread_locals.request = req 
 
-         rep=self.get_response(req)
-
-         '''
-         Remove the local variable from ram
-         '''
-         if hasattr(_thread_locals, VAR_REQUEST):
-            del _thread_locals.request
-         return rep 
-
+   # ##### ##### Backward compatibility django 1.9 or older
+   def process_response(self, request, response):
+      '''
+      Remove the local variable from ram
+      '''
+      if hasattr(_thread_locals, VAR_REQUEST):
+         del _thread_locals.request
+      return response
