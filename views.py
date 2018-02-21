@@ -28,7 +28,10 @@ def login( req ):
    Login the session.
    '''
    params=dict()
-   params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+   try:
+      params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+   except:
+      params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
    if req.method=='POST':
       username=req.POST['username']
       password=req.POST['password']
