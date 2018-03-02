@@ -37,7 +37,7 @@
                 </ul>
             </li>{%else%}<li><a href="#">{%blocktrans with username=user.get_full_name%}Hi, {{username}}{%endblocktrans%}</a></li>{%endif%}
             {%else%}
-            {%if 'webframe:login'|urlexists%}<li><a href="{%url 'login'%}"><i class="fa fa-sign-in"></i> {%trans 'login'%}</a></li>{%endif%}
+            {%if 'webframe:login'|urlexists%}<li><a href="{%url 'webframe:login'%}"><i class="fa fa-sign-in"></i> {%trans 'login'%}</a></li>{%endif%}
             {%endif%}
         </ul>
     </div><!-- /.navbar-collapse -->
