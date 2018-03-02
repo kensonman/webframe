@@ -19,10 +19,10 @@ $(document).ready(function(){
 {%block body%}
 <div class="jumbotron">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-xs-12">
-         <form method="POST" id="loginFrm" class="panel panel-danger">
-            <div class="panel-heading">{%trans 'Login Required'%}</div>
-            <div class="panel-body">
+		<div class="col-md-6 offset-md-3 col-xs-12">
+         <form method="POST" id="loginFrm" class="card card-danger">
+            <div class="card-header bg-danger">{%trans 'Login Required'%}</div>
+            <div class="card-body">
                {%csrf_token%}
                
                {%block login-title%}{%trans 'login-title' as title%}{{title|default:''|safe}}{%endblock%}
@@ -45,22 +45,23 @@ $(document).ready(function(){
                   {%endblock%}
                </div>
 
-               <div class="seperator"><span>{%trans 'OR'%}</span></div>
+               {%if socialLogin_facebook or socialLogin_twitter or socialLogin_github or socialLogin_google%}<div class="seperator"><span>{%trans 'OR'%}</span></div>{%endif%}
                {%endblock%}
 
                <input type="hidden" name="next" value="{{next|default:'/'}}"/>
                {%block messages%}{%if messages%}<div><ul>{%for msg in messages%}
                    <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
                {%endfor%}</ul></div>{%endif%}{%endblock%}
-               <div class="field">
+               
+               <div class="field form-group">
                   <label for="IPAddrFld" class="desktop-only">{%trans 'IPAddr'%}</label>
                   <input type="text" name="ipaddr" value="{{IPAddr}}" class="form-control" readonly="readonly" required="required"/>
                </div>
-               <div class="field">
+               <div class="field form-group">
                   <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
                   <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
                </div>
-               <div class="field">
+               <div class="field form-group">
                   <label for="passwordFld" class="desktop-only">{%trans 'password'%}</label>
                   <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
                </div>
@@ -75,4 +76,5 @@ $(document).ready(function(){
 	</div>
 	
 </div>
+{%block footer%}{%include TMPL_FOOTER%}{%endblock%}
 {%endblock%}
