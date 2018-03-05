@@ -100,3 +100,5 @@ label[for]{cursor:pointer;}
 .input-group-dropdown .form-control{border-radius: 0px 4px 4px 0px !important;}
 .input-group-dropdown ul{ width:100%; margin-left;10px; }
 .input-group-dropdown .option {width:100%;}
+
+.page-title{border-bottom: 1px solid black;}
