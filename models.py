@@ -193,7 +193,7 @@ class ValueObject(models.Model, Dictable):
         '''
         user=get_current_user()
         if user:
-            if not user.is_authenticated(): user=None
+            if not user.is_authenticated: user=None
         self.lmb=user
         try:
             if not self.cb: self.cb=user

@@ -35,12 +35,12 @@
          {%blocktrans with username=user.get_full_name|default:user.username%}Hi, {{username}}{%endblocktrans%} <span class="caret"></span>
          </a>
          <ul class="dropdown-menu">
-         {%if 'webframe:preferences'|urlexists%}<li><a href="{%url 'webframe:preferences' user='aa'%}"><i class="fa fa-gears"></i> {%trans 'webframe:preferences'%}{{user}}</a></li>{%endif%}
-         {%if 'webframe:logout'|urlexists%}<li><a href="{%url 'webframe:logout'%}"><i class="fa fa-sign-out"></i> {%trans 'webframe:logout'%}</a></li>{%endif%}
+         {%if 'webframe:preferences'|urlexists%}<li><a href="{%url 'webframe:preferences' user='aa'%}"><i class="fa fa-gears"></i> {%trans 'preferences'%}{{user}}</a></li>{%endif%}
+         {%if 'webframe:logout'|urlexists%}<li><a href="{%url 'webframe:logout'%}"><i class="fa fa-sign-out"></i> {%trans 'logout'%}</a></li>{%endif%}
          </ul>
          </li>{%else%}<li><a href="#">{%blocktrans with username=user.get_full_name%}Hi, {{username}}{%endblocktrans%}</a></li>{%endif%}
          {%else%}
-         {%if 'webframe:login'|urlexists%}<li><a href="{%url 'webframe:login'%}"><i class="fa fa-sign-in"></i> {%trans 'webframe:login'%}</a></li>{%endif%}
+         {%if 'webframe:login'|urlexists%}<li><a href="{%url 'webframe:login'%}"><i class="fa fa-sign-in"></i> {%trans 'login'%}</a></li>{%endif%}
          {%endif%}
       </ul>
    </div><!-- /.navbar-collapse -->
