@@ -434,7 +434,7 @@ class AsyncManipulationObject(models.Model):
 
 # The abstract value=object that provide the sequence field and related ordering features
 class OrderableValueObject(ValueObject):
-    sequence        = models.FloatField(default=1,verbose_name=_('OrderableValueObject.sequence'))
+    sequence        = models.FloatField(default=1,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
 
     class Meta:
         abstract    = True
