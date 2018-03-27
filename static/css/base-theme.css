@@ -7,6 +7,7 @@
 div.field .desc{color:gray; font-size:10px;}
 div.field > .twitter-typeahead { width: 100%; }
 div.pnl-btns{margin: 20px 10px; text-align:right;}
+div.pnl-btns .btn{margin: 0px 5px;}
 div.pnl-lbtns{margin: 20px 10px;}
 div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 .wf_dropdown_lbl{ margin: 0px 20px; }
