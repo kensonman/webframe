@@ -18,6 +18,7 @@ div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 label[for]{cursor:pointer;}
 .label-error{background-color:#d9534f;}
 .debug{ display: none; }
+.jumbotron-subject{ margin-bottom:5px; }
 
 /* If the file control in the input-group, hide the control */
 .input-group input[type=file] {
