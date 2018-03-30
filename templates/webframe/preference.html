@@ -58,8 +58,8 @@ $(document).ready(function(){
 			<input type="number" name="sequence" id="sequenceFld" class="form-control" value="{{target.sequence|floatformat:0|default:'0'}}" required="true" placeholder="{%trans 'webframe.models.Preference.sequence'%}"/>
 		</div>
 		<div class="pnl pnl-btns">
-			{%if not target.isNew%}<button type="button" class="btn btn-danger" id="deleteBtn"><i class="fa fa-trash"></i> {%trans 'Preference.actions.delete'%}</button>{%endif%}
-			<button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> {%trans 'Preference.actions.save'%}</button>
+			{%if not target.isNew%}<button type="button" class="btn btn-danger" id="deleteBtn"><i class="fas fa-trash"></i> {%trans 'Preference.actions.delete'%}</button>{%endif%}
+			<button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> {%trans 'Preference.actions.save'%}</button>
 		</div>
 	</form>
 
@@ -68,7 +68,7 @@ $(document).ready(function(){
 		{%render_table childs%}
 		<div class="pnl pnl-btns">
 			<a href="{%url 'webframe:preference' user=currentuser.username prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
-				<i class="fa fa-plus"></i> {%if target.user%}{%trans 'Preference.actions.addChild'%}{%else%}{%trans 'Config.actions.addChild'%}{%endif%}
+				<i class="fas fa-plus"></i> {%if target.user%}{%trans 'Preference.actions.addChild'%}{%else%}{%trans 'Config.actions.addChild'%}{%endif%}
 			</a>
 		</div>
 	</div>{%endif%}

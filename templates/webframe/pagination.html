@@ -2,7 +2,7 @@
 	{%if target.paginator.count > 0 %}
 		{%if target.paginator.num_pages > 1%}<ul class="pagination">
 			{%if target.number > 6%}
-				<li><a href="#page_1" goto="1"><i class="fa fa-step-backward"></i></a></li>
+				<li><a href="#page_1" goto="1"><i class="fas fa-step-backward"></i></a></li>
 				<li class="disabled"><a>...</a></li>
 			{%endif%}
 			{%for n in target.paginator.page_range%}
@@ -12,7 +12,7 @@
 			{%endfor%}
 			{%if target.number < target.paginator.num_pages|add:-5%}
 				<li class="disabled"><a>...</a></li>
-				<li><a href="#page_{{target.paginator.num_pages}}" goto="{{target.paginator.num_pages}}"><i class="fa fa-step-forward"></i></a></li>
+				<li><a href="#page_{{target.paginator.num_pages}}" goto="{{target.paginator.num_pages}}"><i class="fas fa-step-forward"></i></a></li>
 			{%endif%}
 		</ul>
 		<div class="pull-right">{%blocktrans with x=target.number y=target.paginator.num_pages total=target.paginator.count per_page=target.paginator.per_page%}Showing {{per_page}} of {{total}}; Page {{x}} of {{y}}{%endblocktrans%}</div>

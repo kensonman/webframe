@@ -61,7 +61,7 @@ $(document).ready(function(){
 						<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
 					</div>
 					<div class="pnl pnl-btns">
-						<button type="submit" class="btn btn-warning"><i class="fa fa-user"></i> {%trans 'User.actions.update'%}</button>
+						<button type="submit" class="btn btn-warning"><i class="fas fa-user"></i> {%trans 'User.actions.update'%}</button>
 					</div>
 				</div>
 			</form>{%endwith%}
@@ -73,7 +73,7 @@ $(document).ready(function(){
 			<div class="card-body">
 				{%render_table config%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'webframe:pref' user=user.username prefId='new'%}?config=True"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+					<a class="btn btn-primary" href="{%url 'webframe:pref' user=user.username prefId='new'%}?config=True"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
 				</div>
 			</div>
 		</div></div>
@@ -85,7 +85,7 @@ $(document).ready(function(){
 			<div class="card-body">
 				{%render_table preference%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'webframe:pref' user=currentuser.username prefId='new'%}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
+					<a class="btn btn-primary" href="{%url 'webframe:pref' user=currentuser.username prefId='new'%}"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
 				</div>
 			</div>
 		</div></div>
