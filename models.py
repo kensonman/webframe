@@ -16,6 +16,7 @@ logger=logging.getLogger('webframe.models')
 DATEFMT='%Y-%m-%d %H:%M:%S.%fT%z'
 fmt=lambda d: 'null' if d is None else d.strftime(DATEFMT)
 rfmt=lambda d: None if d=='null' else datetime.strptime(d, DATEFMT)
+nullValue=_('null') #Make sure the null value can be translate
 
 def valueOf(val):
    '''
