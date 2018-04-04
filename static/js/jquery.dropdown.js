@@ -109,7 +109,7 @@
            var item=$('<'+$(this).attr('wfelement')+'/>')
               .addClass('dropdown-item')
               .prependTo(menu)
-              .attr('name', '-- Please Select --')
+              .attr('name', $(this).attr('wfPlsSelect'))
               .attr('val', '')
            ;
            $.wfdropdown.populate(item);
@@ -139,7 +139,7 @@
      if(params.ajax!=null){
        params.ajax.success=params.success; //Overwrite the success function
        params.ajax.context=this;
-       $(this).attr({'wfelement':params.element, 'wfname':params.name, 'wfid':params.id});
+       $(this).attr({'wfelement':params.element, 'wfname':params.name, 'wfid':params.id, 'wfPlsSelect':$(this).text()});
        $.ajax(params.ajax);
        return this;
      }
