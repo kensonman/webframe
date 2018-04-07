@@ -270,6 +270,7 @@ class AliveObject(models.Model, Dictable):
                             verbose_name=_('webframe.models.AliveObject.enabled'),
                             help_text=_('webframe.models.AliveObject.enabled.helptext'),
                         )
+    objects                 = AliveObjectManager()
 
     def isNew(self):
         '''
