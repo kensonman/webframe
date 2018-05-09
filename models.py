@@ -248,6 +248,12 @@ class AliveObjectManager(models.Manager):
             )
         ).order_by('-effDate')
 
+    def isOverlaped(self, start, end):
+        '''
+        Determinate the specified period is overlaped with the object effective period.
+        '''
+        return self.filter(effDate__lte=end).filter(models.Q(expDate__isnull=True)|models.Q(expDate__gte=start))
+
 class AliveObject(models.Model, Dictable):
     class Meta(object):
         abstract            = True
