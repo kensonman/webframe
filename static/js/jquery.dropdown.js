@@ -81,6 +81,7 @@
       onclick: function( evt ){
          var element=$(this).parents('.wfdropdown:first');
          var value=null;
+         var lastVal=$(element).find('input:first').val();
          if(typeof($(this).attr('val'))=='undefined')
             value=$(this).text();
          else
@@ -88,7 +89,7 @@
          $(element)
             .find('button:first').empty().text($(this).text()).end()
             .find('input:first').val(value).end()
-            .trigger('change')
+            .trigger('change', {'from': lastVal, 'to':value})
          ;
      },
      success: function( data ){
