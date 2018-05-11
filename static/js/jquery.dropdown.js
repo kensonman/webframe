@@ -117,6 +117,7 @@
         var selected=$(this).find('input:first').attr('value');
         var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
         $(this).find('button').text(label);
+        $(this).trigger('ready');
      },
      populate: function( item ){
         var name=$(item).attr('name');
