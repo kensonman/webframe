@@ -1,21 +1,12 @@
-<!DOCTYPE html>{%load staticfiles%}{%load i18n%}
-<html lang="{{lang|default:'zh-Hant'}}">
-<head>
-{%block head%}
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-	<title>{%block title%}{{wf_title|default:'NoTitle'}}{%endblock%}</title>
+{%extends 'webframe/blank.html'%}{%load i18n%}
 
-	{%block scripts%}{%include TMPL_SCRIPTS%}{%endblock%}
+{%block body%}
+<div id="pnl_root">
+	{%block header%}{%include TMPL_HEADER%}{%endblock%}
+	{%block content%}<div id="pnl_body" class="jumbotron pnl-content">
+		<h1>Content Block</h1><hr/>
+		<p>This is the content block. Please kindly to override this block to show your content here.</p>
+	</div>{%endblock%}
+	{%block footer%}{%include TMPL_FOOTER%}{%endblock%}
+</div><!-- End of pnl_root -->
 {%endblock%}
-</head>
-<body>{%block root%}
-<noscript><div class="noscript" style="display:block; width:80%; margin:50px auto;">{%block noscript%}
-	<h1>{%blocktrans%}Javascript is required{%endblocktrans%}</h1>
-	<p>{%blocktrans%}The javascript must be enabled in this site to have the best browsing experience.{%endblocktrans%}</p>
-	<p>{%blocktrans%}Click <a href="http://www.enable-javascript.com/" target="_blank">here</a> to see how to enable the javascript in your browser.{%endblocktrans%}</p>
-{%endblock%}</div></noscript>
-{%block body%}<div id="pnl_root">Body block will be here.</div>{%endblock%}
-{%block loading%}{%include TMPL_LOADING%}{%endblock%}
-{%endblock%}</body>
-</html>
