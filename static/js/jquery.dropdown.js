@@ -115,7 +115,7 @@
            ;
            $.wfdropdown.populate(item);
         }
-        var selected=$(this).find('input:first').attr('value');
+        var selected=$(this).find('input:first').val();
         var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
         $(this).find('button').text(label);
         $(this).trigger('ready');
