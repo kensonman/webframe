@@ -122,6 +122,7 @@
      },
      populate: function( item ){
         var name=$(item).attr('name');
+        if(typeof(name)=='undefined')name=$(item).text();
         var val=$(item).attr('val');
         $(item).empty().append($('<a></a>').text(name).attr({'href':'#','val':val}).addClass('dropdown-item').click($.wfdropdown.onclick));
      },
@@ -146,10 +147,10 @@
        return this;
      }
 
-     var selected=$(this).find('input:first').attr('value');
+     var selected=$(this).find('input:first').val();
      var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
      $(this)
-       .find('.dropdown-item').each(function(){ $.wfdropdown.populate( this ); }).end()
+       .find(params.items).each(function(){ $.wfdropdown.populate( this ); }).end()
        .find('button').text(label)
        .trigger('ready')
      ;
