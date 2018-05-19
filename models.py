@@ -16,6 +16,7 @@ logger=logging.getLogger('webframe.models')
 DATEFMT='%Y-%m-%d %H:%M:%S.%fT%z'
 fmt=lambda d: 'null' if d is None else d.strftime(DATEFMT)
 rfmt=lambda d: None if d=='null' else datetime.strptime(d, DATEFMT)
+nullValue=_('null') #Make sure the null value can be translate
 
 def valueOf(val):
    '''
@@ -193,7 +194,7 @@ class ValueObject(models.Model, Dictable):
         '''
         user=get_current_user()
         if user:
-            if not user.is_authenticated(): user=None
+            if not user.is_authenticated: user=None
         self.lmb=user
         try:
             if not self.cb: self.cb=user
@@ -434,7 +435,7 @@ class AsyncManipulationObject(models.Model):
 
 # The abstract value=object that provide the sequence field and related ordering features
 class OrderableValueObject(ValueObject):
-    sequence        = models.FloatField(default=1,verbose_name=_('OrderableValueObject.sequence'))
+    sequence        = models.FloatField(default=1,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
 
     class Meta:
         abstract    = True

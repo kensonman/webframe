@@ -145,14 +145,8 @@
        $.ajax(params.ajax);
        return this;
      }
-
-     var selected=$(this).find('input:first').attr('value');
-     var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
-     $(this)
-       .find('.dropdown-item').each(function(){ $.wfdropdown.populate( this ); }).end()
-       .find('button').text(label)
-       .trigger('ready')
-     ;
+     
+     $(this).find('.dropdown-item').each(function(){ $.wfdropdown.populate( this ); });
      return this;
    };
 })(jQuery);
