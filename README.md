@@ -44,6 +44,11 @@ Configuration
 			'django.middleware.locale.LocaleMiddleware',
 		]
 
+5. Setup the [login url](https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-LOGIN_URL)
+
+      #file: settings.py
+      LOGIN_URL = 'webframe:login'
+
 Application
 ----
 1. You can use the below script to get the current user. It very useful to implement the last_modified_by in model.
