@@ -39,6 +39,7 @@ def pref(prefName, **kwargs):
                kwargs['user']=User.objects.get(username=str(kwargs['user']))
       else:
          kwargs['user']=get_current_user()
+      logger.info('prefName=={0}'.format(prefName))
       pref=Preference.objects.pref(prefName, **kwargs)
       return pref
    except Preference.DoesNotExist:

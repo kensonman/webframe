@@ -323,7 +323,9 @@ class PrefManager(models.Manager):
       user=kwargs.get('user', None)
       rst=self.filter(name=name)
       try:
-        if user: rst=rst.filter(owner=user)
+        if user: 
+           if len(rst.filter(owner=user))>0:
+              rst=rst.filter(owner=user)
         rst=rst.order_by('owner')
         if len(rst)>0:
             rst=rst[0]
