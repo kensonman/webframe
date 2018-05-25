@@ -279,7 +279,7 @@ def pref(req, user=None, prefId=None):
       _('Preference.msg.confirmDelete')
       pref.delete()
    if pref.parent:
-      return redirect('preference', user=user.username, prefId=pref.parent.id)
+      return redirect('webframe:pref', user=user.username, prefId=pref.parent.id)
    else:
-      return redirect('preferences', user=user.username)
+      return redirect('webframe:prefs', user=user.username)
       

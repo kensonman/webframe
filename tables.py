@@ -4,7 +4,7 @@ from .models import *
 import django_tables2 as tables
 
 class PreferenceTable(tables.Table):
-	name=tables.LinkColumn('webframe:preference', args=[A('owner.username'), A('id.hex')])
+	name=tables.LinkColumn('webframe:pref', args=[A('owner.username'), A('id.hex')])
 
 	class Meta(object):
 		model=Preference
