@@ -8,11 +8,11 @@ def getitem(value, key):
          value=eval(value)
    except:
       pass
-	try:
-		if hasattr(value, 'get'):
-			return value.get(key)
-		elif hasattr(value, '__getitem__'):
-			return value.__getitem__(key)
-	except ValueError:
-		pass
-	return None
+   try:
+      if hasattr(value, 'get'):
+         return value.get(key)
+      elif hasattr(value, '__getitem__'):
+         return value.__getitem__(key)
+   except ValueError:
+      pass
+   return None
