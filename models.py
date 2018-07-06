@@ -181,11 +181,11 @@ class ValueObject(models.Model, Dictable):
             return 'new'
         return self.id.hex
    
-   @deprecated(deprecated_in="v1.1", removed_in="v1.2", current_version=__version__, details="Use Dictable.expDict() instead")
+   @deprecated(deprecated_in="v1.1", removed_in="v1.2", current_version='v1.1', details="Use Dictable.expDict() instead")
    def asDict(self):
       return {'id': self.id.hex, 'lmd':fmt(self.lmd), 'lmb':self.lmb.username, 'cd':fmt(self.cd), 'cb':self.cb.username}
 
-   @deprecated(deprecated_in="v1.1", removed_in="v1.2", current_version=__version__, details="Use Dictable.impDict(data) instead")
+   @deprecated(deprecated_in="v1.1", removed_in="v1.2", current_version='v1.1', details="Use Dictable.impDict(data) instead")
    def fromDict(self, data):
       self.id=data['id']
       self.lmd=rfmt(data['lmd'])
