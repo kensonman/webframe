@@ -1,4 +1,5 @@
 from datetime import datetime
+from deprecation import deprecated
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -49,7 +50,9 @@ def parseVal(field, val):
       return float(val)
    elif typ is 'BooleanField':
       return getBool(val)
-   elif typ in ['CharField', 'TextField', 'EmailField', 'URLField', 'UUIDField']:
+   elif typ in ['UUIDField']:
+      return uuid.UUID(val)
+   elif typ in ['CharField', 'TextField', 'EmailField', 'URLField']:
       return str(val)
    elif typ is 'DateTimeField':
       return datetime.strptime(val, DATEFMT)
@@ -178,9 +181,11 @@ class ValueObject(models.Model, Dictable):
             return 'new'
         return self.id.hex
 
+   @deprecated(deprecated="v2.1", removed_in="v2.2", current_version="v2.1", details="Use Dictable.expDict() instead")
    def asDict(self):
       return {'id': self.id.hex, 'lmd':fmt(self.lmd), 'lmb':self.lmb.username, 'cd':fmt(self.cd), 'cb':self.cb.username}
 
+   @deprecated(deprecated="v2.1", removed_in="v2.2", current_version="v2.1", details="Use Dictable.impDict(data) instead")
    def fromDict(self, data):
       self.id=data['id']
       self.lmd=rfmt(data['lmd'])
