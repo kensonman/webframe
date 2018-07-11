@@ -123,7 +123,7 @@
      populate: function( item ){
         var name=$(item).attr('name');
         var val=$(item).attr('val');
-        $(item).empty().append($('<a></a>').text(name).attr({'href':'#','val':val}).addClass('dropdown-item').click($.wfdropdown.onclick));
+        $(item).empty().append($('<div></div>').text(name).css('cursor', 'pointer').attr({'href':'#','val':val}).addClass('dropdown-item').click($.wfdropdown.onclick));
      },
    }});
    
@@ -150,7 +150,7 @@
      var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
      $(this)
        .find('.dropdown-item').each(function(){ $.wfdropdown.populate( this ); }).end()
-       .find('button').text(label)
+       .find('button').text(label).append('<span style="margin-left:20px"><i class="glyphicon glyphicon-triangle-bottom"></i></span>').end()
        .trigger('ready')
      ;
      return this;
