@@ -87,7 +87,10 @@
          else
             value=$(this).attr('val');
          $(element)
-            .find('button:first').empty().text($(this).text()).end()
+            .find('button:first')
+               .empty().text($(this).text())
+               .append('<span style="margin-left:20px"><i class="glyphicon glyphicon-triangle-bottom"></i></span>')
+               .end()
             .find('input:first').val(value).end()
             .trigger('change', {'from': lastVal, 'to':value})
          ;
@@ -123,6 +126,10 @@
      populate: function( item ){
         var name=$(item).attr('name');
         var val=$(item).attr('val');
+        if(typeof(name)=='undefined' || name.length<1){
+           name=$(item).text();
+           $(item).attr('name', name);
+        }
         $(item).empty().append($('<div></div>').text(name).css('cursor', 'pointer').attr({'href':'#','val':val}).addClass('dropdown-item').click($.wfdropdown.onclick));
      },
    }});
@@ -148,6 +155,7 @@
 
      var selected=$(this).find('input:first').attr('value');
      var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
+     if(label.length<1)label=$(this).find('button:first').text();
      $(this)
        .find('.dropdown-item').each(function(){ $.wfdropdown.populate( this ); }).end()
        .find('button').text(label).append('<span style="margin-left:20px"><i class="glyphicon glyphicon-triangle-bottom"></i></span>').end()
