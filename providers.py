@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 from datetime import datetime
 from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME
 
@@ -34,6 +34,8 @@ def template_injection(req):
     '''
     Inject the TMPL_BASE, TMPL_HEADER, TMPL_FOOTER and TMP_PAGINATION settings into the request
     '''
+    lang=getattr(settings, 'LANGUAGE_CODE', 'zh-hant')
+    langs=getattr(settings, 'LANGS', ((lang, _(lang)), ))
     RST={
         'TMPL_BLANK': getattr(settings, 'TMPL_BLANK', 'webframe/blank.html'),
         'TMPL_BASE': getattr(settings, 'TMPL_BASE', 'webframe/base.html'),
@@ -44,6 +46,7 @@ def template_injection(req):
         'TMPL_PAGINATION': getattr(settings, 'TMPL_PAGINATION', 'webframe/pagination.html'),
         'URL_LOGIN': getattr(settings, 'URL_LOGIN', '/login/'),
         'URL_LOGOUT': getattr(settings, 'URL_LOGOUT', '/logout/'),
+        'LANGS': langs,
     }
     return RST
 
