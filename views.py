@@ -63,6 +63,7 @@ def login( req ):
    params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
    params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
    params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
+   params['socialLogin_google']=hasattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
    logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
    return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 

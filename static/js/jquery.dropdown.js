@@ -149,6 +149,7 @@
 
      var selected=$(this).find('input:first').val();
      var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
+     if(label.length<1) label=$(this).find('buttton:first').text();
      $(this)
        .find(params.items).each(function(){ $.wfdropdown.populate( this ); }).end()
        .find('button').text(label)

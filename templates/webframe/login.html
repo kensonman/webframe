@@ -34,13 +34,13 @@ $(document).ready(function(){
                      <a href="{%url 'social:begin' 'facebook'%}"><img src="{%static 'img/login-facebook.png'%}" alt="{%trans 'login-facebook'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_twitter%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter'%}" alt="{%trans 'login-twitter'%}"/></a>
+                     <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter.png'%}" alt="{%trans 'login-twitter'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_github%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github'%}" alt="{%trans 'login-github'%}"/></a>
+                     <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github.png'%}" alt="{%trans 'login-github'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_google%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'google'%}"><img src="{%static 'img/login-google'%}" alt="{%trans 'login-google'%}"/></a>
+                     <a href="{%url 'social:begin' 'google-oauth2'%}"><img src="{%static 'img/login-google.png'%}" alt="{%trans 'login-google'%}"/></a>
                   </div>{%endif%}
                   {%endblock%}
                </div>
