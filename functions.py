@@ -8,9 +8,9 @@ from deprecation import deprecated
 import os, logging, pytz
 
 logger=logging.getLogger('webframe.functions')
-FMT_DATE='%Y-%m-%d'
-FMT_TIME='%H:%M:%S'
-FMT_DATETIME='%s %s'%(FMT_DATE, FMT_TIME)
+FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
+FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
+FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'%(FMT_DATE, FMT_TIME))
 
 def getClass( cls ):
    '''
