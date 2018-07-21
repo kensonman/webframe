@@ -1,0 +1,49 @@
+/*
+ * File: messages.css
+ * Desc: Declare the css class for displaying the Django-Messages
+ * Usage:
+ * 
+ * Django: views.py
+ * ----------------
+ * from django.contrib import messages
+ * def index(request):
+ *    messages.info(request, 'Info Message')
+ *    return django.contrib.http.HttpResponse('....')
+ *
+ * 
+ * HTML:
+ * ------
+ *  <ul>{%for msg in messages%}
+ *      <li class="animated flash"><span class="alert {%if msg.tags%} msg-{{msg.tags}}{%endif%}">{{msg|safe}}</span></li>
+ *  {%endfor%}</ul>
+ */
+
+.msg-debug{
+   color: #818182;
+   background-color: #fefefe;
+   border-color: #fdfdfe;
+}
+
+.msg-info{
+   color: #383d41;
+   background-color: #e2e3e5;
+   border-color: #d6d8db;
+}
+
+.msg-success{
+   color: #155724;
+   background-color: #d4edda;
+   border-color: #c3e6cb;
+}
+
+.msg-warning{
+   color: #856404;
+   background-color: #fff3cd;
+   border-color: #ffeeba;
+}
+
+.msg-error{
+   color: #721c24;
+   background-color: #f8d7da;
+   border-color: #f5c6cb;
+}
