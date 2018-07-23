@@ -4,9 +4,9 @@
 <div id="pnl_root">
 	{%block header%}{%include TMPL_HEADER%}{%endblock%}
    {%block breadcrumb%}{%endblock%}
-   {%block messages%}{%if messages%}<div class="jumbotron" style="margin: 0px; padding: 5px 20px;"><ul>{%for msg in messages%}
-       <li class="animated flash alert {%if msg.tags%} msg-{{msg.tags}}{%endif%}"><span class="">{{msg|safe}}</span></li>
-   {%endfor%}</ul></div>{%endif%}{%endblock%}
+   {%block messages%}{%if messages%}<ul class="jumbotron jumbotron-breadcrumb">{%for msg in messages%}
+       <li class="animated flash alert {%if msg.tags%} msg-{{msg.tags}}{%endif%}">{{msg|safe}}</li>
+   {%endfor%}</ul>{%endif%}{%endblock%}
 	{%block content%}<div id="pnl_body" class="jumbotron pnl-content">
 		<h1>Content Block</h1><hr/>
 		<p>This is the content block. Please kindly to override this block to show your content here.</p>

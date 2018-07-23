@@ -57,7 +57,3 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 </nav></div>
-
-{%block messages%}{%if messages%}<div class="jumbotron" style="margin: 0px; padding: 5px 20px;"><ul>{%for msg in messages%}
-    <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
-{%endfor%}</ul></div>{%endif%}{%endblock%}
