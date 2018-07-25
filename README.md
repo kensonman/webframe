@@ -155,6 +155,7 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
 
 		#urls.py
       from django.conf import settings
+      from django.conf.urls.static import static
       from django.urls import path, re_path, include
       from webframe.urls import urlpatterns as webframe
 
