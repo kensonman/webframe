@@ -64,12 +64,15 @@ Application
 2. Provide the logout features (Optional)
 
 		#urls.py
-      from django.conf.urls import url, include
+      from django.conf import settings
+      from django.urls import path, re_path, include
+      from webframe.urls import urlpatterns as webframe
 
 		urlpatterns = [
 			#...
-         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
+         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
 		]
+      urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 Preference
 ----
@@ -97,12 +100,15 @@ To use the preference, following the steps:
 3. Setup the preference views
 
 		#urls.py
-      from django.conf.urls import url, include
+      from django.conf import settings
+      from django.urls import path, re_path, include
+      from webframe.urls import urlpatterns as webframe
 
 		urlpatterns = [
 			#...
-         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
+         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
 		]
+      urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 Users
@@ -132,12 +138,15 @@ To use the preference, following the steps:
 3. Setup the preference views
 
 		#urls.py
-      from django.conf.urls import url, include
+      from django.conf import settings
+      from django.urls import path, re_path, include
+      from webframe.urls import urlpatterns as webframe
 
 		urlpatterns = [
 			#...
-         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
+         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
 		]
+      urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 Javascript Translation
 ----
@@ -145,12 +154,15 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
 1. Setup the preference views
 
 		#urls.py
-      from django.conf.urls import url, include
+      from django.conf import settings
+      from django.urls import path, re_path, include
+      from webframe.urls import urlpatterns as webframe
 
 		urlpatterns = [
 			#...
-         url(r'^webframe/', include('webframe.urls', namespace='webframe')),
+         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
 		]
+      urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 2. In HTML code add
 
