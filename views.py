@@ -48,7 +48,7 @@ def login( req ):
          u.is_superuser=True
          u.set_password(password)
          u.save()
-
+         messages.warning(req, 'Created the first user %s as system administroator'%username)
       try:
          u=authenticate(req, username=username, password=password)
       except:
