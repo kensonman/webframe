@@ -18,7 +18,7 @@ div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 label[for]{cursor:pointer;}
 .label-error{background-color:#d9534f;}
 .debug{ display: none; }
-.jumbotron-subject{ margin-bottom:5px; padding-top:0px;}
+.jumbotron-subject{ margin-bottom:5px; padding-top:20px;}
 .jumbotron-breadcrumb{margin: 0px; padding: 5px 20px; list-style-type:none;}
 .jumbotron-breadcrumb li{list-style-type:none;}
 ol.breadcrumb{ margin-bottom: 0px; }
