@@ -23,23 +23,6 @@ label[for]{cursor:pointer;}
 .jumbotron-breadcrumb li{list-style-type:none;}
 ol.breadcrumb{ margin-bottom: 0px; }
 
-
-/* If the file control in the input-group, hide the control */
-.input-group input[type=file] {
-	position: absolute;
-	top: 0;
-	right: 0;
-	min-width: 100%;
-	min-height: 100%;
-	text-align: right;
-	filter: alpha(opacity=0);
-	opacity: 0;
-	outline: none;
-	background: white;
-	cursor: inherit;
-	display: block;
-}
-
 /********* Overlay styles copied from (w3schools.com)[https://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp] **********/
 .overlay {
    height: 100%;
