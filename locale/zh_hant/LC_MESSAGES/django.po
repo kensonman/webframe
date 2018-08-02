@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-29 07:55+0000\n"
+"POT-Creation-Date: 2018-08-02 04:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,198 +17,198 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: models.py:19
+#: models.py:20
 msgid "null"
 msgstr "<i class=\"fa fa-code\"></i>"
 
-#: models.py:131
+#: models.py:134
 msgid "webframe.models.ValueObject"
 msgstr "ValueObject"
 
-#: models.py:132
+#: models.py:135
 msgid "webframe.models.ValueObjects"
 msgstr "ValueObjects"
 
-#: models.py:139
+#: models.py:142
 msgid "webframe.models.ValueObject.id"
 msgstr "ID"
 
-#: models.py:140
+#: models.py:143
 msgid "webframe.models.ValueObject.id.helptext"
 msgstr "用作系統識別。使用 UUID 格式。"
 
-#: models.py:144
+#: models.py:147
 msgid "webframe.models.ValueObject.lmd"
 msgstr "最後修改日期"
 
-#: models.py:145
+#: models.py:148
 msgid "webframe.models.ValueObject.lmd.helptext"
 msgstr ""
 "這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:154
+#: models.py:157
 msgid "webframe.models.ValueObject.lmb"
 msgstr "最後修改人"
 
-#: models.py:155
+#: models.py:158
 msgid "webframe.models.ValueObject.lmb.helptext"
 msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:159
+#: models.py:162
 msgid "webframe.models.ValueObject.cd"
 msgstr "建立日期"
 
-#: models.py:160
+#: models.py:163
 msgid "webframe.models.ValueObject.cd.helptext"
 msgstr "這項資料的建立日期。"
 
-#: models.py:169
+#: models.py:172
 msgid "webframe.models.ValueObject.cb"
 msgstr "建立人"
 
-#: models.py:170
+#: models.py:173
 msgid "webframe.models.ValueObject.cb.helptext"
 msgstr "這項資料的建立人。"
 
-#: models.py:254
+#: models.py:272
 msgid "webframe.models.AliveObject"
 msgstr "Alive Object"
 
-#: models.py:255
+#: models.py:273
 msgid "webframe.models.AliveObjects"
 msgstr "生命週期物件"
 
-#: models.py:259
+#: models.py:277
 msgid "webframe.models.AliveObject.effDate"
 msgstr "有效日期"
 
-#: models.py:260
+#: models.py:278
 msgid "webframe.models.AliveObject.effDate.helptext"
 msgstr "這項資料的有效日期"
 
-#: models.py:265
+#: models.py:283
 msgid "webframe.models.AliveObject.expDate"
 msgstr "失效日期"
 
-#: models.py:266
+#: models.py:284
 msgid "webframe.models.AliveObject.expDate.helptext"
 msgstr "這項資料的失效日期"
 
-#: models.py:270
+#: models.py:288
 msgid "webframe.models.AliveObject.enabled"
 msgstr "啟用"
 
-#: models.py:271
+#: models.py:289
 msgid "webframe.models.AliveObject.enabled.helptext"
 msgstr "這項資料是否啟用"
 
-#: models.py:341 templates/webframe/preference.html:49
+#: models.py:362 templates/webframe/preference.html:49
 #: templates/webframe/preference.html:50
 msgid "webframe.models.Preference.name"
 msgstr "設定名稱"
 
-#: models.py:341
+#: models.py:362
 msgid "webframe.models.Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:342 templates/webframe/preference.html:53
+#: models.py:363 templates/webframe/preference.html:53
 #: templates/webframe/preference.html:54
 msgid "webframe.models.Preference.value"
 msgstr "值"
 
-#: models.py:342
+#: models.py:363
 msgid "webframe.models.Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:348
+#: models.py:369
 msgid "Pwebframe.models.reference.owner"
 msgstr "擁有人"
 
-#: models.py:349
+#: models.py:370
 msgid "webframe.models.Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:356 templates/webframe/preference.html:40
+#: models.py:377 templates/webframe/preference.html:40
 #: templates/webframe/preference.html:41
 msgid "webframe.models.Preference.parent"
 msgstr "歸類"
 
-#: models.py:357
+#: models.py:378
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:361 templates/webframe/preference.html:57
+#: models.py:382 templates/webframe/preference.html:57
 #: templates/webframe/preference.html:58
 msgid "webframe.models.Preference.sequence"
 msgstr "排序"
 
-#: models.py:362
+#: models.py:383
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
-#: models.py:391
+#: models.py:412
 msgid "webframe.models.Privilege"
 msgstr "權限"
 
-#: models.py:392
+#: models.py:413
 msgid "webframe.models.Privileges"
 msgstr "權限"
 
-#: models.py:398
+#: models.py:419
 msgid "webframe.models.Privilege.name"
 msgstr "權限名稱"
 
-#: models.py:399
+#: models.py:420
 msgid "webframe.models.Privilege.desc"
 msgstr "說明"
 
-#: models.py:403 models.py:404
+#: models.py:424 models.py:425
 msgid "webframe.models.GrantedPrivilege"
 msgstr "授權"
 
-#: models.py:409
+#: models.py:430
 msgid "webframe.models.GrantedPrivilege.owner"
 msgstr "被授權者"
 
-#: models.py:414
+#: models.py:435
 msgid "webframe.models.GrantedPrivilege.privilege"
 msgstr "權限"
 
-#: models.py:416
+#: models.py:437
 msgid "webframe.models.GrantedPrivilege.item"
 msgstr "對像資料"
 
-#: models.py:420
+#: models.py:441
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "異步程序物件"
 
-#: models.py:421
+#: models.py:442
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "異步程序物件"
 
-#: models.py:424
+#: models.py:445
 msgid "AsyncManipulationObject.task_id"
 msgstr "異步程序#"
 
-#: models.py:428
+#: models.py:449
 msgid "AsyncManipulationObject.is_processing"
 msgstr "異步程序進行中⋯⋯"
 
-#: models.py:433
+#: models.py:454
 msgid "AsyncManipulationObject.is_ready"
 msgstr "異步程序已準備就緒"
 
-#: models.py:438
+#: models.py:459
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "排序"
 
-#: templates/webframe/base.html:14
+#: templates/webframe/blank.html:14
 msgid "Javascript is required"
 msgstr "無法正常顯示網頁"
 
-#: templates/webframe/base.html:15
+#: templates/webframe/blank.html:15
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
@@ -216,7 +216,7 @@ msgstr ""
 "這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
 "頁能正確顯示."
 
-#: templates/webframe/base.html:16
+#: templates/webframe/blank.html:16
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
@@ -237,26 +237,26 @@ msgstr "版本"
 msgid "render-date"
 msgstr "輸出日期"
 
-#: templates/webframe/header.html:32 templates/webframe/user.html:3
+#: templates/webframe/header.html:40 templates/webframe/user.html:3
 #: templates/webframe/user.html:23 templates/webframe/users.html:3
 #: templates/webframe/users.html:28
 msgid "users"
 msgstr "使用者"
 
-#: templates/webframe/header.html:35 templates/webframe/header.html:41
+#: templates/webframe/header.html:43 templates/webframe/header.html:49
 #, python-format
 msgid "Hi, %(username)s"
 msgstr "你好，%(username)s"
 
-#: templates/webframe/header.html:38
+#: templates/webframe/header.html:46
 msgid "preferences"
 msgstr "個人設定"
 
-#: templates/webframe/header.html:39
+#: templates/webframe/header.html:47
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header.html:43 templates/webframe/login.html:69
+#: templates/webframe/header.html:51 templates/webframe/login.html:69
 msgid "login"
 msgstr "登入"
 
@@ -302,12 +302,12 @@ msgstr "用戶名稱"
 msgid "password"
 msgstr "密碼"
 
-#: templates/webframe/pagination.html:18
+#: templates/webframe/pagination.html:22
 #, python-format
 msgid "Showing %(per_page)s of %(total)s; Page %(x)s of %(y)s"
-msgstr "正顯示 %(total)s 中的 %(per_page)s 項資料。第 %(x)s 頁,共 %(y)s 頁。"
+msgstr "共有 %(total)s 項資料, 每頁顯示 %(per_page)s 項資料。第 %(x)s 頁,共 %(y)s 頁。"
 
-#: templates/webframe/pagination.html:40
+#: templates/webframe/pagination.html:24
 msgid "pagination-norecord"
 msgstr "找不到相關資料"
 
@@ -487,10 +487,10 @@ msgstr "新增使用者"
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:132
+#: views.py:133
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:279
+#: views.py:280
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
