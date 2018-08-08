@@ -39,6 +39,7 @@ Configuration
 		MIDDLEWARE_CLASSES += [
 			'method_override.middleware.MethodOverrideMiddleware', #django 1.9 or belows
 			'webframe.methodoverridemiddleware.MethodOverrideMiddleware', #django 1.10 or aboves
+         'webframe.NextURLMiddleware.NextURLMiddleware',
 			'webframe.LangMiddleware.LangMiddleware',
 			'webframe.CurrentUserMiddleware.CurrentUserMiddleware',
 			'django.middleware.locale.LocaleMiddleware',
