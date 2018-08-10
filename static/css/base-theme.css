@@ -22,6 +22,25 @@ label[for]{cursor:pointer;}
 .jumbotron-breadcrumb{margin: 0px; padding: 5px 20px; list-style-type:none;}
 .jumbotron-breadcrumb li{list-style-type:none;}
 ol.breadcrumb{ margin-bottom: 0px; }
+.btn-file {
+   position: relative;
+   overflow: hidden;
+}
+.btn-file input[type=file] {
+   position: absolute;
+   top: 0;
+   right: 0;
+   min-width: 100%;
+   min-height: 100%;
+   font-size: 100px;
+   text-align: right;
+   filter: alpha(opacity=0);
+   opacity: 0;
+   outline: none;
+   background: white;
+   cursor: inherit;
+   display: block;
+}
 
 /********* Overlay styles copied from (w3schools.com)[https://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp] **********/
 .overlay {
