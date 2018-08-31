@@ -309,7 +309,7 @@ msgstr "共有 %(total)s 項資料, 每頁顯示 %(per_page)s 項資料。第 %(
 
 #: templates/webframe/pagination.html:24
 msgid "pagination-norecord"
-msgstr "找不到相關資料"
+msgstr "沒有相關資料"
 
 #: templates/webframe/preference.html:3 templates/webframe/preference.html:26
 msgid "Preference.new"
