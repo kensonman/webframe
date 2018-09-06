@@ -176,6 +176,9 @@ class ValueObject(models.Model, Dictable):
    def isNew(self):
       return self.lmd is None
 
+   def isNotNew(self):
+      return self.lmd is not None
+
    def id_or_new(self):
       if self.isNew():
          return 'new'
