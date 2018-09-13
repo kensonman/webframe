@@ -334,6 +334,14 @@ class AliveObject(models.Model, Dictable):
 
 class PrefManager(models.Manager):
    def pref(self, name, **kwargs):
+     '''
+     Get the preference from database.
+     
+     @name                   The preference name
+     @kwargs['defval']       The default value
+     @kwargs['user']         The preference owner
+     @kwargs['returnValue']  The boolean value indicate the method return the preference's value instead of preference instance.
+     '''
      defval=kwargs.get('defval', None)
      user=kwargs.get('user', None)
      rst=self.filter(name=name)
