@@ -247,7 +247,7 @@ def pref(req, user=None, prefId=None):
          pref.owner=user
       # Preparing the form view
       params['target']=pref
-      params['childs']=PreferenceTable(pref.childs())
+      params['childs']=PreferenceTable(pref.childs)
       params['currentuser']=user
       return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
    elif req.method=='POST':

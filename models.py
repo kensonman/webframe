@@ -401,6 +401,7 @@ class Preference(ValueObject):
    def __unicode__(self):
       return '(None)' if self.value is None else "{0}::{1}".format(self.name, self.value)
 
+   @property
    def childs(self):
       return Preference.objects.filter(parent=self).order_by('sequence')
 
