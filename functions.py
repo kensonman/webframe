@@ -167,7 +167,8 @@ def getChoice(choices, val):
       - getChoices(EXAMPLE, 'one') => 1 (Index of 'one' element)
       - getChoices(EXAMPLE, 'two') => 4 (Index of 'two' element)
    '''
-   if isinstance(val, int):
+   if isinstance(val, int) or val.isdigit():
+      val=int(val)
       return choices[val][1]
    else:
       val=str(val).upper()
