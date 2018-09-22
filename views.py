@@ -304,7 +304,7 @@ def ajaxPrefs(req, name):
    '''
    Get the preferences according to the name in JSON format
    '''
-   logger.debug('Getting pref<{0}>'.format(name))
+   logger.debug('Getting prefs<{0}>'.format(name))
    rst=Preference.objects.pref(name, user=req.user, defval=None)
-   rst=[{'id': i.id, 'name':i.name} for i in rst.childs]
+   rst=[{'id': i.id, 'name':i.name, 'value':i.value} for i in rst.childs]
    return JsonResponse(rst, safe=False)
