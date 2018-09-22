@@ -341,14 +341,17 @@ class PrefManager(models.Manager):
      @kwargs['defval']       The default value
      @kwargs['user']         The preference owner
      @kwargs['returnValue']  The boolean value indicate the method return the preference's value instead of preference instance.
+     @kwargs['parent']       The parent preference of this instance
      '''
      defval=kwargs.get('defval', None)
      user=kwargs.get('user', None)
+     parent=kwargs.get('parent', None)
      rst=self.filter(name=name)
      try:
       if user: 
          if len(rst.filter(owner=user))>0:
            rst=rst.filter(owner=user)
+      if parent: rst=rst.filter(parent=parent)
       rst=rst.order_by('owner')
       if len(rst)>0:
          rst=rst[0]
