@@ -15,6 +15,7 @@ from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
+from .decorators import is_enabled
 from .functions import getBool
 from .models import *
 from .tables import *
@@ -286,3 +287,24 @@ def pref(req, user=None, prefId=None):
    else:
       return redirect('webframe:prefs', user=user.username)
       
+@login_required
+@is_enabled('WF-AJAX_PREF')
+def ajaxPref(req, name):
+   '''
+   Get the preference according to the name in JSON format
+   '''
+   logger.debug('Getting pref<{0}>'.format(name))
+   rst=Preference.objects.pref(name, user=req.user, defval=None)
+   rst={'name': rst.name, 'value': rst.value, 'id': rst.id}
+   return JsonResponse(rst, safe=False)
+
+@login_required
+@is_enabled('WF-AJAX_PREFS')
+def ajaxPrefs(req, name):
+   '''
+   Get the preferences according to the name in JSON format
+   '''
+   logger.debug('Getting pref<{0}>'.format(name))
+   rst=Preference.objects.pref(name, user=req.user, defval=None)
+   rst=[{'id': i.id, 'name':i.name} for i in rst.childs]
+   return JsonResponse(rst, safe=False)
