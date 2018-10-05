@@ -373,8 +373,8 @@ class Preference(ValueObject):
          ('browse_config', 'Can browse system configuration'),
          ('browse_preference', 'Can browse other preferences'),
       )
-   name               = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
-   value               = models.CharField(max_length=1024,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
+   name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
+   value               = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
    owner               = models.ForeignKey(
      settings.AUTH_USER_MODEL,null=True,
      blank=True,
