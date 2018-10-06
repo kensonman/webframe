@@ -11,6 +11,18 @@ logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
 FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'%(FMT_DATE, FMT_TIME))
+ 
+def valueOf(obj, defval=None):
+   '''
+   Get the value of the specified object, if it is callable/method/function, execute it and return the result;
+   '''
+   if obj==None: return defval 
+   if hasattr(obj, 'valueOf'): obj=obj.valueOf()
+   if hasattr(obj, '__call__'): obj=obj()
+   if isinstance(obj, str):
+      obj=obj.strip()
+      if len(obj)<1: return defval 
+   return obj
 
 def getClass( cls ):
    '''
