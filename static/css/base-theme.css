@@ -41,6 +41,7 @@ ol.breadcrumb{ margin-bottom: 0px; }
    cursor: inherit;
    display: block;
 }
+.more-text{ color: blue; padding: 0px 10px; font-weight:900; font-size: large;}
 
 /********* Overlay styles copied from (w3schools.com)[https://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp] **********/
 .overlay {

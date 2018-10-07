@@ -1,4 +1,4 @@
-{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}{%load method_override%}
+{%extends TMPL_BASE%}{%load i18n django_tables2 method_override%}
 
 {%block title%}{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%} - {%trans 'brand'%}{%endblock%}
 
@@ -6,70 +6,70 @@
 <script type="text/javascript" src="{% url 'webframe:js' %}"></script>
 <script type="text/javascript"><!--
 $(document).ready(function(){
-	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
-		window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
-	});
-	//Delete Logic: {%if not target.isNew%}
-		$('#deleteBtn').click(function(){ 
-			if(confirm(gettext('Preference.msg.confirmDelete')))
-				$(this).parents('form:first')
-					.find('input[name=_method]').val('DELETE').end()
-					.submit();
-		});
-	//{%endif%}End Delete Logic
+   $('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
+      window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
+   });
+   //Delete Logic: {%if not target.isNew%}
+      $('#deleteBtn').click(function(){ 
+         if(confirm(gettext('Preference.msg.confirmDelete')))
+            $(this).parents('form:first')
+               .find('input[name=_method]').val('DELETE').end()
+               .submit();
+      });
+   //{%endif%}End Delete Logic
 });
 //--></script>
 {%endblock%}
 
 {%block content%}<div class="jumbotron"><div class="pnl pnl-padding">
-	<h1>{%if target.user%}
-		{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}
-	{%else%}
-		{%trans 'Config.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Configuration{%endblocktrans%}
-	{%endif%}</h1>
-	<form method="POST">
-		{%csrf_token%}
-		{% method_override 'POST'%}
-		{%if target.parent%}<input type="hidden" name="parent" value="{{target.parent.id.hex}}"/>{%endif%}
-		{%if config_key%}<input type="hidden" name="config_key" value="{{config_key}}"/>{%endif%}
-		{%if not target.isNew%}<div class="field">
-			<label for="idFld">{%trans 'webframe.models.Preference.id'%}</label>
-			<input name="id" id="idFld" class="form-control" value="{{target.id.hex|default:''}}" readonly="readonly" required="true" placeholder="{%trans 'webframe.models.Preference.id'%}"/>
-		</div>{%endif%}
-		{%if target.parent%}<div class="field">
-			<label for="parentFld">{%trans 'webframe.models.Preference.parent'%}</label>
-			<input name="parent" id="parentFld" class="form-control" value="{{target.parent.id.hex}}" readonly="readonly" required="true" placeholder="{%trans 'webframe.models.Preference.parent'%}"/>
-		</div>{%endif%}
-		{%if target.owner%}<div class="field">
-			<label for="usernameFld">{%trans 'webframe.models.Preference.owner'%}</label>
-	   	<input name="username" id="usernameFld" class="form-control" value="{{target.owner.username|default:''}}" readonly="readonly" placeholder="{%trans 'webframe.models.Preference.owner'%}"/>
-	   	<input type="hidden" name="owner" id="ownerFld" value="{{target.owner.id}}"/>
-		</div>{%endif%}
-		<div class="field">
-			<label for="nameFld">{%trans 'webframe.models.Preference.name'%}</label>
-			<input name="name" id="nameFld" class="form-control" value="{{target.name|default:''}}" required="true" placeholder="{%trans 'webframe.models.Preference.name'%}"/>
-		</div>
-		<div class="field">
-			<label for="valueFld">{%trans 'webframe.models.Preference.value'%}</label>
-			<textarea name="value" id="valueFld" class="form-control" placeholder="{%trans 'webframe.models.Preference.value'%}">{{target.value|default:''|safe}}</textarea>
-		</div>
-		<div class="field">
-			<label for="sequenceFld">{%trans 'webframe.models.Preference.sequence'%}</label>
-			<input type="number" name="sequence" id="sequenceFld" class="form-control" value="{{target.sequence|floatformat:0|default:'0'}}" required="true" placeholder="{%trans 'webframe.models.Preference.sequence'%}"/>
-		</div>
-		<div class="pnl pnl-btns">
-			{%if not target.isNew%}<button type="button" class="btn btn-danger" id="deleteBtn"><i class="fas fa-trash"></i> {%trans 'Preference.actions.delete'%}</button>{%endif%}
-			<button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> {%trans 'Preference.actions.save'%}</button>
-		</div>
-	</form>
+   <h1>{%if target.user%}
+      {%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}
+   {%else%}
+      {%trans 'Config.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Configuration{%endblocktrans%}
+   {%endif%}</h1>
+   <form method="POST">
+      {%csrf_token%}
+      {% method_override 'POST'%}
+      {%if target.parent%}<input type="hidden" name="parent" value="{{target.parent.id.hex}}"/>{%endif%}
+      {%if config_key%}<input type="hidden" name="config_key" value="{{config_key}}"/>{%endif%}
+      {%if not target.isNew%}<div class="field">
+         <label for="idFld">{%trans 'webframe.models.Preference.id'%}</label>
+         <input name="id" id="idFld" class="form-control" value="{{target.id.hex|default:''}}" readonly="readonly" required="true" placeholder="{%trans 'webframe.models.Preference.id'%}"/>
+      </div>{%endif%}
+      {%if target.parent%}<div class="field">
+         <label for="parentFld">{%trans 'webframe.models.Preference.parent'%}</label>
+         <input name="parent" id="parentFld" class="form-control" value="{{target.parent.id.hex}}" readonly="readonly" required="true" placeholder="{%trans 'webframe.models.Preference.parent'%}"/>
+      </div>{%endif%}
+      {%if target.owner%}<div class="field">
+         <label for="usernameFld">{%trans 'webframe.models.Preference.owner'%}</label>
+         <input name="username" id="usernameFld" class="form-control" value="{{target.owner.username|default:''}}" readonly="readonly" placeholder="{%trans 'webframe.models.Preference.owner'%}"/>
+         <input type="hidden" name="owner" id="ownerFld" value="{{target.owner.id}}"/>
+      </div>{%endif%}
+      <div class="field">
+         <label for="nameFld">{%trans 'webframe.models.Preference.name'%}</label>
+         <input name="name" id="nameFld" class="form-control" value="{{target.name|default:''}}" required="true" placeholder="{%trans 'webframe.models.Preference.name'%}"/>
+      </div>
+      <div class="field">
+         <label for="valueFld">{%trans 'webframe.models.Preference.value'%}</label>
+         <textarea name="value" id="valueFld" class="form-control" placeholder="{%trans 'webframe.models.Preference.value'%}">{{target.value|default:''|safe}}</textarea>
+      </div>
+      <div class="field">
+         <label for="sequenceFld">{%trans 'webframe.models.Preference.sequence'%}</label>
+         <input type="number" name="sequence" id="sequenceFld" class="form-control" value="{{target.sequence|floatformat:0|default:'0'}}" required="true" placeholder="{%trans 'webframe.models.Preference.sequence'%}"/>
+      </div>
+      <div class="pnl pnl-btns">
+         {%if not target.isNew%}<button type="button" class="btn btn-danger" id="deleteBtn"><i class="fas fa-trash"></i> {%trans 'Preference.actions.delete'%}</button>{%endif%}
+         <button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> {%trans 'Preference.actions.save'%}</button>
+      </div>
+   </form>
 
-	{%if not target.isNew%}<div class="field">
-		<label>{%trans 'Preference.childs'%}</label>
-		{%render_table childs%}
-		<div class="pnl pnl-btns">
-			<a href="{%url 'webframe:pref' user=currentuser.username prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
-				<i class="fas fa-plus"></i> {%if target.user%}{%trans 'Preference.actions.addChild'%}{%else%}{%trans 'Config.actions.addChild'%}{%endif%}
-			</a>
-		</div>
-	</div>{%endif%}
+   {%if not target.isNew%}<div class="field">
+      <label>{%trans 'Preference.childs'%}</label>
+      {%render_table childs%}
+      <div class="pnl pnl-btns">
+         <a href="{%url 'webframe:pref' user=currentuser.username prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> {%if target.user%}{%trans 'Preference.actions.addChild'%}{%else%}{%trans 'Config.actions.addChild'%}{%endif%}
+         </a>
+      </div>
+   </div>{%endif%}
 </div></div>{%endblock%}
