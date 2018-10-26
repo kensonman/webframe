@@ -7,6 +7,7 @@
 div.field .desc{color:gray; font-size:10px;}
 div.field > .twitter-typeahead { width: 100%; }
 div.pnl-btns{margin: 20px 10px; text-align:right;}
+div.pnl-btns .btn{margin: 0px 5px;}
 div.pnl-lbtns{margin: 20px 10px;}
 div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 .wf_dropdown_lbl{ margin: 0px 20px; }
@@ -17,22 +18,30 @@ div.pnl-rbtns{margin: 20px 10px; text-align:right;}
 label[for]{cursor:pointer;}
 .label-error{background-color:#d9534f;}
 .debug{ display: none; }
-
-/* If the file control in the input-group, hide the control */
-.input-group input[type=file] {
-	position: absolute;
-	top: 0;
-	right: 0;
-	min-width: 100%;
-	min-height: 100%;
-	text-align: right;
-	filter: alpha(opacity=0);
-	opacity: 0;
-	outline: none;
-	background: white;
-	cursor: inherit;
-	display: block;
+.jumbotron-subject{ margin-bottom:5px; padding-top:20px;}
+.jumbotron-breadcrumb{margin: 0px; padding: 5px 20px; list-style-type:none;}
+.jumbotron-breadcrumb li{list-style-type:none;}
+ol.breadcrumb{ margin-bottom: 0px; }
+.btn-file {
+   position: relative;
+   overflow: hidden;
 }
+.btn-file input[type=file] {
+   position: absolute;
+   top: 0;
+   right: 0;
+   min-width: 100%;
+   min-height: 100%;
+   font-size: 100px;
+   text-align: right;
+   filter: alpha(opacity=0);
+   opacity: 0;
+   outline: none;
+   background: white;
+   cursor: inherit;
+   display: block;
+}
+.more-text{ color: blue; padding: 0px 10px; font-weight:900; font-size: large;}
 
 /********* Overlay styles copied from (w3schools.com)[https://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp] **********/
 .overlay {
@@ -100,3 +109,5 @@ label[for]{cursor:pointer;}
 .input-group-dropdown .form-control{border-radius: 0px 4px 4px 0px !important;}
 .input-group-dropdown ul{ width:100%; margin-left;10px; }
 .input-group-dropdown .option {width:100%;}
+
+.page-title{border-bottom: 1px solid black;}

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 from datetime import datetime
 from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME
 
@@ -27,12 +27,15 @@ def absolute_path(req):
     RST['VERSION']=getattr(settings, 'VERSION', 'v0.1.0-beta')
     RST['IPAddr']=getClientIP(req)
     RST['DEBUG']=getattr(settings, 'DEBUG', False)
+    if getattr(settings, 'FONTAWESOME_LIC', None): RST['FONTAWESOME_LIC']=getattr(settings, 'FONTAWESOME_LIC', None)
     return RST
 
 def template_injection(req):
     '''
     Inject the TMPL_BASE, TMPL_HEADER, TMPL_FOOTER and TMP_PAGINATION settings into the request
     '''
+    lang=getattr(settings, 'LANGUAGE_CODE', 'zh-hant')
+    langs=getattr(settings, 'LANGS', ((lang, _(lang)), ))
     RST={
         'TMPL_BLANK': getattr(settings, 'TMPL_BLANK', 'webframe/blank.html'),
         'TMPL_BASE': getattr(settings, 'TMPL_BASE', 'webframe/base.html'),
@@ -43,6 +46,7 @@ def template_injection(req):
         'TMPL_PAGINATION': getattr(settings, 'TMPL_PAGINATION', 'webframe/pagination.html'),
         'URL_LOGIN': getattr(settings, 'URL_LOGIN', '/login/'),
         'URL_LOGOUT': getattr(settings, 'URL_LOGOUT', '/logout/'),
+        'LANGS': langs,
     }
     return RST
 
@@ -68,5 +72,5 @@ def fmt_injection(req):
     RST['FMT_JSTIME']= getattr(settings, 'FMT_JSTIME', 'HH:mm:ss')
     RST['FMT_JSDATETIME']= getattr(settings, 'FMT_JSDATETIME', '%s %s'%(RST['FMT_JSDATE'], RST['FMT_JSTIME'])) 
 
-    RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fa fa-shield"></i></span>')
+    RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fas fa-shield-alt"></i></span>')
     return RST

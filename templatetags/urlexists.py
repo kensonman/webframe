@@ -10,14 +10,15 @@ register=template.Library()
 @register.filter
 @stringfilter
 def urlexists(url):
-    '''
-    Check the URL is registered in the urls.py.
-
-    Usage: 
-        <url-name>|urlexists  
-    '''
-    try:
-        rst=reverse(url)
-        return True
-    except NoReverseMatch:
-        return False
+   '''
+   Check the URL is registered in the urls.py.
+   Usage: 
+       <url-name>|urlexists  
+   '''
+   try:
+      rst=reverse(url)
+      return True
+   except NoReverseMatch as ex:
+      if ex.args[0].find('pattern(s) tried')>0: #If tried pattern, but parameter not match
+         return True
+      return False
