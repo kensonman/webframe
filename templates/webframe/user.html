@@ -18,8 +18,8 @@ $(document).ready(function(){
 //--></script>
 {%endblock%}
 
-{%block content%}<div class="panel panel-default">
-<div class="panel-body">
+{%block content%}<div class="card card-secondary">
+<div class="card-body">
    <h1>{%trans 'User.new' as newuser%}{{target.username|default:newuser}} - {%trans 'users'%}</h1>
    <form id="userFrm" method="POST" action="{%url 'webframe:user' user=target.username|default:'add'%}">
       {%csrf_token%}
@@ -86,10 +86,10 @@ $(document).ready(function(){
       </div>{%endif%}
 
       <div class="pnl pnl-btns">
-         {%if perms.auth.add_group or perms.auth.change_group or perms.auth.delete_group%}<a href="{%url 'admin:auth_group_changelist'%}" target="_blank" class="btn btn-info"><i class="fa fa-users"></i> {%trans 'Group Admin'%}</a>{%endif%}
+         {%if perms.auth.add_group or perms.auth.change_group or perms.auth.delete_group%}<a href="{%url 'admin:auth_group_changelist'%}" target="_blank" class="btn btn-info"><i class="fas fa-users"></i> {%trans 'Group Admin'%}</a>{%endif%}
          {%for b in btns%}<a href="{%url b.href user=target.username%}" class="btn btn-{{b.lv|default:'info'}}">{%if b.icon%}<i class="{{b.icon}}"></i>&nbsp;{%endif%}{%trans b.label%}</a>{%endfor%}
-         {%if target.id and perms.auth and perms.auth.delete_user%}<button class="btn btn-danger" id="deleteBtn"><i class="fa fa-user-times"></i> {%trans 'User.actions.delete'%}</button>{%endif%}
-         <button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> {%trans 'User.actions.save'%}</button>
+         {%if target.id and perms.auth and perms.auth.delete_user%}<button class="btn btn-danger" id="deleteBtn"><i class="fas fa-user-times"></i> {%trans 'User.actions.delete'%}</button>{%endif%}
+         <button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> {%trans 'User.actions.save'%}</button>
       </div>
    </form>
 </div>

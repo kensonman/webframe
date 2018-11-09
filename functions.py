@@ -8,9 +8,21 @@ from deprecation import deprecated
 import os, logging, pytz
 
 logger=logging.getLogger('webframe.functions')
-FMT_DATE='%Y-%m-%d'
-FMT_TIME='%H:%M:%S'
-FMT_DATETIME='%s %s'%(FMT_DATE, FMT_TIME)
+FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
+FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
+FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'%(FMT_DATE, FMT_TIME))
+ 
+def valueOf(obj, defval=None):
+   '''
+   Get the value of the specified object, if it is callable/method/function, execute it and return the result;
+   '''
+   if obj==None: return defval 
+   if hasattr(obj, 'valueOf'): obj=obj.valueOf()
+   if hasattr(obj, '__call__'): obj=obj()
+   if isinstance(obj, str):
+      obj=obj.strip()
+      if len(obj)<1: return defval 
+   return obj
 
 def getClass( cls ):
    '''
@@ -167,7 +179,8 @@ def getChoice(choices, val):
       - getChoices(EXAMPLE, 'one') => 1 (Index of 'one' element)
       - getChoices(EXAMPLE, 'two') => 4 (Index of 'two' element)
    '''
-   if isinstance(val, int):
+   if isinstance(val, int) or val.isdigit():
+      val=int(val)
       return choices[val][1]
    else:
       val=str(val).upper()

@@ -15,6 +15,7 @@ from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
+from .decorators import is_enabled
 from .functions import getBool
 from .models import *
 from .tables import *
@@ -28,7 +29,10 @@ def login( req ):
    Login the session.
    '''
    params=dict()
-   params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+   try:
+      params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+   except:
+      params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
    if req.method=='POST':
       username=req.POST['username']
       password=req.POST['password']
@@ -45,7 +49,7 @@ def login( req ):
          u.is_superuser=True
          u.set_password(password)
          u.save()
-
+         messages.warning(req, 'Created the first user %s as system administroator'%username)
       try:
          u=authenticate(req, username=username, password=password)
       except:
@@ -60,6 +64,9 @@ def login( req ):
    params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
    params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
    params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
+   params['socialLogin_google']=hasattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+   req.session['next']=params['next']
+   logger.debug('Next URL: {0}'.format(params['next']))
    logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
    return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
@@ -241,7 +248,7 @@ def pref(req, user=None, prefId=None):
          pref.owner=user
       # Preparing the form view
       params['target']=pref
-      params['childs']=PreferenceTable(pref.childs())
+      params['childs']=PreferenceTable(pref.childs)
       params['currentuser']=user
       return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
    elif req.method=='POST':
@@ -276,7 +283,28 @@ def pref(req, user=None, prefId=None):
       _('Preference.msg.confirmDelete')
       pref.delete()
    if pref.parent:
-      return redirect('preference', user=user.username, prefId=pref.parent.id)
+      return redirect('webframe:pref', user=user.username, prefId=pref.parent.id)
    else:
-      return redirect('preferences', user=user.username)
+      return redirect('webframe:prefs', user=user.username)
       
+@login_required
+@is_enabled('WF-AJAX_PREF')
+def ajaxPref(req, name):
+   '''
+   Get the preference according to the name in JSON format
+   '''
+   logger.debug('Getting pref<{0}>'.format(name))
+   rst=Preference.objects.pref(name, user=req.user, defval=None)
+   rst={'name': rst.name, 'value': rst.value, 'id': rst.id}
+   return JsonResponse(rst, safe=False)
+
+@login_required
+@is_enabled('WF-AJAX_PREFS')
+def ajaxPrefs(req, name):
+   '''
+   Get the preferences according to the name in JSON format
+   '''
+   logger.debug('Getting prefs<{0}>'.format(name))
+   rst=Preference.objects.pref(name, user=req.user, defval=None)
+   rst=[{'id': i.id, 'name':i.name, 'value':i.value} for i in rst.childs]
+   return JsonResponse(rst, safe=False)

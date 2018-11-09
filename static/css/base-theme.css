@@ -1,102 +1,205 @@
-@import url('typeahead.css');
+/**
+ * File:       webframe/scss/base-theme.scss
+ * Author:     Kenson Man <kenson.idv.hk@gmail.com>
+ * Date:       2018-10-26 20:57
+ * Desc:       Used to compile the theme for webframe package.
+ */
+@import url("typeahead.css");
+#pnl_root {
+  display: none; }
 
-#pnl_root{display:none;}
-#pnl_body{margin-bottom:0px;}
-#pnl_footer{ padding: 20px; font-size:12px;}
-.navbar{ margin-bottom: 0px; }
-div.field .desc{color:gray; font-size:10px;}
-div.field > .twitter-typeahead { width: 100%; }
-div.pnl-btns{margin: 20px 10px; text-align:right;}
-div.pnl-lbtns{margin: 20px 10px;}
-div.pnl-rbtns{margin: 20px 10px; text-align:right;}
-.wf_dropdown_lbl{ margin: 0px 20px; }
-.required{color: blue;}
-.error{color: red; font-weight:900;}
-.deleted{color: gray; text-decoration: line-through;}
-.helptext{color:gray;display:block;}
-label[for]{cursor:pointer;}
-.label-error{background-color:#d9534f;}
-.debug{ display: none; }
+#pnl_body {
+  margin-bottom: 0px; }
 
-/* If the file control in the input-group, hide the control */
-.input-group input[type=file] {
-	position: absolute;
-	top: 0;
-	right: 0;
-	min-width: 100%;
-	min-height: 100%;
-	text-align: right;
-	filter: alpha(opacity=0);
-	opacity: 0;
-	outline: none;
-	background: white;
-	cursor: inherit;
-	display: block;
-}
+#pnl_footer {
+  padding: 20px;
+  font-size: 12px; }
+
+.navbar {
+  margin-bottom: 0px; }
+
+div.field .desc {
+  color: gray;
+  font-size: 10px; }
+
+div.field > .twitter-typeahead {
+  width: 100%; }
+
+div.pnl-btns {
+  margin: 20px 10px;
+  text-align: right; }
+  div.pnl-btns .btn {
+    margin: 0px 5px; }
+
+div.pnl-lbtns {
+  margin: 20px 10px; }
+
+div.pnl-rbtns {
+  margin: 20px 10px;
+  text-align: right; }
+
+.wf_dropdown_lbl {
+  margin: 0px 20px; }
+
+.required {
+  color: blue; }
+
+.error {
+  color: red;
+  font-weight: 900; }
+
+.deleted {
+  color: gray;
+  text-decoration: line-through; }
+
+.helptext {
+  color: gray;
+  display: block; }
+
+label[for] {
+  cursor: pointer; }
+
+.label-error {
+  background-color: #d9534f; }
+
+.debug {
+  display: none; }
+
+.jumbotron-subject {
+  margin-bottom: 5px;
+  padding-top: 20px; }
+
+.jumbotron-breadcrumb {
+  margin: 0px;
+  padding: 5px 20px;
+  list-style-type: none; }
+
+.jumbotron-breadcrumb li {
+  list-style-type: none; }
+
+ol.breadcrumb {
+  margin-bottom: 0px; }
+
+.btn-file {
+  position: relative;
+  overflow: hidden; }
+  .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block; }
+
+.more-text {
+  color: blue;
+  padding: 0px 10px;
+  font-weight: 900;
+  font-size: large; }
 
 /********* Overlay styles copied from (w3schools.com)[https://www.w3schools.com/howto/howto_js_fullscreen_overlay.asp] **********/
 .overlay {
-   height: 100%;
-   width: 100%;
-   font-size: 16px;
-   position: fixed; /* Stay in place */
-   z-index: 1000; /* Sit on top */
-   left: 0;
-   top: 0;
-   background-color: rgb(0,0,0); /* Black fallback color */
-   background-color: rgba(0,0,0, 0.6); /* Black w/opacity */
-   overflow-x: hidden; /* Disable horizontal scroll */
-   display:none;
-}
-.overlay .content {
-   position: relative;
-   top: 25%; /* 25% from the top */
-   text-align: center; /* Centered text/links */
-   background-color: white;
-   border-radius: 25px;
-   padding:20px;
-   margin: 30px auto;
-}
-.overlay a {
-   text-decoration: none;
-   color: brown;
-   display: inline-block; /* Display block instead of inline */
-   transition: 0.5s; /* Transition effects on hover (color) */
-}
-.overlay a:hover, .overlay a:focus { color: red; }
-.overlay .closebtn {
-   position: absolute;
-   top: 20px;
-   right: 45px;
-   font-size: 60px;
-}
-@media screen and (max-width: 767px) {
-   div.field{margin: 10px 0px; padding: 0px 10px;}
-   .overlay .content { width: 90%; }
-}
-@media screen and (min-width: 768px) {
-   div.field{margin: 20px 0px; padding: 0px 10px;}
-   .overlay .content { width: 80%; }
-}
-/********** End of Overlay styles **********/
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+  position: fixed;
+  /* Stay in place */
+  z-index: 1000;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  background-color: black;
+  /* Black fallback color */
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Black w/opacity */
+  overflow-x: hidden;
+  /* Disable horizontal scroll */
+  display: none; }
+  .overlay .content {
+    position: relative;
+    top: 25%;
+    /* 25% from the top */
+    text-align: center;
+    /* Centered text/links */
+    background-color: white;
+    border-radius: 25px;
+    padding: 20px;
+    margin: 30px auto; }
+  .overlay a {
+    text-decoration: none;
+    color: brown;
+    display: inline-block;
+    /* Display block instead of inline */
+    transition: 0.5s;
+    /* Transition effects on hover (color) */ }
+    .overlay a:hover {
+      color: red; }
+    .overlay a:focus {
+      color: red; }
+  .overlay .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px; }
 
+@media screen and (max-width: 767px) {
+  div.field {
+    margin: 10px 0px;
+    padding: 0px 10px; }
+  .overlay .content {
+    width: 90%; } }
+
+@media screen and (min-width: 768px) {
+  div.field {
+    margin: 20px 0px;
+    padding: 0px 10px; }
+  .overlay .content {
+    width: 80%; } }
+
+/********** End of Overlay styles **********/
 /* Mobile Device */
-@media screen and (max-device-width: 799px){
-	.jumbotron .row form, .jumbotron from{ padding: 5px 30px; }
-	.pnl-padding{ padding: 10px; }
-	.desktop-only{ display: none; }
-}
+@media screen and (max-device-width: 799px) {
+  .jumbotron .row form, .jumbotron from {
+    padding: 5px 30px; }
+  .pnl-padding {
+    padding: 10px; }
+  .desktop-only {
+    display: none; } }
 
 /* Desktop Device */
-@media screen and (min-device-width: 800px){
-	.pnl-padding{ padding: 20px; }
-}
-
+@media screen and (min-device-width: 800px) {
+  .pnl-padding {
+    padding: 20px; } }
 
 /* ********** Input-Group-Dropdown ********** */
-.input-group-dropdown button {width:100%; text-align:left;}
-.input-group-dropdown .caret {position:absolute; right:10px; margin-top:10px;}
-.input-group-dropdown .input-group-addon{border-radius: 4px 0px 0px 4px !important;}
-.input-group-dropdown .form-control{border-radius: 0px 4px 4px 0px !important;}
-.input-group-dropdown ul{ width:100%; margin-left;10px; }
-.input-group-dropdown .option {width:100%;}
+.input-group-dropdown button {
+  width: 100%;
+  text-align: left; }
+
+.input-group-dropdown .caret {
+  position: absolute;
+  right: 10px;
+  margin-top: 10px; }
+
+.input-group-dropdown .input-group-addon {
+  border-radius: 4px 0px 0px 4px !important; }
+
+.input-group-dropdown .form-control {
+  border-radius: 0px 4px 4px 0px !important; }
+
+.input-group-dropdown ul {
+  width: 10px;
+  margin-left: 10px; }
+
+.input-group-dropdown .option {
+  width: 100%; }
+
+.page-title {
+  border-bottom: 1px solid black; }
