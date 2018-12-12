@@ -90,7 +90,7 @@ def getDate( val, defVal=None, fmt=FMT_DATE ):
    '''
    return getTime(val, defVal=defVal, fmt=fmt)
 
-def getTime( val, defVal=None, fmt=FMT_TIME ):
+def getTime( val, defVal=None, fmt=FMT_TIME, **kwargs ):
    '''
    Retrieve the time from string.
 
@@ -102,11 +102,14 @@ def getTime( val, defVal=None, fmt=FMT_TIME ):
    if isinstance(val, datetime): return val
    try:
       rst=datetime.strptime(val, fmt)
-      return timezone.make_aware(rst)
+      rst=timezone.make_aware(rst)
+      if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
+      if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
+      return rst
    except ValueError:
       return defVal
 
-def getDateTime( val, defVal=None, fmt=FMT_DATETIME ):
+def getDateTime( val, defVal=None, fmt=FMT_DATETIME, **kwargs ):
    '''
    Retrieve the datetime from string.
 
@@ -114,7 +117,7 @@ def getDateTime( val, defVal=None, fmt=FMT_DATETIME ):
    @param defVal The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   return getTime(val, defVal=defVal, fmt=fmt)
+   return getTime(val, defVal=defVal, fmt=fmt, **kwargs)
 
 def checkRecaptcha( req, secret, simple=True ):
    '''
