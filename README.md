@@ -50,11 +50,6 @@ Configuration
       #file: settings.py
       LOGIN_URL = 'webframe:login'
 
-5. Setup the [login url](https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-LOGIN_URL)
-
-      #file: settings.py
-      LOGIN_URL = 'webframe:login'
-
 Application
 ----
 1. You can use the below script to get the current user. It very useful to implement the last_modified_by in model.
@@ -71,6 +66,7 @@ Application
 
       #urls.py
       from django.conf import settings
+      from django.conf.urls.static import static
       from django.urls import path, re_path, include
       from webframe.urls import urlpatterns as webframe
 
@@ -107,6 +103,7 @@ To use the preference, following the steps:
 
       #urls.py
       from django.conf import settings
+      from django.conf.urls.static import static
       from django.urls import path, re_path, include
       from webframe.urls import urlpatterns as webframe
 
@@ -145,6 +142,7 @@ To use the preference, following the steps:
 
       #urls.py
       from django.conf import settings
+      from django.conf.urls.static import static
       from django.urls import path, re_path, include
       from webframe.urls import urlpatterns as webframe
 
