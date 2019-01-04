@@ -1,4 +1,4 @@
-{%extends TMPL_BASE%}{%load i18n django_tables2 method_override%}
+{%extends TMPL_BASE%}{%load i18n django_tables2 method_override pref%}
 
 {%block title%}{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}{%endblock%}
 
