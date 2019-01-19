@@ -24,6 +24,10 @@ import hashlib, logging
 CONFIG_KEY='ConfigKey'
 logger=logging.getLogger('webframe.views')
 
+#Make sure the translation
+_('django.contrib.auth.backends.ModelBackend')
+_('django_auth_ldap.backend.LDAPBackend')
+
 def login( req ):
    '''
    Login the session.
@@ -68,6 +72,8 @@ def login( req ):
    req.session['next']=params['next']
    logger.debug('Next URL: {0}'.format(params['next']))
    logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
+   #warning about the Authentication Backends
+   params['backends']=[_(b) for b in settings.AUTHENTICATION_BACKENDS]
    return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
 def logout(req):

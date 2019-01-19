@@ -58,6 +58,12 @@ $(document).ready(function(){
                   <input type="text" name="ipaddr" value="{{IPAddr}}" class="form-control" readonly="readonly" required="required"/>
                </div>
                <div class="field form-group">
+                  <label for="backendsFld">{%trans 'Authentication Backends'%}</label>
+                  <ul>
+                     {%for b in backends%}<li>{{b}}</li>{%endfor%}
+                  </ul>
+               </div>
+               <div class="field form-group">
                   <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
                   <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
                </div>
