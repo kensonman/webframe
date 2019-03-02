@@ -56,6 +56,9 @@ Configuration
       ```python
       #file: settings.py
       LOGIN_URL = 'webframe:login'
+      STATIC_ROOT= 'static'
+      MEDIA_URL  = '/media/'
+      MEDIA_ROOT = 'media'
       ```
 
 Application
