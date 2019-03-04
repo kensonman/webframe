@@ -208,3 +208,11 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
 Social Authentication
 ------
 The social authentication can be supported by django-social-app-auth. The Instruction can be found (here)[https://simpleisbetterthancomplex.com/tutorial/2016/10/24/how-to-add-social-login-to-django.html].
+
+Compile SCSS
+----
+The package is develed under scss code. It can be customizes the style by scss engine. Execute the following code to compile:
+
+   ```bash
+   docker run --rm -v $(pwd):$(pwd) -w $(pwd) jbergknoff/sass scss/base-theme.scss > static/css/base-theme.css
+   ```
