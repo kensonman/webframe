@@ -59,6 +59,7 @@ Configuration
       STATIC_ROOT= 'static'
       MEDIA_URL  = '/media/'
       MEDIA_ROOT = 'media'
+      DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
       ```
 
 Application
