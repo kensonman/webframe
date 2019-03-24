@@ -6,6 +6,9 @@ def stringformat(value, fmt='{}'):
    '''
    format the value
    '''
-   if isinstance(value, dict):
-      return fmt.format(**value)
-   return fmt.format(value)
+   try:
+      if isinstance(value, dict):
+         return fmt.format(**value)
+      return fmt.format(value)
+   except:
+      return 'Value[%s]::%s cannot format by pattern: %s'%(value, type(value).__name__, fmt)
