@@ -18,12 +18,12 @@
 # Basic Example
    <div class="dropdown">
       <input type="hidden" name="field-name" value="default-value"/>
-      <button type="button" data-toggle="dropdown">Label</button>
+      <button type="button" data-toggle="dropdown" class="btn btn-success">-- Please Select --</button>
       <ul class="dropdown-menu">
-            <li class="dropdown-item" val="1" name="Opt1">Opt1</li>
-            <li class="dropdown-item" val="two" name="Opt2"></li>
-            <li class="dropdown-item" val="value will be here" name="Opt3">Opt3</a></li>
-            <li class="dropdown-item" val="Opt4"></li><!-- def value is the "Opt4" -->
+            <li><a class="dropdown-item" val="1" name="Opt1">Opt1</a></li>
+            <li><a class="dropdown-item" val="two" name="Opt2</a>"></li>
+            <li><a class="dropdown-item" val="value will be here" name="Opt3">Opt3</a</a>></li>
+            <li><a class="dropdown-item" val="Opt4"></li><!-- def value is the "Opt4</a>" -->
       </ul>
     </div>
    <script type="text/javascript"><!--
@@ -36,7 +36,7 @@
    });
    //--></script>
 
-# AJAX Example
+{%url 'newsletters'%}?filter= AJAX Example
    <div class="dropdown">
       <input type="hidden" name="field-name" value="default-value"/>
       <button type="button" data-toggle="dropdown">Label</button>
@@ -82,12 +82,13 @@
          var element=$(this).parents('.wfdropdown:first');
          var value=null;
          var lastVal=$(element).find('input:first').val();
+         var dropdownSymbol=$('<div/>').html($(element).attr('_symbol')).text();
          if(typeof($(this).attr('val'))=='undefined')
             value=$(this).text();
          else
             value=$(this).attr('val');
          $(element)
-            .find('button:first').empty().text($(this).text()).end()
+            .find('button:first').empty().text($(this).text()).append(dropdownSymbol).end()
             .find('input:first').val(value).end()
             .trigger('change', {'from': lastVal, 'to':value})
          ;
@@ -131,7 +132,13 @@
    // jQuery plugin definition
    $.fn.wfdropdown = function(params) {
      // merge default and user parameters
-     params = $.extend({'items':'a.dropdown-item','value':'input:first','onclick':jQuery.wfdropdown.onclick,'success':jQuery.wfdropdown.success,'element':'li','name':'name','id':'id','ajax':null}, params);
+     params = $.extend({
+      'items':'a.dropdown-item',
+      'value':'input:first',
+      'symbol': '<i class="fas fa-caret-square-down wf-caret"></i>',
+      'onclick':jQuery.wfdropdown.onclick,
+      'success':jQuery.wfdropdown.success,'element':'li','name':'name','id':'id','ajax':null
+     }, params);
      if($(this).length<1){
         console.log('No element found for dropdown.');
         return this;
@@ -151,8 +158,9 @@
      var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
      if(label.length<1) label=$(this).find('buttton:first').text();
      $(this)
+       .attr('_symbol', $('<div/>').text(params.symbol).html())
        .find(params.items).each(function(){ $.wfdropdown.populate( this ); }).end()
-       .find('button').text(label)
+       .find('button').text(label).append(params.symbol)
        .trigger('ready')
      ;
      return this;
