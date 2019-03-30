@@ -27,6 +27,7 @@ def absolute_path(req):
     RST['VERSION']=getattr(settings, 'VERSION', 'v0.1.0-beta')
     RST['IPAddr']=getClientIP(req)
     RST['DEBUG']=getattr(settings, 'DEBUG', False)
+    RST['METHOD_OVERRIDE']=getattr(settings, 'METHOD_OVERRIDE_PARAM_KEY', '_method')
     if getattr(settings, 'FONTAWESOME_LIC', None): RST['FONTAWESOME_LIC']=getattr(settings, 'FONTAWESOME_LIC', None)
     return RST
 
