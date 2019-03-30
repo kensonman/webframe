@@ -1,4 +1,4 @@
-{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}
+{%extends TMPL_BASE%}{%load i18n django_tables2 pref%}
 
 {%block title%}{%trans 'users'%}{%endblock%}
 
@@ -13,9 +13,10 @@
 }
 </style>
 <script type="text/javascript"><!--
+var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
 $(document).ready(function(){
 	$('tr[username]')
-		.hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer')
+		.hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer')
 		.click(function(){
 			window.location.href="{%url 'webframe:user' user='_userId_'%}".replace('_userId_', $(this).attr('username'));
 		});

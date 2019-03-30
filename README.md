@@ -18,11 +18,14 @@ Configuration
 
 2. Add the `webframe` into `INSTALLED_APPS`:
 
+      ```python    
       #file: settings.py
       INSTALLED_APPS += ('webframe', 'method_override')
+      ```
 
 3. Install the context-processors:
 
+      ```python
       #file: settings.py #in Django 1.9
       TEMPLATES = [
          #...
@@ -32,9 +35,11 @@ Configuration
             #...
          ]
       ]
+      ```
 
 4. Install the Middleware
 
+      ```python
       #file: settings.py
       MIDDLEWARE_CLASSES += [
          'method_override.middleware.MethodOverrideMiddleware',        #django 1.9 or belows
@@ -44,26 +49,36 @@ Configuration
          'webframe.CurrentUserMiddleware.CurrentUserMiddleware',
          'django.middleware.locale.LocaleMiddleware',
       ]
+      ```
 
 5. Setup the [login url](https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-LOGIN_URL)
 
+      ```python
       #file: settings.py
       LOGIN_URL = 'webframe:login'
+      STATIC_ROOT= 'static'
+      MEDIA_URL  = '/media/'
+      MEDIA_ROOT = 'media'
+      DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap4.html'
+      ```
 
 Application
 ----
 1. You can use the below script to get the current user. It very useful to implement the last_modified_by in model.
 
+      ```python
       #file: modles.py
       from webframe.CurrentUserMiddleware import get_current_user
 
-      ...
+      #...
       class MyModel(models.Model):
          last_modify_by = models.ForeignKey(settings.AUTH_USER_MODEL,default=get_current_user)
-      ...
+      #...
+      ```
 
 2. Provide the logout features (Optional)
 
+      ```python
       #urls.py
       from django.conf import settings
       from django.conf.urls.static import static
@@ -75,6 +90,7 @@ Application
          path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+      ```
 
 Preference
 ----
@@ -84,11 +100,14 @@ To use the preference, following the steps:
 
 1. Add the `django_tables2` into `INSTALLED_APPS`:
 
+      ```python
       #file: settings.py
       INSTALLED_APPS += ('django_tables2',)
+      ```
 
 2. Make sure the context-processor is installed:
 
+      ```python
       #file: settings.py #in Django 1.9
       TEMPLATES = [
          #...
@@ -98,9 +117,11 @@ To use the preference, following the steps:
          #...
          ]
       ]
+      ```
 
 3. Setup the preference views
 
+      ```python
       #urls.py
       from django.conf import settings
       from django.conf.urls.static import static
@@ -112,6 +133,7 @@ To use the preference, following the steps:
          path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+      ```
 
 
 Users
@@ -122,12 +144,15 @@ To use the preference, following the steps:
 
 1. Add the `django_tables2` into `INSTALLED_APPS` and showing the password field for user:
 
+      ```python
       #file: settings.py
       INSTALLED_APPS += ('django_tables2',)
       AUTH_PASSWORD_REQUIRED=True
+      ```
 
 2. Make sure the context-processor is installed:
 
+      ```python
       #file: settings.py #in Django 1.9
       TEMPLATES = [
          #...
@@ -137,9 +162,11 @@ To use the preference, following the steps:
          #...
          ]
       ]
+      ```
 
 3. Setup the preference views
 
+      ```python
       #urls.py
       from django.conf import settings
       from django.conf.urls.static import static
@@ -151,12 +178,14 @@ To use the preference, following the steps:
          path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+      ```
 
 Javascript Translation
 ----
 The WEBFRAME also support the javascript translation. Just add the belows statement into your code.
 1. Setup the preference views
 
+      ```python
       #urls.py
       from django.conf import settings
       from django.conf.urls.static import static
@@ -168,12 +197,23 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
          path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+      ```
 
 2. In HTML code add
 
+      ```HTML
       <script type="text/javascript" src="{%url 'webframe:js'%}"></script>
+      ```
 
 
 Social Authentication
 ------
 The social authentication can be supported by django-social-app-auth. The Instruction can be found (here)[https://simpleisbetterthancomplex.com/tutorial/2016/10/24/how-to-add-social-login-to-django.html].
+
+Compile SCSS
+----
+The package is develed under scss code. It can be customizes the style by scss engine. Execute the following code to compile:
+
+   ```bash
+   docker run --rm -v $(pwd):$(pwd) -w $(pwd) jbergknoff/sass scss/base-theme.scss > static/css/base-theme.css
+   ```

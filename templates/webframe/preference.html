@@ -1,12 +1,13 @@
-{%extends TMPL_BASE%}{%load i18n django_tables2 method_override%}
+{%extends TMPL_BASE%}{%load i18n django_tables2 method_override pref%}
 
 {%block title%}{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%} - {%trans 'brand'%}{%endblock%}
 
 {%block scripts%}{{block.super}}
 <script type="text/javascript" src="{% url 'webframe:js' %}"></script>
 <script type="text/javascript"><!--
+var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
 $(document).ready(function(){
-   $('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
+   $('tr[prefId]').hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer').click(function(){
       window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
    });
    //Delete Logic: {%if not target.isNew%}
