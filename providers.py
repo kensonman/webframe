@@ -2,6 +2,11 @@ from django.conf import settings
 from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 from datetime import datetime
 from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME
+from .models import Preference
+
+def getPref(k, v, req, t=30):
+   v=Preference.objects.pref(k, defval=v, user=req.user, returnValue=True)
+   return v 
 
 def absolute_path(req):
     '''
@@ -65,13 +70,13 @@ def fmt_injection(req):
     momentjs format can be found more here: http://momentjs.com/docs/#/use-it/
     '''
     RST={}
-    RST['FMT_DATE']= getattr(settings, 'FMT_DATE', FMT_DATE)
-    RST['FMT_TIME']= getattr(settings, 'FMT_TIME', FMT_TIME)
-    RST['FMT_DATETIME']= getattr(settings, 'FMT_DATETIME', FMT_DATETIME)
+    RST['FMT_DATE']=getPref('FMT_DATE', FMT_DATE, req)
+    RST['FMT_TIME']=getPref('FMT_TIME', FMT_TIME, req)
+    RST['FMT_DATETIME']=getPref('FMT_DATETIME',  FMT_DATETIME, req)
 
-    RST['FMT_JSDATE']= getattr(settings, 'FMT_JSDATE', 'YYYY-MM-DD')
-    RST['FMT_JSTIME']= getattr(settings, 'FMT_JSTIME', 'HH:mm:ss')
-    RST['FMT_JSDATETIME']= getattr(settings, 'FMT_JSDATETIME', '%s %s'%(RST['FMT_JSDATE'], RST['FMT_JSTIME'])) 
+    RST['FMT_JSDATE']=getPref('FMT_JSDATE', 'YYYY-MM-DD', req)
+    RST['FMT_JSTIME']=getPref('FMT_JSTIME', 'HH:mm:ss', req)
+    RST['FMT_JSDATETIME']=getPref('FMT_JSDATETIME', '{0} {1}'.format(RST['FMT_JSDATE'], RST['FMT_JSTIME']), req)
 
     RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fas fa-shield-alt"></i></span>')
     return RST
