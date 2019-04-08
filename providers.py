@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 from datetime import datetime
-from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME
+from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME, convertDateformat 
 from .models import Preference
 
 def getPref(k, v, req, t=30):
@@ -74,9 +74,9 @@ def fmt_injection(req):
     RST['FMT_TIME']=getPref('FMT_TIME', FMT_TIME, req)
     RST['FMT_DATETIME']=getPref('FMT_DATETIME',  FMT_DATETIME, req)
 
-    RST['FMT_JSDATE']=getPref('FMT_JSDATE', 'YYYY-MM-DD', req)
-    RST['FMT_JSTIME']=getPref('FMT_JSTIME', 'HH:mm:ss', req)
-    RST['FMT_JSDATETIME']=getPref('FMT_JSDATETIME', '{0} {1}'.format(RST['FMT_JSDATE'], RST['FMT_JSTIME']), req)
+    RST['FMT_JSDATE']=convertDateformat(RST['FMT_DATE'], format='javascript')
+    RST['FMT_JSTIME']=convertDateformat(RST['FMT_TIME'], format='javascript')
+    RST['FMT_JSDATETIME']=convertDateformat(RST['FMT_DATETIME'], format='javascript')
 
     RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fas fa-shield-alt"></i></span>')
     return RST
