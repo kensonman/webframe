@@ -241,7 +241,7 @@ def convertDateformat(pydateformat, format='javascript'):
          '%B': 'MMMM',                       #Month name: (In English: January, .., December)(Auf Deutsch: Januar, .., Dezember)
          '%b': 'MMM',                        #Month name abbreviated: (In English: Jan, .., Dec)(Auf Deutsch: Jan, .., Dez)
          '%c': 'ddd MMM DD HH:mm:ss YYYY',   #Locale’s appropriate date and time representation: (English: Sun Oct 13 23:30:00 1996)(Deutsch: So 13 Oct 22:30:00 1996) 
-         '%d': 'DD',                         #Day 0 padded: (01, .., 31)
+         '%d': 'dd',                         #Day 0 padded: (01, .., 31)
          '%f': 'SSSS',                       #Microseconds 0 padded: (000000, .., 999999)
          '%H': 'HH',                         #Hour (24-Hour) 0 padded: (00, .., 23) 
          '%I': 'hh',                         #Hour (12-Hour) 0 padded: (01, .., 12)
