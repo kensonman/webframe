@@ -208,6 +208,14 @@ def prefs(req, user=None):
    if user!=req.user.username and not req.user.is_superuser:
       if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
    user=getObj(get_user_model(), username=user)
+   if req.method=='POST':
+      newPwd=req.POST.get('newPwd', None)
+      if newPwd and newPwd==req.POST.get('rePwd', None):
+         user.set_password(newPwd)
+         user.save()
+         auth_logout(req)
+         return redirect('webframe:prefs', user=user)
+
    params=dict()
    params['preference']=PreferenceTable(Preference.objects.filter(owner=req.user, parent__isnull=True))
    params['config']=PreferenceTable(Preference.objects.filter(owner__isnull=True, parent__isnull=True))

@@ -12,6 +12,7 @@ $(document).ready(function(){
 	$('#prefContainer').find('tr[prefId]').hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer').click(function(){
 		window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
 	});
+   $('#changePwdFrm').validate();
 });
 //--></script>
 {%endblock%}
@@ -36,7 +37,7 @@ $(document).ready(function(){
 				</div>
 				<div class="field">
 					<label for="rePwdFld">{%trans 'BTUser.re-password'%}</label>
-					<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
+					<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" equalTo="#newPwdFld" placeholder="{%trans 'BTUser.re-password'%}"/>
 				</div>
 				<div class="pnl pnl-btns">
 					<button type="submit" class="btn btn-warning">{%trans 'Preference.actions.changePassword'%}</button>
