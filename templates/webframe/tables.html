@@ -1,0 +1,41 @@
+{%extends 'django_tables2/bootstrap.html'%}{% load django_tables2 i18n %}
+{% block pagination %}
+<nav class="navigation">
+<div class="">{%blocktrans with pageX=table.page.number pageY=table.paginator.num_pages size=table.paginator.per_page total=table.paginator.count%}Page {{pageX}} of {{pageY}}, {{size}} in {{total}}{%endblocktrans%}</div>
+<ul class="pagination justify-content-center">
+   {% if table.page.has_previous %}
+      {% block pagination.previous %}
+      {%if table.page.number > 3%}
+      <li class="page-item previous">
+         <a href="{% querystring table.prefixed_page_field=1 %}" class="page-link">{% trans 'pagination.first' %}</a>
+      </li>
+      {%endif%}
+      <li class="page-item previous">
+         <a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}" class="page-link">{% trans 'pagination.previous' %}</a>
+      </li>
+      {% endblock pagination.previous %}
+   {% endif %}
+
+   {% block pagination.current %}
+      {%for p in table.paginator.page_range%}
+      <li class="page-item">
+         <a href="{% querystring table.prefixed_page_field=p %}" class="page-link">{{p}}</a>
+      </li>
+      {%endfor%}
+   {% endblock pagination.current %}
+
+   {% if table.page.has_next %}
+      {% block pagination.next %}
+      <li class="page-item next">
+         <a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}" class="page-link">{% trans 'pagination.next' %}</a>
+      </li>
+      {%if table.page.number < table.paginator.count|add:-3 %}
+      <li class="page-item previous">
+         <a href="{% querystring table.prefixed_page_field=table.paginator.num_pages %}" class="page-link">{% trans 'pagination.last' %}</a>
+      </li>
+      {%endif%}
+      {% endblock pagination.next %}
+   {% endif %}
+</ul>
+</nav>
+{% endblock pagination %}

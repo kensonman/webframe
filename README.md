@@ -35,6 +35,9 @@ Configuration
             #...
          ]
       ]
+
+      # *Optional*: Specify the django_tables2 template for bootstrap4
+      DJANGO_TABLES2_TEMPLATE = 'webframe/tables.html'
       ```
 
 4. Install the Middleware
