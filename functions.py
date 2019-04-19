@@ -67,38 +67,38 @@ def inNetworks( ipaddr, networks=['192.168.0.0/255.255.255.0',]):
             return True
     return False
 
-def getBool( val, defVal=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
+def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
    '''
    Retrieve the boolean value from string
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param trueOpts The available values of TRUE
    '''
    if callable(val): val=val()
    if val:
       return str(val).upper() in trueOpts
-   return defVal 
+   return defval 
 
-def getDate( val, defVal=None, fmt=FMT_DATE ):
+def getDate( val, defval=None, fmt=FMT_DATE ):
    '''
    Retrieve the date from string.
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   return getTime(val, defVal=defVal, fmt=fmt)
+   return getTime(val, defval=defval, fmt=fmt)
 
-def getTime( val, defVal=None, fmt=FMT_TIME, **kwargs ):
+def getTime( val, defval=None, fmt=FMT_TIME, **kwargs ):
    '''
    Retrieve the time from string.
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   if not val: return defVal
+   if not val: return defval
    if isinstance(val, datetime): return val
    try:
       rst=datetime.strptime(val, fmt)
@@ -107,17 +107,17 @@ def getTime( val, defVal=None, fmt=FMT_TIME, **kwargs ):
       if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
       return rst
    except ValueError:
-      return defVal
+      return defval
 
-def getDateTime( val, defVal=None, fmt=FMT_DATETIME, **kwargs ):
+def getDateTime( val, defval=None, fmt=FMT_DATETIME, **kwargs ):
    '''
    Retrieve the datetime from string.
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   return getTime(val, defVal=defVal, fmt=fmt, **kwargs)
+   return getTime(val, defval=defval, fmt=fmt, **kwargs)
 
 def checkRecaptcha( req, secret, simple=True ):
    '''
