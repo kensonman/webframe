@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-18 15:01+0000\n"
+"POT-Creation-Date: 2019-04-19 04:36+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: TChinese\n"
@@ -305,12 +305,11 @@ msgstr "用戶名稱"
 msgid "password"
 msgstr "密碼"
 
-#: templates/webframe/pagination.html:22
+#: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
-msgid "Showing %(per_page)s of %(total)s; Page %(x)s of %(y)s"
+msgid "Showing %(size)s of %(total)s; Page %(x)s of %(y)s"
 msgstr ""
-"共有 %(total)s 項資料, 每頁顯示 %(per_page)s 項資料。第 %(x)s 頁,共 %(y)s "
-"頁。"
+"共有 %(total)s 項資料, 每頁顯示 %(size)s 項資料。第 %(x)s 頁,共 %(y)s 頁。"
 
 #: templates/webframe/pagination.html:24
 msgid "pagination-norecord"
@@ -436,24 +435,23 @@ msgstr "個人設定"
 msgid "Preference.actions.addPref"
 msgstr "新增個人設定"
 
-#: templates/webframe/tables.html:4
-#, python-format
-msgid "Page %(pageX)s of %(pageY)s, %(size)s in %(total)s"
-msgstr "共%(total)s項資料；%(pageX)s頁，共%(pageY)s頁；每頁顯示%(size)s項資料"
-
-#: templates/webframe/tables.html:10
+#: templates/webframe/tables.html:6
 msgid "pagination.first"
 msgstr "<i class=\"fa fa-angle-double-left\"></i>"
 
-#: templates/webframe/tables.html:14
+#: templates/webframe/tables.html:7
 msgid "pagination.previous"
 msgstr "<i class=\"fa fa-angle-left\"></i>"
 
-#: templates/webframe/tables.html:30
+#: templates/webframe/tables.html:8
+msgid "pagination.more"
+msgstr "..."
+
+#: templates/webframe/tables.html:9
 msgid "pagination.next"
 msgstr "<i class=\"fa fa-angle-right\"></i>"
 
-#: templates/webframe/tables.html:34
+#: templates/webframe/tables.html:10
 msgid "pagination.last"
 msgstr "<i class=\"fa fa-angle-double-right\"></i>"
 

@@ -19,7 +19,7 @@
            </ul>
          </nav>
 
-         <div class="float-right">{%blocktrans with x=target.number y=target.paginator.num_pages total=target.paginator.count per_page=target.paginator.per_page%}Showing {{per_page}} of {{total}}; Page {{x}} of {{y}}{%endblocktrans%}</div>
+         <div class="float-right">{%blocktrans with x=target.number y=target.paginator.num_pages total=target.paginator.count size=target.paginator.per_page%}Showing {{size}} of {{total}}; Page {{x}} of {{y}}{%endblocktrans%}</div>
       {%else%}
          <div class="norecord">{%trans 'pagination-norecord'%}</div>
       {%endif%}
