@@ -40,6 +40,13 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 <script type="text/javascript"><!--
 $(document).ready(function(){
    $('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
+
+   //File component
+   $('input[type=file]').on('change', function(){
+      $('label[for='+$(this).prop('id')+']').text($(this).val());
+   });
+
+   //Mandatory Indicator
    $('form').find('.field').each(function(){
       $(this).find('input[required],textarea[required],select[required]').each(function(){
          $(this).parents('.field:first').find('label:first')
