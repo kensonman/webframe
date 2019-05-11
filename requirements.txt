@@ -4,3 +4,4 @@ six
 pytz
 netaddr
 deprecation
+django_tables2
