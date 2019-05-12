@@ -50,6 +50,7 @@ def template_injection(req):
         'TMPL_SCRIPTS': getattr(settings, 'TMPL_SCRIPTS', 'webframe/scripts.html'),
         'TMPL_LOADING': getattr(settings, 'TMPL_SCRIPTS', 'webframe/loading.html'),
         'TMPL_PAGINATION': getattr(settings, 'TMPL_PAGINATION', 'webframe/pagination.html'),
+        'TMPL_STYLE': getattr(settings, 'TMPL_STYLE', None),
         'URL_LOGIN': getattr(settings, 'URL_LOGIN', '/login/'),
         'URL_LOGOUT': getattr(settings, 'URL_LOGOUT', '/logout/'),
         'LANGS': langs,
