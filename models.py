@@ -266,12 +266,20 @@ class AliveObjectManager(models.Manager):
    def isOverlapped(self, start, end):
       '''
       Determinate the specified period is overlaped with the object effective period.
+      
+      Giving:
+        - source beging date == self.effDate
+        - source end date    == self.expDate
+        - target beging date == start
+        - target end date    == end
+      Refer to https://stackoverflow.com/questions/14002907/query-to-get-date-overlaping, the defination of overlaping is
+          ***** NOT (taget_end_date < source_begin_date or target_begin_date > source_end_date ) *****
+      That is equal than:
+         not (target_end_date < source_beging_date) and not (target_beging_date > source_end_date)
+      Therefore:
+         (effDate__lte=end, expDate__gte=start)
       '''
-      return self.filter(
-            (models.Q(effDate__gte=start)&models.Q(expDate__lte=end))
-            |
-            (models.Q(effDate__gte=start)&models.Q(expDate__isnull=True))
-         )
+      return self.filter(effDate__lte=end, expDate__gte=start)
 
 class AliveObject(models.Model, Dictable):
    class Meta(object):
