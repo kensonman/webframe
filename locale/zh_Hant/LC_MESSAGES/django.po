@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-19 04:36+0000\n"
+"POT-Creation-Date: 2019-05-21 08:59+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -202,11 +202,11 @@ msgstr "異步程序已準備就緒"
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "排序"
 
-#: templates/webframe/blank.html:14
+#: templates/webframe/blank.html:15
 msgid "Javascript is required"
 msgstr "無法正常顯示網頁"
 
-#: templates/webframe/blank.html:15
+#: templates/webframe/blank.html:16
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
@@ -214,7 +214,7 @@ msgstr ""
 "這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
 "頁能正確顯示."
 
-#: templates/webframe/blank.html:16
+#: templates/webframe/blank.html:17
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
@@ -241,20 +241,24 @@ msgstr "輸出日期"
 msgid "users"
 msgstr "使用者"
 
-#: templates/webframe/header.html:43 templates/webframe/header.html:49
+#: templates/webframe/header.html:44 templates/webframe/header.html:54
 #, python-format
 msgid "Hi, %(username)s"
 msgstr "你好，%(username)s"
 
-#: templates/webframe/header.html:46
+#: templates/webframe/header.html:48
+msgid "impersonate-stop"
+msgstr "停止扮演"
+
+#: templates/webframe/header.html:51
 msgid "preferences"
 msgstr "個人設定"
 
-#: templates/webframe/header.html:47
+#: templates/webframe/header.html:52
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header.html:51 templates/webframe/login.html:75
+#: templates/webframe/header.html:56 templates/webframe/login.html:75
 msgid "login"
 msgstr "登入"
 
@@ -491,14 +495,18 @@ msgid "user.group"
 msgstr "所屬群組"
 
 #: templates/webframe/user.html:89
+msgid "impersonate-start"
+msgstr "扮演此使用者"
+
+#: templates/webframe/user.html:90
 msgid "Group Admin"
 msgstr "管理群組"
 
-#: templates/webframe/user.html:91
+#: templates/webframe/user.html:92
 msgid "User.actions.delete"
 msgstr "刪除使用者"
 
-#: templates/webframe/user.html:92
+#: templates/webframe/user.html:93
 msgid "User.actions.save"
 msgstr "存儲使用者"
 
