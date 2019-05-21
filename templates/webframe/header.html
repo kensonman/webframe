@@ -40,9 +40,14 @@
          {%if 'webframe:users'|urlexists%}{%if perms.auth.add_user or perms.auth.change_user%}<li class="nav-item"><a href="{%url 'webframe:users'%}" class="nav-link"><i class="fas fa-users"></i> {%trans 'users'%}</a></li>{%endif%}{%endif%}
          {%if 'webframe:prefs'|urlexists or 'webframe:logout'|urlexists%}<li class="dropdown nav-item">
             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            {%blocktrans with username=user.get_full_name|default:user.username%}Hi, {{username}}{%endblocktrans%} <span class="caret"></span>
+               {%if user.is_impersonate%}{{request.impersonator}}@{%endif%}
+               {%blocktrans with username=user.get_full_name|default:user.username%}Hi, {{username}}{%endblocktrans%} <span class="caret"></span>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+               {%if user.is_impersonate%}
+                  <a href="{%url 'impersonate-stop'%}" class="dropdown-item">{%trans 'impersonate-stop'%}</a>
+                  <div class="dropdown-divider"></div>
+               {%endif%}
                {%if 'webframe:prefs'|urlexists%}<a href="{%url 'webframe:prefs' user=user.username%}" class="dropdown-item"><i class="fas fa-cogs"></i> {%trans 'preferences'%}</a>{%endif%}
                {%if 'webframe:logout'|urlexists%}<a href="{%url 'webframe:logout'%}" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> {%trans 'logout'%}</a>{%endif%}
             </div>

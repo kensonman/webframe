@@ -1,3 +1,4 @@
+django
 django-method-override
 pillow
 six
@@ -5,3 +6,6 @@ pytz
 netaddr
 deprecation
 django_tables2
+
+#Optional
+django-impersonate
