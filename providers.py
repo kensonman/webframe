@@ -13,7 +13,7 @@ def absolute_path(req):
     Get the absolute-path of the application or request
     '''
     RST={}
-    url=getattr(settings, 'ABSOLUTE_PATH', None)
+    url=getattr(settings, 'ABSOLUTE_PATH', req.build_absolute_uri('/')[:-1])
     try:
         if not url:
             host=req.build_absolute_uri()

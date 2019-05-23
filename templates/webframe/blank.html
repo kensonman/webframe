@@ -1,9 +1,12 @@
-<!DOCTYPE html>{%load staticfiles%}{%load i18n%}
+<!DOCTYPE html>{%load staticfiles i18n%}
 <html lang="{{lang|default:'zh-Hant'}}">
 <head>
 {%block head%}
    <meta charset="utf-8"/>
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+   {%block meta%}
+      <meta property="og:title" content="{%trans 'appName'%}"/>
+   {%endblock%}
    <title>{%block title%}{{wf_title|default:'NoTitle'}}{%endblock%}</title>
 
    {%block scripts%}{%include TMPL_SCRIPTS%}{%block scripts-blk%}{%endblock%}{%endblock%}
