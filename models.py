@@ -196,18 +196,20 @@ class ValueObject(models.Model, Dictable):
      self.cd=rfmt(data['cd'])
      self.cb=getObj(get_user_model(), username=data['cb'])
 
-   def save(self):
+   def save(self, *args, **kwargs):
       '''
       Saving the value-object. The method will setup the lmb default value
       '''
       user=get_current_user()
       if user:
          if not user.is_authenticated: user=None
-      self.lmb=user
-      try:
-         if not self.cb: self.cb=user
-      except TypeError:
-         self.cb=user
+      if str(kwargs.get('update_lmb', 'true')).upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
+         self.lmb=user
+      if str(kwargs.get('update_cb', 'true')).upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
+         try:
+            if not self.cb: self.cb=user
+         except TypeError:
+            self.cb=user
       super(ValueObject, self).save()
 
    def cached(self, name, fn, useCache=True):
@@ -494,7 +496,7 @@ class OrderableValueObject(ValueObject):
       return self.__class__.objects.all().order_by('sequence')
 
    # Saving and reorder the models
-   def save(self):
+   def save(self, *args, **kwargs):
       if not self.sequence: self.sequence=1
       self.sequence-=0.5
       ValueObject.save(self)
@@ -502,4 +504,4 @@ class OrderableValueObject(ValueObject):
       for i in self.__get_ordered_list__():
          i.sequence=counter
          counter+=1
-         ValueObject.save(i)
+         ValueObject.save(i, update_lmb='false')
