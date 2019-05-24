@@ -237,10 +237,13 @@ def pref(req, user=None, prefId=None):
    Showing the preference form for input.
    '''
    # Declare the preference's owner
-   if user==None or user=='None': user=req.user.username
-   if user!=req.user.username and not req.user.is_superuser:
-      if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
-   user=getObj(get_user_model(), username=user)
+   if user:
+      if user.upper()=='NONE': 
+         user=None
+      else:
+         if user!=req.user.username and not req.user.is_superuser:
+            if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
+         user=getObj(get_user_model(), username=user)
    params=dict()
 
    # Get the target preference
@@ -299,7 +302,7 @@ def pref(req, user=None, prefId=None):
    if pref.parent:
       return redirect('webframe:pref', user=user.username, prefId=pref.parent.id)
    else:
-      return redirect('webframe:prefs', user=user.username)
+      return redirect('webframe:prefs', user=user.username if user else req.user)
       
 @login_required
 @is_enabled('WF-AJAX_PREF')
