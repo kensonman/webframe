@@ -35,7 +35,7 @@ def choice(value, choices):
       {{target.status|choice:STATUS}} == 'Draft'
    '''
    if type(value)!=int:
-      return '"%d" is not a int'%value
+      return '"{0}" is not a int'.format(value)
    if type(choices)!=tuple:
       return 'no suitable choices provided'
    return choices[value][1]
