@@ -385,7 +385,7 @@ class PrefManager(models.Manager):
      parent=kwargs.get('parent', None)
      rst=self.filter(name=name)
      try:
-      if user: 
+      if user and user.is_authenticated: 
          if len(rst.filter(owner=user))>0:
            rst=rst.filter(owner=user)
       if parent: rst=rst.filter(parent=parent)
