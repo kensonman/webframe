@@ -436,34 +436,7 @@ class Preference(ValueObject):
          self.sequence=math.ceil(self.sequence)
          super(Preference, self).save()
 
-class Privilege(models.Model):
-   class Meta(object):
-     verbose_name         = _('webframe.models.Privilege')
-     verbose_name_plural    = _('webframe.models.Privileges')
-
-   contenttype          = models.ForeignKey(
-     ContentType, 
-     on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
-   )
-   name               = models.CharField(max_length=50,verbose_name=_('webframe.models.Privilege.name'))
-   desc               = models.TextField(max_length=200,null=True,blank=True,verbose_name=_('webframe.models.Privilege.desc'))
-
-class GrantedPrivilege(models.Model):
-   class Meta(object):
-     verbose_name         = _('webframe.models.GrantedPrivilege')
-     verbose_name_plural    = _('webframe.models.GrantedPrivilege')
-
-   owner               = models.ForeignKey(
-     settings.AUTH_USER_MODEL,
-     on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
-     verbose_name=_('webframe.models.GrantedPrivilege.owner'),
-   )
-   privilege            = models.ForeignKey(
-     Privilege,
-     on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
-     verbose_name=_('webframe.models.GrantedPrivilege.privilege'),
-   )
-   item               = models.UUIDField(verbose_name=_('webframe.models.GrantedPrivilege.item'))
+# Deprecated the Privilege and GrantedPrivileges. Use [Django-Guardian](https://django-guardian.readthedocs.io/en/stable/overview.html) instead.
    
 class AsyncManipulationObject(models.Model):
    class Meta(object):

@@ -9,3 +9,4 @@ django_tables2
 
 #Optional
 django-impersonate
+django-guardian

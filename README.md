@@ -224,4 +224,50 @@ The package is develed under scss code. It can be customizes the style by scss e
 
 Impersonate Support
 -----
-Follow the [Impersonate](https://pypi.org/project/django-impersonate/) to support impersonate features. 
+The impersonate features are supported by [Impersonate](https://pypi.org/project/django-impersonate/) module.
+The quick configuration are as belows:
+
+1. Install the module:
+   ```bash
+   pip install django-impersonate
+   ```
+
+2. Add `impersonate` into INSTALLED_APPS;
+3. Add `impersonate.middleware.ImpersonateMiddleware` into MIDDLEWARE;
+4. Add impersonate's urls:
+   ```python
+   #conf/urls.py
+   urlpattens=patterns('',
+      #...
+      url(r'^impersonate/', include('impersonate.urls')),
+      #...
+   )
+   ```
+5. Migrate the database settings:
+   ```bash
+   ./manage.py migrate
+   ```
+
+Django-Guardian Support
+----
+The [django-guardian](https://django-guardian.readthedocs.io/en/stable/overview.html) is the module to support item-level permission. 
+The quick configuration are as belows:
+
+1. Install the module:
+   ```bash
+   pip install django-guardian
+   ```
+
+2. Add `guardian` into INSTALLED_APPS;
+3. Add `guardian.backends.ObjectPermissionBackend` into authentication backend:
+   ```python
+   AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+   )
+   ```
+4. Migrate the database settings:
+   ```bash
+   ./manage.py migrate
+   ```
+
