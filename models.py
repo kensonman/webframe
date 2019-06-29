@@ -346,6 +346,29 @@ class AliveObject(models.Model, Dictable):
       self.expDate=rfmt(data['expDate'])
       self.enabled=getBool(data['enabled'])
 
+# The abstract value=object that provide the sequence field and related ordering features
+class OrderableValueObject(ValueObject):
+   sequence      = models.FloatField(default=1,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
+
+   class Meta:
+      abstract   = True
+      ordering   = ['sequence', 'id',]
+
+   # Get the ordering features
+   def __get_ordered_list__(self):
+      return self.__class__.objects.all().order_by('sequence')
+
+   # Saving and reorder the models
+   def save(self, *args, **kwargs):
+      if not self.sequence: self.sequence=1
+      self.sequence-=0.5
+      ValueObject.save(self)
+      counter=1
+      for i in self.__get_ordered_list__():
+         i.sequence=counter
+         counter+=1
+         ValueObject.save(i, update_lmb='false')
+
 class PrefManager(models.Manager):
    def pref(self, name, **kwargs):
      '''
@@ -362,7 +385,7 @@ class PrefManager(models.Manager):
      parent=kwargs.get('parent', None)
      rst=self.filter(name=name)
      try:
-      if user: 
+      if user and user.is_authenticated: 
          if len(rst.filter(owner=user))>0:
            rst=rst.filter(owner=user)
       if parent: rst=rst.filter(parent=parent)
@@ -378,7 +401,7 @@ class PrefManager(models.Manager):
       logger.exception('Cannot get preferences<%s>'%name)
       return defval
 
-class Preference(ValueObject):
+class AbstractPreference(OrderableValueObject):
    class Meta(object):
       permissions       = (
          ('add_config',  'Can add configuration'),
@@ -387,6 +410,8 @@ class Preference(ValueObject):
          ('browse_config', 'Can browse system configuration'),
          ('browse_preference', 'Can browse other preferences'),
       )
+      abstract         = True
+
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
    value               = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
    owner               = models.ForeignKey(
@@ -422,19 +447,16 @@ class Preference(ValueObject):
    def childs(self):
       return Preference.objects.filter(parent=self).order_by('sequence')
 
-   def save(self):
+   def __get_ordered_list__(self):
       if self.parent:
-         self.sequence-=0.1
-         super(Preference, self).save()
-         childs=Preference.objects.filter(parent=self.parent).order_by('sequence')
-         cnt=0
-         for p in childs:
-            cnt+=1
-            p.sequence=cnt
-            super(Preference, p).save()
+         result=self.__class__.objects.filter(parent=self.parent)
       else:
-         self.sequence=math.ceil(self.sequence)
-         super(Preference, self).save()
+         result=self.__class__.objects.filter(parent__isnull=True)
+      if self.owner: result=result.filter(owner=self.owner)
+      return result.order_by('sequence')
+
+class Preference(AbstractPreference):
+   pass
 
 # Deprecated the Privilege and GrantedPrivileges. Use [Django-Guardian](https://django-guardian.readthedocs.io/en/stable/overview.html) instead.
    
@@ -455,26 +477,3 @@ class AsyncManipulationObject(models.Model):
    def is_ready(self):
      _('AsyncManipulationObject.is_ready')
      return self.task_id is None
-
-# The abstract value=object that provide the sequence field and related ordering features
-class OrderableValueObject(ValueObject):
-   sequence      = models.FloatField(default=1,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
-
-   class Meta:
-      abstract   = True
-      ordering   = ['sequence', 'id',]
-
-   # Get the ordering features
-   def __get_ordered_list__(self):
-      return self.__class__.objects.all().order_by('sequence')
-
-   # Saving and reorder the models
-   def save(self, *args, **kwargs):
-      if not self.sequence: self.sequence=1
-      self.sequence-=0.5
-      ValueObject.save(self)
-      counter=1
-      for i in self.__get_ordered_list__():
-         i.sequence=counter
-         counter+=1
-         ValueObject.save(i, update_lmb='false')
