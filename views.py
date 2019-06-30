@@ -44,7 +44,7 @@ def login( req ):
       ## 2017-09-30 10:44, Kenson Man
       ## Let the first login user be the system administrator
       User=get_user_model()
-      if User.objects.all().count()<1:
+      if User.objects.exclude(username=getattr(settings, 'ANONYMOUS_USER_NAME', 'AnonymousUser')).count()<1:
          u=User()
          u.username=username
          u.first_name='System'
