@@ -37,6 +37,7 @@
             {%endfor%}</div>
          </li>
          {%if user.is_authenticated%}
+         {%if user.is_staff%}<li class="nav-item"><a href="{%url 'admin:index'%}" class="nav-link"><i class="fas fa-cogs"></i> {%trans 'admin-tools'%}</a></li>{%endif%}
          {%if 'webframe:users'|urlexists%}{%if perms.auth.add_user or perms.auth.change_user%}<li class="nav-item"><a href="{%url 'webframe:users'%}" class="nav-link"><i class="fas fa-users"></i> {%trans 'users'%}</a></li>{%endif%}{%endif%}
          {%if 'webframe:prefs'|urlexists or 'webframe:logout'|urlexists%}<li class="dropdown nav-item">
             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">

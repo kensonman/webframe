@@ -456,10 +456,8 @@ class AbstractPreference(OrderableValueObject):
       return result.order_by('sequence')
 
 class Preference(AbstractPreference):
-   pass
+   reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
 
-# Deprecated the Privilege and GrantedPrivileges. Use [Django-Guardian](https://django-guardian.readthedocs.io/en/stable/overview.html) instead.
-   
 class AsyncManipulationObject(models.Model):
    class Meta(object):
      verbose_name         = _('webframe.models.AsyncManipulationObject')

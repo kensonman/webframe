@@ -1,13 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 2019
+# This file is distributed under the same license as the webframe package.
+# Kenson Man <kenson@kenson.idv.hk>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-21 08:59+0000\n"
+"POT-Creation-Date: 2019-06-30 03:27+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -68,149 +67,129 @@ msgstr "Created By"
 msgid "webframe.models.ValueObject.cb.helptext"
 msgstr "The person that create this value-object"
 
-#: models.py:279
+#: models.py:289
 msgid "webframe.models.AliveObject"
 msgstr "AliveObject"
 
-#: models.py:280
+#: models.py:290
 msgid "webframe.models.AliveObjects"
 msgstr "AliveObject"
 
-#: models.py:284
+#: models.py:294
 msgid "webframe.models.AliveObject.effDate"
 msgstr "Effective Date"
 
-#: models.py:285
+#: models.py:295
 msgid "webframe.models.AliveObject.effDate.helptext"
 msgstr "The date(Included) to start the life-cycle of the object"
 
-#: models.py:290
+#: models.py:300
 msgid "webframe.models.AliveObject.expDate"
 msgstr "Expiry Date"
 
-#: models.py:291
+#: models.py:301
 msgid "webframe.models.AliveObject.expDate.helptext"
 msgstr "The date(Excluded) to end the life-cycle of the object"
 
-#: models.py:295
+#: models.py:305
 msgid "webframe.models.AliveObject.enabled"
 msgstr "Enabled"
 
-#: models.py:296
+#: models.py:306
 msgid "webframe.models.AliveObject.enabled.helptext"
 msgstr "The enabling status of the object"
 
-#: models.py:380 templates/webframe/preference.html:50
+#: models.py:351
+msgid "webframe.models.OrderableValueObject.sequence"
+msgstr "Ordering"
+
+#: models.py:415 templates/webframe/preference.html:50
 #: templates/webframe/preference.html:51
 msgid "webframe.models.Preference.name"
 msgstr "Name"
 
-#: models.py:380
+#: models.py:415
 msgid "webframe.models.Preference.name.helptext"
 msgstr "The name of the preference"
 
-#: models.py:381 templates/webframe/preference.html:54
+#: models.py:416 templates/webframe/preference.html:54
 #: templates/webframe/preference.html:55
 msgid "webframe.models.Preference.value"
 msgstr "Value"
 
-#: models.py:381
+#: models.py:416
 msgid "webframe.models.Preference.value.helptext"
 msgstr "The value of the perference"
 
-#: models.py:387
+#: models.py:422
 msgid "Pwebframe.models.reference.owner"
 msgstr "Owner"
 
-#: models.py:388
+#: models.py:423
 msgid "webframe.models.Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:395 templates/webframe/preference.html:41
+#: models.py:430 templates/webframe/preference.html:41
 #: templates/webframe/preference.html:42
 msgid "webframe.models.Preference.parent"
 msgstr "Parent"
 
-#: models.py:396
+#: models.py:431
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:400 templates/webframe/preference.html:58
+#: models.py:435 templates/webframe/preference.html:58
 #: templates/webframe/preference.html:59
 msgid "webframe.models.Preference.sequence"
 msgstr "Sequence"
 
-#: models.py:401
+#: models.py:436
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:431
-msgid "webframe.models.Privilege"
-msgstr "Privilege"
+#: models.py:459
+msgid "webframe.models.Preference.reserved"
+msgstr "Reserved?"
 
-#: models.py:432
-msgid "webframe.models.Privileges"
-msgstr "Privileges"
+#: models.py:459
+msgid "webframe.models.Preference.reserved.helptext"
+msgstr "The preference is reserved for system use (Should not shown on front-end UI)."
 
-#: models.py:438
-msgid "webframe.models.Privilege.name"
-msgstr "Name"
-
-#: models.py:439
-msgid "webframe.models.Privilege.desc"
-msgstr "Desc"
-
-#: models.py:443 models.py:444
-msgid "webframe.models.GrantedPrivilege"
-msgstr "GrantedPrivilege"
-
-#: models.py:449
-msgid "webframe.models.GrantedPrivilege.owner"
-msgstr "Owner"
-
-#: models.py:454
-msgid "webframe.models.GrantedPrivilege.privilege"
-msgstr "Priviege"
-
-#: models.py:456
-msgid "webframe.models.GrantedPrivilege.item"
-msgstr "Item"
-
-#: models.py:460
+#: models.py:463
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:461
+#: models.py:464
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:464
+#: models.py:467
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:468
+#: models.py:471
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:473
+#: models.py:476
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
 
-#: models.py:478
-msgid "webframe.models.OrderableValueObject.sequence"
-msgstr "Ordering"
+#: templates/webframe/blank.html:8
+msgid "appName"
+msgstr ""
 
-#: templates/webframe/blank.html:15
+#: templates/webframe/blank.html:18
 msgid "Javascript is required"
 msgstr ""
 
-#: templates/webframe/blank.html:16
+#: templates/webframe/blank.html:19
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
 msgstr ""
 
-#: templates/webframe/blank.html:17
+#: templates/webframe/blank.html:20
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
@@ -229,30 +208,34 @@ msgstr "Version"
 msgid "render-date"
 msgstr "Render Date"
 
-#: templates/webframe/header.html:40 templates/webframe/user.html:3
+#: templates/webframe/header.html:40
+msgid "admin-tools"
+msgstr ""
+
+#: templates/webframe/header.html:41 templates/webframe/user.html:3
 #: templates/webframe/user.html:23 templates/webframe/users.html:3
 #: templates/webframe/users.html:29
 msgid "users"
 msgstr "Users"
 
-#: templates/webframe/header.html:44 templates/webframe/header.html:54
+#: templates/webframe/header.html:45 templates/webframe/header.html:55
 #, python-format
 msgid "Hi, %(username)s"
 msgstr "Hi, %(username)s"
 
-#: templates/webframe/header.html:48
+#: templates/webframe/header.html:49
 msgid "impersonate-stop"
 msgstr "Stop impersonating"
 
-#: templates/webframe/header.html:51
+#: templates/webframe/header.html:52
 msgid "preferences"
 msgstr "Preference"
 
-#: templates/webframe/header.html:52
+#: templates/webframe/header.html:53
 msgid "logout"
 msgstr "Logout"
 
-#: templates/webframe/header.html:56 templates/webframe/login.html:75
+#: templates/webframe/header.html:57 templates/webframe/login.html:75
 msgid "login"
 msgstr "Login"
 
@@ -523,6 +506,30 @@ msgstr ""
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:297
+#: views.py:300
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
+
+#~ msgid "webframe.models.Privilege"
+#~ msgstr "Privilege"
+
+#~ msgid "webframe.models.Privileges"
+#~ msgstr "Privileges"
+
+#~ msgid "webframe.models.Privilege.name"
+#~ msgstr "Name"
+
+#~ msgid "webframe.models.Privilege.desc"
+#~ msgstr "Desc"
+
+#~ msgid "webframe.models.GrantedPrivilege"
+#~ msgstr "GrantedPrivilege"
+
+#~ msgid "webframe.models.GrantedPrivilege.owner"
+#~ msgstr "Owner"
+
+#~ msgid "webframe.models.GrantedPrivilege.privilege"
+#~ msgstr "Priviege"
+
+#~ msgid "webframe.models.GrantedPrivilege.item"
+#~ msgstr "Item"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-21 08:59+0000\n"
+"POT-Creation-Date: 2019-06-30 03:27+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -68,145 +68,125 @@ msgstr "建立人"
 msgid "webframe.models.ValueObject.cb.helptext"
 msgstr "這項資料的建立人。"
 
-#: models.py:279
+#: models.py:289
 msgid "webframe.models.AliveObject"
 msgstr "Alive Object"
 
-#: models.py:280
+#: models.py:290
 msgid "webframe.models.AliveObjects"
 msgstr "生命週期物件"
 
-#: models.py:284
+#: models.py:294
 msgid "webframe.models.AliveObject.effDate"
 msgstr "有效日期"
 
-#: models.py:285
+#: models.py:295
 msgid "webframe.models.AliveObject.effDate.helptext"
 msgstr "這項資料的有效日期"
 
-#: models.py:290
+#: models.py:300
 msgid "webframe.models.AliveObject.expDate"
 msgstr "失效日期"
 
-#: models.py:291
+#: models.py:301
 msgid "webframe.models.AliveObject.expDate.helptext"
 msgstr "這項資料的失效日期"
 
-#: models.py:295
+#: models.py:305
 msgid "webframe.models.AliveObject.enabled"
 msgstr "啟用"
 
-#: models.py:296
+#: models.py:306
 msgid "webframe.models.AliveObject.enabled.helptext"
 msgstr "這項資料是否啟用"
 
-#: models.py:380 templates/webframe/preference.html:50
+#: models.py:351
+msgid "webframe.models.OrderableValueObject.sequence"
+msgstr "排序"
+
+#: models.py:415 templates/webframe/preference.html:50
 #: templates/webframe/preference.html:51
 msgid "webframe.models.Preference.name"
 msgstr "設定名稱"
 
-#: models.py:380
+#: models.py:415
 msgid "webframe.models.Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:381 templates/webframe/preference.html:54
+#: models.py:416 templates/webframe/preference.html:54
 #: templates/webframe/preference.html:55
 msgid "webframe.models.Preference.value"
 msgstr "值"
 
-#: models.py:381
+#: models.py:416
 msgid "webframe.models.Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:387
+#: models.py:422
 msgid "Pwebframe.models.reference.owner"
 msgstr "擁有人"
 
-#: models.py:388
+#: models.py:423
 msgid "webframe.models.Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:395 templates/webframe/preference.html:41
+#: models.py:430 templates/webframe/preference.html:41
 #: templates/webframe/preference.html:42
 msgid "webframe.models.Preference.parent"
 msgstr "歸類"
 
-#: models.py:396
+#: models.py:431
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:400 templates/webframe/preference.html:58
+#: models.py:435 templates/webframe/preference.html:58
 #: templates/webframe/preference.html:59
 msgid "webframe.models.Preference.sequence"
 msgstr "排序"
 
-#: models.py:401
+#: models.py:436
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
-#: models.py:431
-msgid "webframe.models.Privilege"
-msgstr "權限"
+#: models.py:459
+msgid "webframe.models.Preference.reserved"
+msgstr "系統保留？"
 
-#: models.py:432
-msgid "webframe.models.Privileges"
-msgstr "權限"
+#: models.py:459
+msgid "webframe.models.Preference.reserved.helptext"
+msgstr "這個設定是否為系統保留（前台不應該顯示與使用者）？"
 
-#: models.py:438
-msgid "webframe.models.Privilege.name"
-msgstr "權限名稱"
-
-#: models.py:439
-msgid "webframe.models.Privilege.desc"
-msgstr "說明"
-
-#: models.py:443 models.py:444
-msgid "webframe.models.GrantedPrivilege"
-msgstr "授權"
-
-#: models.py:449
-msgid "webframe.models.GrantedPrivilege.owner"
-msgstr "被授權者"
-
-#: models.py:454
-msgid "webframe.models.GrantedPrivilege.privilege"
-msgstr "權限"
-
-#: models.py:456
-msgid "webframe.models.GrantedPrivilege.item"
-msgstr "對像資料"
-
-#: models.py:460
+#: models.py:463
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "異步程序物件"
 
-#: models.py:461
+#: models.py:464
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "異步程序物件"
 
-#: models.py:464
+#: models.py:467
 msgid "AsyncManipulationObject.task_id"
 msgstr "異步程序#"
 
-#: models.py:468
+#: models.py:471
 msgid "AsyncManipulationObject.is_processing"
 msgstr "異步程序進行中⋯⋯"
 
-#: models.py:473
+#: models.py:476
 msgid "AsyncManipulationObject.is_ready"
 msgstr "異步程序已準備就緒"
 
-#: models.py:478
-msgid "webframe.models.OrderableValueObject.sequence"
-msgstr "排序"
+#: templates/webframe/blank.html:8
+msgid "appName"
+msgstr ""
 
-#: templates/webframe/blank.html:15
+#: templates/webframe/blank.html:18
 msgid "Javascript is required"
 msgstr "無法正常顯示網頁"
 
-#: templates/webframe/blank.html:16
+#: templates/webframe/blank.html:19
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
@@ -214,7 +194,7 @@ msgstr ""
 "這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
 "頁能正確顯示."
 
-#: templates/webframe/blank.html:17
+#: templates/webframe/blank.html:20
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
@@ -235,30 +215,34 @@ msgstr "版本"
 msgid "render-date"
 msgstr "輸出日期"
 
-#: templates/webframe/header.html:40 templates/webframe/user.html:3
+#: templates/webframe/header.html:40
+msgid "admin-tools"
+msgstr ""
+
+#: templates/webframe/header.html:41 templates/webframe/user.html:3
 #: templates/webframe/user.html:23 templates/webframe/users.html:3
 #: templates/webframe/users.html:29
 msgid "users"
 msgstr "使用者"
 
-#: templates/webframe/header.html:44 templates/webframe/header.html:54
+#: templates/webframe/header.html:45 templates/webframe/header.html:55
 #, python-format
 msgid "Hi, %(username)s"
 msgstr "你好，%(username)s"
 
-#: templates/webframe/header.html:48
+#: templates/webframe/header.html:49
 msgid "impersonate-stop"
 msgstr "停止扮演"
 
-#: templates/webframe/header.html:51
+#: templates/webframe/header.html:52
 msgid "preferences"
 msgstr "個人設定"
 
-#: templates/webframe/header.html:52
+#: templates/webframe/header.html:53
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header.html:56 templates/webframe/login.html:75
+#: templates/webframe/header.html:57 templates/webframe/login.html:75
 msgid "login"
 msgstr "登入"
 
@@ -530,6 +514,30 @@ msgstr "使用者名稱或密碼有誤"
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:297
+#: views.py:300
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
+
+#~ msgid "webframe.models.Privilege"
+#~ msgstr "權限"
+
+#~ msgid "webframe.models.Privileges"
+#~ msgstr "權限"
+
+#~ msgid "webframe.models.Privilege.name"
+#~ msgstr "權限名稱"
+
+#~ msgid "webframe.models.Privilege.desc"
+#~ msgstr "說明"
+
+#~ msgid "webframe.models.GrantedPrivilege"
+#~ msgstr "授權"
+
+#~ msgid "webframe.models.GrantedPrivilege.owner"
+#~ msgstr "被授權者"
+
+#~ msgid "webframe.models.GrantedPrivilege.privilege"
+#~ msgstr "權限"
+
+#~ msgid "webframe.models.GrantedPrivilege.item"
+#~ msgstr "對像資料"
