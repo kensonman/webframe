@@ -86,11 +86,10 @@ Application
       from django.conf import settings
       from django.conf.urls.static import static
       from django.urls import path, re_path, include
-      from webframe.urls import urlpatterns as webframe
 
       urlpatterns = [
          #...
-         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
+         path('webframe/', include('webframe.urls', namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
       ```
@@ -129,11 +128,10 @@ To use the preference, following the steps:
       from django.conf import settings
       from django.conf.urls.static import static
       from django.urls import path, re_path, include
-      from webframe.urls import urlpatterns as webframe
 
       urlpatterns = [
          #...
-         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
+         path('webframe/', include('webframe.urls', namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
       ```
@@ -174,11 +172,10 @@ To use the preference, following the steps:
       from django.conf import settings
       from django.conf.urls.static import static
       from django.urls import path, re_path, include
-      from webframe.urls import urlpatterns as webframe
 
       urlpatterns = [
          #...
-         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
+         path('webframe/', include('webframe.urls', namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
       ```
@@ -193,11 +190,10 @@ The WEBFRAME also support the javascript translation. Just add the belows statem
       from django.conf import settings
       from django.conf.urls.static import static
       from django.urls import path, re_path, include
-      from webframe.urls import urlpatterns as webframe
 
       urlpatterns = [
          #...
-         path('webframe/', include((webframe, 'webframe'), namespace='webframe')),
+         path('webframe/', include('webframe.urls', namespace='webframe')),
       ]
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
       ```

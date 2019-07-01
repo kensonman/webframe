@@ -5,6 +5,7 @@ from django.urls import path, re_path, include
 from django.views.i18n import JavaScriptCatalog
 from . import views
 
+app_name='webframe'
 urlpatterns=[
    re_path(r'^login/?$', views.login, name='login'),
    re_path(r'^logout/?$', views.logout, name='logout'),
