@@ -118,7 +118,7 @@
         }
         var selected=$(this).find('input:first').val();
         var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
-        $(this).find('button').text(label);
+        $(this).find('button').text(label).append($('<span></span>').html($(this).attr('_symbol')).text());
         $(this).trigger('ready');
      },
      populate: function( item ){
@@ -151,7 +151,7 @@
        params.ajax.context=this;
        $(this).attr({'wfelement':params.element, 'wfname':params.name, 'wfid':params.id, 'wfPlsSelect':$(this).text()});
        $.ajax(params.ajax);
-       return this;
+       //return this;
      }
 
      var selected=$(this).find('input:first').val();
