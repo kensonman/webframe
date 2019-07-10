@@ -89,8 +89,9 @@
             value=$(this).attr('val');
          $(element)
             .find('button:first').empty().text($(this).text()).append(dropdownSymbol).end()
-            .find('input:first').val(value).end()
-            .trigger('change', {'from': lastVal, 'to':value})
+            .find('input:first').val(value)
+               .trigger('change', {'from': lastVal, 'to':value})
+            .end()
          ;
      },
      success: function( data ){
