@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
 from .functions import getBool, getClass
-import math, uuid, logging, json
+import math, uuid, logging, json, pytz
 
 logger=logging.getLogger('webframe.models')
 
@@ -495,7 +495,9 @@ class AbstractPreference(OrderableValueObject):
    @datetimeValue.setter
    def datetimeValue(self, val):
       if hasattr(val, 'strftime'):
-         self.value=datetime.strftime(val.strftime(DATEFMT)
+         if not val.tzinfo:
+            val=pytz.utc.localize(val)
+         self.value=val.strftime(DATEFMT)
       else:
          raise ValueError('Expected datetime value, but {0}'.format(type(val)))
 
