@@ -455,6 +455,58 @@ class AbstractPreference(OrderableValueObject):
       if self.owner: result=result.filter(owner=self.owner)
       return result.order_by('sequence')
 
+   @property
+   def intValue(self):
+      if self.value is None: return None
+      return int(self.value)
+   @intValue.setter
+   def intValue(self, val):
+      if isinstance(val, int):
+         self.value=str(val)
+      else:
+         raise ValueError('Expected integer value, but {0}'.format(type(val)))
+
+   @property
+   def boolValue(self):
+      if self.value is None: return None
+      return self.value.upper() in ['TRUE', 'T', '1', 'YES', 'Y']
+   @boolValue.setter
+   def boolValue(self, val):
+      if isinstance(val, bool):
+         self.value=str(val)
+      else:
+         raise ValueError('Expected boolean value, but {0}'.format(type(val)))
+
+   @property
+   def floatValue(self):
+      if self.value is None: return None
+      return float(self.value)
+   @floatValue.setter
+   def floatValue(self, val):
+      if isinstance(val, float):
+         self.value=str(val)
+      else:
+         raise ValueError('Expected float value, but {0}'.format(type(val)))
+
+   @property
+   def datetimeValue(self):
+      if self.value is None: return None
+      return datetime.strptime(self.value, DATEFMT)
+   @datetimeValue.setter
+   def datetimeValue(self, val):
+      if hasattr(val, 'strftime'):
+         self.value=datetime.strftime(val.strftime(DATEFMT)
+      else:
+         raise ValueError('Expected datetime value, but {0}'.format(type(val)))
+
+   @property
+   def jsonValue(self):
+      if self.value is None: return None
+      return json.loads(self.value)
+   @jsonValue.setter
+   def jsonValue(self, val):
+      self.value=json.dumps(val)
+
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
 
