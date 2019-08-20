@@ -1,4 +1,4 @@
-{%extends 'webframe/base.html'%}{%load i18n%}{%load staticfiles%}
+{%extends 'webframe/base.html'%}{%load i18n staticfiles pref%}
 
 {%block title%}{%trans 'Login Required'%}{%endblock%}
 
@@ -53,16 +53,18 @@ $(document).ready(function(){
                    <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
                {%endfor%}</ul></div>{%endif%}{%endblock%}
                
-               <div class="field form-group">
+               
+               {%pref 'LOGIN_IPAddrFld' defval='True' as IPAddrFld%}
+               {%if IPAddrFld == 'True' or IPAddrFld == 'true'%}<div class="field form-group">
                   <label for="IPAddrFld" class="desktop-only">{%trans 'IPAddr'%}</label>
                   <input type="text" name="ipaddr" value="{{IPAddr}}" class="form-control" readonly="readonly" required="required"/>
-               </div>
-               <div class="field form-group">
+               </div>{%endif%}
+               {%block authenticationBackendsBlock%}<div class="field form-group">
                   <label for="backendsFld">{%trans 'Authentication Backends'%}</label>
                   <ul>
                      {%for b in backends%}<li>{{b}}</li>{%endfor%}
                   </ul>
-               </div>
+               </div>{%endblock%}
                <div class="field form-group">
                   <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
                   <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
