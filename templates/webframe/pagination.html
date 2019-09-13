@@ -1,44 +1,56 @@
-{%load i18n%}<div class="paginator">{%if target.paginator%}
-	{%if target.paginator.count > 0 %}
-		{%if target.paginator.num_pages > 1%}<ul class="pagination">
-			{%if target.number > 6%}
-				<li><a href="#page_1" goto="1"><i class="fa fa-step-backward"></i></a></li>
-				<li class="disabled"><a>...</a></li>
-			{%endif%}
-			{%for n in target.paginator.page_range%}
-				{%if  n >= target.number|add:-5  and  n <= target.number|add:5  %}
-				<li class="{%if n == target.number%}active{%endif%}"><a href="#page_{{n}}" goto="{{n}}">{{n}}</a></li>
-				{%endif%}
-			{%endfor%}
-			{%if target.number < target.paginator.num_pages|add:-5%}
-				<li class="disabled"><a>...</a></li>
-				<li><a href="#page_{{target.paginator.num_pages}}" goto="{{target.paginator.num_pages}}"><i class="fa fa-step-forward"></i></a></li>
-			{%endif%}
-		</ul>
-		<div class="pull-right">{%blocktrans with x=target.number y=target.paginator.num_pages total=target.paginator.count per_page=target.paginator.per_page%}Showing {{per_page}} of {{total}}; Page {{x}} of {{y}}{%endblocktrans%}</div>
-		<script type="text/javascript"><!--
-		if(typeof(gotoPage)=='undefined'){
-			var gotoPage=function(){
-				frm=$(this).parents('form:first')
-				if(frm.size()>0){//found the form, use the form for pagination
-					if($(frm).find('input[name=page]').length<1){
-						$('<input/>').attr({'name':'page','type':'hidden'}).val('1').appendTo(frm);
-					}
-					$(frm)
-						.find('input[name=page]').val($(this).attr('goto')).end()
-						.submit();
-				}else{
-					window.location.href='?page='+$(this).attr('goto');
-				}
-				return false;//Return fasle for the linkage
-			};
+{%load i18n%}
+<div class="paginator">
+   {%if target.paginator%}
+      {%if target.paginator.count > 0%}
+         <nav aria-label="Page navigation" class="float-left">
+            <ul class="pagination" style="margin-bottom: 0px">
+               {%if target.number > 6%}
+				   <li class="page-item"><a href="javascript:gotoPage(1)" class="page-link"><i class="fas fa-step-backward"></i></a></li>
+               {%endif%}
 
-			$(document).ready(function(){$('ul.pagination').find('a[goto]').click(gotoPage);});
-		}
-		//--></script>{%endif%}
-	{%else%}
-		<div class="norecord">{%trans 'pagination-norecord'%}</div>
-	{%endif%}
-{%else%}
-	<div class="nopaginator">target is not an instance of Page</div>
-{%endif%}</div>
+               {%for n in target.paginator.page_range%}{%if n >= target.number|add:-2 and n <= target.number|add:2 %}
+               <li class="page-item {%if n == target.number%}active{%endif%}"><a class="page-link" href="javascript:gotoPage({{n}})">{{n}}</a></li>
+               {%endif%}{%endfor%}
+
+           
+               {%if target.number < target.paginator.num_pages|add:-2%}
+                  <li><a class="page-link" href="javascript:gotoPage({{target.paginator.num_pages}})"><i class="fas fa-step-forward"></i></a></li>
+               {%endif%}
+           </ul>
+         </nav>
+
+         <div class="float-right">{%blocktrans with x=target.number y=target.paginator.num_pages total=target.paginator.count size=target.paginator.per_page%}Showing {{size}} of {{total}}; Page {{x}} of {{y}}{%endblocktrans%}</div>
+      {%else%}
+         <div class="norecord">{%trans 'pagination-norecord'%}</div>
+      {%endif%}
+   {%else%}
+      <div class="nopaginator">target is not an instance of Page</div>
+   {%endif%}
+</div>
+<script type="text/javascript"><!--
+if(typeof(gotoPage)=='undefined'){
+   var gotoPage=function( page ){
+      if(typeof(page)=='undefined') page=$(this).attr('page');
+      if(typeof(page)=='undefined') page=$(this).attr('goto');
+      if(typeof(page)=='undefined'){
+         console.log('Cannot found which page to go');
+         alert('Cannot found which page to go');
+         return;
+      }
+      frm=$(this).parents('form:first')
+      if(frm.length>0){//found the form, use the form for pagination
+         if($(frm).find('input[name=page]').length<1){
+            $('<input/>').attr({'name':'page','type':'hidden'}).val('1').appendTo(frm);
+         }
+         $(frm)
+            .find('input[name=page]').val(page).end()
+            .submit();
+      }else{
+         window.location.href='?page='+page;
+      }
+      return false;//Return fasle for the linkage
+   };
+
+   $(document).ready(function(){$('ul.pagination').find('a[goto]').click(gotoPage);});
+}
+//--></script>

@@ -8,9 +8,21 @@ from deprecation import deprecated
 import os, logging, pytz
 
 logger=logging.getLogger('webframe.functions')
-FMT_DATE='%Y-%m-%d'
-FMT_TIME='%H:%M:%S'
-FMT_DATETIME='%s %s'%(FMT_DATE, FMT_TIME)
+FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
+FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
+FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'%(FMT_DATE, FMT_TIME))
+ 
+def valueOf(obj, defval=None):
+   '''
+   Get the value of the specified object, if it is callable/method/function, execute it and return the result;
+   '''
+   if obj==None: return defval 
+   if hasattr(obj, 'valueOf'): obj=obj.valueOf()
+   if hasattr(obj, '__call__'): obj=obj()
+   if isinstance(obj, str):
+      obj=obj.strip()
+      if len(obj)<1: return defval 
+   return obj
 
 def getClass( cls ):
    '''
@@ -55,54 +67,57 @@ def inNetworks( ipaddr, networks=['192.168.0.0/255.255.255.0',]):
             return True
     return False
 
-def getBool( val, defVal=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
+def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
    '''
    Retrieve the boolean value from string
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param trueOpts The available values of TRUE
    '''
    if callable(val): val=val()
    if val:
       return str(val).upper() in trueOpts
-   return defVal 
+   return defval 
 
-def getDate( val, defVal=None, fmt=FMT_DATE ):
+def getDate( val, defval=None, fmt=FMT_DATE ):
    '''
    Retrieve the date from string.
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   return getTime(val, defVal=defVal, fmt=fmt)
+   return getTime(val, defval=defval, fmt=fmt)
 
-def getTime( val, defVal=None, fmt=FMT_TIME ):
+def getTime( val, defval=None, fmt=FMT_TIME, **kwargs ):
    '''
    Retrieve the time from string.
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   if not val: return defVal
+   if not val: return defval
    if isinstance(val, datetime): return val
    try:
       rst=datetime.strptime(val, fmt)
-      return timezone.make_aware(rst)
+      rst=timezone.make_aware(rst)
+      if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
+      if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
+      return rst
    except ValueError:
-      return defVal
+      return defval
 
-def getDateTime( val, defVal=None, fmt=FMT_DATETIME ):
+def getDateTime( val, defval=None, fmt=FMT_DATETIME, **kwargs ):
    '''
    Retrieve the datetime from string.
 
    @param val The value to be parse to bool
-   @param defVal The default value if the val is None
+   @param defval The default value if the val is None
    @param fmt The specified format according to Python: datetime.strptime
    '''
-   return getTime(val, defVal=defVal, fmt=fmt)
+   return getTime(val, defval=defval, fmt=fmt, **kwargs)
 
 def checkRecaptcha( req, secret, simple=True ):
    '''
@@ -167,7 +182,8 @@ def getChoice(choices, val):
       - getChoices(EXAMPLE, 'one') => 1 (Index of 'one' element)
       - getChoices(EXAMPLE, 'two') => 4 (Index of 'two' element)
    '''
-   if isinstance(val, int):
+   if isinstance(val, int) or val.isdigit():
+      val=int(val)
       return choices[val][1]
    else:
       val=str(val).upper()
@@ -184,3 +200,75 @@ def getChoices(choices, val):
    Alias of getChoice(choices, val) for backward compatible
    '''
    return getChoice(choices, val)
+
+def convertDateformat(pydateformat, format='javascript'):
+   '''
+   Convert the Python's date-format into Javascript format
+   @param pydateformat                    The date-format to be converted
+   @param format                          The style required. Currently support: javascript, java
+   '''
+   if format=='javascript':
+      keys={
+         '%A': 'dddd',                       #Weekday as locale’s full name: (In English: Sunday, .., Saturday)(Auf Deutsch: Sonntag, .., Samstag)   
+         '%a': 'ddd',                        #Weekday abbreivated: (In English: Sun, .., Sat)(Auf Deutsch: So, .., Sa)
+         '%B': 'MMMM',                       #Month name: (In English: January, .., December)(Auf Deutsch: Januar, .., Dezember)
+         '%b': 'MMM',                        #Month name abbreviated: (In English: Jan, .., Dec)(Auf Deutsch: Jan, .., Dez)
+         '%c': 'ddd MMM DD HH:mm:ss YYYY',   #Locale’s appropriate date and time representation: (English: Sun Oct 13 23:30:00 1996)(Deutsch: So 13 Oct 22:30:00 1996) 
+         '%d': 'DD',                         #Day 0 padded: (01, .., 31)
+         '%f': 'SSS',                        #Microseconds 0 padded: (000000, .., 999999)
+         '%H': 'HH',                         #Hour (24-Hour) 0 padded: (00, .., 23) 
+         '%I': 'hh',                         #Hour (12-Hour) 0 padded: (01, .., 12)
+         '%j': 'DDDD',                       #Day of Year 0 padded: (001, .., 366) 
+         '%M': 'mm',                         #Minute 0 padded: (01, .. 59) 
+         '%m': 'MM',                         #Month 0 padded: (01, .., 12)
+         '%p': 'A',                          #Locale equivalent of AM/PM: (EN: AM, PM)(DE: am, pm)
+         '%S': 'ss',                         #Second 0 padded: (00, .., 59)
+         '%U': 'ww',                         #Week # of Year (Sunday): (00, .., 53)  All days in a new year preceding the first Sunday are considered to be in week 0.
+         '%W': 'ww',                         #Week # of Year (Monday): (00, .., 53)  All days in a new year preceding the first Monday are considered to be in week 0.
+         '%w': 'd',                          #Weekday as #: (0, 6)
+         '%X': 'HH:mm:ss',                   #Locale's appropriate time representation: (EN: 23:30:00)(DE: 23:30:00)
+         '%x': 'MM/DD/YYYY',                 #Locale's appropriate date representation: (None: 02/14/16)(EN: 02/14/16)(DE: 14.02.16)
+         '%Y': 'YYYY',                       #Year as #: (1970, 2000, 2038, 292,277,026,596)
+         '%y': 'YY',                         #Year without century 0 padded: (00, .., 99)
+         '%Z': 'z',                          #Time zone name: ((empty), UTC, EST, CST) (empty string if the object is naive).
+         '%z': 'ZZ',                         #UTC offset in the form +HHMM or -HHMM: ((empty), +0000, -0400, +1030) Empty string if the the object is naive.
+         '%%': '%',                          #A literal '%' character: (%)
+      }
+   elif format=='java':
+      keys={
+         '%A': 'EEEE',                       #Weekday as locale’s full name: (In English: Sunday, .., Saturday)(Auf Deutsch: Sonntag, .., Samstag)   
+         '%a': 'E',                          #Weekday abbreivated: (In English: Sun, .., Sat)(Auf Deutsch: So, .., Sa)
+         '%B': 'MMMM',                       #Month name: (In English: January, .., December)(Auf Deutsch: Januar, .., Dezember)
+         '%b': 'MMM',                        #Month name abbreviated: (In English: Jan, .., Dec)(Auf Deutsch: Jan, .., Dez)
+         '%c': 'ddd MMM DD HH:mm:ss YYYY',   #Locale’s appropriate date and time representation: (English: Sun Oct 13 23:30:00 1996)(Deutsch: So 13 Oct 22:30:00 1996) 
+         '%d': 'dd',                         #Day 0 padded: (01, .., 31)
+         '%f': 'SSSS',                       #Microseconds 0 padded: (000000, .., 999999)
+         '%H': 'HH',                         #Hour (24-Hour) 0 padded: (00, .., 23) 
+         '%I': 'hh',                         #Hour (12-Hour) 0 padded: (01, .., 12)
+         '%j': 'DDD',                        #Day of Year 0 padded: (001, .., 366) 
+         '%M': 'mm',                         #Minute 0 padded: (01, .. 59) 
+         '%m': 'MM',                         #Month 0 padded: (01, .., 12)
+         '%p': 'A',                          #Locale equivalent of AM/PM: (EN: AM, PM)(DE: am, pm)
+         '%S': 'ss',                         #Second 0 padded: (00, .., 59)
+         '%U': 'ww',                         #Week # of Year (Sunday): (00, .., 53)  All days in a new year preceding the first Sunday are considered to be in week 0.
+         '%W': 'ww',                         #Week # of Year (Monday): (00, .., 53)  All days in a new year preceding the first Monday are considered to be in week 0.
+         '%w': 'd',                          #Weekday as #: (0, 6)
+         '%X': 'HH:mm:ss',                   #Locale's appropriate time representation: (EN: 23:30:00)(DE: 23:30:00)
+         '%x': 'MM/dd/yyyy',                 #Locale's appropriate date representation: (None: 02/14/16)(EN: 02/14/16)(DE: 14.02.16)
+         '%Y': 'yyyy',                       #Year as #: (1970, 2000, 2038, 292,277,026,596)
+         '%y': 'yy',                         #Year without century 0 padded: (00, .., 99)
+         '%Z': 'z',                          #Time zone name: ((empty), UTC, EST, CST) (empty string if the object is naive).
+         '%z': 'ZZ',                         #UTC offset in the form +HHMM or -HHMM: ((empty), +0000, -0400, +1030) Empty string if the the object is naive.
+         '%%': '%',                          #A literal '%' character: (%)
+      }
+
+
+   result=pydateformat
+   for k in keys:
+      result=result.replace(k, keys[k])
+   return result
+
+@deprecated(deprecated_in='1.0', removed_in='2.0', details='Use convertDateformat(pydateformat, format="javascript") instead')
+def getJSDateformat(pydateformat, format='javascript'):
+   return convertDateformat(pydateformat, format)
+

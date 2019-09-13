@@ -15,6 +15,7 @@ from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
+from .decorators import is_enabled
 from .functions import getBool
 from .models import *
 from .tables import *
@@ -23,12 +24,19 @@ import hashlib, logging
 CONFIG_KEY='ConfigKey'
 logger=logging.getLogger('webframe.views')
 
+#Make sure the translation
+_('django.contrib.auth.backends.ModelBackend')
+_('django_auth_ldap.backend.LDAPBackend')
+
 def login( req ):
    '''
    Login the session.
    '''
    params=dict()
-   params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+   try:
+      params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+   except:
+      params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
    if req.method=='POST':
       username=req.POST['username']
       password=req.POST['password']
@@ -36,7 +44,7 @@ def login( req ):
       ## 2017-09-30 10:44, Kenson Man
       ## Let the first login user be the system administrator
       User=get_user_model()
-      if User.objects.all().count()<1:
+      if User.objects.exclude(username=getattr(settings, 'ANONYMOUS_USER_NAME', 'AnonymousUser')).count()<1:
          u=User()
          u.username=username
          u.first_name='System'
@@ -45,7 +53,7 @@ def login( req ):
          u.is_superuser=True
          u.set_password(password)
          u.save()
-
+         messages.warning(req, 'Created the first user %s as system administroator'%username)
       try:
          u=authenticate(req, username=username, password=password)
       except:
@@ -60,7 +68,12 @@ def login( req ):
    params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
    params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
    params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
+   params['socialLogin_google']=hasattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+   req.session['next']=params['next']
+   logger.debug('Next URL: {0}'.format(params['next']))
    logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
+   #warning about the Authentication Backends
+   params['backends']=[_(b) for b in settings.AUTHENTICATION_BACKENDS]
    return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
 def logout(req):
@@ -195,9 +208,17 @@ def prefs(req, user=None):
    if user!=req.user.username and not req.user.is_superuser:
       if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
    user=getObj(get_user_model(), username=user)
+   if req.method=='POST':
+      newPwd=req.POST.get('newPwd', None)
+      if newPwd and newPwd==req.POST.get('rePwd', None):
+         user.set_password(newPwd)
+         user.save()
+         auth_logout(req)
+         return redirect('webframe:prefs', user=user)
+
    params=dict()
-   params['preference']=PreferenceTable(Preference.objects.filter(owner=req.user, parent__isnull=True))
-   params['config']=PreferenceTable(Preference.objects.filter(owner__isnull=True, parent__isnull=True))
+   params['preference']=PreferenceTable(Preference.objects.filter(owner=req.user, parent__isnull=True, reserved=False))
+   params['config']=PreferenceTable(Preference.objects.filter(owner__isnull=True, parent__isnull=True, reserved=False))
    rc=RequestConfig(req)
    rc.configure(params['preference'])
    rc.configure(params['config'])
@@ -216,10 +237,13 @@ def pref(req, user=None, prefId=None):
    Showing the preference form for input.
    '''
    # Declare the preference's owner
-   if user==None or user=='None': user=req.user.username
-   if user!=req.user.username and not req.user.is_superuser:
-      if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
-   user=getObj(get_user_model(), username=user)
+   if user:
+      if user.upper()=='NONE': 
+         user=None
+      else:
+         if user!=req.user.username and not req.user.is_superuser:
+            if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
+         user=getObj(get_user_model(), username=user)
    params=dict()
 
    # Get the target preference
@@ -241,7 +265,7 @@ def pref(req, user=None, prefId=None):
          pref.owner=user
       # Preparing the form view
       params['target']=pref
-      params['childs']=PreferenceTable(pref.childs())
+      params['childs']=PreferenceTable(pref.childs)
       params['currentuser']=user
       return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
    elif req.method=='POST':
@@ -276,7 +300,28 @@ def pref(req, user=None, prefId=None):
       _('Preference.msg.confirmDelete')
       pref.delete()
    if pref.parent:
-      return redirect('preference', user=user.username, prefId=pref.parent.id)
+      return redirect('webframe:pref', user=user.username, prefId=pref.parent.id)
    else:
-      return redirect('preferences', user=user.username)
+      return redirect('webframe:prefs', user=user.username if user else req.user)
       
+@login_required
+@is_enabled('WF-AJAX_PREF')
+def ajaxPref(req, name):
+   '''
+   Get the preference according to the name in JSON format
+   '''
+   logger.debug('Getting pref<{0}>'.format(name))
+   rst=Preference.objects.pref(name, user=req.user, defval=None, returnValue=False)
+   rst={'name': rst.name, 'value': rst.value, 'id': rst.id}
+   return JsonResponse(rst, safe=False)
+
+@login_required
+@is_enabled('WF-AJAX_PREFS')
+def ajaxPrefs(req, name):
+   '''
+   Get the preferences according to the name in JSON format
+   '''
+   logger.debug('Getting prefs<{0}>'.format(name))
+   rst=Preference.objects.pref(name, user=req.user, defval=None, returnValue=False)
+   rst=[{'id': i.id, 'name':i.name, 'value':i.value} for i in rst.childs]
+   return JsonResponse(rst, safe=False)

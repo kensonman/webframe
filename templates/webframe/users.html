@@ -1,4 +1,4 @@
-{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}
+{%extends TMPL_BASE%}{%load i18n django_tables2 pref%}
 
 {%block title%}{%trans 'users'%}{%endblock%}
 
@@ -13,9 +13,10 @@
 }
 </style>
 <script type="text/javascript"><!--
+var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
 $(document).ready(function(){
 	$('tr[username]')
-		.hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer')
+		.hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer')
 		.click(function(){
 			window.location.href="{%url 'webframe:user' user='_userId_'%}".replace('_userId_', $(this).attr('username'));
 		});
@@ -23,13 +24,13 @@ $(document).ready(function(){
 //--></script>
 {%endblock%}
 
-{%block content%}<div class="panel panel-default">
-<div class="panel-body">
+{%block content%}<div class="card card-secondary">
+<div class="card-body">
     <h1>{%trans 'users'%}</h1><hr/>
     {%render_table target%}
     <div class="pnl pnl-btns">
         {%for b in btns%}<a href="{{b.href}}" class="btn btn-{{b.lv|default:'info'}}">{{b.label}}</a>{%endfor%}
-        {%if perms.auth.add_user%}<a href="{%url 'webframe:user' user='add'%}" class="btn btn-primary"><i class="fa fa-user-plus"></i> {%trans 'User.actions.new'%}</a>{%endif%}
+        {%if perms.auth.add_user%}<a href="{%url 'webframe:user' user='add'%}" class="btn btn-primary"><i class="fas fa-user-plus"></i> {%trans 'User.actions.new'%}</a>{%endif%}
     </div>
 </div>
 </div>{%endblock%}

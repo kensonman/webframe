@@ -1,0 +1,37 @@
+{%extends 'django_tables2/bootstrap.html'%}{% load django_tables2 i18n pref calc%}
+
+{%block pagination %}
+   {%pref 'PAGINATOR_SIZE' defval=3 as PSize%}
+   {%set PSize|calc:'{}*-1' as NPSize%}
+   {%trans 'pagination.first' as first%}
+   {%trans 'pagination.previous' as previous%}
+   {%trans 'pagination.more' as more%}
+   {%trans 'pagination.next' as next%}
+   {%trans 'pagination.last' as last%}
+   <div class="alert alert-light">
+      {%blocktrans with x=table.page.number y=table.paginator.num_pages size=table.paginator.per_page total=table.paginator.count%}Showing {{size}} of {{total}}; Page {{x}} of {{y}}{%endblocktrans%}
+   </div>
+   <nav class="navigation">
+      <ul class="pagination justify-content-center">
+         {%if table.page.number > PSize|add:1%}
+            <li class="page-item previous">
+               <a href="{% querystring table.prefixed_page_field=1 %}" class="page-link">{{first|safe}}</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">{{more|safe}}</a>
+         {%endif%}
+
+         {%for p in table.paginator.page_range%}{%if table.page.number|add:NPSize <= p  and p <= table.page.number|add:PSize%}
+         <li class="page-item {%if p == table.page.number%}active{%endif%}">
+            <a href="{% querystring table.prefixed_page_field=p %}" class="page-link">{{p}}</a>
+         </li>
+         {%endif%}{%endfor%}
+
+         {%if table.page.number < table.paginator.num_pages|add:NPSize%}
+            <li class="page-item disabled"><span class="page-link">{{more|safe}}</a>
+            <li class="page-item previous">
+               <a href="{% querystring table.prefixed_page_field=table.paginator.num_pages %}" class="page-link">{{last|safe}}</a>
+            </li>
+         {%endif%}
+      </ul>
+   </nav>
+{% endblock pagination %}

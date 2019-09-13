@@ -1,25 +1,30 @@
-{%extends TMPL_BASE%}{%load i18n%}{%load django_tables2%}{%load method_override%}
+{%extends TMPL_BASE%}{%load i18n django_tables2 method_override pref%}
 
 {%block title%}{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}{%endblock%}
 
 {%block scripts%}{{block.super}}
 <script type="text/javascript"><!--
+var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
 $(document).ready(function(){
-	$('tr[prefId]').hover(function(){ $(this).addClass('active'); }, function(){ $(this).removeClass('active'); }).css('cursor', 'pointer').click(function(){
+	$('#confContainer').find('tr[prefId]').hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer').click(function(){
+		window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}?config=True".replace('_prefId_', $(this).attr('prefId'));
+	});
+	$('#prefContainer').find('tr[prefId]').hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer').click(function(){
 		window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
 	});
+   $('#changePwdFrm').validate();
 });
 //--></script>
 {%endblock%}
 
-{%block content%}<div class="panel panel-default"><div class="panel-body">
+{%block content%}<div class="card card-secondary"><div class="card-body">
 	<h1>{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}</h1><hr/>
 
 	<div class="pnl-padding"><div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4"><form id="changePwdFrm" method="POST" class="panel panel-warning">
+		<div class="col-12 col-sm-12 col-md-4 col-lg-4"><form id="changePwdFrm" method="POST" class="card card-warning">
 			{%csrf_token%}
-			<div class="panel-heading">{%trans 'Preference.sections.changePassword'%}</div>
-			<div class="panel-body">
+			<div class="card-header">{%trans 'Preference.sections.changePassword'%}</div>
+			<div class="card-body">
 				{%if not user.is_superuser%}
 				<div class="field">
 					<label for="oldPwdFld">{%trans 'BTUser.old-password'%}</label>
@@ -32,7 +37,7 @@ $(document).ready(function(){
 				</div>
 				<div class="field">
 					<label for="rePwdFld">{%trans 'BTUser.re-password'%}</label>
-					<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.re-password'%}"/>
+					<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" equalTo="#newPwdFld" placeholder="{%trans 'BTUser.re-password'%}"/>
 				</div>
 				<div class="pnl pnl-btns">
 					<button type="submit" class="btn btn-warning">{%trans 'Preference.actions.changePassword'%}</button>
@@ -41,13 +46,13 @@ $(document).ready(function(){
 		</form></div>
 
 
-		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-			{%with target=currentuser%}<form id="userFrm" method="POST" action="{%url 'webframe:user' user=target.username|default:'add'%}" class="panel panel-warning">
+		<div class="col-12 col-sm-12 col-md-8 col-lg-8">
+			{%with target=currentuser%}<form id="userFrm" method="POST" action="{%url 'webframe:user' user=target.username|default:'add'%}" class="card card-warning">
 				{%csrf_token%}
 				{%method_override 'PUT'%}
 				<input type="hidden" name="next" value="{%url 'webframe:prefs' target.username%}"/>
-				<div class="panel-heading">{%trans 'Preference.sections.pin'%}</div>
-				<div class="panel-body">
+				<div class="card-header">{%trans 'Preference.sections.pin'%}</div>
+				<div class="card-body">
 					<div class="field">
 						<label for="first_nameFld">{%trans 'first name'%}</label>
 						<input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
@@ -61,31 +66,31 @@ $(document).ready(function(){
 						<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
 					</div>
 					<div class="pnl pnl-btns">
-						<button type="submit" class="btn btn-warning"><i class="fa fa-user"></i> {%trans 'User.actions.update'%}</button>
+						<button type="submit" class="btn btn-warning"><i class="fas fa-user"></i> {%trans 'User.actions.update'%}</button>
 					</div>
 				</div>
 			</form>{%endwith%}
 		</div>
 
 		{%if user.is_superuser or perms.webframe.add_config or perms.webframe.change_config or perms.webframe.browse_config%}
-		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
-			<div class="panel-heading">{%trans 'Preference.sections.config'%}</div>
-			<div class="panel-body">
+		<div id="confContainer" class="col-12 col-sm-12 col-md-6 col-lg-6"><div class="card card-info">
+			<div class="card-header">{%trans 'Preference.sections.config'%}</div>
+			<div class="card-body">
 				{%render_table config%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'webframe:pref' user=user.username prefId='new'%}?config=True"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+					<a class="btn btn-primary" href="{%url 'webframe:pref' user=user.username prefId='new'%}?config=True"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
 				</div>
 			</div>
 		</div></div>
 		{%endif%}
 
 		{%if perms.webframe.add_preference or perms.webframe.change_preference or perms.webframe.browse_preference%}
-		<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"><div class="panel panel-info">
-			<div class="panel-heading">{%trans 'Preference.sections.preference'%}</div>
-			<div class="panel-body">
+		<div id="prefContainer" class="col-12 col-sm-12 col-md-6 col-lg-6"><div class="card card-info">
+			<div class="card-header">{%trans 'Preference.sections.preference'%}</div>
+			<div class="card-body">
 				{%render_table preference%}
 				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'webframe:pref' user=currentuser.username prefId='new'%}"><i class="fa fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
+					<a class="btn btn-primary" href="{%url 'webframe:pref' user=currentuser.username prefId='new'%}"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
 				</div>
 			</div>
 		</div></div>

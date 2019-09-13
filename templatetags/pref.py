@@ -22,8 +22,7 @@ def pref(prefName, **kwargs):
 
          @param defval      The default value. If the preference/config not found, return the default value instead;
          @param user        The owner of this preference. If you would like to access the config, setup this parameter to None;
-         @param returnValue It will told the template-tag to return the preference's value instead of the preference instead;
-
+         @param returnValue It will told the template-tag to return the preference's value instead of the preference instead; DEFAULT True
    '''
    try:
       if 'user' in kwargs:
@@ -40,6 +39,7 @@ def pref(prefName, **kwargs):
       else:
          kwargs['user']=get_current_user()
       pref=Preference.objects.pref(prefName, **kwargs)
+      logger.info('pref[{0}]=={1}'.format(prefName, pref))
       return pref
    except Preference.DoesNotExist:
       return "{Pref<%s> Not Found}"

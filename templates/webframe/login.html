@@ -1,4 +1,4 @@
-{%extends 'webframe/base.html'%}{%load i18n%}{%load staticfiles%}
+{%extends 'webframe/base.html'%}{%load i18n staticfiles pref%}
 
 {%block title%}{%trans 'Login Required'%}{%endblock%}
 
@@ -19,10 +19,10 @@ $(document).ready(function(){
 {%block body%}
 <div class="jumbotron">
 	<div class="row">
-		<div class="col-md-6 col-md-offset-3 col-xs-12">
-         <form method="POST" id="loginFrm" class="panel panel-danger">
-            <div class="panel-heading">{%trans 'Login Required'%}</div>
-            <div class="panel-body">
+		<div class="col-md-6 offset-md-3 col-12">
+         <form method="POST" id="loginFrm" class="card card-danger">
+            <div class="card-header bg-danger">{%trans 'Login Required'%}</div>
+            <div class="card-body">
                {%csrf_token%}
                
                {%block login-title%}{%trans 'login-title' as title%}{{title|default:''|safe}}{%endblock%}
@@ -34,33 +34,42 @@ $(document).ready(function(){
                      <a href="{%url 'social:begin' 'facebook'%}"><img src="{%static 'img/login-facebook.png'%}" alt="{%trans 'login-facebook'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_twitter%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter'%}" alt="{%trans 'login-twitter'%}"/></a>
+                     <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter.png'%}" alt="{%trans 'login-twitter'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_github%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github'%}" alt="{%trans 'login-github'%}"/></a>
+                     <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github.png'%}" alt="{%trans 'login-github'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_google%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'google'%}"><img src="{%static 'img/login-google'%}" alt="{%trans 'login-google'%}"/></a>
+                     <a href="{%url 'social:begin' 'google-oauth2'%}"><img src="{%static 'img/login-google.png'%}" alt="{%trans 'login-google'%}"/></a>
                   </div>{%endif%}
                   {%endblock%}
                </div>
 
-               <div class="seperator"><span>{%trans 'OR'%}</span></div>
+               {%if socialLogin_facebook or socialLogin_twitter or socialLogin_github or socialLogin_google%}<div class="seperator"><span>{%trans 'OR'%}</span></div>{%endif%}
                {%endblock%}
 
                <input type="hidden" name="next" value="{{next|default:'/'}}"/>
                {%block messages%}{%if messages%}<div><ul>{%for msg in messages%}
                    <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
                {%endfor%}</ul></div>{%endif%}{%endblock%}
-               <div class="field">
+               
+               
+               {%pref 'LOGIN_IPAddrFld' defval='True' as IPAddrFld%}
+               {%if IPAddrFld == 'True' or IPAddrFld == 'true'%}<div class="field form-group">
                   <label for="IPAddrFld" class="desktop-only">{%trans 'IPAddr'%}</label>
                   <input type="text" name="ipaddr" value="{{IPAddr}}" class="form-control" readonly="readonly" required="required"/>
-               </div>
-               <div class="field">
+               </div>{%endif%}
+               {%block authenticationBackendsBlock%}<div class="field form-group">
+                  <label for="backendsFld">{%trans 'Authentication Backends'%}</label>
+                  <ul>
+                     {%for b in backends%}<li>{{b}}</li>{%endfor%}
+                  </ul>
+               </div>{%endblock%}
+               <div class="field form-group">
                   <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
                   <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
                </div>
-               <div class="field">
+               <div class="field form-group">
                   <label for="passwordFld" class="desktop-only">{%trans 'password'%}</label>
                   <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
                </div>
@@ -75,4 +84,5 @@ $(document).ready(function(){
 	</div>
 	
 </div>
+{%block footer%}{%include TMPL_FOOTER%}{%endblock%}
 {%endblock%}
