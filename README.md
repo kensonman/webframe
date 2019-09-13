@@ -238,6 +238,7 @@ The quick configuration are as belows:
       url(r'^impersonate/', include('impersonate.urls')),
       #...
    )
+   LOGIN_REDIRECT_URL = 'dashboard' #The URL that will redirected after login/impersonate.
    ```
 5. Migrate the database settings:
    ```bash
