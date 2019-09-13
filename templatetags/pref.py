@@ -2,6 +2,7 @@ from django import template
 from django.contrib.auth.models import User, AnonymousUser
 from django.utils.functional import SimpleLazyObject
 from webframe.models import Preference
+from webframe.functions import valueOf
 from webframe.CurrentUserMiddleware import get_current_user
 import logging
 
@@ -32,7 +33,7 @@ def pref(prefName, **kwargs):
          else:
             if isinstance(user, AnonymousUser):
                del kwargs['user']
-            elif hasattr(user, 'is_anonymous') and user.is_anonymous():
+            elif hasattr(user, 'is_anonymous') and valueOf(user.is_anonymous):
                del kwargs['user']
             elif not isinstance(user, User):
                kwargs['user']=User.objects.get(username=str(kwargs['user']))

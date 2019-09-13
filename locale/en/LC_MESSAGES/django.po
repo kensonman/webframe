@@ -17,7 +17,7 @@ msgstr ""
 
 #: models.py:20
 msgid "null"
-msgstr "<i class=\"fa fa-code\"></i>"
+msgstr "<i class=\"fas fa-code\"></i>"
 
 #: models.py:134
 msgid "webframe.models.ValueObject"
@@ -416,11 +416,11 @@ msgstr "Add Preference"
 
 #: templates/webframe/tables.html:6
 msgid "pagination.first"
-msgstr "<i class=\"fa fa-angle-double-left\"></i>"
+msgstr "<i class=\"fas fa-angle-double-left\"></i>"
 
 #: templates/webframe/tables.html:7
 msgid "pagination.previous"
-msgstr "<i class=\"fa fa-angle-left\"></i>"
+msgstr "<i class=\"fas fa-angle-left\"></i>"
 
 #: templates/webframe/tables.html:8
 msgid "pagination.more"
@@ -428,11 +428,11 @@ msgstr "..."
 
 #: templates/webframe/tables.html:9
 msgid "pagination.next"
-msgstr "<i class=\"fa fa-angle-right\"></i>"
+msgstr "<i class=\"fas fa-angle-right\"></i>"
 
 #: templates/webframe/tables.html:10
 msgid "pagination.last"
-msgstr "<i class=\"fa fa-angle-double-right\"></i>"
+msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 
 #: templates/webframe/user.html:3 templates/webframe/user.html:23
 msgid "User.new"
