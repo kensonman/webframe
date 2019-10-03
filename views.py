@@ -204,6 +204,7 @@ def prefs(req, user=None):
    If requesting to show user that is not current session,
    the superuser permission are required.
    '''
+   if user=='_': return redirect('webframe:prefs', user=req.user)
    if user==None: user=req.user.username
    if user!=req.user.username and not req.user.is_superuser:
       if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
@@ -236,6 +237,7 @@ def pref(req, user=None, prefId=None):
    '''
    Showing the preference form for input.
    '''
+   if user=='_': return redirect('webframe:pref', user=req.user, prefId=prefId)
    # Declare the preference's owner
    if user:
       if user.upper()=='NONE': 
