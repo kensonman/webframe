@@ -82,15 +82,17 @@
          var element=$(this).parents('.wfdropdown:first');
          var value=null;
          var lastVal=$(element).find('input:first').val();
+         var symbol=$(element).attr('wfsymbol')==''?'':'<i class="symbol-dropdown fas '+$(element).attr('wfsymbol')+'"></i>';
          if(typeof($(this).attr('val'))=='undefined')
             value=$(this).text();
          else
             value=$(this).attr('val');
          $(element)
-            .find('button:first').empty().text($(this).text()).end()
+            .find('button:first').empty().text($(this).text()).append(symbol).end()
             .find('input:first').val(value)
                .trigger('change', {'from': lastVal, 'to':value})
             .end()
+            .trigger('change', {'from': lastVal, 'to':value})
          ;
      },
      success: function( data ){
@@ -135,6 +137,7 @@
      params = $.extend({
       'items':'a.dropdown-item',
       'value':'input:first',
+      'symbol': 'fa-caret-down',
       'onclick':jQuery.wfdropdown.onclick,
       'success':jQuery.wfdropdown.success,'element':'li','name':'name','id':'id','ajax':null
      }, params);
@@ -148,19 +151,21 @@
      if(params.ajax!=null){
        params.ajax.success=params.success; //Overwrite the success function
        params.ajax.context=this;
-       $(this).attr({'wfelement':params.element, 'wfname':params.name, 'wfid':params.id, 'wfPlsSelect':$(this).text()});
+       $(this).attr({'wfelement':params.element, 'wfname':params.name, 'wfid':params.id, 'wfPlsSelect':$(this).text(), 'wfsymbol':params.symbol});
        $.ajax(params.ajax);
        //return this;
      }
 
      var selected=$(this).find('input:first').val();
      var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
+     var symbol=params.symbol==''?'':'<i class="symbol-dropdown fas '+params.symbol+'"></i>';
      if(label.length<1) label=$(this).find('buttton:first').text();
      $(this)
+       .attr('wfsymbol', params.symbol)
        .find(params.items).each(function(){ $.wfdropdown.populate( this ); }).end()
-       .find('button').text(label)
-       .trigger('ready')
+       .find('button').text(label).append(symbol)
      ;
+     if(params.ajax==null)$(this).trigger('ready');
      return this;
    };
 })(jQuery);

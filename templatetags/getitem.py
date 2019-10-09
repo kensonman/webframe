@@ -10,9 +10,12 @@ def getitem(value, key):
       pass
    try:
       if hasattr(value, 'get'):
-         return value.get(key)
+         rst=value.get(key)
       elif hasattr(value, '__getitem__'):
-         return value.__getitem__(key)
+         rst=value.__getitem__(key)
+      else:
+         rst=str(value)[key]
+      return str(rst)
    except ValueError:
       pass
    return None

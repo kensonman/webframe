@@ -269,6 +269,7 @@ def pref(req, user=None, prefId=None):
       params['target']=pref
       params['childs']=PreferenceTable(pref.childs)
       params['currentuser']=user
+      params['TYPES']=Preference.TYPES
       return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
    elif req.method=='POST':
       # Security Checking
@@ -292,6 +293,7 @@ def pref(req, user=None, prefId=None):
          pref.owner=None
 
       # Saving
+      pref.tipe=int(req.POST['tipe'])
       pref.name=req.POST['name']
       pref.value=req.POST['value']
       pref.sequence=int(req.POST['sequence'])

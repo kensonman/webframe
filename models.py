@@ -409,8 +409,33 @@ class AbstractPreference(OrderableValueObject):
          ('delete_config', 'Can delete configuration'),
          ('browse_config', 'Can browse system configuration'),
          ('browse_preference', 'Can browse other preferences'),
+         ('change_preference_type', 'Can change the preference type'),
       )
       abstract         = True
+   TYPE_NONE           = 0 
+   TYPE_INT            = 1
+   TYPE_DECIMAL        = 2 
+   TYPE_BOOLEAN        = 3
+   TYPE_TEXT           = 4
+   TYPE_RICHTEXT       = 5
+   TYPE_URL            = 6
+   TYPE_EMAIL          = 7
+   TYPE_DATE           = 8
+   TYPE_TIME           = 9
+   TYPE_DATETIME       = 10
+   TYPES               = (
+      (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
+      (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
+      (TYPE_DECIMAL, _('webframe.models.Preference.TYPE.DECIMAL')),
+      (TYPE_BOOLEAN, _('webframe.models.Preference.TYPE.BOOLEAN')),
+      (TYPE_TEXT, _('webframe.models.Preference.TYPE.TEXT')),
+      (TYPE_RICHTEXT, _('webframe.models.Preference.TYPE.RICHTEXT')),
+      (TYPE_URL, _('webframe.models.Preference.TYPE.URL')),
+      (TYPE_EMAIL, _('webframe.models.Preference.TYPE.EMAIL')),
+      (TYPE_DATE, _('webframe.models.Preference.TYPE.DATE')),
+      (TYPE_TIME, _('webframe.models.Preference.TYPE.TIME')),
+      (TYPE_DATETIME, _('webframe.models.Preference.TYPE.DATETIME')),
+   )
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
    value               = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
@@ -435,6 +460,7 @@ class AbstractPreference(OrderableValueObject):
      verbose_name=_('webframe.models.Preference.sequence'),
      help_text=_('webframe.models.Preference.sequence.helptext'),
    )
+   tipe                = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('webframe.models.Preference.tipe'), help_text=_('webframe.models.Preference.tipe.helptext'))
    objects             = PrefManager()
 
    def __str__(self):

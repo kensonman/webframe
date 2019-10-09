@@ -38,6 +38,21 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 <script type="text/javascript" src="{%static 'js/pydatefmt.js'%}"></script>
 <script type="text/javascript" src="{%static 'js/numformat.js'%}"></script>
 <script type="text/javascript"><!--
+//2019-10-11 13:51 by Kenson: Fixing the DateTimePicker for Font Awesome 5
+//  Reference: https://tempusdominus.github.io/bootstrap-4/Options/
+$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+icons: {
+   time: 'fas fa-clock',
+   date: 'fas fa-calendar',
+   up: 'fas fa-arrow-up',
+   down: 'fas fa-arrow-down',
+   previous: 'fas fa-chevron-left',
+   next: 'fas fa-chevron-right',
+   today: 'fas fa-calendar-check-o',
+   clear: 'fas fa-trash',
+   close: 'fas fa-times'
+} });
+//END
 $(document).ready(function(){
    $('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
 
