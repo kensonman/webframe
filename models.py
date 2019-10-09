@@ -411,6 +411,22 @@ class AbstractPreference(OrderableValueObject):
          ('browse_preference', 'Can browse other preferences'),
       )
       abstract         = True
+   TYPE_INT            = 0
+   TYPE_DECIMAL        = 1
+   TYPE_BOOLEAN        = 2
+   TYPE_TEXT           = 3
+   TYPE_RICHTEXT       = 4
+   TYPE_LIST           = 5 #Comma/Semicolon delimited string
+   TYPE_NONE           = 6 
+   TYPES               = (
+      (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
+      (TYPE_DECIMAL, _('webframe.models.Preference.TYPE.DECIMAL')),
+      (TYPE_BOOLEAN, _('webframe.models.Preference.TYPE.BOOLEAN')),
+      (TYPE_TEXT, _('webframe.models.Preference.TYPE.TEXT')),
+      (TYPE_RICHTEXT, _('webframe.models.Preference.TYPE.RICHTEXT')),
+      (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
+      (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
+   )
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
    value               = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
@@ -435,6 +451,7 @@ class AbstractPreference(OrderableValueObject):
      verbose_name=_('webframe.models.Preference.sequence'),
      help_text=_('webframe.models.Preference.sequence.helptext'),
    )
+   tipe                = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('webframe.models.Preference.tipe'), help_text=_('webframe.models.Preference.tipe.helptext'))
    objects             = PrefManager()
 
    def __str__(self):
