@@ -80,26 +80,32 @@ def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
       return str(val).upper() in trueOpts
    return defval 
 
-def getDate( val, defval=None, fmt=FMT_DATE ):
+def getDate( val, **kwargs ):
    '''
    Retrieve the date from string.
 
-   @param val The value to be parse to bool
-   @param defval The default value if the val is None
-   @param fmt The specified format according to Python: datetime.strptime
+   @param val        The value to be parse to bool;
+   @param defval     The default value if the val is None;
+   @param fmt        The specified format according to Python: datetime.strptime;
+   @param daystart   The indicator to get the begining of the day;
+   @param dayend     The indicator to get the end of the day;
    '''
-   return getTime(val, defval=defval, fmt=fmt)
+   if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATE
+   return getTime(val, **kwargs)
 
-def getTime( val, defval=None, fmt=FMT_TIME, **kwargs ):
+def getTime( val, **kwargs ):
    '''
    Retrieve the time from string.
 
-   @param val The value to be parse to bool
-   @param defval The default value if the val is None
-   @param fmt The specified format according to Python: datetime.strptime
+   @param val        The value to be parse to bool;
+   @param defval     The default value if the val is None;
+   @param fmt        The specified format according to Python: datetime.strptime;
+   @param daystart   The indicator to get the begining of the day;
+   @param dayend     The indicator to get the end of the day;
    '''
-   if not val: return defval
+   if not val: return kwargs.get('defval', None) 
    if isinstance(val, datetime): return val
+   fmt=kwargs.get('fmt', FMT_TIME)
    try:
       rst=datetime.strptime(val, fmt)
       rst=timezone.make_aware(rst)
@@ -107,17 +113,20 @@ def getTime( val, defval=None, fmt=FMT_TIME, **kwargs ):
       if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
       return rst
    except ValueError:
-      return defval
+      return kwargs.get('defval', None) 
 
-def getDateTime( val, defval=None, fmt=FMT_DATETIME, **kwargs ):
+def getDateTime( val, **kwargs ):
    '''
    Retrieve the datetime from string.
 
-   @param val The value to be parse to bool
-   @param defval The default value if the val is None
-   @param fmt The specified format according to Python: datetime.strptime
+   @param val        The value to be parse to bool;
+   @param defval     The default value if the val is None;
+   @param fmt        The specified format according to Python: datetime.strptime;
+   @param daystart   The indicator to get the begining of the day;
+   @param dayend     The indicator to get the end of the day;
    '''
-   return getTime(val, defval=defval, fmt=fmt, **kwargs)
+   if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATETIME
+   return getTime(val, **kwargs)
 
 def checkRecaptcha( req, secret, simple=True ):
    '''
