@@ -423,6 +423,7 @@ class AbstractPreference(OrderableValueObject):
    TYPE_DATE           = 8
    TYPE_TIME           = 9
    TYPE_DATETIME       = 10
+   TYPE_UUIDS          = 11
    TYPES               = (
       (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
       (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
@@ -435,6 +436,7 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_DATE, _('webframe.models.Preference.TYPE.DATE')),
       (TYPE_TIME, _('webframe.models.Preference.TYPE.TIME')),
       (TYPE_DATETIME, _('webframe.models.Preference.TYPE.DATETIME')),
+      (TYPE_UUIDS, _('webframe.models.Preference.TYPE.UUIDS')),
    )
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))

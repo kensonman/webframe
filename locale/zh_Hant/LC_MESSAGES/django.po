@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-11 06:01+0000\n"
+"POT-Creation-Date: 2019-10-14 02:46+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -104,129 +104,133 @@ msgstr "這項資料是否啟用"
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "排序"
 
-#: models.py:426
+#: models.py:428
 msgid "webframe.models.Preference.TYPE.NONE"
 msgstr "必需為空值"
 
-#: models.py:427
+#: models.py:429
 msgid "webframe.models.Preference.TYPE.INT"
 msgstr "整數"
 
-#: models.py:428
+#: models.py:430
 msgid "webframe.models.Preference.TYPE.DECIMAL"
 msgstr "常數 (可以處理小數)"
 
-#: models.py:429
+#: models.py:431
 msgid "webframe.models.Preference.TYPE.BOOLEAN"
 msgstr "真假值"
 
-#: models.py:430
+#: models.py:432
 msgid "webframe.models.Preference.TYPE.TEXT"
 msgstr "純文字"
 
-#: models.py:431
+#: models.py:433
 msgid "webframe.models.Preference.TYPE.RICHTEXT"
 msgstr "可格式化文字 (HTML)"
 
-#: models.py:432
+#: models.py:434
 msgid "webframe.models.Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:433
+#: models.py:435
 msgid "webframe.models.Preference.TYPE.EMAIL"
 msgstr "電郵地址"
 
-#: models.py:434
+#: models.py:436
 msgid "webframe.models.Preference.TYPE.DATE"
 msgstr "日期"
 
-#: models.py:435
+#: models.py:437
 msgid "webframe.models.Preference.TYPE.TIME"
 msgstr "時間"
 
-#: models.py:436
+#: models.py:438
 msgid "webframe.models.Preference.TYPE.DATETIME"
 msgstr "日期時間"
 
-#: models.py:439 templates/webframe/preference.html:133
-#: templates/webframe/preference.html:134
+#: models.py:439
+msgid "webframe.models.Preference.TYPE.UUIDS"
+msgstr "豆號分隔的 UUIDs"
+
+#: models.py:442 templates/webframe/preference.html:140
+#: templates/webframe/preference.html:141
 msgid "webframe.models.Preference.name"
 msgstr "設定名稱"
 
-#: models.py:439
+#: models.py:442
 msgid "webframe.models.Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:440 templates/webframe/preference.html:137
-#: templates/webframe/preference.html:138
+#: models.py:443 templates/webframe/preference.html:144
+#: templates/webframe/preference.html:145
 msgid "webframe.models.Preference.value"
 msgstr "值"
 
-#: models.py:440
+#: models.py:443
 msgid "webframe.models.Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:446
+#: models.py:449
 msgid "Pwebframe.models.reference.owner"
 msgstr "擁有人"
 
-#: models.py:447
+#: models.py:450
 msgid "webframe.models.Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:454 templates/webframe/preference.html:124
-#: templates/webframe/preference.html:125
+#: models.py:457 templates/webframe/preference.html:131
+#: templates/webframe/preference.html:132
 msgid "webframe.models.Preference.parent"
 msgstr "歸類"
 
-#: models.py:455
+#: models.py:458
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:459 templates/webframe/preference.html:141
-#: templates/webframe/preference.html:142
+#: models.py:462 templates/webframe/preference.html:148
+#: templates/webframe/preference.html:149
 msgid "webframe.models.Preference.sequence"
 msgstr "排序"
 
-#: models.py:460
+#: models.py:463
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
-#: models.py:462 templates/webframe/preference.html:110
+#: models.py:465 templates/webframe/preference.html:117
 msgid "webframe.models.Preference.tipe"
 msgstr "類型"
 
-#: models.py:462
+#: models.py:465
 msgid "webframe.models.Preference.tipe.helptext"
 msgstr "設定值的類列"
 
-#: models.py:538
+#: models.py:541
 msgid "webframe.models.Preference.reserved"
 msgstr "系統保留？"
 
-#: models.py:538
+#: models.py:541
 msgid "webframe.models.Preference.reserved.helptext"
 msgstr "這個設定是否為系統保留（前台不應該顯示與使用者）？"
 
-#: models.py:542
+#: models.py:545
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "異步程序物件"
 
-#: models.py:543
+#: models.py:546
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "異步程序物件"
 
-#: models.py:546
+#: models.py:549
 msgid "AsyncManipulationObject.task_id"
 msgstr "異步程序#"
 
-#: models.py:550
+#: models.py:553
 msgid "AsyncManipulationObject.is_processing"
 msgstr "異步程序進行中⋯⋯"
 
-#: models.py:555
+#: models.py:558
 msgid "AsyncManipulationObject.is_ready"
 msgstr "異步程序已準備就緒"
 
@@ -354,11 +358,11 @@ msgstr ""
 msgid "pagination-norecord"
 msgstr "沒有相關資料"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:100
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:107
 msgid "Preference.new"
 msgstr "新的設定"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:100
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:107
 #, python-format
 msgid "%(pref)s - Preferences"
 msgstr "%(pref)s - 喜好"
@@ -367,46 +371,50 @@ msgstr "%(pref)s - 喜好"
 msgid "brand"
 msgstr "WebFrame"
 
-#: templates/webframe/preference.html:102
+#: templates/webframe/preference.html:87
+msgid "Preference.value.validation.uuid"
+msgstr "不是正確的 UUID 格式. 請輸入以 豆號 分隔的 UUIDs"
+
+#: templates/webframe/preference.html:109
 msgid "Config.new"
 msgstr "新增設定"
 
-#: templates/webframe/preference.html:102
+#: templates/webframe/preference.html:109
 #, python-format
 msgid "%(pref)s - Configuration"
 msgstr "%(pref)s - 設定"
 
-#: templates/webframe/preference.html:113
+#: templates/webframe/preference.html:120
 msgid "-- Please Select --"
 msgstr ""
 
-#: templates/webframe/preference.html:120
-#: templates/webframe/preference.html:121
+#: templates/webframe/preference.html:127
+#: templates/webframe/preference.html:128
 msgid "webframe.models.Preference.id"
 msgstr "ID"
 
-#: templates/webframe/preference.html:128
-#: templates/webframe/preference.html:129
+#: templates/webframe/preference.html:135
+#: templates/webframe/preference.html:136
 msgid "webframe.models.Preference.owner"
 msgstr "擁有人"
 
-#: templates/webframe/preference.html:145
+#: templates/webframe/preference.html:152
 msgid "Preference.actions.delete"
 msgstr "刪除設定"
 
-#: templates/webframe/preference.html:146
+#: templates/webframe/preference.html:153
 msgid "Preference.actions.save"
 msgstr "存儲設定"
 
-#: templates/webframe/preference.html:151
+#: templates/webframe/preference.html:158
 msgid "Preference.childs"
 msgstr "歸類到這個設定的設定"
 
-#: templates/webframe/preference.html:155
+#: templates/webframe/preference.html:162
 msgid "Preference.actions.addChild"
 msgstr "新增一個歸類到這個設定的設定"
 
-#: templates/webframe/preference.html:155
+#: templates/webframe/preference.html:162
 msgid "Config.actions.addChild"
 msgstr "新增一個歸類到這個設定的設定"
 
@@ -572,6 +580,6 @@ msgstr "使用者名稱或密碼有誤"
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:303
+#: views.py:304
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"

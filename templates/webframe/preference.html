@@ -18,6 +18,8 @@ $(document).ready(function(){
                .submit();
       });
    //{%endif%}End Delete Logic
+   rules={};
+   messages={};
    $('#tipeFld')
       .on('ready', function(){
          var type=parseInt($('#tipeFld > input:first').val());
@@ -80,6 +82,10 @@ $(document).ready(function(){
                );
                $('#valueFldCtr').find('input:first').attr('placeholder', '{{FMT_JSDATETIME}}').end().datetimepicker({format: '{{FMT_JSDATETIME}}'});
                break;
+            case 11: //UUIDs
+               rules['value']={'regex': '^([,\\s]*\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b[,\\s]*)+$'};
+               messages['value']={'regex': "{%trans 'Preference.value.validation.uuid'%}"};
+               break;
             default:
                break;
          }
@@ -91,7 +97,7 @@ $(document).ready(function(){
          'value': 'input:first',
       })
    ;
-   $('#prefFrm').validate();
+   $('#prefFrm').validate({'rules': rules, 'messages': messages});
 });
 //--></script>
 {%endblock%}
@@ -111,7 +117,7 @@ $(document).ready(function(){
          <label for="tipeFld">{%trans 'webframe.models.Preference.tipe'%}</label>
          <div class="dropdown" id="tipeFld">
             <input type="hidden" name="tipe" value="{{target.tipe|default:4}}" required="required"/>
-            <button type="button dropdown-toggle" data-toggle="dropdown" class="btn btn-secondary {%if prems.webframe.change_preference_type or target.isNew%}disabled{%endif%}">aaa{%trans '-- Please Select --'%}</button>
+            <button type="button dropdown-toggle" data-toggle="dropdown" class="btn btn-secondary {%if prems.webframe.change_preference_type or not target.isNew%}disabled{%endif%}">aaa{%trans '-- Please Select --'%}</button>
             <ul class="dropdown-menu">{%for t in TYPES%}{%with name=t|getitem:1%}
                <li><a class="dropdown-item" val="{{t|getitem:0}}" name="{%trans name%}">{%trans name%}</a></li>
             {%endwith%}{%endfor%}</ul>
