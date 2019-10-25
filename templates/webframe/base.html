@@ -1,8 +1,16 @@
-{%extends 'webframe/blank.html'%}{%load i18n%}
+{%extends 'webframe/blank.html'%}{%load i18n urlexists%}
 
 {%block body%}
 <div id="pnl_root">
-	{%block header%}{%include TMPL_HEADER%}{%endblock%}
+	{%block header%}
+      <div id="pnl_header"></div>
+      
+      {%if 'header'|urlexists%}
+         <script type="text/jsx" src="{%url 'header'%}"></script>
+      {%else%}
+         <script type="text/jsx" src="{%url TMPL_HEADER|default:'webframe:header'%}"></script>
+      {%endif%}
+   {%endblock%}
    {%block breadcrumb%}{%endblock%}
    {%block messages%}{%if messages%}<ul class="jumbotron jumbotron-breadcrumb">{%for msg in messages%}
        <li class="animated flash alert {%if msg.tags%} msg-{{msg.tags}}{%endif%}">{{msg|safe}}</li>

@@ -329,3 +329,6 @@ def ajaxPrefs(req, name):
    rst=Preference.objects.pref(name, user=req.user, defval=None, returnValue=False)
    rst=[{'id': i.id, 'name':i.name, 'value':i.value} for i in rst.childs]
    return JsonResponse(rst, safe=False)
+
+def header(req):
+   return render(req, 'webframe/header.jsx')

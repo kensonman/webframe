@@ -45,7 +45,7 @@ def template_injection(req):
     RST={
         'TMPL_BLANK': getattr(settings, 'TMPL_BLANK', 'webframe/blank.html'),
         'TMPL_BASE': getattr(settings, 'TMPL_BASE', 'webframe/base.html'),
-        'TMPL_HEADER': getattr(settings, 'TMPL_HEADER', 'webframe/header.html'),
+        'TMPL_HEADER': getattr(settings, 'TMPL_HEADER', None),
         'TMPL_FOOTER': getattr(settings, 'TMPL_FOOTER', 'webframe/footer.html'),
         'TMPL_SCRIPTS': getattr(settings, 'TMPL_SCRIPTS', 'webframe/scripts.html'),
         'TMPL_LOADING': getattr(settings, 'TMPL_SCRIPTS', 'webframe/loading.html'),
