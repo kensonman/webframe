@@ -1,65 +1,121 @@
-{%load i18n%}{%load urlexists%}{%load getitem%}
-<div id="pnl_header"><nav class="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light">
-   <a class="navbar-brand" href="#">Brand</a>
-   <!-- Collect the nav links, forms, and other content for toggling -->
-   <div class="collapse navbar-collapse" id="navbarCollapsibleContent">
-      <ul class="navbar-nav mr-auto">
-         <li class="nav-item active"><a href="#" class="nav-link">Link <span class="sr-only">(current)</span></a></li>
-         <li class="nav-item"><a href="#" class="nav-link">Link</a></li>
-         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-               <a class="dropdown-item" href="#">Action</a>
-               <a class="dropdown-item" href="#">Another action</a>
-               <div class="dropdown-divider"></div>
-               <a class="dropdown-item" href="#">Something else here</a>
-           </div>
-         </li>
-         <li class="nav-item">
-            <form class="form-inline my-2 my-lg-0" role="search">
-               <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search">
-                  <span class="input-group-append"><button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button></span>
-               </div>
-            </form>
-         </li>
-      </ul>
+{%load i18n urlexists getitem%}
+<div id="pnl_header"></div>
+<script type="text/babel">
+function Icon(props){
+   if(!props.icon){ return null; }
+   return (
+      <i className={props.icon?'fas fa-'+props.icon:''}></i>
+   );
+};
 
-      <ul class="nav navbar-nav navbar-right">
-         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <i class="fas fa-globe"></i>
+function MenuItem(props){
+   return (
+      <li className="nav-item"><a className="nav-link" href={props.url} target={props.target?props.target:'_self'}>
+         <Icon icon={props.icon} />&nbsp;
+         {props.text}
+      </a></li>
+   );
+};
+
+function MenuSeparator(props){
+   return <div className="dropdown-divider"></div>
+};
+
+class MenuDropdown extends React.Component{
+   render(){
+      return (
+         <li className="nav-item dropdown">
+            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <Icon icon={this.props.icon} />&nbsp;
+               {this.props.text} 
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">{%for l in LANGS%}
-               <a class="dropdown-item lang" href="{{request.path}}?lang={{l|getitem:0}}">{{l|getitem:1}}</a>
-            {%endfor%}</div>
+            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+               {this.props.children}
+           </ul>
          </li>
-         {%if user.is_authenticated%}
-         {%if user.is_staff%}<li class="nav-item"><a href="{%url 'admin:index'%}" class="nav-link"><i class="fas fa-cogs"></i> {%trans 'admin-tools'%}</a></li>{%endif%}
-         {%if 'webframe:users'|urlexists%}{%if perms.auth.add_user or perms.auth.change_user%}<li class="nav-item"><a href="{%url 'webframe:users'%}" class="nav-link"><i class="fas fa-users"></i> {%trans 'users'%}</a></li>{%endif%}{%endif%}
-         {%if 'webframe:prefs'|urlexists or 'webframe:logout'|urlexists%}<li class="dropdown nav-item">
-            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-               {%if user.is_impersonate%}{{request.impersonator}}@{%endif%}
-               {%blocktrans with username=user.get_full_name|default:user.username%}Hi, {{username}}{%endblocktrans%} <span class="caret"></span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-               {%if user.is_impersonate%}
-                  <a href="{%url 'impersonate-stop'%}" class="dropdown-item">{%trans 'impersonate-stop'%}</a>
-                  <div class="dropdown-divider"></div>
-               {%endif%}
-               {%if 'webframe:prefs'|urlexists%}<a href="{%url 'webframe:prefs' user=user.username%}" class="dropdown-item"><i class="fas fa-cogs"></i> {%trans 'preferences'%}</a>{%endif%}
-               {%if 'webframe:logout'|urlexists%}<a href="{%url 'webframe:logout'%}" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> {%trans 'logout'%}</a>{%endif%}
+      );
+   }
+}
+
+function MenuInput(props){
+   return (
+      <li className="nav-item">
+         <form className="navbar-form navbar-left" role="search" action={props.action} style={props.style}>
+            <div className="input-group">
+                <input type="text" name={props.name} className="form-control" placeholder={props.text}/>
+                <div className="input-group-append">
+                   <span className="input-group-btn"><button className="btn btn-default" type="submit" title={props.text}><Icon icon={props.icon}/></button></span>
+                </div>
             </div>
-         </li>{%else%}<li class="nav-item"><a href="#" class="nav-link">{%blocktrans with username=user.get_full_name%}Hi, {{username}}{%endblocktrans%}</a></li>{%endif%}
-         {%else%}
-         {%if 'webframe:login'|urlexists%}<li class="nav-item"><a href="{%url 'webframe:login'%}" class="nav-link"><i class="fas fa-sign-in-alt"></i> {%trans 'login'%}</a></li>{%endif%}
-         {%endif%}
-      </ul>
-   </div><!-- /.navbar-collapse -->
+         </form>
+      </li>
+   );
+};
+</script>
 
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapsibleContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-</nav></div>
+{%if 'header'|urlexists%}
+<script type="text/jsx" src="{%url 'header'%}"></script>
+{%else%}
+<script type="text/babel">
+function Menu(props){
+   return (
+      <div id="pnl_header"><nav className="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light">
+         <a className="navbar-brand" href="{%if 'dashboard'|urlexists%}{%url 'dashboard'%}{%else%}/{%endif%}" title="Brand">Brand</a>
+         <div className="collapse navbar-collapse" id="navbarCollapsibleContent">
+            <ul className="navbar-nav mr-auto">
+               <MenuItem url="#" text="Action"/>
+               <MenuItem url="#" text="Another action"/>
+               <MenuDropdown text="Dropdown">
+                  <MenuItem url="#" text="Action"/>
+                  <MenuItem url="#" text="Another action"/>
+                  <MenuSeparator/>
+                  <MenuItem url="#" text="Something else here"/>
+               </MenuDropdown>
+               <MenuInput action="" text="Searching..." icon="search" name="q" style={%templatetag openvariable%}'width': '200px'{%templatetag closevariable%}/>
+            </ul>
+
+            <ul className="nav navbar-nav navbar-right">
+               <MenuDropdown icon="globe">{%for l in LANGS%}
+                  <MenuItem url="?lang={{l|getitem:0}}" text="{{l|getitem:1}}"/>
+               {%endfor%}</MenuDropdown>
+               {%if user.is_staff%}
+                  <MenuItem url="{%url 'admin:index'%}" icon="cogs" text="{%trans 'control-panel'%}"/>
+               {%endif%}
+               {%if user.is_authenticated%}
+                  {%if 'webframe:prefs'|urlexists or 'webframe:logout'|urlexists%}
+                     <MenuDropdown text="{%blocktrans with username=user.get_full_name|default:user.username%}Hi, {{username}}{%endblocktrans%}">
+                        {%if 'webframe:users'|urlexists%}{%if perms.auth.add_user or perms.auth.change_user%}
+                           <MenuItem url="{%url 'webframe:users'%}" icon="users" text="{%trans 'users'%}"/>
+                        {%endif%}{%endif%}
+                        {%if 'webframe:prefs'|urlexists%}
+                           <MenuItem url="{%url 'webframe:prefs' user=user%}" icon="cogs" text="{%blocktrans with user=user%}{{user}}'s preferrences{%endblocktrans%}"/>
+                        {%endif%}
+                        {%if 'webframe:logout'|urlexists%}
+                           <MenuSeparator/>
+                           <MenuItem url="{%url 'webframe:logout'%}" icon="sign-out-alt" text="{%trans 'logout'%}"/>
+                        {%endif%}
+                     </MenuDropdown>
+                  {%else%}
+                     <MenuItem url="#" text="{%blocktrans with username=user.get_full_name%}Hi, {{username}}{%endblocktrans%}"/>
+                  {%endif%}
+               {%else%}
+                  {%if 'webframe:login'|urlexists%}<MenuItem url="{%url 'webframe:login'%}" icon="sign-in-alt" text="{%trans 'login'%}"/>{%endif%}
+               {%endif%}
+            </ul>
+         </div>
+
+         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapsibleContent" aria-expanded="false" aria-label="Toggle navigation">
+           <span className="navbar-toggler-icon"></span>
+         </button>
+      </nav></div>
+   );
+};
+</script>
+{%endif%}
+
+<script type="text/babel">
+ReactDOM.render(
+  <Menu/>, 
+  document.getElementById('pnl_header')
+);
+</script>
