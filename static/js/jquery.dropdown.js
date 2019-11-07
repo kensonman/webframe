@@ -127,7 +127,7 @@
         var name=$(item).attr('name');
         if(typeof(name)=='undefined')name=$(item).text();
         var val=$(item).attr('val');
-        $(item).empty().append($('<a></a>').text(name).attr({'href':'#','val':val}).addClass('dropdown-item').click($.wfdropdown.onclick));
+        $(item).empty().append($('<a></a>').text(name).attr({'href':'#','val':val}).addClass('dropdown-item').on('click', $.wfdropdown.onclick));
      },
    }});
    
@@ -139,7 +139,11 @@
       'value':'input:first',
       'symbol': 'fa-caret-down',
       'onclick':jQuery.wfdropdown.onclick,
-      'success':jQuery.wfdropdown.success,'element':'li','name':'name','id':'id','ajax':null
+      'success':jQuery.wfdropdown.success,
+      'element':'li',
+      'name':'name',
+      'id':'id',
+      'ajax':null
      }, params);
      if($(this).length<1){
         console.log('No element found for dropdown.');
@@ -152,8 +156,10 @@
        params.ajax.success=params.success; //Overwrite the success function
        params.ajax.context=this;
        $(this).attr({'wfelement':params.element, 'wfname':params.name, 'wfid':params.id, 'wfPlsSelect':$(this).text(), 'wfsymbol':params.symbol});
+       $(this).on('ready', function(){
+         $(this).find('a.dropdown-item').off('click').on('click', params.onclick); //Remove the default handler when populate, use the custom onclick instead.
+       });
        $.ajax(params.ajax);
-       //return this;
      }
 
      var selected=$(this).find('input:first').val();
