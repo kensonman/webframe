@@ -414,7 +414,7 @@ msgstr "Add Config"
 #: templates/webframe/preferences.html:3 templates/webframe/preferences.html:21
 #, python-format
 msgid "%(user)s's preferences"
-msgstr ""
+msgstr "My <!--%(user)s--> preferences"
 
 #: templates/webframe/preferences.html:26
 msgid "Preference.sections.changePassword"

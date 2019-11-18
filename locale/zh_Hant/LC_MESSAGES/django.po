@@ -421,7 +421,7 @@ msgstr "新增一個歸類到這個設定的設定"
 #: templates/webframe/preferences.html:3 templates/webframe/preferences.html:21
 #, python-format
 msgid "%(user)s's preferences"
-msgstr "%(user)s的設定"
+msgstr "我<!--%(user)s-->的設定"
 
 #: templates/webframe/preferences.html:26
 msgid "Preference.sections.changePassword"

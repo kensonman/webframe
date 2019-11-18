@@ -13,7 +13,7 @@ function MenuItem(props){
    return (
       <li className="nav-item"><a className="nav-link" href={props.url} target={props.target?props.target:'_self'}>
          <Icon icon={props.icon} />&nbsp;
-         {props.text}
+         {props.text.replace(/<!--.*-->/, '')}
       </a></li>
    );
 };
@@ -28,7 +28,7 @@ class MenuDropdown extends React.Component{
          <li className="nav-item dropdown">
             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                <Icon icon={this.props.icon} />&nbsp;
-               {this.props.text} 
+               {this.props.text.replace(/<!--.*-->/, '')} 
             </a>
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                {this.props.children}
@@ -43,9 +43,9 @@ function MenuInput(props){
       <li className="nav-item">
          <form className="navbar-form navbar-left" role="search" action={props.action} style={props.style}>
             <div className="input-group">
-                <input type="text" name={props.name} className="form-control" placeholder={props.text}/>
+                <input type="text" name={props.name} className="form-control" placeholder={props.text.replace(/<!--.*-->/, '')}/>
                 <div className="input-group-append">
-                   <span className="input-group-btn"><button className="btn btn-default" type="submit" title={props.text}><Icon icon={props.icon}/></button></span>
+                   <span className="input-group-btn"><button className="btn btn-default" type="submit" title={props.text.replace(/<!--.*-->/, '')}><Icon icon={props.icon}/></button></span>
                 </div>
             </div>
          </form>
