@@ -475,6 +475,13 @@ class AbstractPreference(OrderableValueObject):
    def childs(self):
       return Preference.objects.filter(parent=self).order_by('sequence')
 
+   @property
+   def user(self):
+      return self.owner
+   @user.setter
+   def user(self, val):
+      self.owner=val
+
    def __get_ordered_list__(self):
       if self.parent:
          result=self.__class__.objects.filter(parent=self.parent)

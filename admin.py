@@ -5,4 +5,5 @@ from .models import *
 class PreferenceAdmin(admin.ModelAdmin):
    list_display=('id', 'name', 'parent', 'reserved', 'lmb', 'lmd')
    list_filter=('reserved',)
-   search_fields=('name', 'value', 'owner__name')
+   search_fields=('name', 'value', 'owner__username', 'owner__name')
+   ordering=('owner__username', 'name', 'value')
