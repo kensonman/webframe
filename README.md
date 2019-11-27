@@ -268,3 +268,61 @@ The quick configuration are as belows:
    ./manage.py migrate
    ```
 
+Django AD/LDAP login support
+----
+To support the AD/LDAP login, please following the below instruction.
+
+1. Install the required package/library
+```bash
+pip install -y django-auth-ldap python-ldap
+```
+
+2. Add the below config into src/conf/settings.py:
+```python
+# django-auth-ldap
+LDAP_ENABLED=os.getenv('LDAP_ENABLED', 'False').lower() in ['true', 't', 'yes', 'y', '1']
+if LDAP_ENABLED:
+   # LDAP Setting
+   LDAP_SERVERS ={   
+      'host': os.getenv('LDAP_HOST', 'Your-AD/LDAP-Host'),
+      'port': int(os.getenv('LDAP_PORT', '389')),
+      'use_ssl': os.getenv('LDAP_USE_SSL', 'False').lower() in ['true', 't', 'yes', 'y', '1'],
+   }  
+   LDAP_BIND_USER=os.getenv('LDAP_BIND_USER', 'CN=webmaster,OU=IT,OU=BT_Staff,DC=breakthrough,DC=org,DC=hk')
+   LDAP_BIND_PWD =os.getenv('LDAP_BIND_PASS', 'BIND Password')
+   LDAP_USER_BASE=os.getenv('LDAP_USER_BASE', 'OU=BT_STAFF,DC=breakthrough,DC=org,DC=hk')
+   LDAP_GROUP_BASE=os.getenv('LDAP_GROUP_BASE', 'DC=breakthrough,DC=org,DC=hk')
+   LDAP_USERNAME_FIELD=os.getenv('LDAP_USERNAME_FIELD', '(sAMAccountName=%(user)s)')
+   LDAP_USER_FILTER = os.getenv('LDAP_USER_FILTER', "(&(sAMAccountName=%s)(objectClass=user))")
+   LDAP_DEPT_FILTER = os.getenv('LDAP_DEPT_FILTER', "(&(department=%s)(objectClass=user))")
+   LDAP_GROUP_FILTER= os.getenv('LDAP_GROUP_FILTER', "(objectClass=group)")
+   LDAP_IS_STAFF_FILTER=os.getenv('LDAP_IS_STAFF_FILTER', 'CN=IT_Group,OU=IT,OU=BT_Staff,DC=breakthrough,DC=org,DC=hk|CN=Domain Admins,CN=Users,DC=breakthrough,DC=org,DC=hk')
+   LDAP_IS_SUPERUSER_FILTER=os.getenv('LDAP_IS_SUPERUSER_FILTER', 'CN=IT_Group,OU=IT,OU=BT_Staff,DC=breakthrough,DC=org,DC=hk|CN=Domain Admins,CN=Users,DC=breakthrough,DC=org,DC=hk')
+   LDAP_USER_FIELDS_MAPPING=os.getenv('LDAP_USER_FIELDS_MAPPING', '{"first_name": "givenName", "last_name": "sn", "email": "mail"}')
+   import ldap, json
+   from django_auth_ldap.config import LDAPSearch, NestedActiveDirectoryGroupType 
+
+   AUTH_LDAP_SERVER_URI='ldap://%s:%s'%(LDAP_SERVERS['host'], LDAP_SERVERS['port'])
+   AUTH_LDAP_BIND_DN=LDAP_BIND_USER
+   AUTH_LDAP_BIND_PASSWORD=LDAP_BIND_PWD
+   AUTH_LDAP_CONNECTION_OPTIONS={
+      ldap.OPT_DEBUG_LEVEL: 1,
+      ldap.OPT_REFERRALS: 0,
+   }
+   AUTH_LDAP_USER_SEARCH=LDAPSearch(LDAP_USER_BASE, ldap.SCOPE_SUBTREE, LDAP_USERNAME_FIELD)
+   AUTH_LDAP_GROUP_SEARCH=LDAPSearch(LDAP_GROUP_BASE, ldap.SCOPE_SUBTREE, LDAP_GROUP_FILTER)
+   AUTH_LDAP_GROUP_TYPE=NestedActiveDirectoryGroupType()
+   AUTH_LDAP_USER_ATTR_MAP=json.loads(LDAP_USER_FIELDS_MAPPING)
+   AUTH_LDAP_USER_FLAGS_BY_GROUP={
+      # IS_STAFF is not used in this application;
+      'is_staff': LDAP_IS_STAFF_FILTER.split('|')
+
+      # IS_SUPERUSER is used to generated the shortcut buttons
+      'is_superuser': LDAP_IS_SUPERUSER_FILTER.split('|'),
+   }
+   AUTH_LDAP_MIRROR_GROUPS=True
+   AUTHENTICATION_BACKENDS=(
+      'django_auth_ldap.backend.LDAPBackend',
+      'django.contrib.auth.backends.ModelBackend',
+   )
+```
