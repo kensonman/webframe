@@ -1,0 +1,71 @@
+/**
+ * File: webframe/static/css/rating.css
+ * Author: Ask SNB
+ * Source URL: https://bootsnipp.com/snippets/qr6zz
+ * Example:
+ * <div class="rating">
+ *    <input type="radio" name="rating" value="5" id="ratingFld5"/><label for="ratingFld5"></label> 
+ *    <input type="radio" name="rating" value="4" id="ratingFld4"/><label for="ratingFld4"></label> 
+ *    <input type="radio" name="rating" value="3" id="ratingFld3"/><label for="ratingFld3"></label> 
+ *    <input type="radio" name="rating" value="2" id="ratingFld2"/><label for="ratingFld2"></label> 
+ *    <input type="radio" name="rating" value="1" id="ratingFld1"/><label for="ratingFld1"></label> 
+ * </div>
+ */
+
+$symbol: "\2605";
+$color:  #FFD600;
+
+.rating {
+   float:left;
+}
+
+/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
+follow these rules. Every browser that supports :checked also supports :not(), so
+it doesn’t make the test unnecessarily selective */
+.rating:not(:checked) > input {
+  position:absolute;
+  top:-9999px;
+  clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+  float:right;
+  width:1em;
+  /* padding:0 .1em; */
+  overflow:hidden;
+  white-space:nowrap;
+  cursor:pointer;
+  font-size:300%;
+  /* line-height:1.2; */
+  color:#ddd;
+}
+
+.rating:not(:checked) > label:before {
+  content: $symbol;
+}
+
+.rating > input:checked ~ label {
+  color: $color;
+  
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: $color;
+  
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+  color: $color;
+  
+}
+
+.rating > label:active {
+  position:relative;
+  top:2px;
+  left:2px;
+}

@@ -48,15 +48,15 @@ def parseVal(field, val):
      return long(val)
    elif typ in ['FloatField', 'DecimalField']:
      return float(val)
-   elif typ is 'BooleanField':
+   elif typ == 'BooleanField':
      return getBool(val)
    elif typ in ['UUIDField']:
      return uuid.UUID(val)
    elif typ in ['CharField', 'TextField', 'EmailField', 'URLField']:
      return str(val)
-   elif typ is 'DateTimeField':
+   elif typ == 'DateTimeField':
      return datetime.strptime(val, DATEFMT)
-   elif typ is 'ForeignKey':
+   elif typ == 'ForeignKey':
      if field.related_model is get_user_model():
        try:
          return get_user_model().objects.get(username=val)
@@ -474,6 +474,13 @@ class AbstractPreference(OrderableValueObject):
    @property
    def childs(self):
       return Preference.objects.filter(parent=self).order_by('sequence')
+
+   @property
+   def user(self):
+      return self.owner
+   @user.setter
+   def user(self, val):
+      self.owner=val
 
    def __get_ordered_list__(self):
       if self.parent:
