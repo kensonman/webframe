@@ -2,6 +2,28 @@
  * Date:    2019-1025 17:49
  * Author:  Kenson Man <kenson.idv.hk@gmail.com>
  */
+class Menu extends React.Component{
+   constructor(){
+      super();
+   }
+   render(){
+      console.log(this.props);
+      return (
+         <div id="pnl_header"><nav className="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light">
+            <span>{this.props.icon}, {this.props.text}</span>
+            <a className="navbar-brand" href={this.props.url} title={this.props.dashboard}><Icon icon={this.props.icon} /> {this.props.text}</a>
+         </nav></div>
+/*
+         <div id="pnl_header"><nav className="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light">
+            <Icon icon={this.props.icon} />
+            <div className="collapse navbar-collapse" id="navbarCollapsibleContent">
+               {this.props.children}
+            </div>
+         </nav></div>
+*/
+      );
+   }
+}
 function Icon(props){
    if(!props.icon){ return null; }
    return (
