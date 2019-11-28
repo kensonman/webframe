@@ -316,7 +316,7 @@ if LDAP_ENABLED:
    AUTH_LDAP_USER_ATTR_MAP=json.loads(LDAP_USER_FIELDS_MAPPING)
    AUTH_LDAP_USER_FLAGS_BY_GROUP={
       # IS_STAFF is not used in this application;
-      'is_staff': LDAP_IS_STAFF_FILTER.split('|')
+      'is_staff': LDAP_IS_STAFF_FILTER.split('|'),
 
       # IS_SUPERUSER is used to generated the shortcut buttons
       'is_superuser': LDAP_IS_SUPERUSER_FILTER.split('|'),
