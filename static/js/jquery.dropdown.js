@@ -18,7 +18,7 @@
 # Basic Example
    <div class="dropdown">
       <input type="hidden" name="field-name" value="default-value"/>
-      <button type="button dropdown-toggle" data-toggle="dropdown" class="btn btn-success">-- Please Select --</button>
+      <button type="button" data-toggle="dropdown" class="btn btn-success">-- Please Select --</button>
       <ul class="dropdown-menu">
             <li><a class="dropdown-item" val="1" name="Opt1">Opt1</a></li>
             <li><a class="dropdown-item" val="two" name="Opt2</a>"></li>
@@ -120,7 +120,7 @@
         }
         var selected=$(this).find('input:first').val();
         var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
-        $(this).find('button').text(label).append($('<span></span>').text());
+        $(this).find('button:first').text(label).append($('<span></span>').text()).append('<i class="symbol-dropdown fas '+$(this).attr('wfsymbol')+'"></i>');
         $(this).trigger('ready');
      },
      populate: function( item ){
@@ -169,7 +169,7 @@
      $(this)
        .attr('wfsymbol', params.symbol)
        .find(params.items).each(function(){ $.wfdropdown.populate( this ); }).end()
-       .find('button').text(label).append(symbol)
+       .find('button:first').text(label).append(symbol)
      ;
      if(params.ajax==null)$(this).trigger('ready');
      return this;
