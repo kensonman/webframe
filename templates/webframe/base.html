@@ -2,7 +2,11 @@
 
 {%block body%}
 <div id="pnl_root">
-	{%block header%}{%include TMPL_HEADER%}{%endblock%}
+	{%block header%}<div id="headerPnl"></div><script type="text/javascript"><!--
+   $(document).ready(function(){
+      $('#headerPnl').load('{%url "header"%}');
+   });
+   //--></script>{%endblock%}
    {%block breadcrumb%}{%endblock%}
    {%block messages%}{%if messages%}<ul class="jumbotron jumbotron-breadcrumb">{%for msg in messages%}
        <li class="animated flash alert {%if msg.tags%} msg-{{msg.tags}}{%endif%}">{{msg|safe}}</li>
