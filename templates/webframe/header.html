@@ -13,50 +13,24 @@
          </b-nav-form>
       </b-navbar-nav>
 
-   <!-- Right aligned nav items -->
+      <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
          <b-nav-item-dropdown text="Lang">{%for l in LANGS%}
-            <b-dropdown-item href="?lang={l|getitem:0}}#">{{l:getitem:1}}</b-dropdown-item>
+            <b-dropdown-item href="?lang={l|getitem:0}}#">{{l|getitem:1}}</b-dropdown-item>
          {%endfor%}</b-nav-item-dropdown>
-         <b-nav-item-dropdown right>
-            <template v-slot:button-content>
-               <em>User</em>
-            </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-         </b-nav-item-dropdown>
+         {%if user.is_authenticated%}<b-nav-item-dropdown text="{%blocktrans with username=user.get_full_name|default:user.username%}Hi, {{username}}{%endblocktrans%}">
+            {%if user.is_impersonate%}
+               <b-dropdown-item href="{%url 'impersonate-stop'%}">{%trans 'impersonate-stop'%}</b-dropdown-item>
+               <b-dropdown-divider></b-dropdown-divider>
+            {%endif%}
+            {%if user.is_staff%}<b-dropdown-item href="{%url 'admin:index'%}"><i class="fas fa-cogs"></i> {%trans 'admin-tools'%}</b-dropdown-item>{%endif%}
+            {%if 'webframe:users'|urlexists%}{%if perms.auth.add_user or perms.auth.change_user%}<b-dropdown-item href="{%url 'webframe:users'%}"><i class="fas fa-users"></i> {%trans 'users'%}</b-dropdown-item>{%endif%}{%endif%}
+            {%if 'webframe:prefs'|urlexists or 'webframe:logout'|urlexists%}<b-dropdown-item href="{%url 'webframe:prefs' user='_'%}"><i class="fas fa-cogs"></i> {%trans 'logout'%}</b-dropdown-item>{%endif%}
+            <b-dropdown-divider></b-dropdown-divider>
+            {%if 'webframe:logout'|urlexists%}<b-dropdown-item href="{%url 'webframe:logout'%}"><i class="fas fa-sign-out-alt"></i> {%trans 'logout'%}</b-dropdown-item>{%endif%}
+         </b-nav-item-dropdown>{%else%}
+            {%if 'webframe:login'|urlexists%}<b-nav-item href="{%url 'webframe:login'%}"><i class="fas fa-sign-in-alt"></i> {%trans 'login'%}</b-nav-item>{%endif%}
+         {%endif%}
       </b-navbar-nav>
    </b-collapse>
 </b-navbar>
-<div id="pnl_header"><nav class="navbar navbar-expand-lg navbar-expand-md navbar-light bg-light">
-   <a class="navbar-brand" href="#">Brand</a>
-   <!-- Collect the nav links, forms, and other content for toggling -->
-
-      <ul class="nav navbar-nav navbar-right">
-         {%if user.is_authenticated%}
-         {%if user.is_staff%}<li class="nav-item"><a href="{%url 'admin:index'%}" class="nav-link"><i class="fas fa-cogs"></i> {%trans 'admin-tools'%}</a></li>{%endif%}
-         {%if 'webframe:users'|urlexists%}{%if perms.auth.add_user or perms.auth.change_user%}<li class="nav-item"><a href="{%url 'webframe:users'%}" class="nav-link"><i class="fas fa-users"></i> {%trans 'users'%}</a></li>{%endif%}{%endif%}
-         {%if 'webframe:prefs'|urlexists or 'webframe:logout'|urlexists%}<li class="dropdown nav-item">
-            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-               {%if user.is_impersonate%}{{request.impersonator}}@{%endif%}
-               {%blocktrans with username=user.get_full_name|default:user.username%}Hi, {{username}}{%endblocktrans%} <span class="caret"></span>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-               {%if user.is_impersonate%}
-                  <a href="{%url 'impersonate-stop'%}" class="dropdown-item">{%trans 'impersonate-stop'%}</a>
-                  <div class="dropdown-divider"></div>
-               {%endif%}
-               {%if 'webframe:prefs'|urlexists%}<a href="{%url 'webframe:prefs' user=user.username%}" class="dropdown-item"><i class="fas fa-cogs"></i> {%trans 'preferences'%}</a>{%endif%}
-               {%if 'webframe:logout'|urlexists%}<a href="{%url 'webframe:logout'%}" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> {%trans 'logout'%}</a>{%endif%}
-            </div>
-         </li>{%else%}<li class="nav-item"><a href="#" class="nav-link">{%blocktrans with username=user.get_full_name%}Hi, {{username}}{%endblocktrans%}</a></li>{%endif%}
-         {%else%}
-         {%if 'webframe:login'|urlexists%}<li class="nav-item"><a href="{%url 'webframe:login'%}" class="nav-link"><i class="fas fa-sign-in-alt"></i> {%trans 'login'%}</a></li>{%endif%}
-         {%endif%}
-      </ul>
-   </div><!-- /.navbar-collapse -->
-
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapsibleContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-</nav></div>
