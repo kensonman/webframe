@@ -1,26 +1,7 @@
-<!DOCTYPE html>{%load staticfiles i18n%}
-<html lang="{{lang|default:'zh-Hant'}}">
-<head>
-{%block opengraph%}{%endblock%}
-{%block head%}
-   <meta charset="utf-8"/>
-   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-   {%block meta%}
-      <meta property="og:title" content="{%trans 'appName'%}"/>
-   {%endblock%}
-   <title>{%block title%}{{wf_title|default:'NoTitle'}}{%endblock%}</title>
+{%extends 'webframe/framework.html'%}
+{%comment%}
+DEPRECATED
+Use "webframe/framework.html" instead. 
 
-   {%block scripts%}{%include TMPL_SCRIPTS%}{%block scripts-blk%}{%endblock%}{%endblock%}
-   {%block head-blk%}{%endblock%}
-{%endblock%}
-</head>
-<body>{%block root%}
-<noscript><div class="noscript" style="display:block; width:80%; margin:50px auto;">{%block noscript%}
-   <h1>{%blocktrans%}Javascript is required{%endblocktrans%}</h1>
-   <p>{%blocktrans%}The javascript must be enabled in this site to have the best browsing experience.{%endblocktrans%}</p>
-   <p>{%blocktrans%}Click <a href="http://www.enable-javascript.com/" target="_blank">here</a> to see how to enable the javascript in your browser.{%endblocktrans%}</p>
-{%endblock%}</div></noscript>
-{%block body%}<div id="pnl_root">Body block will be here.</div>{%endblock%}
-{%block loading%}{%include TMPL_LOADING%}{%block loading-blk%}{%endblock%}{%endblock%}
-{%endblock%}</body>
-</html>
+This file is used for backward compatible.
+{%endcomment%}
