@@ -95,7 +95,6 @@ class Command(BaseCommand):
             uri='{rpthost}/rest_v2/resources{prefix}{rptname}_Data/{tipe}'
             contentType='application/repository.dataType+json'
             rep=self.jasperserver(uri, method='get', contentType=contentType, tipe=tipe, rptname=rptname, headers={'accept': 'application/json'})
-            logger.debug('[{0}] {1}'.format(rep.status_code, rep.text))
             if 200 <= rep.status_code < 300:
                types[tipe]=rep.json()['uri']
             else:
@@ -122,7 +121,9 @@ class Command(BaseCommand):
                })
                if 200 <= rep.status_code < 300:
                   logger.info('Created/Updated data-type for {0}: {1}...'.format(rptname, tipe))
-                  types[tipe]=rep.url
+                  url=rep.url
+                  url=url[url.index('rest_v2/resources')+17:]
+                  types[tipe]=url
                else:
                   logger.debug('[{0}]: {1}'.format(rep.status_code, rep.text))
                   raise TypeError('Cannot create the data-type for report: {0}'.format(rptname))
@@ -131,11 +132,36 @@ class Command(BaseCommand):
       def property(rptname, tag):
          logger.debug('   Handling parameter<{0}> as {1}'.format(tag.attrib['name'], tag.attrib['class']))
          tipe=gettype(rptname, types, tag.attrib['class'])
+         uri='{rpthost}/rest_v2/resources{prefix}{rptname}_Data/InputControl.{name}'
+         contentType='application/repository.inputControl+json'
+         rep=self.jasperserver(uri, method='get', contentType=contentType, name=tag.attrib['name'], rptname=rptname, headers={'accept': 'application/json'})
+         if 200 <= rep.status_code < 300:
+            return rep.json()['uri']
+         else:
+            rep=self.jasperserver(uri, contentType=contentType, name=tag.attrib['name'], rptname=rptname, data={
+               'label': 'InputControl.{0}'.format(tag.attrib['name']),
+               'description': tag.find('{{{0}}}parameterDescription'.format(ns)).text,
+               'permissionMask': '0',
+               'version': '1',
+               'mandatory': True,
+               'type': '2', #2==Single Value
+               'dataType': {'dataTypeReference': {'uri': tipe}},
+               'usedFields': tag.attrib['name'],
+               'verbise': True,
+            })
+            if 200 <= rep.status_code < 300:
+               logger.info('Created/Updated parameter<{0}> for report<{1}>...'.format(tag.attrib['name'], rptname))
+               return rep.url[rep.url.index('rest_v2/resources')+17:]
+            else:
+               logger.debug('[{0}]: {1}'.format(rep.status_code, rep.text))
+               raise TypeError('Cannot create the parameter<{0}> for report<{1}>'.format(tag.attrib['name'], rptname))
 
       name=root.attrib['name'].replace('-', '_')
       logger.info('Importing "{1}" JRXML: {0}...'.format(filename, name))
+      parameters=dict()
       for p in root.findall('{{{0}}}parameter'.format(ns)):
-         property(name, p)
+         parameters[p.attrib['name']]=property(name, p)
+      logger.warning(parameters)
 
    def import_file(self, filename):
       # Import the xml file
