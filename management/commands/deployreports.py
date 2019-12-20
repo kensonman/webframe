@@ -8,7 +8,7 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from pathlib import Path
-import logging, requests, json, base64, html, glob
+import logging, requests, json, base64, html, glob, os
 
 
 logger=logging.getLogger('webframe.commands.install')
@@ -120,12 +120,12 @@ class Command(BaseCommand):
                   'strictMin': 'false', 
                })
                if 200 <= rep.status_code < 300:
-                  logger.info('Created/Updated data-type for {0}: {1}...'.format(rptname, tipe))
+                  logger.info('      Created/Updated data-type for {0}: {1}...'.format(rptname, tipe))
                   url=rep.url
                   url=url[url.index('rest_v2/resources')+17:]
                   types[tipe]=url
                else:
-                  logger.debug('[{0}]: {1}'.format(rep.status_code, rep.text))
+                  logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
                   raise TypeError('Cannot create the data-type for report: {0}'.format(rptname))
          return types[tipe]
 
@@ -138,9 +138,10 @@ class Command(BaseCommand):
          if 200 <= rep.status_code < 300:
             return rep.json()['uri']
          else:
+            desc=tag.find('{{{0}}}parameterDescription'.format(ns))
             rep=self.jasperserver(uri, contentType=contentType, name=tag.attrib['name'], rptname=rptname, data={
                'label': 'InputControl.{0}'.format(tag.attrib['name']),
-               'description': tag.find('{{{0}}}parameterDescription'.format(ns)).text,
+               'description': None if not desc else desc.text,
                'permissionMask': '0',
                'version': '1',
                'mandatory': True,
@@ -150,18 +151,26 @@ class Command(BaseCommand):
                'verbise': True,
             })
             if 200 <= rep.status_code < 300:
-               logger.info('Created/Updated parameter<{0}> for report<{1}>...'.format(tag.attrib['name'], rptname))
+               logger.info('   Created/Updated parameter<{0}> for report<{1}>...'.format(tag.attrib['name'], rptname))
                return rep.url[rep.url.index('rest_v2/resources')+17:]
             else:
-               logger.debug('[{0}]: {1}'.format(rep.status_code, rep.text))
+               logger.debug('   [{0}]: {1}'.format(rep.status_code, rep.text))
                raise TypeError('Cannot create the parameter<{0}> for report<{1}>'.format(tag.attrib['name'], rptname))
+
+      def subreport(cwd, rptname, tag):
+         filename=tag.find('{{{0}}}subreportExpression'.format(ns)).text
+         logger.debug('   Handling subreport<{0}>...'.format(filename))
+         #sr=ET.ElementTree(file=filename).getroot()
 
       name=root.attrib['name'].replace('-', '_')
       logger.info('Importing "{1}" JRXML: {0}...'.format(filename, name))
+      cwd=os.path.dirname(filename)
       parameters=dict()
       for p in root.findall('{{{0}}}parameter'.format(ns)):
          parameters[p.attrib['name']]=property(name, p)
-      logger.warning(parameters)
+
+      for r in root.iter('{{{0}}}subreport'.format(ns)):
+         subreport(cwd, name, r)
 
    def import_file(self, filename):
       # Import the xml file
