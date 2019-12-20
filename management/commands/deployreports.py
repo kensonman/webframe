@@ -28,7 +28,8 @@ class Command(BaseCommand):
       parser.add_argument('--admin', dest='adminuser', type=str, help='The admin username of the report server; Default: jasperadmin', default='jasperadmin')
       parser.add_argument('--pass', dest='adminpass', type=str, help='The admin password of the report server; Default: jasperadmin', default='jasperadmin')
       parser.add_argument('--prefix', dest='prefix', type=str, help='The prefix of installed reports URI; Default: /webframe', default='/webframe/')
-      parser.add_argument('--reports', dest='reports', type=str, help='The path of the target report(s); Default: ./rpt/MyReports/*xml', default='./rpt/MyReports/*xml')
+      parser.add_argument('--reports', dest='reports', type=str, help='The path of the target report(s); Default: ./rpt/MyReports/*xml', default='./rpt/MyReports/*.jrxml')
+      parser.add_argument('--dbconn', dest='dbconn', type=str, help='Specify the database connection for each imported report; Default: ./rpt/MyReports/DBConn.xml', default='./rpt/MyReports/DBConn.xml')
       parser.add_argument('--role', dest='role', type=str, help='The role to access the sitesys report repository', default='sitesys')
 
    def jasperserver(self, url, **kwargs):
@@ -158,9 +159,31 @@ class Command(BaseCommand):
                raise TypeError('Cannot create the parameter<{0}> for report<{1}>'.format(tag.attrib['name'], rptname))
 
       def subreport(cwd, rptname, tag):
-         filename=tag.find('{{{0}}}subreportExpression'.format(ns)).text
-         logger.debug('   Handling subreport<{0}>...'.format(filename))
-         #sr=ET.ElementTree(file=filename).getroot()
+         path=tag.find('{{{0}}}subreportExpression'.format(ns)).text
+         path=path[path.index('\"')+1:]
+         path='{0}.jrxml'.format(path[0:path.index('\"')])
+         filename=os.path.join(cwd, path)
+         sr=ET.ElementTree(file=filename).getroot()
+         logger.debug('   Handling subreport<{0}>: {1}...'.format(sr.attrib['name'], filename))
+         uri='{rpthost}/rest_v2/resources{prefix}{path}'.format(rpthost=self.kwargs['rpthost'], prefix=self.kwargs['prefix'], path=path) 
+         desc=sr.find('{{{0}}}property[@name=\'com.jaspersoft.studio.report.description\']'.format(ns))
+         rep=self.jasperserver(uri, contentType='application/repository.file+json', method='get', headers={'accept': 'application/json'})
+         if 200 <= rep.status_code < 300:
+            pass
+         else:
+            rep=self.jasperserver(uri, contentType='application/repository.file+json', method='put', data={
+               'label': sr.attrib['name'],
+               'description': None if not desc else desc,
+               'permissionMask': '0',
+               'version': '1',
+               'type': 'jrxml',
+               'content': b64(filename),
+            })
+            if 200 <= rep.status_code < 300:
+               logger.info('      Created/Updated subreport<{0}>...'.format(sr.attrib['name']))
+            else:
+               logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
+               raise TypeError('Cannot create the subreport<{0}>...'.format(sr.attrib['name']))
 
       name=root.attrib['name'].replace('-', '_')
       logger.info('Importing "{1}" JRXML: {0}...'.format(filename, name))
@@ -171,6 +194,28 @@ class Command(BaseCommand):
 
       for r in root.iter('{{{0}}}subreport'.format(ns)):
          subreport(cwd, name, r)
+
+      uri='{rpthost}/rest_v2/resources{prefix}{name}'
+      rep=self.jasperserver(uri, contentType='application/reposity.reportUnit+json', method='get', name=name, headers={'accept': 'application/json'})
+      if not 200 <= rep.status_code < 300:
+         desc=root.find('{{{0}}}property[@name=\'com.jaspersoft.studio.report.description\']'.format(ns))
+         rep=self.jasperserver(uri, contentType='application/reposity.reportUnit+json', method='put', name=name, data={
+            'label': root.attrib['name'],
+            'description': None if not desc else desc,
+            'permissionMask': '0',
+            'version': '1',
+            'controlsLayout': 'popupScreen',
+            'alwaysPromptControls': 'true',
+            'dataSource': {'dataSourceReference': {'uri': self.dbconn}},
+            'inputControls': [{'inputControlReference': {'uri': parameters[p]}} for p in parameters],
+            'jrxml': {
+               'jrxmlFile': {
+                  'type': 'jrxml',
+                  'label': 'jrxml',
+                  'content': b64(filename)
+               }
+            }
+         })
 
    def import_file(self, filename):
       # Import the xml file
@@ -187,14 +232,13 @@ class Command(BaseCommand):
 
    def import_ds(self, root):
       # Make sure the data-source created
-      url='{rpthost}/rest_v2/resources{prefix}?overwrite=True'
+      url='{rpthost}/rest_v2/resources{prefix}'
       contentType='application/repository.jdbcDataSource+json'
       name=root.find('name').text
       rep=self.jasperserver(url, name=name, contentType=contentType, method='get')
       if rep.status_code==200:
          self.jasperserver(url, name=name, contentType=contentType, method='delete')
       rep=self.jasperserver(url, name=name, contentType=contentType, method='post', data={
-         'uri': '{prefix}'.format(prefix=self.kwargs['prefix'], name=name),
          'label': name,
          'description': 'The database connection imported by deployreports.py',
          'permissionMask': '0',
@@ -207,6 +251,7 @@ class Command(BaseCommand):
       })
       if 200 <= rep.status_code < 300:
          logger.info('Create/Update datatsource<{0}> successfully.'.format(name))
+         self.dbconn='{prefix}{name}'.format(prefix=self.kwargs['prefix'], name=name)
       else:
          logger.warning('Create/Update datasource<{0}> failed with status code {1}'.format(name, rep.status_code))
          logger.warning(rep.text)
@@ -226,5 +271,6 @@ class Command(BaseCommand):
       logger.info('Report server are located at "{host}" with admin-user: {user}'.format(host=self.kwargs['rpthost'], user=kwargs['adminuser']))
       self.init_role()
       self.init_user()
+      self.import_file(self.kwargs['dbconn'])
       for f in glob.glob(self.kwargs['reports']):
          self.import_file(f)
