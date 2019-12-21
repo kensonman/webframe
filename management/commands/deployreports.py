@@ -196,10 +196,10 @@ class Command(BaseCommand):
          subreport(cwd, name, r)
 
       uri='{rpthost}/rest_v2/resources{prefix}{name}'
-      rep=self.jasperserver(uri, contentType='application/reposity.reportUnit+json', method='get', name=name, headers={'accept': 'application/json'})
+      rep=self.jasperserver(uri, contentType='application/repository.reportUnit+json', method='get', name=name, headers={'accept': 'application/json'})
       if not 200 <= rep.status_code < 300:
          desc=root.find('{{{0}}}property[@name=\'com.jaspersoft.studio.report.description\']'.format(ns))
-         rep=self.jasperserver(uri, contentType='application/reposity.reportUnit+json', method='put', name=name, data={
+         rep=self.jasperserver(uri, contentType='application/repository.reportUnit+json', method='put', name=name, data={
             'label': root.attrib['name'],
             'description': None if not desc else desc,
             'permissionMask': '0',
@@ -216,6 +216,11 @@ class Command(BaseCommand):
                }
             }
          })
+         if 200 <= rep.status_code < 300:
+            logger.info('      Created/Updated report<{0}>...'.format(name))
+         else:
+            logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
+            raise TypeError('Cannot create the report<{0}>...'.format(name))
 
    def import_file(self, filename):
       # Import the xml file
