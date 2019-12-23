@@ -62,11 +62,11 @@ class Command(BaseCommand):
    def init_role(self):
       # Checking the role are existing
       url='{rpthost}/rest_v2/roles/{role}'
-      rep=self.jasperserver(url, contentType='role', method='get')
+      rep=self.jasperserver(url, contentType='application/json', method='get')
       if rep.status_code != 200:
          #If NOT exists
          logger.info('Creating reporting role: %s ...'%self.kwargs['role'])
-         rep=self.jasperserver(url, data={}, contentType='role', method='put')
+         rep=self.jasperserver(url, data={}, contentType='application/json', method='put')
          if 200<=rep.status_code<300:
             logger.info('Role<%s> has been created successfully!'%self.kwargs['role'])
          else:
@@ -78,10 +78,10 @@ class Command(BaseCommand):
       user=settings.REPORTING['username']
       pawd=settings.REPORTING['password']
       url='{rpthost}/rest_v2/users/{user}'
-      rep=self.jasperserver(url, contentType='user', method='get', user=user)
+      rep=self.jasperserver(url, contentType='application/json', method='get', user=user)
       if rep.status_code!=200:
          logger.info('Creating/Updating report user: %s ...'%settings.REPORTING['username'])
-         rep=self.jasperserver(url, contentType='user', method='put', user=user, data={'fullName': 'Deploy by script', 'enabled': True, 'password': pawd, 'rules': [{'name': 'ROLE_USER'}, {'name': self.kwargs['role']}]})
+         rep=self.jasperserver(url, contentType='application/json', method='put', user=user, data={'fullName': 'Deploy by script', 'enabled': True, 'password': pawd, 'roles': [{'name': 'ROLE_USER'}, {'name': self.kwargs['role']}]})
          if 200<=rep.status_code<300:
             logger.info('Role<%s> has been created successfully!'%self.kwargs['role'])
          else:
@@ -121,19 +121,19 @@ class Command(BaseCommand):
                   'strictMin': 'false', 
                })
                if 200 <= rep.status_code < 300:
-                  logger.info('      Created/Updated data-type for {0}: {1}...'.format(rptname, tipe))
+                  logger.info('   Created/Updated data-type for {0}: {1}...'.format(rptname, tipe))
                   url=rep.url
                   url=url[url.index('rest_v2/resources')+17:]
                   types[tipe]=url
                else:
-                  logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
+                  logger.debug('   [{0}]: {1}'.format(rep.status_code, rep.text))
                   raise TypeError('Cannot create the data-type for report: {0}'.format(rptname))
          return types[tipe]
 
       def property(rptname, tag):
          logger.debug('   Handling parameter<{0}> as {1}'.format(tag.attrib['name'], tag.attrib['class']))
          tipe=gettype(rptname, types, tag.attrib['class'])
-         uri='{rpthost}/rest_v2/resources{prefix}{rptname}_Data/InputControl.{name}'
+         uri='{rpthost}/rest_v2/resources{prefix}{rptname}_Data/{name}'
          contentType='application/repository.inputControl+json'
          rep=self.jasperserver(uri, method='get', contentType=contentType, name=tag.attrib['name'], rptname=rptname, headers={'accept': 'application/json'})
          if 200 <= rep.status_code < 300:
@@ -141,6 +141,7 @@ class Command(BaseCommand):
          else:
             desc=tag.find('{{{0}}}parameterDescription'.format(ns))
             rep=self.jasperserver(uri, contentType=contentType, name=tag.attrib['name'], rptname=rptname, data={
+               'name': tag.attrib['name'],
                'label': 'InputControl.{0}'.format(tag.attrib['name']),
                'description': None if not desc else desc.text,
                'permissionMask': '0',
@@ -149,7 +150,7 @@ class Command(BaseCommand):
                'type': '2', #2==Single Value
                'dataType': {'dataTypeReference': {'uri': tipe}},
                'usedFields': tag.attrib['name'],
-               'verbise': True,
+               'visible': True,
             })
             if 200 <= rep.status_code < 300:
                logger.info('   Created/Updated parameter<{0}> for report<{1}>...'.format(tag.attrib['name'], rptname))
@@ -221,6 +222,13 @@ class Command(BaseCommand):
          else:
             logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
             raise TypeError('Cannot create the report<{0}>...'.format(name))
+      rep=self.jasperserver('{rpthost}/rest_v2/permissions', method='post', name='permission', contentType='application/json', data={
+         'uri': '{prefix}{name}'.format(prefix=self.kwargs['prefix'], name=name),
+         'recipient': 'role:/{0}'.format(self.kwargs['role']),
+         'mask': '1',
+      })
+      if not 200<= rep.status_code < 300:
+         logger.warning('      Failed to grant permission for role: {0} in {1}{2}: {3}{4}'.format(self.kwargs['role'], self.kwargs['prefix'], name, rep.status_code, rep.text))
 
    def import_file(self, filename):
       # Import the xml file
@@ -250,8 +258,8 @@ class Command(BaseCommand):
          'version': '1',
 
          'driverClass': root.find('driver').text,
-         'username': settings.REPORTING['username'], #Refer to rpt/createUser.sql
-         'password': settings.REPORTING['password'], #Refer to rpt/createUser.sql
+         'username': root.find('username').text, #Refer to rpt/createUser.sql
+         'password': root.find('password').text, #Refer to rpt/createUser.sql
          'connectionUrl': root.find('url').text,
       })
       if 200 <= rep.status_code < 300:
