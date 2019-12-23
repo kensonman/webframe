@@ -44,16 +44,16 @@ class Command(BaseCommand):
       method=myargs.get('method','put').upper()
 
       if method=='PUT':
-         logger.debug('Putting resources<{0}>: {1}'.format(kwargs['contentType'], url))
+         logger.debug('      Putting resources<{0}>: {1}'.format(kwargs['contentType'], url))
          rep=requests.put(url, auth=auth, data=data, headers=headers)
       elif method=='POST':
-         logger.debug('Posting resources<{0}>: {1}'.format(kwargs['contentType'], url))
+         logger.debug('      Posting resources<{0}>: {1}'.format(kwargs['contentType'], url))
          rep=requests.post(url, auth=auth, data=data, headers=headers)
       elif method=='GET':
-         logger.debug('Getting resources<{0}>: {1}'.format(kwargs['contentType'], url))
+         logger.debug('      Getting resources<{0}>: {1}'.format(kwargs['contentType'], url))
          rep=requests.get(url, auth=auth, data=data, headers=headers)
       elif method=='DELETE':
-         logger.debug('Deleting resources<{0}>: {1}'.format(kwargs['contentType'], url))
+         logger.debug('      Deleting resources<{0}>: {1}'.format(kwargs['contentType'], url))
          rep=requests.delete(url, auth=auth, data=data, headers=headers)
       else:
          raise TypeError('Unknow HTTP method: {0}'.format(method))
@@ -65,12 +65,12 @@ class Command(BaseCommand):
       rep=self.jasperserver(url, contentType='application/json', method='get')
       if rep.status_code != 200:
          #If NOT exists
-         logger.info('Creating reporting role: %s ...'%self.kwargs['role'])
+         logger.info('   Creating reporting role: %s ...'%self.kwargs['role'])
          rep=self.jasperserver(url, data={}, contentType='application/json', method='put')
          if 200<=rep.status_code<300:
-            logger.info('Role<%s> has been created successfully!'%self.kwargs['role'])
+            logger.info('   Role<%s> has been created successfully!'%self.kwargs['role'])
          else:
-            logger.warning('Role<%s> cannot been created, status-code: %s'%(self.kwargs['role'], rep.status_code))
+            logger.info('   Role<%s> cannot been created, status-code: %s'%(self.kwargs['role'], rep.status_code))
             logger.debug(rep.text)
 
    def init_user(self):
@@ -80,12 +80,12 @@ class Command(BaseCommand):
       url='{rpthost}/rest_v2/users/{user}'
       rep=self.jasperserver(url, contentType='application/json', method='get', user=user)
       if rep.status_code!=200:
-         logger.info('Creating/Updating report user: %s ...'%settings.REPORTING['username'])
+         logger.info('   Creating/Updating report user: %s ...'%settings.REPORTING['username'])
          rep=self.jasperserver(url, contentType='application/json', method='put', user=user, data={'fullName': 'Deploy by script', 'enabled': True, 'password': pawd, 'roles': [{'name': 'ROLE_USER'}, {'name': self.kwargs['role']}]})
          if 200<=rep.status_code<300:
-            logger.info('Role<%s> has been created successfully!'%self.kwargs['role'])
+            logger.info('   Role<%s> has been created successfully!'%self.kwargs['role'])
          else:
-            logger.warning('Role<%s> cannot been created, status-code: %s'%(self.kwargs['role'], rep.status_code))
+            logger.info('   Role<%s> cannot been created, status-code: %s'%(self.kwargs['role'], rep.status_code))
             logger.debug(rep.text)
 
    def import_report(self, filename, root):
@@ -99,7 +99,7 @@ class Command(BaseCommand):
             if 200 <= rep.status_code < 300:
                types[tipe]=rep.json()['uri']
             else:
-               logger.debug('      Creating contentType for {0}'.format(tipe))
+               logger.debug('            Creating contentType for {0}'.format(tipe))
                #Server support type: text|number|date|dateTime|time
                if tipe in ['java.lang.Double', 'java.lang.Float', 'java.lang.Integer', 'java.lang.Long', 'java.lang.Short', 'java.math.BigDecimal']:
                   serverType='number'
@@ -126,12 +126,12 @@ class Command(BaseCommand):
                   url=url[url.index('rest_v2/resources')+17:]
                   types[tipe]=url
                else:
-                  logger.debug('   [{0}]: {1}'.format(rep.status_code, rep.text))
+                  logger.debug('         [{0}]: {1}'.format(rep.status_code, rep.text))
                   raise TypeError('Cannot create the data-type for report: {0}'.format(rptname))
          return types[tipe]
 
       def property(rptname, tag):
-         logger.debug('   Handling parameter<{0}> as {1}'.format(tag.attrib['name'], tag.attrib['class']))
+         logger.debug('         Handling parameter<{0}> as {1}'.format(tag.attrib['name'], tag.attrib['class']))
          tipe=gettype(rptname, types, tag.attrib['class'])
          uri='{rpthost}/rest_v2/resources{prefix}{rptname}_Data/{name}'
          contentType='application/repository.inputControl+json'
@@ -156,7 +156,7 @@ class Command(BaseCommand):
                logger.info('   Created/Updated parameter<{0}> for report<{1}>...'.format(tag.attrib['name'], rptname))
                return rep.url[rep.url.index('rest_v2/resources')+17:]
             else:
-               logger.debug('   [{0}]: {1}'.format(rep.status_code, rep.text))
+               logger.debug('         [{0}]: {1}'.format(rep.status_code, rep.text))
                raise TypeError('Cannot create the parameter<{0}> for report<{1}>'.format(tag.attrib['name'], rptname))
 
       def subreport(cwd, rptname, tag, params):
@@ -166,7 +166,7 @@ class Command(BaseCommand):
          path='{0}.jrxml'.format(path)
          filename=os.path.join(cwd, "{0}_Data".format(rptname), path)
          sr=ET.ElementTree(file=filename).getroot()
-         logger.debug('   Handling subreport<{0}>: {1}...'.format(sr.attrib['name'], filename))
+         logger.debug('         Handling subreport<{0}>: {1}...'.format(sr.attrib['name'], filename))
          uri='{rpthost}/rest_v2/resources{prefix}{rptname}_Data/{path}'.format(rpthost=self.kwargs['rpthost'], prefix=self.kwargs['prefix'], path=path, rptname=rptname) 
          desc=sr.find('{{{0}}}property[@name=\'com.jaspersoft.studio.report.description\']'.format(ns))
          rep=self.jasperserver(uri, contentType='application/repository.file+json', method='get', headers={'accept': 'application/json'})
@@ -184,11 +184,11 @@ class Command(BaseCommand):
             if 200 <= rep.status_code < 300:
                logger.info('   Created/Updated subreport<{0}>...'.format(sr.attrib['name']))
             else:
-               logger.debug('   [{0}]: {1}'.format(rep.status_code, rep.text))
+               logger.debug('         [{0}]: {1}'.format(rep.status_code, rep.text))
                raise TypeError('Cannot create the subreport<{0}>...'.format(sr.attrib['name']))
 
       name=root.attrib['name'].replace('-', '_')
-      logger.info('Importing "{1}" JRXML: {0}...'.format(filename, name))
+      logger.warning('Importing "{1}" JRXML: {0}...'.format(filename, name))
       cwd=os.path.dirname(filename)
       parameters=dict()
       for p in root.findall('{{{0}}}parameter'.format(ns)):
@@ -219,9 +219,9 @@ class Command(BaseCommand):
             }
          })
          if 200 <= rep.status_code < 300:
-            logger.info('Created/Updated report<{0}>...'.format(name))
+            logger.info('   Created/Updated report<{0}>...'.format(name))
          else:
-            logger.debug('[{0}]: {1}'.format(rep.status_code, rep.text))
+            logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
             raise TypeError('Cannot create the report<{0}>...'.format(name))
       rep=self.jasperserver('{rpthost}/rest_v2/permissions', method='post', name='permission', contentType='application/json', data={
          'uri': '{prefix}{name}'.format(prefix=self.kwargs['prefix'], name=name),
@@ -229,11 +229,11 @@ class Command(BaseCommand):
          'mask': '1',
       })
       if not 200<= rep.status_code < 300:
-         logger.warning('   Failed to grant permission for role: {0} in {1}{2}: {3}{4}'.format(self.kwargs['role'], self.kwargs['prefix'], name, rep.status_code, rep.text))
+         logger.info('   Failed to grant permission for role: {0} in {1}{2}: {3}{4}'.format(self.kwargs['role'], self.kwargs['prefix'], name, rep.status_code, rep.text))
 
    def import_file(self, filename):
       # Import the xml file
-      logger.debug('Importing file: {0}'.format(filename))
+      logger.debug('      Importing file: {0}'.format(filename))
       root=ET.ElementTree(file=filename).getroot()
       if root.tag=='jdbcDataAdapter':
          #Importing the jdbc
@@ -242,7 +242,7 @@ class Command(BaseCommand):
          #Importing the JasperReport
          self.import_report(filename, root)
       else:
-         logger.info('Unknow ROOT Tag in the xml, skipping...')
+         logger.info('   Unknow ROOT Tag in the xml, skipping...')
 
    def import_ds(self, root):
       # Make sure the data-source created
@@ -264,10 +264,10 @@ class Command(BaseCommand):
          'connectionUrl': root.find('url').text,
       })
       if 200 <= rep.status_code < 300:
-         logger.info('Create/Update datatsource<{0}> successfully.'.format(name))
+         logger.info('   Create/Update datatsource<{0}> successfully.'.format(name))
          self.dbconn='{prefix}{name}'.format(prefix=self.kwargs['prefix'], name=name)
       else:
-         logger.warning('Create/Update datasource<{0}> failed with status code {1}'.format(name, rep.status_code))
+         logger.info('   Create/Update datasource<{0}> failed with status code {1}'.format(name, rep.status_code))
          logger.warning(rep.text)
 
    def handle(self, *args, **kwargs):
@@ -282,7 +282,7 @@ class Command(BaseCommand):
          logger.setLevel(logging.ERROR)
       self.kwargs=kwargs
 
-      logger.info('Report server are located at "{host}" with admin-user: {user}'.format(host=self.kwargs['rpthost'], user=kwargs['adminuser']))
+      logger.info('   Report server are located at "{host}" with admin-user: {user}'.format(host=self.kwargs['rpthost'], user=kwargs['adminuser']))
       self.init_role()
       self.init_user()
       self.import_file(self.kwargs['dbconn'])
