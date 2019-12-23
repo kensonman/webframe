@@ -159,14 +159,15 @@ class Command(BaseCommand):
                logger.debug('   [{0}]: {1}'.format(rep.status_code, rep.text))
                raise TypeError('Cannot create the parameter<{0}> for report<{1}>'.format(tag.attrib['name'], rptname))
 
-      def subreport(cwd, rptname, tag):
-         path=tag.find('{{{0}}}subreportExpression'.format(ns)).text
-         path=path[path.index('\"')+1:]
-         path='{0}.jrxml'.format(path[0:path.index('\"')])
-         filename=os.path.join(cwd, path)
+      def subreport(cwd, rptname, tag, params):
+         path=tag.find('{{{0}}}subreportExpression'.format(ns)).text #$P{rptprefix}+"Customer"+$P{rptsuffix}
+         path=path[path.index('\"')+1:] #Customer"+$P{rptsuffix}
+         path=path[0:path.index('\"')]  #Customer
+         path='{0}.jrxml'.format(path)
+         filename=os.path.join(cwd, "{0}_Data".format(rptname), path)
          sr=ET.ElementTree(file=filename).getroot()
          logger.debug('   Handling subreport<{0}>: {1}...'.format(sr.attrib['name'], filename))
-         uri='{rpthost}/rest_v2/resources{prefix}{path}'.format(rpthost=self.kwargs['rpthost'], prefix=self.kwargs['prefix'], path=path) 
+         uri='{rpthost}/rest_v2/resources{prefix}{rptname}_Data/{path}'.format(rpthost=self.kwargs['rpthost'], prefix=self.kwargs['prefix'], path=path, rptname=rptname) 
          desc=sr.find('{{{0}}}property[@name=\'com.jaspersoft.studio.report.description\']'.format(ns))
          rep=self.jasperserver(uri, contentType='application/repository.file+json', method='get', headers={'accept': 'application/json'})
          if 200 <= rep.status_code < 300:
@@ -181,9 +182,9 @@ class Command(BaseCommand):
                'content': b64(filename),
             })
             if 200 <= rep.status_code < 300:
-               logger.info('      Created/Updated subreport<{0}>...'.format(sr.attrib['name']))
+               logger.info('   Created/Updated subreport<{0}>...'.format(sr.attrib['name']))
             else:
-               logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
+               logger.debug('   [{0}]: {1}'.format(rep.status_code, rep.text))
                raise TypeError('Cannot create the subreport<{0}>...'.format(sr.attrib['name']))
 
       name=root.attrib['name'].replace('-', '_')
@@ -194,7 +195,7 @@ class Command(BaseCommand):
          parameters[p.attrib['name']]=property(name, p)
 
       for r in root.iter('{{{0}}}subreport'.format(ns)):
-         subreport(cwd, name, r)
+         subreport(cwd, name, r, parameters)
 
       uri='{rpthost}/rest_v2/resources{prefix}{name}'
       rep=self.jasperserver(uri, contentType='application/repository.reportUnit+json', method='get', name=name, headers={'accept': 'application/json'})
@@ -218,9 +219,9 @@ class Command(BaseCommand):
             }
          })
          if 200 <= rep.status_code < 300:
-            logger.info('      Created/Updated report<{0}>...'.format(name))
+            logger.info('Created/Updated report<{0}>...'.format(name))
          else:
-            logger.debug('      [{0}]: {1}'.format(rep.status_code, rep.text))
+            logger.debug('[{0}]: {1}'.format(rep.status_code, rep.text))
             raise TypeError('Cannot create the report<{0}>...'.format(name))
       rep=self.jasperserver('{rpthost}/rest_v2/permissions', method='post', name='permission', contentType='application/json', data={
          'uri': '{prefix}{name}'.format(prefix=self.kwargs['prefix'], name=name),
@@ -228,7 +229,7 @@ class Command(BaseCommand):
          'mask': '1',
       })
       if not 200<= rep.status_code < 300:
-         logger.warning('      Failed to grant permission for role: {0} in {1}{2}: {3}{4}'.format(self.kwargs['role'], self.kwargs['prefix'], name, rep.status_code, rep.text))
+         logger.warning('   Failed to grant permission for role: {0} in {1}{2}: {3}{4}'.format(self.kwargs['role'], self.kwargs['prefix'], name, rep.status_code, rep.text))
 
    def import_file(self, filename):
       # Import the xml file
