@@ -282,9 +282,10 @@ class Command(BaseCommand):
          logger.setLevel(logging.ERROR)
       self.kwargs=kwargs
 
-      logger.info('   Report server are located at "{host}" with admin-user: {user}'.format(host=self.kwargs['rpthost'], user=kwargs['adminuser']))
+      logger.warning('Report server are located at "{host}" with admin-user: {user}'.format(host=self.kwargs['rpthost'], user=kwargs['adminuser']))
       self.init_role()
       self.init_user()
+      logger.warning('Importing datasource: {0}...'.format(self.kwargs['dbconn']))
       self.import_file(self.kwargs['dbconn'])
       for f in glob.glob(self.kwargs['reports']):
          self.import_file(f)
