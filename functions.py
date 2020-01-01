@@ -86,9 +86,10 @@ def getDate( val, **kwargs ):
 
    @param val        The value to be parse to bool;
    @param defval     The default value if the val is None;
-   @param fmt        The specified format according to Python: datetime.strptime;
+   @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_DATE
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param tzAware    The indicate the result should be timezone aware; default is True
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATE
    return getTime(val, **kwargs)
@@ -99,21 +100,23 @@ def getTime( val, **kwargs ):
 
    @param val        The value to be parse to bool;
    @param defval     The default value if the val is None;
-   @param fmt        The specified format according to Python: datetime.strptime;
+   @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_TIME
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param tzAware    The indicate the result should be timezone aware; default is True
    '''
    if not val: return kwargs.get('defval', None) 
    if isinstance(val, datetime): return val
    fmt=kwargs.get('fmt', FMT_TIME)
    try:
       rst=datetime.strptime(val, fmt)
-      rst=timezone.make_aware(rst)
-      if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
-      if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
-      return rst
    except ValueError:
-      return kwargs.get('defval', None) 
+      rst=kwargs.get('defval', None)
+      if rst == None: return rst
+   if kwargs.get('tzAware', True): rst=timezone.make_aware(rst)
+   if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
+   if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
+   return rst
 
 def getDateTime( val, **kwargs ):
    '''
@@ -121,9 +124,10 @@ def getDateTime( val, **kwargs ):
 
    @param val        The value to be parse to bool;
    @param defval     The default value if the val is None;
-   @param fmt        The specified format according to Python: datetime.strptime;
+   @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_DATETIME
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param tzAware    The indicate the result should be timezone aware; default is True
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATETIME
    return getTime(val, **kwargs)

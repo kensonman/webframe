@@ -537,6 +537,14 @@ class AbstractPreference(OrderableValueObject):
    def jsonValue(self, val):
       self.value=json.dumps(val)
 
+   @property
+   def listValue(self):
+      if self.value is None: return list()
+      return re.findall(r'[^,;|]+', self.value)
+   @listValue.setter
+   def listValue(self, val):
+      self.value='|'.join(val)
+
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
 
