@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
-from .functions import getBool, getClass
+from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME
 import math, uuid, logging, json, pytz
 
 logger=logging.getLogger('webframe.models')
@@ -424,6 +424,7 @@ class AbstractPreference(OrderableValueObject):
    TYPE_TIME           = 9
    TYPE_DATETIME       = 10
    TYPE_UUIDS          = 11
+   TYPE_LIST           = 12
    TYPES               = (
       (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
       (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
@@ -437,6 +438,7 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_TIME, _('webframe.models.Preference.TYPE.TIME')),
       (TYPE_DATETIME, _('webframe.models.Preference.TYPE.DATETIME')),
       (TYPE_UUIDS, _('webframe.models.Preference.TYPE.UUIDS')),
+      (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
    )
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
@@ -470,6 +472,37 @@ class AbstractPreference(OrderableValueObject):
 
    def __unicode__(self):
       return '(None)' if self.value is None else "{0}::{1}".format(self.name, self.value)
+
+   def __getitem__(self, key):
+      childs=self.childs
+      for c in childs:
+         if c.name==key:
+            return c.realValue
+      return None
+
+   @property
+   def realValue(self):
+      if self.tipe==TYPE_NONE:
+         return None
+      elif self.tipe==TYPE_INT or self.tipe==TYPE_DECIMAL:
+         return self.intValue
+      elif self.tipe==TYPE_BOOLEAN:
+         return self.boolValue
+      elif self.tipe==TYPE_TEXT or self.tipe==TYPE_RICHTEXT or self.tipe==TYPE_EMAIL:
+         return self.value
+      elif self.tipe==TYPE_DATE:
+         return getTime(self.value, fmt=FMT_DATE)
+      elif self.tipe==TYPE_TIME:
+         return getTime(self.value, fmt=FMT_TIME)
+      elif self.tipe==TYPE_DATETIME:
+         return getTime(self.value, fmt=FMT_DATETIME)
+      elif self.tipe==TYPE_UUIDS:
+         v=self.listValue
+         return [uuid.UUID(uid) for uid in v]
+      elif self.tipe==TYPE_LIST:
+         return self.listValue
+      else:
+         raise TypeError('Unknow DataType: {0}'.format(self.tipe))
 
    @property
    def childs(self):
