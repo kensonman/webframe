@@ -473,13 +473,6 @@ class AbstractPreference(OrderableValueObject):
    def __unicode__(self):
       return '(None)' if self.value is None else "{0}::{1}".format(self.name, self.value)
 
-   def __getitem__(self, key):
-      childs=self.childs
-      for c in childs:
-         if c.name==key:
-            return c.realValue
-      return None
-
    @property
    def realValue(self):
       if self.tipe==TYPE_NONE:
