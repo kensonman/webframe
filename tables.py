@@ -7,7 +7,7 @@
 #
 from django_tables2 import A
 from django.contrib.auth.models import User
-from django.utils.html import format_html, escape 
+from django.utils.html import mark_safe, escape 
 from .models import *
 
 import django_tables2 as tables, logging
@@ -28,7 +28,7 @@ class PreferenceTable(tables.Table):
          value='<i class="fas fa-align-left"></i>'
       elif len(value)>50: 
          value='{0}<span class="more-text">...</span>{1}'.format(value[0:10], value[-10:])
-      return format_html('<span class="value">{0}</span>'.format(value))
+      return mark_safe('<span class="value">{0}</span>'.format(value))
 
 class UserTable(tables.Table):
    username=tables.LinkColumn('webframe:user', args=[A('username'),])
