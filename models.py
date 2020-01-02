@@ -498,6 +498,13 @@ class AbstractPreference(OrderableValueObject):
          raise TypeError('Unknow DataType: {0}'.format(self.tipe))
 
    @property
+   def asDict(self):
+      rst=dict()
+      for c in self.childs:
+         rst[c.name]=c.realValue
+      return rst
+
+   @property
    def childs(self):
       return Preference.objects.filter(parent=self).order_by('sequence')
 
