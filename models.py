@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
 from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME
-import math, uuid, logging, json, pytz
+import math, uuid, logging, json, pytz, re
 
 logger=logging.getLogger('webframe.models')
 
@@ -475,24 +475,24 @@ class AbstractPreference(OrderableValueObject):
 
    @property
    def realValue(self):
-      if self.tipe==TYPE_NONE:
+      if self.tipe==AbstractPreference.TYPE_NONE:
          return None
-      elif self.tipe==TYPE_INT or self.tipe==TYPE_DECIMAL:
+      elif self.tipe==AbstractPreference.TYPE_INT or self.tipe==AbstractPreference.TYPE_DECIMAL:
          return self.intValue
-      elif self.tipe==TYPE_BOOLEAN:
+      elif self.tipe==AbstractPreference.TYPE_BOOLEAN:
          return self.boolValue
-      elif self.tipe==TYPE_TEXT or self.tipe==TYPE_RICHTEXT or self.tipe==TYPE_EMAIL:
+      elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL:
          return self.value
-      elif self.tipe==TYPE_DATE:
+      elif self.tipe==AbstractPreference.TYPE_DATE:
          return getTime(self.value, fmt=FMT_DATE)
-      elif self.tipe==TYPE_TIME:
+      elif self.tipe==AbstractPreference.TYPE_TIME:
          return getTime(self.value, fmt=FMT_TIME)
-      elif self.tipe==TYPE_DATETIME:
+      elif self.tipe==AbstractPreference.TYPE_DATETIME:
          return getTime(self.value, fmt=FMT_DATETIME)
-      elif self.tipe==TYPE_UUIDS:
+      elif self.tipe==AbstractPreference.TYPE_UUIDS:
          v=self.listValue
          return [uuid.UUID(uid) for uid in v]
-      elif self.tipe==TYPE_LIST:
+      elif self.tipe==AbstractPreference.TYPE_LIST:
          return self.listValue
       else:
          raise TypeError('Unknow DataType: {0}'.format(self.tipe))

@@ -303,10 +303,11 @@ def pref(req, user=None, prefId=None):
       # Delete the method
       _('Preference.msg.confirmDelete')
       pref.delete()
+
    if pref.parent:
-      return redirect('webframe:pref', user=user.username, prefId=pref.parent.id)
+      return redirect('webframe:pref', user=pref.parent.owner, prefId=pref.parent.id)
    else:
-      return redirect('webframe:prefs', user=user.username if user else req.user)
+      return redirect('webframe:prefs', user=pref.owner)
       
 @login_required
 @is_enabled('WF-AJAX_PREF')
