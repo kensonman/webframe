@@ -1,9 +1,9 @@
 #-*- coding: utf-8 -*-
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 from deprecation import deprecated
 from django.conf import settings
 from django.http import HttpRequest
-from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
 from pytz import timezone as tz
 import os, logging, calendar
@@ -11,7 +11,7 @@ import os, logging, calendar
 logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
-FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'%(FMT_DATE, FMT_TIME))
+FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'.format(FMT_DATE, FMT_TIME))
  
 def valueOf(obj, defval=None):
    '''
@@ -94,6 +94,15 @@ def getDate( val, **kwargs ):
    @param monthend   The indicator to get the end of the specified month;
    @param tzAware    The indicate the result should be timezone aware; default is True
    @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
+   @param offset     Offset the result according to the specified time-expression. The time-expression is combinated with 
+                     [a offset operator: +/-], [a offset value as integer] and [a character indicate the offset unit]. e.g.: 
+                        +1S   (move forward one second);
+                        -2M   (move backward two minutes);
+                        -3H   (move backward three hours);
+                        +4d   (move forward four days);
+                        +5W   (move forward five weeks);
+                        +6m   (move forward six months);
+                        +7y   (move forward seven years);
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATE
    return getTime(val, **kwargs)
@@ -111,9 +120,18 @@ def getTime( val, **kwargs ):
    @param monthend   The indicator to get the end of the specified month;
    @param tzAware    The indicate the result should be timezone aware (in Django, use the TIME_ZONE at settings); default is True
    @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
+   @param offset     Offset the result according to the specified time-expression. The time-expression is combinated with 
+                     [a offset operator: +/-], [a offset value as integer] and [a character indicate the offset unit]. e.g.: 
+                        +1S   (move forward one second);
+                        -2M   (move backward two minutes);
+                        -3H   (move backward three hours);
+                        +4d   (move forward four days);
+                        +5W   (move forward five weeks);
+                        +6m   (move forward six months);
+                        +7y   (move forward seven years);
    '''
    if not val: val=kwargs.get('defval', None)
-   if val=='now': val=tz.now()
+   if val=='now': val=datetime.utcnow().astimezone(tz(settings.TIME_ZONE))
    if isinstance(val, datetime): 
       rst=val
    else:
@@ -125,14 +143,40 @@ def getTime( val, **kwargs ):
          rst=kwargs.get('defval', None)
          if rst == None: return rst
    if kwargs.get('tzAware', True): 
-      if not rst.tzinfo: rst=timezone.make_aware(rst)
+      if not rst.tzinfo: rst=rst.replace(tzinfo=tz(settings.TIME_ZONE))
    if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
-   if 'add' in kwargs: pass
-   if 'replace' in kwargs: pass
+   if 'offset' in kwargs:
+      exp=kwargs['offset']
+      op=exp[0]
+      exp=exp[1:]
+      if not (op=='+' or op=='-'): raise SyntaxError('Offset Operator only support + or -')
+      unit=exp[-1:]
+      try:
+         value=int(exp[:-1])
+         if op=='-': value=value*-1
+      except ValueError:
+         raise SyntaxError('offset expression syntax: {+/-}{int-value}{offset unit character}')
+      if unit=='S':
+         rst=rst+timedelta(seconds=value)
+      elif unit=='M':
+         rst=rst+timedelta(minutes=value)
+      elif unit=='H':
+         rst=rst+timedelta(hours=value)
+      elif unit=='d':
+         rst=rst+timedelta(days=value)
+      elif unit=='W':
+         rst=rst+timedelta(weeks=value)
+      elif unit=='m':
+         rst=rst+relativedelta(months=value)
+      elif unit=='y':
+         rst=rst+relativedelta(years=value)
+      else:
+         raise SyntaxError('Unknow office-unit: {0}'.format(unit))
    if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
    if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
    if 'monthstart' in kwargs: rst=rst.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
    if 'monthend' in kwargs: rst=rst.replace(day=calendar.monthrange(rst.year, rst.month)[1], hour=23, minute=59, second=59, microsecond=999999)
+
    return rst
 
 def getDateTime( val, **kwargs ):
@@ -148,6 +192,15 @@ def getDateTime( val, **kwargs ):
    @param monthend   The indicator to get the end of the specified month;
    @param tzAware    The indicate the result should be timezone aware; default is True
    @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
+   @param offset     Offset the result according to the specified time-expression. The time-expression is combinated with 
+                     [a offset operator: +/-], [a offset value as integer] and [a character indicate the offset unit]. e.g.: 
+                        +1S   (move forward one second);
+                        -2M   (move backward two minutes);
+                        -3H   (move backward three hours);
+                        +4d   (move forward four days);
+                        +5W   (move forward five weeks);
+                        +6m   (move forward six months);
+                        +7y   (move forward seven years);
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATETIME
    return getTime(val, **kwargs)
