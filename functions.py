@@ -3,9 +3,10 @@ from datetime import datetime, timedelta
 from deprecation import deprecated
 from django.conf import settings
 from django.http import HttpRequest
+from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
-from pytz import timezone
-import os, logging
+from pytz import timezone as tz
+import os, logging, calendar
 
 logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
@@ -105,10 +106,11 @@ def getTime( val, **kwargs ):
    @param dayend     The indicator to get the end of the day;
    @param tzAware    The indicate the result should be timezone aware; default is True
    '''
-   if not val: val=kwargs['defval']
+   if not val: val=kwargs.get('defval', None)
    if isinstance(val, datetime): 
       rst=val
    else:
+      logger.warning('Parsing datetime with format: {0}'.format(kwargs.get('fmt', FMT_TIME)))
       fmt=kwargs.get('fmt', FMT_TIME)
       try:
          rst=datetime.strptime(val, fmt)
@@ -116,10 +118,12 @@ def getTime( val, **kwargs ):
          rst=kwargs.get('defval', None)
          if rst == None: return rst
    if kwargs.get('tzAware', True): 
-      if not rst.tzinfo: rst=rst.replace(tzinfo=timezone('UTC')) #Convert native to UTC
-      rst=rst.astimezone(timezone(settings.TIME_ZONE)) #Convert the UTC to local timezone
+      if not rst.tzinfo: rst=timezone.make_aware(rst)
+   if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
    if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
    if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
+   if 'monthstart' in kwargs: rst=rst.replace(day=1)
+   if 'monthend' in kwargs: rst=rst.replace(day=calendar.monthrange(rst.year, rst.month)[1])
    return rst
 
 def getDateTime( val, **kwargs ):
