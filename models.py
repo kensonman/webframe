@@ -388,6 +388,10 @@ class PrefManager(models.Manager):
       if user and user.is_authenticated: 
          if len(rst.filter(owner=user))>0:
            rst=rst.filter(owner=user)
+         else:
+           rst=rst.filter(owner__isnull=True)
+      else:
+         rst=rst.filter(owner__isnull=True)
       if parent: rst=rst.filter(parent=parent)
       rst=rst.order_by('owner')
       if len(rst)>0:
