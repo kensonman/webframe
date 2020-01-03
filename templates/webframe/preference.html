@@ -28,13 +28,13 @@ $(document).ready(function(){
                $('#valueFld').val('').prop('readonly', 'readonly');
                break;
             case 1: //Integer
-               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" digits="digits" required="required"/>');
+               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" digits="digits" value="{{target.value|default:''}}" required="required"/>');
                break;
             case 2: //Decimal
-               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" number="number" required="required"/>');
+               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" number="number" value="{{target.value|default:''}}" required="required"/>');
                break;
             case 3: //Boolean
-               $('<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No"/>').insertAfter(
+               $('<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" {%if target.boolValue%}checked="checked"{%endif%}/>').insertAfter(
                   $('#valueFld').css('display', 'none')
                ).on('change', function(evt){ $('#valueFld').val($(this).is(':checked')) }).trigger('change');
                break;
@@ -44,10 +44,10 @@ $(document).ready(function(){
                $('#valueFld').summernote({height: 100});
                break;
             case 6: //URL
-               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" url="url"/>');
+               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" url="url" value="{{target.value|default:''}}"/>');
                break;
             case 7: //Email
-               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" email="email"/>');
+               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" email="email" value="{{target.value|default:''}}"/>');
                break;
             case 8: //Date
                $('#valueFld').replaceWith(

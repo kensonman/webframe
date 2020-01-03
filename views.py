@@ -307,7 +307,8 @@ def pref(req, user=None, prefId=None):
    if pref.parent:
       return redirect('webframe:pref', user=pref.parent.owner, prefId=pref.parent.id)
    else:
-      return redirect('webframe:prefs', user=pref.owner)
+      logger.warning('saved without parent')
+      return redirect('webframe:prefs', user=pref.owner if pref.owner else req.user)
       
 @login_required
 @is_enabled('WF-AJAX_PREF')
