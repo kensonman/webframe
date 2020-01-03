@@ -87,12 +87,13 @@ def offsetTime( val, expression ):
 
    @param val        The specified time/date/datetime
    @param exp        A space delimited offset-expression. The offset-expression is combinated with 
-                     [a offset operator: +/-], [a offset value as integer] and [a offset-unit as character]. e.g.: 
+                     [a offset operator: +/-/=], [a offset value as integer] and [a offset-unit as character]. e.g.: 
+                        =0f   (set the microsecond to be 0);
                         +1S   (move forward one second);
                         -2M   (move backward two minutes);
                         -3H   (move backward three hours);
                         +4d   (move forward four days);
-                        +5W   (move forward five weeks);
+                        +5W   (move forward five weeks); (= operator not supported)
                         +6m   (move forward six months);
                         +7y   (move forward seven years);
    Usage: "+1M -1d"     Move to the end of current month;
@@ -100,31 +101,56 @@ def offsetTime( val, expression ):
    '''
    rst=val
    for exp in expression.strip().split(' '):
+      #parsing the exp
       op=exp[0]
       exp=exp[1:]
-      if not (op=='+' or op=='-'): raise SyntaxError('Offset Operator only support + or -')
       unit=exp[-1:]
       try:
          value=int(exp[:-1])
-         if op=='-': value=value*-1
       except ValueError:
          raise SyntaxError('offset expression syntax: {+/-}{int-value}{offset unit character}')
-      if unit=='S':
-         rst=rst+timedelta(seconds=value)
-      elif unit=='M':
-         rst=rst+timedelta(minutes=value)
-      elif unit=='H':
-         rst=rst+timedelta(hours=value)
-      elif unit=='d':
-         rst=rst+timedelta(days=value)
-      elif unit=='W':
-         rst=rst+timedelta(weeks=value)
-      elif unit=='m':
-         rst=rst+relativedelta(months=value)
-      elif unit=='y':
-         rst=rst+relativedelta(years=value)
+
+      if op=='=':
+         if unit=='f':
+            rst=rst.replace(microsecond=value)
+         elif unit=='S':
+            rst=rst.replace(second=value)
+         elif unit=='M':
+            rst=rst.replace(minute=value)
+         elif unit=='H':
+            rst=rst.replace(hour=value)
+         elif unit=='d':
+            rst=rst.replace(day=value)
+         elif unit=='W':
+            raise ValueError('= operator is not support the Week')
+         elif unit=='m':
+            rst=rst.replace(month=value)
+         elif unit=='y':
+            rst.rst.replace(year=value)
+         else:
+            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+      elif (op=='+' or op=='-'): 
+         if op=='-': value=value*-1
+         if unit=='f':
+            rst=rst.replace(microsecond=value)
+         elif unit=='S':
+            rst=rst+timedelta(seconds=value)
+         elif unit=='M':
+            rst=rst+timedelta(minutes=value)
+         elif unit=='H':
+            rst=rst+timedelta(hours=value)
+         elif unit=='d':
+            rst=rst+timedelta(days=value)
+         elif unit=='W':
+            rst=rst+timedelta(weeks=value)
+         elif unit=='m':
+            rst=rst+relativedelta(months=value)
+         elif unit=='y':
+            rst=rst+relativedelta(years=value)
+         else:
+            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
       else:
-         raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+         raise SyntaxError('Offset Operator only support +, - and =')
    return rst
 
 def getDate( val, **kwargs ):
