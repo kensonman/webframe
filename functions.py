@@ -85,12 +85,15 @@ def getDate( val, **kwargs ):
    '''
    Retrieve the date from string.
 
-   @param val        The value to be parse to bool;
+   @param val        The value to be parse to time; If "now", return the current time;
    @param defval     The default value if the val is None;
    @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_DATE
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param monthstart The indicator to get the begining of the specified month;
+   @param monthend   The indicator to get the end of the specified month;
    @param tzAware    The indicate the result should be timezone aware; default is True
+   @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATE
    return getTime(val, **kwargs)
@@ -99,14 +102,18 @@ def getTime( val, **kwargs ):
    '''
    Retrieve the time from string.
 
-   @param val        The value to be parse to bool;
+   @param val        The value to be parse to time; If "now", return the current time;
    @param defval     The default value if the val is None;
    @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_TIME
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
-   @param tzAware    The indicate the result should be timezone aware; default is True
+   @param monthstart The indicator to get the begining of the specified month;
+   @param monthend   The indicator to get the end of the specified month;
+   @param tzAware    The indicate the result should be timezone aware (in Django, use the TIME_ZONE at settings); default is True
+   @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
    '''
    if not val: val=kwargs.get('defval', None)
+   if val=='now': val=tz.now()
    if isinstance(val, datetime): 
       rst=val
    else:
@@ -120,22 +127,27 @@ def getTime( val, **kwargs ):
    if kwargs.get('tzAware', True): 
       if not rst.tzinfo: rst=timezone.make_aware(rst)
    if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
+   if 'add' in kwargs: pass
+   if 'replace' in kwargs: pass
    if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
    if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
-   if 'monthstart' in kwargs: rst=rst.replace(day=1)
-   if 'monthend' in kwargs: rst=rst.replace(day=calendar.monthrange(rst.year, rst.month)[1])
+   if 'monthstart' in kwargs: rst=rst.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+   if 'monthend' in kwargs: rst=rst.replace(day=calendar.monthrange(rst.year, rst.month)[1], hour=23, minute=59, second=59, microsecond=999999)
    return rst
 
 def getDateTime( val, **kwargs ):
    '''
    Retrieve the datetime from string.
 
-   @param val        The value to be parse to bool;
+   @param val        The value to be parse to time; If "now", return the current time;
    @param defval     The default value if the val is None;
    @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_DATETIME
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param monthstart The indicator to get the begining of the specified month;
+   @param monthend   The indicator to get the end of the specified month;
    @param tzAware    The indicate the result should be timezone aware; default is True
+   @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATETIME
    return getTime(val, **kwargs)

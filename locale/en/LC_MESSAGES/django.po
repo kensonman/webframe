@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 07:41+0000\n"
+"POT-Creation-Date: 2020-01-03 08:53+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -115,154 +115,142 @@ msgstr "The enabling status of the object"
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "Ordering"
 
-#: models.py:428
+#: models.py:430
 msgid "webframe.models.Preference.TYPE.NONE"
 msgstr "None (Must be empty)"
 
-#: models.py:429
+#: models.py:431
 msgid "webframe.models.Preference.TYPE.INT"
 msgstr "Integer"
 
-#: models.py:430
+#: models.py:432
 msgid "webframe.models.Preference.TYPE.DECIMAL"
 msgstr "Decimal"
 
-#: models.py:431
+#: models.py:433
 msgid "webframe.models.Preference.TYPE.BOOLEAN"
 msgstr "Boolean"
 
-#: models.py:432
+#: models.py:434
 msgid "webframe.models.Preference.TYPE.TEXT"
 msgstr "Text"
 
-#: models.py:433
+#: models.py:435
 msgid "webframe.models.Preference.TYPE.RICHTEXT"
 msgstr "Rich Text (HTML)"
 
-#: models.py:434
+#: models.py:436
 msgid "webframe.models.Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:435
+#: models.py:437
 msgid "webframe.models.Preference.TYPE.EMAIL"
 msgstr "Email"
 
-#: models.py:436
+#: models.py:438
 msgid "webframe.models.Preference.TYPE.DATE"
 msgstr "Date"
 
-#: models.py:437
+#: models.py:439
 msgid "webframe.models.Preference.TYPE.TIME"
 msgstr "Time"
 
-#: models.py:438
+#: models.py:440
 msgid "webframe.models.Preference.TYPE.DATETIME"
 msgstr "Date Time"
 
-#: models.py:439
+#: models.py:441
 msgid "webframe.models.Preference.TYPE.UUIDS"
 msgstr "Comma delimited UUIDs"
 
-#: models.py:442 templates/webframe/preference.html:140
+#: models.py:442
+msgid "webframe.models.Preference.TYPE.LIST"
+msgstr "Comma, Semicolon or | delimited strigns"
+
+#: models.py:443
+msgid "webframe.models.Preference.TYPE.JSON"
+msgstr "JSON object"
+
+#: models.py:446 templates/webframe/preference.html:140
 #: templates/webframe/preference.html:141
 msgid "webframe.models.Preference.name"
 msgstr "Name"
 
-#: models.py:442
+#: models.py:446
 msgid "webframe.models.Preference.name.helptext"
 msgstr "The name of the preference"
 
-#: models.py:443 templates/webframe/preference.html:144
+#: models.py:447 templates/webframe/preference.html:144
 #: templates/webframe/preference.html:145
 msgid "webframe.models.Preference.value"
 msgstr "Value"
 
-#: models.py:443
+#: models.py:447
 msgid "webframe.models.Preference.value.helptext"
 msgstr "The value of the perference"
 
-#: models.py:449
+#: models.py:453
 msgid "Pwebframe.models.reference.owner"
 msgstr "Owner"
 
-#: models.py:450
+#: models.py:454
 msgid "webframe.models.Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:457 templates/webframe/preference.html:131
+#: models.py:461 templates/webframe/preference.html:131
 #: templates/webframe/preference.html:132
 msgid "webframe.models.Preference.parent"
 msgstr "Parent"
 
-#: models.py:458
+#: models.py:462
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:462 templates/webframe/preference.html:148
+#: models.py:466 templates/webframe/preference.html:148
 #: templates/webframe/preference.html:149
 msgid "webframe.models.Preference.sequence"
 msgstr "Sequence"
 
-#: models.py:463
+#: models.py:467
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:465 templates/webframe/preference.html:117
+#: models.py:469 templates/webframe/preference.html:117
 msgid "webframe.models.Preference.tipe"
 msgstr "Type"
 
-#: models.py:465
+#: models.py:469
 msgid "webframe.models.Preference.tipe.helptext"
 msgstr "The type of the preference value"
 
-#: models.py:548
+#: models.py:586
 msgid "webframe.models.Preference.reserved"
 msgstr "Reserved?"
 
-#: models.py:548
+#: models.py:586
 msgid "webframe.models.Preference.reserved.helptext"
 msgstr ""
 "The preference is reserved for system use (Should not shown on front-end UI)."
 
-#: models.py:552
+#: models.py:590
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:553
+#: models.py:591
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:556
+#: models.py:594
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:560
+#: models.py:598
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:565
+#: models.py:603
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
-
-#: templates/webframe/blank.html:9
-msgid "appName"
-msgstr ""
-
-#: templates/webframe/blank.html:19
-msgid "Javascript is required"
-msgstr ""
-
-#: templates/webframe/blank.html:20
-msgid ""
-"The javascript must be enabled in this site to have the best browsing "
-"experience."
-msgstr ""
-
-#: templates/webframe/blank.html:21
-msgid ""
-"Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
-"a> to see how to enable the javascript in your browser."
-msgstr ""
 
 #: templates/webframe/footer.html:3
 #, python-format
@@ -276,6 +264,57 @@ msgstr "Version"
 #: templates/webframe/footer.html:6
 msgid "render-date"
 msgstr "Render Date"
+
+#: templates/webframe/framework.html:9
+msgid "appName"
+msgstr ""
+
+#: templates/webframe/framework.html:19
+msgid "Javascript is required"
+msgstr ""
+
+#: templates/webframe/framework.html:20
+msgid ""
+"The javascript must be enabled in this site to have the best browsing "
+"experience."
+msgstr ""
+
+#: templates/webframe/framework.html:21
+msgid ""
+"Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
+"a> to see how to enable the javascript in your browser."
+msgstr ""
+
+#: templates/webframe/header.html:40
+msgid "admin-tools"
+msgstr ""
+
+#: templates/webframe/header.html:41 templates/webframe/user.html:3
+#: templates/webframe/user.html:23 templates/webframe/users.html:3
+#: templates/webframe/users.html:29
+msgid "users"
+msgstr "Users"
+
+#: templates/webframe/header.html:45 templates/webframe/header.html:55
+#, python-format
+msgid "Hi, %(username)s"
+msgstr "Hi, %(username)s"
+
+#: templates/webframe/header.html:49
+msgid "impersonate-stop"
+msgstr "Stop impersonating"
+
+#: templates/webframe/header.html:52
+msgid "preferences"
+msgstr "Preference"
+
+#: templates/webframe/header.html:53
+msgid "logout"
+msgstr "Logout"
+
+#: templates/webframe/header.html:57 templates/webframe/login.html:77
+msgid "login"
+msgstr "Login"
 
 #: templates/webframe/login.html:3 templates/webframe/login.html:24
 msgid "Login Required"
@@ -322,10 +361,6 @@ msgstr "Username"
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "Password"
-
-#: templates/webframe/login.html:77
-msgid "login"
-msgstr "Login"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -490,11 +525,6 @@ msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 msgid "User.new"
 msgstr "Add User"
 
-#: templates/webframe/user.html:3 templates/webframe/user.html:23
-#: templates/webframe/users.html:3 templates/webframe/users.html:29
-msgid "users"
-msgstr "Users"
-
 #: templates/webframe/user.html:28
 msgid "id"
 msgstr "ID"
@@ -566,15 +596,3 @@ msgstr "Are you user to delete this user? This action can not be un-do."
 #: views.py:304
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
-
-#~ msgid "Hi, %(username)s"
-#~ msgstr "Hi, %(username)s"
-
-#~ msgid "impersonate-stop"
-#~ msgstr "Stop impersonating"
-
-#~ msgid "preferences"
-#~ msgstr "Preference"
-
-#~ msgid "logout"
-#~ msgstr "Logout"

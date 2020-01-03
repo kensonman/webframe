@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 07:41+0000\n"
+"POT-Creation-Date: 2020-01-03 08:53+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -116,159 +116,143 @@ msgstr "這項資料是否啟用"
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "排序"
 
-#: models.py:428
+#: models.py:430
 msgid "webframe.models.Preference.TYPE.NONE"
 msgstr "必需為空值"
 
-#: models.py:429
+#: models.py:431
 msgid "webframe.models.Preference.TYPE.INT"
 msgstr "整數"
 
-#: models.py:430
+#: models.py:432
 msgid "webframe.models.Preference.TYPE.DECIMAL"
 msgstr "常數 (可以處理小數)"
 
-#: models.py:431
+#: models.py:433
 msgid "webframe.models.Preference.TYPE.BOOLEAN"
 msgstr "真假值"
 
-#: models.py:432
+#: models.py:434
 msgid "webframe.models.Preference.TYPE.TEXT"
 msgstr "純文字"
 
-#: models.py:433
+#: models.py:435
 msgid "webframe.models.Preference.TYPE.RICHTEXT"
 msgstr "可格式化文字 (HTML)"
 
-#: models.py:434
+#: models.py:436
 msgid "webframe.models.Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:435
+#: models.py:437
 msgid "webframe.models.Preference.TYPE.EMAIL"
 msgstr "電郵地址"
 
-#: models.py:436
+#: models.py:438
 msgid "webframe.models.Preference.TYPE.DATE"
 msgstr "日期"
 
-#: models.py:437
+#: models.py:439
 msgid "webframe.models.Preference.TYPE.TIME"
 msgstr "時間"
 
-#: models.py:438
+#: models.py:440
 msgid "webframe.models.Preference.TYPE.DATETIME"
 msgstr "日期時間"
 
-#: models.py:439
+#: models.py:441
 msgid "webframe.models.Preference.TYPE.UUIDS"
 msgstr "豆號分隔的 UUIDs"
 
-#: models.py:442 templates/webframe/preference.html:140
+#: models.py:442
+msgid "webframe.models.Preference.TYPE.LIST"
+msgstr "豆號、分號或｜分隔的字串"
+
+#: models.py:443
+msgid "webframe.models.Preference.TYPE.JSON"
+msgstr "JSON 物件"
+
+#: models.py:446 templates/webframe/preference.html:140
 #: templates/webframe/preference.html:141
 msgid "webframe.models.Preference.name"
 msgstr "設定名稱"
 
-#: models.py:442
+#: models.py:446
 msgid "webframe.models.Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:443 templates/webframe/preference.html:144
+#: models.py:447 templates/webframe/preference.html:144
 #: templates/webframe/preference.html:145
 msgid "webframe.models.Preference.value"
 msgstr "值"
 
-#: models.py:443
+#: models.py:447
 msgid "webframe.models.Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:449
+#: models.py:453
 msgid "Pwebframe.models.reference.owner"
 msgstr "擁有人"
 
-#: models.py:450
+#: models.py:454
 msgid "webframe.models.Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:457 templates/webframe/preference.html:131
+#: models.py:461 templates/webframe/preference.html:131
 #: templates/webframe/preference.html:132
 msgid "webframe.models.Preference.parent"
 msgstr "歸類"
 
-#: models.py:458
+#: models.py:462
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:462 templates/webframe/preference.html:148
+#: models.py:466 templates/webframe/preference.html:148
 #: templates/webframe/preference.html:149
 msgid "webframe.models.Preference.sequence"
 msgstr "排序"
 
-#: models.py:463
+#: models.py:467
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
-#: models.py:465 templates/webframe/preference.html:117
+#: models.py:469 templates/webframe/preference.html:117
 msgid "webframe.models.Preference.tipe"
 msgstr "類型"
 
-#: models.py:465
+#: models.py:469
 msgid "webframe.models.Preference.tipe.helptext"
 msgstr "設定值的類列"
 
-#: models.py:548
+#: models.py:586
 msgid "webframe.models.Preference.reserved"
 msgstr "系統保留？"
 
-#: models.py:548
+#: models.py:586
 msgid "webframe.models.Preference.reserved.helptext"
 msgstr "這個設定是否為系統保留（前台不應該顯示與使用者）？"
 
-#: models.py:552
+#: models.py:590
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "異步程序物件"
 
-#: models.py:553
+#: models.py:591
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "異步程序物件"
 
-#: models.py:556
+#: models.py:594
 msgid "AsyncManipulationObject.task_id"
 msgstr "異步程序#"
 
-#: models.py:560
+#: models.py:598
 msgid "AsyncManipulationObject.is_processing"
 msgstr "異步程序進行中⋯⋯"
 
-#: models.py:565
+#: models.py:603
 msgid "AsyncManipulationObject.is_ready"
 msgstr "異步程序已準備就緒"
-
-#: templates/webframe/blank.html:9
-msgid "appName"
-msgstr ""
-
-#: templates/webframe/blank.html:19
-msgid "Javascript is required"
-msgstr "無法正常顯示網頁"
-
-#: templates/webframe/blank.html:20
-msgid ""
-"The javascript must be enabled in this site to have the best browsing "
-"experience."
-msgstr ""
-"這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
-"頁能正確顯示."
-
-#: templates/webframe/blank.html:21
-msgid ""
-"Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
-"a> to see how to enable the javascript in your browser."
-msgstr ""
-"按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</a> "
-"查看如何打開 JavaScript 支援."
 
 #: templates/webframe/footer.html:3
 #, python-format
@@ -282,6 +266,61 @@ msgstr "版本"
 #: templates/webframe/footer.html:6
 msgid "render-date"
 msgstr "輸出日期"
+
+#: templates/webframe/framework.html:9
+msgid "appName"
+msgstr ""
+
+#: templates/webframe/framework.html:19
+msgid "Javascript is required"
+msgstr "無法正常顯示網頁"
+
+#: templates/webframe/framework.html:20
+msgid ""
+"The javascript must be enabled in this site to have the best browsing "
+"experience."
+msgstr ""
+"這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
+"頁能正確顯示."
+
+#: templates/webframe/framework.html:21
+msgid ""
+"Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
+"a> to see how to enable the javascript in your browser."
+msgstr ""
+"按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</a> "
+"查看如何打開 JavaScript 支援."
+
+#: templates/webframe/header.html:40
+msgid "admin-tools"
+msgstr ""
+
+#: templates/webframe/header.html:41 templates/webframe/user.html:3
+#: templates/webframe/user.html:23 templates/webframe/users.html:3
+#: templates/webframe/users.html:29
+msgid "users"
+msgstr "使用者"
+
+#: templates/webframe/header.html:45 templates/webframe/header.html:55
+#, python-format
+msgid "Hi, %(username)s"
+msgstr "你好，%(username)s"
+
+#: templates/webframe/header.html:49
+msgid "impersonate-stop"
+msgstr "停止扮演"
+
+#: templates/webframe/header.html:52
+msgid "preferences"
+msgstr "個人設定"
+
+#: templates/webframe/header.html:53
+msgid "logout"
+msgstr "登出"
+
+#: templates/webframe/header.html:57 templates/webframe/login.html:77
+msgid "login"
+msgstr "登入"
 
 #: templates/webframe/login.html:3 templates/webframe/login.html:24
 msgid "Login Required"
@@ -328,10 +367,6 @@ msgstr "用戶名稱"
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
-
-#: templates/webframe/login.html:77
-msgid "login"
-msgstr "登入"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -497,11 +532,6 @@ msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 msgid "User.new"
 msgstr "新的用戶"
 
-#: templates/webframe/user.html:3 templates/webframe/user.html:23
-#: templates/webframe/users.html:3 templates/webframe/users.html:29
-msgid "users"
-msgstr "使用者"
-
 #: templates/webframe/user.html:28
 msgid "id"
 msgstr "ID"
@@ -573,15 +603,3 @@ msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消
 #: views.py:304
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
-
-#~ msgid "Hi, %(username)s"
-#~ msgstr "你好，%(username)s"
-
-#~ msgid "impersonate-stop"
-#~ msgstr "停止扮演"
-
-#~ msgid "preferences"
-#~ msgstr "個人設定"
-
-#~ msgid "logout"
-#~ msgstr "登出"

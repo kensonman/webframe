@@ -425,6 +425,7 @@ class AbstractPreference(OrderableValueObject):
    TYPE_DATETIME       = 10
    TYPE_UUIDS          = 11
    TYPE_LIST           = 12
+   TYPE_JSON           = 13
    TYPES               = (
       (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
       (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
@@ -439,6 +440,7 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_DATETIME, _('webframe.models.Preference.TYPE.DATETIME')),
       (TYPE_UUIDS, _('webframe.models.Preference.TYPE.UUIDS')),
       (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
+      (TYPE_JSON, _('webframe.models.Preference.TYPE.JSON')),
    )
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
@@ -494,6 +496,8 @@ class AbstractPreference(OrderableValueObject):
          return [uuid.UUID(uid) for uid in v]
       elif self.tipe==AbstractPreference.TYPE_LIST:
          return self.listValue
+      elif self.tipe==AbstractPreference.TYPE_JSON:
+         return self.jsonValue
       else:
          raise TypeError('Unknow DataType: {0}'.format(self.tipe))
 
