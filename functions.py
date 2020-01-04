@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from deprecation import deprecated
 from django.conf import settings
 from django.http import HttpRequest
+from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
 from pytz import timezone as tz
 import os, logging, calendar
@@ -187,7 +188,7 @@ def getTime( val, **kwargs ):
    @param offset     The offset expression according to offsetTime( val, expression )
    '''
    if not val: val=kwargs.get('defval', None)
-   if val=='now': val=datetime.utcnow().astimezone(tz(settings.TIME_ZONE))
+   if val=='now': val=datetime.utcnow().astimezone(timezone.get_current_timezone())
    if isinstance(val, datetime): 
       rst=val
    else:
@@ -199,7 +200,7 @@ def getTime( val, **kwargs ):
          rst=kwargs.get('defval', None)
          if rst == None: return rst
    if kwargs.get('tzAware', True): 
-      if not rst.tzinfo: rst=rst.replace(tzinfo=tz(settings.TIME_ZONE))
+      if not rst.tzinfo: rst=timezone.make_aware(rst)
    if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
    if 'offset' in kwargs: rst=offsetTime(rst, kwargs['offset'])
    if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
