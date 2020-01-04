@@ -52,7 +52,7 @@ $(document).ready(function(){
             case 8: //Date
                $('#valueFld').replaceWith(
                   '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr"/>'+
+                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
                   ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
                   '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
                   ' </div>'+
@@ -63,7 +63,7 @@ $(document).ready(function(){
             case 9: //Time
                $('#valueFld').replaceWith(
                   '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr"/>'+
+                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
                   ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
                   '  <div class="input-group-text"><i class="fa fa-clock"></i></div>'+
                   ' </div>'+
@@ -74,7 +74,7 @@ $(document).ready(function(){
             case 10: //Date Time
                $('#valueFld').replaceWith(
                   '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr"/>'+
+                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
                   ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
                   '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
                   ' </div>'+
@@ -116,7 +116,7 @@ $(document).ready(function(){
       <div class="field form-group">
          <label for="tipeFld">{%trans 'webframe.models.Preference.tipe'%}</label>
          <div class="dropdown" id="tipeFld">
-            <input type="hidden" name="tipe" value="{{target.tipe|default:4}}" required="required"/>
+            <input type="hidden" name="tipe" value="{{target.tipe}}" required="required"/>
             <button type="button dropdown-toggle" data-toggle="dropdown" class="btn btn-secondary {%if prems.webframe.change_preference_type or not target.isNew%}disabled{%endif%}">aaa{%trans '-- Please Select --'%}</button>
             <ul class="dropdown-menu">{%for t in TYPES%}{%with name=t|getitem:1%}
                <li><a class="dropdown-item" val="{{t|getitem:0}}" name="{%trans name%}">{%trans name%}</a></li>
