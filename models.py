@@ -376,12 +376,13 @@ class PrefManager(models.Manager):
      
      @name                   The preference name
      @kwargs['defval']       The default value
-     @kwargs['user']         The preference owner
+     @kwargs['owner']        The preference owner
+     @kwargs['user']         The alias of "owner"
      @kwargs['returnValue']  The boolean value indicate the method return the preference's value instead of preference instance.
      @kwargs['parent']       The parent preference of this instance
      '''
      defval=kwargs.get('defval', None)
-     user=kwargs.get('user', None)
+     user=kwargs.get('owner', kwargs.get('user', None))
      parent=kwargs.get('parent', None)
      rst=self.filter(name=name)
      try:
@@ -585,6 +586,13 @@ class AbstractPreference(OrderableValueObject):
    @listValue.setter
    def listValue(self, val):
       self.value='|'.join(val)
+
+   @property
+   def user(self):
+      return self.owner
+   @user.setter
+   def user(self, val):
+      self.owner=val
 
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
