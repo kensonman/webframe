@@ -271,7 +271,7 @@ def pref(req, user=None, prefId=None):
       params['currentuser']=user
       params['TYPES']=Preference.TYPES
       return render(req, getattr(settings, 'TMPL_PREFERENCE', 'webframe/preference.html'), params)
-   elif req.method=='POST':
+   elif req.method=='POST' or req.method=='PUT':
       # Security Checking
       if req.POST.get('owner', None):
          if pref.isNew() and req.user.has_perm('webframe.add_preference'):
@@ -303,6 +303,9 @@ def pref(req, user=None, prefId=None):
       # Delete the method
       _('Preference.msg.confirmDelete')
       pref.delete()
+
+   if req.POST.get('nextUrl', None):
+      return redirect(req.POST.get('nextUrl', '/'))
 
    if pref.parent:
       return redirect('webframe:pref', user=pref.parent.owner, prefId=pref.parent.id)
