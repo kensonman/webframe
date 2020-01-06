@@ -103,6 +103,14 @@ $(document).ready(function(){
 {%endblock%}
 
 {%block content%}<div class="jumbotron"><div class="pnl pnl-padding">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{%url 'webframe:prefs' user=req.user%}">{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}</a></li>
+      {%if target.parent%}
+         <li class="breadcrumb-item"><a href="{%url 'webframe:pref' user=req.user prefId=target.parent.id%}">{{target.parent.name}}</a></li>
+      {%endif%}
+      <li class="breadcrumb-item active">{{target.name}}</li>
+   </ol>
+
    <h1>{%if target.user%}
       {%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}
    {%else%}
