@@ -7,12 +7,22 @@ from django.http import HttpRequest
 from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
 from pytz import timezone as tz
-import os, logging, calendar
+import os, logging, calendar, uuid
 
 logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
 FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'.format(FMT_DATE, FMT_TIME))
+
+def isUUID(val):
+   '''
+   Returns True if the specified value is a valid UUID. Otherwise, returns False
+   '''
+   try:
+      uuid.UUID(val)
+      return True
+   except ValueError:
+      return False
  
 def valueOf(obj, defval=None):
    '''
