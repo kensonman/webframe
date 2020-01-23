@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
-from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME
+from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID
 import math, uuid, logging, json, pytz, re
 
 logger=logging.getLogger('webframe.models')
@@ -377,7 +377,7 @@ class PrefManager(models.Manager):
      '''
      Get the preference from database.
      
-     @name                   The preference name
+     @name                   The preference name or UUID
      @kwargs['defval']       The default value
      @kwargs['owner']        The preference owner
      @kwargs['user']         The alias of "owner"
@@ -387,7 +387,10 @@ class PrefManager(models.Manager):
      defval=kwargs.get('defval', None)
      user=kwargs.get('owner', kwargs.get('user', None))
      parent=kwargs.get('parent', None)
-     rst=self.filter(name=name)
+     if isUUID(name):
+        rst=self.filter(id=name)
+     else:
+        rst=self.filter(name=name)
      try:
       if user and user.is_authenticated: 
          if len(rst.filter(owner=user))>0:
