@@ -20,80 +20,84 @@ $(document).ready(function(){
 {%block content%}<div class="card card-secondary"><div class="card-body">
 	<h1>{%blocktrans with user=user.username%}{{user}}'s preferences{%endblocktrans%}</h1><hr/>
 
-	<div class="pnl-padding"><div class="row">
-		<div class="col-12 col-sm-12 col-md-4 col-lg-4"><form id="changePwdFrm" method="POST" class="card card-warning">
-			{%csrf_token%}
-			<div class="card-header">{%trans 'Preference.sections.changePassword'%}</div>
-			<div class="card-body">
-				{%if not user.is_superuser%}
-				<div class="field">
-					<label for="oldPwdFld">{%trans 'BTUser.old-password'%}</label>
-					<input type="password" name="oldPwd" id="oldPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.old-password'%}"/>
-				</div>
-				{%endif%}
-				<div class="field">
-					<label for="newPwdFld">{%trans 'BTUser.password'%}</label>
-					<input type="password" name="newPwd" id="newPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.password'%}"/>
-				</div>
-				<div class="field">
-					<label for="rePwdFld">{%trans 'BTUser.re-password'%}</label>
-					<input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" equalTo="#newPwdFld" placeholder="{%trans 'BTUser.re-password'%}"/>
-				</div>
-				<div class="pnl pnl-btns">
-					<button type="submit" class="btn btn-warning">{%trans 'Preference.actions.changePassword'%}</button>
-				</div>
-			</div>
-		</form></div>
+	<div class="pnl-padding">
+      <div class="row">
+         <div class="col-12 col-sm-12 col-md-4 col-lg-4"><form id="changePwdFrm" method="POST" class="card card-warning">
+            {%csrf_token%}
+            <div class="card-header">{%trans 'Preference.sections.changePassword'%}</div>
+            <div class="card-body">
+               {%if not user.is_superuser%}
+               <div class="field">
+                  <label for="oldPwdFld">{%trans 'BTUser.old-password'%}</label>
+                  <input type="password" name="oldPwd" id="oldPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.old-password'%}"/>
+               </div>
+               {%endif%}
+               <div class="field">
+                  <label for="newPwdFld">{%trans 'BTUser.password'%}</label>
+                  <input type="password" name="newPwd" id="newPwdFld" class="form-control" required="true" placeholder="{%trans 'BTUser.password'%}"/>
+               </div>
+               <div class="field">
+                  <label for="rePwdFld">{%trans 'BTUser.re-password'%}</label>
+                  <input type="password" name="rePwd" id="rePwdFld" class="form-control" required="true" equalTo="#newPwdFld" placeholder="{%trans 'BTUser.re-password'%}"/>
+               </div>
+               <div class="pnl pnl-btns">
+                  <button type="submit" class="btn btn-warning">{%trans 'Preference.actions.changePassword'%}</button>
+               </div>
+            </div>
+         </form></div>
 
 
-		<div class="col-12 col-sm-12 col-md-8 col-lg-8">
-			{%with target=currentuser%}<form id="userFrm" method="POST" action="{%url 'webframe:user' user=target.username|default:'add'%}" class="card card-warning">
-				{%csrf_token%}
-				{%method_override 'PUT'%}
-				<input type="hidden" name="next" value="{%url 'webframe:prefs' target.username%}"/>
-				<div class="card-header">{%trans 'Preference.sections.pin'%}</div>
-				<div class="card-body">
-					<div class="field">
-						<label for="first_nameFld">{%trans 'first name'%}</label>
-						<input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
-					</div>
-					<div class="field">
-						<label for="last_nameFld">{%trans 'last name'%}</label>
-						<input name="last_name" value="{{target.last_name|default:''}}" class="form-control" placeholder="{%trans 'last name'%}" required="true"/>
-					</div>
-					<div class="field">
-						<label for="emailFld">{%trans 'email address'%}</label>
-						<input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
-					</div>
-					<div class="pnl pnl-btns">
-						<button type="submit" class="btn btn-warning"><i class="fas fa-user"></i> {%trans 'User.actions.update'%}</button>
-					</div>
-				</div>
-			</form>{%endwith%}
-		</div>
+         <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+            {%with target=currentuser%}<form id="userFrm" method="POST" action="{%url 'webframe:user' user=target.username|default:'add'%}" class="card card-warning">
+               {%csrf_token%}
+               {%method_override 'PUT'%}
+               <input type="hidden" name="next" value="{%url 'webframe:prefs' target.username%}"/>
+               <div class="card-header">{%trans 'Preference.sections.pin'%}</div>
+               <div class="card-body">
+                  <div class="field">
+                     <label for="first_nameFld">{%trans 'first name'%}</label>
+                     <input name="first_name" value="{{target.first_name|default:''}}" class="form-control" placeholder="{%trans 'first name'%}" required="true"/>
+                  </div>
+                  <div class="field">
+                     <label for="last_nameFld">{%trans 'last name'%}</label>
+                     <input name="last_name" value="{{target.last_name|default:''}}" class="form-control" placeholder="{%trans 'last name'%}" required="true"/>
+                  </div>
+                  <div class="field">
+                     <label for="emailFld">{%trans 'email address'%}</label>
+                     <input name="email" value="{{target.email|default:''}}" class="form-control" placeholder="{%trans 'email address'%}" required="true"/>
+                  </div>
+                  <div class="pnl pnl-btns">
+                     <button type="submit" class="btn btn-warning"><i class="fas fa-user"></i> {%trans 'User.actions.update'%}</button>
+                  </div>
+               </div>
+            </form>{%endwith%}
+         </div>
+      </div>
 
-		{%if user.is_superuser or perms.webframe.add_config or perms.webframe.change_config or perms.webframe.browse_config%}
-		<div id="confContainer" class="col-12 col-sm-12 col-md-6 col-lg-6"><div class="card card-info">
-			<div class="card-header">{%trans 'Preference.sections.config'%}</div>
-			<div class="card-body">
-				{%render_table config%}
-				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'webframe:pref' user=user.username prefId='new'%}?config=True"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
-				</div>
-			</div>
-		</div></div>
-		{%endif%}
+      <div class="row" style="margin-top: 20px">
+         {%if perms.webframe.add_preference or perms.webframe.change_preference or perms.webframe.browse_preference%}
+         <div id="prefContainer" class="col-12 col-sm-12 col-md-6 col-lg-6"><div class="card card-info">
+            <div class="card-header">{%trans 'Preference.sections.preference'%}</div>
+            <div class="card-body">
+               {%render_table preference%}
+               <div class="pnl pnl-btns">
+                  <a class="btn btn-primary" href="{%url 'webframe:pref' user=currentuser.username prefId='new'%}"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
+               </div>
+            </div>
+         </div></div>
+         {%endif%}
 
-		{%if perms.webframe.add_preference or perms.webframe.change_preference or perms.webframe.browse_preference%}
-		<div id="prefContainer" class="col-12 col-sm-12 col-md-6 col-lg-6"><div class="card card-info">
-			<div class="card-header">{%trans 'Preference.sections.preference'%}</div>
-			<div class="card-body">
-				{%render_table preference%}
-				<div class="pnl pnl-btns">
-					<a class="btn btn-primary" href="{%url 'webframe:pref' user=currentuser.username prefId='new'%}"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addPref'%}</a>
-				</div>
-			</div>
-		</div></div>
-		{%endif%}
-	</div></div>
+         {%if user.is_superuser or perms.webframe.add_config or perms.webframe.change_config or perms.webframe.browse_config%}
+         <div id="confContainer" class="col-12 col-sm-12 col-md-6 col-lg-6"><div class="card card-info">
+            <div class="card-header">{%trans 'Preference.sections.config'%}</div>
+            <div class="card-body">
+               {%render_table config%}
+               <div class="pnl pnl-btns">
+                  <a class="btn btn-primary" href="{%url 'webframe:pref' user=user.username prefId='new'%}?config=True"><i class="fas fa-plus"></i> {%trans 'Preference.actions.addConfig'%}</a>
+               </div>
+            </div>
+         </div></div>
+         {%endif%}
+      </div>
+   </div>
 </div></div>{%endblock%}

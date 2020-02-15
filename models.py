@@ -9,8 +9,8 @@ from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
-from .functions import getBool, getClass
-import math, uuid, logging, json, pytz
+from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID
+import math, uuid, logging, json, pytz, re
 
 logger=logging.getLogger('webframe.models')
 
@@ -18,6 +18,9 @@ DATEFMT='%Y-%m-%d %H:%M:%S.%fT%z'
 fmt=lambda d: 'null' if d is None else d.strftime(DATEFMT)
 rfmt=lambda d: None if d=='null' else datetime.strptime(d, DATEFMT)
 nullValue=_('null') #Make sure the null value can be translate
+#Make sure the following transaction
+_('Traditional Chinese')
+_('English')
 
 def valueOf(val):
    '''
@@ -374,20 +377,28 @@ class PrefManager(models.Manager):
      '''
      Get the preference from database.
      
-     @name                   The preference name
+     @name                   The preference name or UUID
      @kwargs['defval']       The default value
-     @kwargs['user']         The preference owner
+     @kwargs['owner']        The preference owner
+     @kwargs['user']         The alias of "owner"
      @kwargs['returnValue']  The boolean value indicate the method return the preference's value instead of preference instance.
      @kwargs['parent']       The parent preference of this instance
      '''
      defval=kwargs.get('defval', None)
-     user=kwargs.get('user', None)
+     user=kwargs.get('owner', kwargs.get('user', None))
      parent=kwargs.get('parent', None)
-     rst=self.filter(name=name)
+     if isUUID(name):
+        rst=self.filter(id=name)
+     else:
+        rst=self.filter(name=name)
      try:
       if user and user.is_authenticated: 
          if len(rst.filter(owner=user))>0:
            rst=rst.filter(owner=user)
+         else:
+           rst=rst.filter(owner__isnull=True)
+      else:
+         rst=rst.filter(owner__isnull=True)
       if parent: rst=rst.filter(parent=parent)
       rst=rst.order_by('owner')
       if len(rst)>0:
@@ -424,6 +435,8 @@ class AbstractPreference(OrderableValueObject):
    TYPE_TIME           = 9
    TYPE_DATETIME       = 10
    TYPE_UUIDS          = 11
+   TYPE_LIST           = 12
+   TYPE_JSON           = 13
    TYPES               = (
       (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
       (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
@@ -437,6 +450,8 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_TIME, _('webframe.models.Preference.TYPE.TIME')),
       (TYPE_DATETIME, _('webframe.models.Preference.TYPE.DATETIME')),
       (TYPE_UUIDS, _('webframe.models.Preference.TYPE.UUIDS')),
+      (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
+      (TYPE_JSON, _('webframe.models.Preference.TYPE.JSON')),
    )
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
@@ -470,6 +485,39 @@ class AbstractPreference(OrderableValueObject):
 
    def __unicode__(self):
       return '(None)' if self.value is None else "{0}::{1}".format(self.name, self.value)
+
+   @property
+   def realValue(self):
+      if self.tipe==AbstractPreference.TYPE_NONE:
+         return None
+      elif self.tipe==AbstractPreference.TYPE_INT or self.tipe==AbstractPreference.TYPE_DECIMAL:
+         return self.intValue
+      elif self.tipe==AbstractPreference.TYPE_BOOLEAN:
+         return self.boolValue
+      elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL:
+         return self.value
+      elif self.tipe==AbstractPreference.TYPE_DATE:
+         return getTime(self.value, fmt=FMT_DATE)
+      elif self.tipe==AbstractPreference.TYPE_TIME:
+         return getTime(self.value, fmt=FMT_TIME)
+      elif self.tipe==AbstractPreference.TYPE_DATETIME:
+         return getTime(self.value, fmt=FMT_DATETIME)
+      elif self.tipe==AbstractPreference.TYPE_UUIDS:
+         v=self.listValue
+         return [uuid.UUID(uid) for uid in v]
+      elif self.tipe==AbstractPreference.TYPE_LIST:
+         return self.listValue
+      elif self.tipe==AbstractPreference.TYPE_JSON:
+         return self.jsonValue
+      else:
+         raise TypeError('Unknow DataType: {0}'.format(self.tipe))
+
+   @property
+   def asDict(self):
+      rst=dict()
+      for c in self.childs:
+         rst[c.name]=c.realValue
+      return rst
 
    @property
    def childs(self):
@@ -536,6 +584,21 @@ class AbstractPreference(OrderableValueObject):
    @jsonValue.setter
    def jsonValue(self, val):
       self.value=json.dumps(val)
+
+   @property
+   def listValue(self):
+      if self.value is None: return list()
+      return re.findall(r'[^,;|]+', self.value)
+   @listValue.setter
+   def listValue(self, val):
+      self.value='|'.join(val)
+
+   @property
+   def user(self):
+      return self.owner
+   @user.setter
+   def user(self, val):
+      self.owner=val
 
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))

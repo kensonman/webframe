@@ -6,6 +6,8 @@ pytz
 netaddr
 deprecation
 django_tables2
+python-dateutil
+pytimeparse
 
 #Optional
 django-impersonate

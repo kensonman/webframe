@@ -26,6 +26,8 @@ class LangMiddleware(object):
          if 'HTTP_ACCEPT_LANGUAGE' in req.META:
             del req.META['HTTP_ACCEPT_LANGUAGE']
          lang=getattr(settings, 'FORCE_LANGUAGE_CODE')
+      if lang.upper()=='ZH_HK' or lang.upper()=='ZH_TW':
+         lang='zh_Hant'
       
       logger.debug('Finially Lang: %s'%lang)
       req.session[translation.LANGUAGE_SESSION_KEY]=lang
@@ -33,8 +35,7 @@ class LangMiddleware(object):
       req.LANGUAGE_CODE=translation.get_language()
       
       rep=self.get_response(req)
-
-      translation.deactivate()
+      rep.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang)
 
       return rep
 
