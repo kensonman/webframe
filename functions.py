@@ -198,7 +198,6 @@ def getTime( val, **kwargs ):
    @param offset     The offset expression according to offsetTime( val, expression )
    '''
    if not val: val=kwargs.get('defval', None)
-   if val=='now': val=datetime.utcnow().astimezone(timezone.get_current_timezone())
    if isinstance(val, datetime): 
       rst=val
    else:
@@ -209,6 +208,7 @@ def getTime( val, **kwargs ):
       except ValueError, TypeError:
          rst=kwargs.get('defval', None)
          if rst == None: return rst
+   if rst=='now': rst=datetime.utcnow().astimezone(timezone.get_current_timezone())
    if kwargs.get('tzAware', True): 
       if not rst.tzinfo: rst=timezone.make_aware(rst)
    if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
