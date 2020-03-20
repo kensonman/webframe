@@ -12,7 +12,7 @@ import os, logging, calendar, uuid
 logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
-FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'.format(FMT_DATE, FMT_TIME))
+FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '{0} {1}'.format(FMT_DATE, FMT_TIME))
 
 def isUUID(val):
    '''
@@ -206,7 +206,7 @@ def getTime( val, **kwargs ):
       fmt=kwargs.get('fmt', FMT_TIME)
       try:
          rst=datetime.strptime(val, fmt)
-      except ValueError:
+      except ValueError, TypeError:
          rst=kwargs.get('defval', None)
          if rst == None: return rst
    if kwargs.get('tzAware', True): 
