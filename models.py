@@ -18,6 +18,7 @@ DATEFMT='%Y-%m-%d %H:%M:%S.%fT%z'
 fmt=lambda d: 'null' if d is None else d.strftime(DATEFMT)
 rfmt=lambda d: None if d=='null' else datetime.strptime(d, DATEFMT)
 nullValue=_('null') #Make sure the null value can be translate
+TRUE_VALUES=['TRUE', 'true', 'True', 'T', 'YES', 'yes', 'Yes', 'Y', '1', 'ON', 'on', 'On', True, 1]
 #Make sure the following transaction
 _('Traditional Chinese')
 _('English')
@@ -206,9 +207,9 @@ class ValueObject(models.Model, Dictable):
       user=get_current_user()
       if user:
          if not user.is_authenticated: user=None
-      if str(kwargs.get('update_lmb', 'true')).upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
+      if kwargs.get('update_lmb', 'true') in TRUE_VALUES:
          self.lmb=user
-      if str(kwargs.get('update_cb', 'true')).upper() in ['TRUE', 'T', 'YES', 'Y', '1']:
+      if kwargs.get('update_cb', 'true') in TRUE_VALUES:
          try:
             if not self.cb: self.cb=user
          except TypeError:
@@ -373,24 +374,31 @@ class OrderableValueObject(ValueObject):
          ValueObject.save(i, update_lmb='false')
 
 class PrefManager(models.Manager):
-   def pref(self, name, **kwargs):
+   def pref(self, name=None, **kwargs):
      '''
      Get the preference from database.
      
-     @name                   The preference name or UUID
-     @kwargs['defval']       The default value
-     @kwargs['owner']        The preference owner
+     @name                   The filter of preference name or UUID
+     @kwargs['defval']       The filter of default value
+     @kwargs['owner']        The filter of preference owner
      @kwargs['user']         The alias of "owner"
-     @kwargs['returnValue']  The boolean value indicate the method return the preference's value instead of preference instance.
-     @kwargs['parent']       The parent preference of this instance
+     @kwargs['config']       Default False; The boolean value indicate the method should allow None owner as the result; (return the first occurence);
+     @kwargs['returnValue']  Default True;  The boolean value indicate the method return the preference's value instead of preference instance.
+     @kwargs['returnQuery']  Default False; The boolean value indicate the method return the query instead of others; [for debug];
+     @kwargs['parent']       The filter of parent preference of result instance
+     @kwargs['value']        The filter of preference value
      '''
      defval=kwargs.get('defval', None)
      user=kwargs.get('owner', kwargs.get('user', None))
      parent=kwargs.get('parent', None)
+     value=kwargs.get('value', None)
+     if not name: name=kwargs.get('name', None)
      if isUUID(name):
         rst=self.filter(id=name)
      else:
         rst=self.filter(name=name)
+     if isinstance(user, str):
+      user=get_user_model().objects.get(username=user)
      try:
       if user and user.is_authenticated: 
          if len(rst.filter(owner=user))>0:
@@ -398,14 +406,30 @@ class PrefManager(models.Manager):
          else:
            rst=rst.filter(owner__isnull=True)
       else:
-         rst=rst.filter(owner__isnull=True)
+         if not kwargs.get('config', False) in TRUE_VALUES:
+            rst=rst.filter(owner__isnull=True)
       if parent: rst=rst.filter(parent=parent)
+      if value: 
+         if value.startswith('=='): 
+            rst=rst.filter(value=value[2:].strip())
+         elif value.startswith('!='):
+            rst=rst.exclude(value=value[2:].strip())
+         elif value.startswith('^='):
+            rst=rst.filter(value__startswith=value[2:].strip())
+         elif value.startswith('$='):
+            rst=rst.filter(value__endswith=value[2:].strip())
+         elif value.startswith('*='):
+            rst=rst.filter(value__icontains=value[2:].strip())
+         else:
+            rst=rst.filter(value=value)
       rst=rst.order_by('owner')
+      if kwargs.get('returnQuery', 'False') in TRUE_VALUES:
+         return rst.query
       if len(rst)>0:
          rst=rst[0]
       else:
          rst=Preference(name=name, value=defval)
-      if str(kwargs.get('returnValue', 'True')).upper() in ['TRUE', 'T', 'YES', 'Y', '1', 'ON']:
+      if kwargs.get('returnValue', 'True') in TRUE_VALUES:
          return rst.value
       return rst
      except:
@@ -545,7 +569,7 @@ class AbstractPreference(OrderableValueObject):
    @property
    def boolValue(self):
       if self.value is None: return None
-      return self.value.upper() in ['TRUE', 'T', '1', 'YES', 'Y']
+      return self.value in TRUE_VALUES
    @boolValue.setter
    def boolValue(self, val):
       if isinstance(val, bool):
@@ -602,6 +626,10 @@ class AbstractPreference(OrderableValueObject):
 
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
+
+   @classmethod
+   def pref(self, name, **kwargs):
+      return Preference.objects.pref(name, **kwargs)
 
 class AsyncManipulationObject(models.Model):
    class Meta(object):
