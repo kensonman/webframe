@@ -205,7 +205,7 @@ def getTime( val, **kwargs ):
       fmt=kwargs.get('fmt', FMT_TIME)
       try:
          rst=datetime.strptime(val, fmt)
-      except ValueError, TypeError:
+      except (ValueError, TypeError):
          rst=kwargs.get('defval', None)
          if rst == None: return rst
    if rst=='now': rst=datetime.utcnow().astimezone(timezone.get_current_timezone())

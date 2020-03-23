@@ -373,24 +373,29 @@ class OrderableValueObject(ValueObject):
          ValueObject.save(i, update_lmb='false')
 
 class PrefManager(models.Manager):
-   def pref(self, name, **kwargs):
+   def pref(self, name=None, **kwargs):
      '''
      Get the preference from database.
      
-     @name                   The preference name or UUID
-     @kwargs['defval']       The default value
-     @kwargs['owner']        The preference owner
+     @name                   The filter of preference name or UUID
+     @kwargs['defval']       The filter of default value
+     @kwargs['owner']        The filter of preference owner
      @kwargs['user']         The alias of "owner"
      @kwargs['returnValue']  The boolean value indicate the method return the preference's value instead of preference instance.
-     @kwargs['parent']       The parent preference of this instance
+     @kwargs['parent']       The filter of parent preference of result instance
+     @kwargs['value']        The filter of preference value
      '''
      defval=kwargs.get('defval', None)
      user=kwargs.get('owner', kwargs.get('user', None))
      parent=kwargs.get('parent', None)
+     value=kwargs.get('value', None)
+     if not name: name=kwargs.get('name', None)
      if isUUID(name):
         rst=self.filter(id=name)
      else:
         rst=self.filter(name=name)
+     if isinstance(user, str):
+      user=get_user_model().objects.get(username=user)
      try:
       if user and user.is_authenticated: 
          if len(rst.filter(owner=user))>0:
@@ -400,6 +405,19 @@ class PrefManager(models.Manager):
       else:
          rst=rst.filter(owner__isnull=True)
       if parent: rst=rst.filter(parent=parent)
+      if value: 
+         if value.startswith('=='): 
+            rst=rst.filter(value=value[2:].strip())
+         elif value.startswith('!='):
+            rst=rst.exclude(value=value[2:].strip())
+         elif value.startswith('^='):
+            rst=rst.filter(value__startswith=value[2:].strip())
+         elif value.startswith('$='):
+            rst=rst.filter(value__endswith=value[2:].strip())
+         elif value.startswith('*='):
+            rst=rst.filter(value__icontains=value[2:].strip())
+         else:
+            rst=rst.filter(value=value)
       rst=rst.order_by('owner')
       if len(rst)>0:
          rst=rst[0]
@@ -602,6 +620,10 @@ class AbstractPreference(OrderableValueObject):
 
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
+
+   @classmethod
+   def pref(self, name, **kwargs):
+      return Preference.objects.pref(name, **kwargs)
 
 class AsyncManipulationObject(models.Model):
    class Meta(object):
