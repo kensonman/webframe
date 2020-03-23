@@ -410,6 +410,7 @@ class PrefManager(models.Manager):
             rst=rst.filter(owner__isnull=True)
       if parent: rst=rst.filter(parent=parent)
       if value: 
+         value=str(value)
          if value.startswith('=='): 
             rst=rst.filter(value=value[2:].strip())
          elif value.startswith('!='):
