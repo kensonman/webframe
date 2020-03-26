@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
-from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID
+from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES
 import math, uuid, logging, json, pytz, re
 
 logger=logging.getLogger('webframe.models')
@@ -18,7 +18,6 @@ DATEFMT='%Y-%m-%d %H:%M:%S.%fT%z'
 fmt=lambda d: 'null' if d is None else d.strftime(DATEFMT)
 rfmt=lambda d: None if d=='null' else datetime.strptime(d, DATEFMT)
 nullValue=_('null') #Make sure the null value can be translate
-TRUE_VALUES=['TRUE', 'true', 'True', 'T', 'YES', 'yes', 'Yes', 'Y', '1', 'ON', 'on', 'On', True, 1]
 #Make sure the following transaction
 _('Traditional Chinese')
 _('English')

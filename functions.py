@@ -13,6 +13,7 @@ logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
 FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '{0} {1}'.format(FMT_DATE, FMT_TIME))
+TRUE_VALUES=['TRUE', 'true', 'True', 'T', 'YES', 'yes', 'Yes', 'Y', '1', 'ON', 'on', 'On', True, 1]
 
 def isUUID(val):
    '''
@@ -79,7 +80,7 @@ def inNetworks( ipaddr, networks=['192.168.0.0/255.255.255.0',]):
             return True
     return False
 
-def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
+def getBool( val, defval=False, trueOpts=TRUE_VALUES ):
    '''
    Retrieve the boolean value from string
 
@@ -89,7 +90,7 @@ def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
    '''
    if callable(val): val=val()
    if val:
-      return str(val).upper() in trueOpts
+      return val in trueOpts
    return defval 
 
 def offsetTime( val, expression ):
