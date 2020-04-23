@@ -13,6 +13,7 @@ logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
 FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '{0} {1}'.format(FMT_DATE, FMT_TIME))
+TRUE_VALUES=['TRUE', 'true', 'True', 'T', 'YES', 'yes', 'Yes', 'Y', '1', 'ON', 'on', 'On', True, 1]
 
 def isUUID(val):
    '''
@@ -79,7 +80,7 @@ def inNetworks( ipaddr, networks=['192.168.0.0/255.255.255.0',]):
             return True
     return False
 
-def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
+def getBool( val, defval=False, trueOpts=TRUE_VALUES ):
    '''
    Retrieve the boolean value from string
 
@@ -89,7 +90,7 @@ def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
    '''
    if callable(val): val=val()
    if val:
-      return str(val).upper() in trueOpts
+      return val in trueOpts
    return defval 
 
 def offsetTime( val, expression ):
@@ -198,7 +199,6 @@ def getTime( val, **kwargs ):
    @param offset     The offset expression according to offsetTime( val, expression )
    '''
    if not val: val=kwargs.get('defval', None)
-   if val=='now': val=datetime.utcnow().astimezone(timezone.get_current_timezone())
    if isinstance(val, datetime): 
       rst=val
    else:
@@ -206,9 +206,10 @@ def getTime( val, **kwargs ):
       fmt=kwargs.get('fmt', FMT_TIME)
       try:
          rst=datetime.strptime(val, fmt)
-      except ValueError, TypeError:
+      except (ValueError, TypeError):
          rst=kwargs.get('defval', None)
          if rst == None: return rst
+   if rst=='now': rst=datetime.utcnow().astimezone(timezone.get_current_timezone())
    if kwargs.get('tzAware', True): 
       if not rst.tzinfo: rst=timezone.make_aware(rst)
    if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
