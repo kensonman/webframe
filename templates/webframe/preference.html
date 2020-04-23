@@ -8,7 +8,7 @@
 var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
 $(document).ready(function(){
    $('tr[prefId]').hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer').click(function(){
-      window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
+      window.location.href="{%url 'webframe:pref' user=currentuser.username|default:'None' prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
    });
    //Delete Logic: {%if not target.isNew%}
       $('#deleteBtn').click(function(){ 
@@ -28,13 +28,13 @@ $(document).ready(function(){
                $('#valueFld').val('').prop('readonly', 'readonly');
                break;
             case 1: //Integer
-               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" digits="digits" required="required"/>');
+               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" digits="digits" value="{{target.value|default:''}}" required="required"/>');
                break;
             case 2: //Decimal
-               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" number="number" required="required"/>');
+               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" number="number" value="{{target.value|default:''}}" required="required"/>');
                break;
             case 3: //Boolean
-               $('<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No"/>').insertAfter(
+               $('<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" {%if target.boolValue%}checked="checked"{%endif%}/>').insertAfter(
                   $('#valueFld').css('display', 'none')
                ).on('change', function(evt){ $('#valueFld').val($(this).is(':checked')) }).trigger('change');
                break;
@@ -44,15 +44,15 @@ $(document).ready(function(){
                $('#valueFld').summernote({height: 100});
                break;
             case 6: //URL
-               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" url="url"/>');
+               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" url="url" value="{{target.value|default:''}}"/>');
                break;
             case 7: //Email
-               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" email="email"/>');
+               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" email="email" value="{{target.value|default:''}}"/>');
                break;
             case 8: //Date
                $('#valueFld').replaceWith(
                   '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr"/>'+
+                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
                   ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
                   '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
                   ' </div>'+
@@ -63,7 +63,7 @@ $(document).ready(function(){
             case 9: //Time
                $('#valueFld').replaceWith(
                   '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr"/>'+
+                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
                   ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
                   '  <div class="input-group-text"><i class="fa fa-clock"></i></div>'+
                   ' </div>'+
@@ -74,7 +74,7 @@ $(document).ready(function(){
             case 10: //Date Time
                $('#valueFld').replaceWith(
                   '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr"/>'+
+                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
                   ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
                   '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
                   ' </div>'+
@@ -103,6 +103,14 @@ $(document).ready(function(){
 {%endblock%}
 
 {%block content%}<div class="jumbotron"><div class="pnl pnl-padding">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{%url 'webframe:prefs' user=req.user%}">{%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}</a></li>
+      {%if target.parent%}
+         <li class="breadcrumb-item"><a href="{%url 'webframe:pref' user=req.user prefId=target.parent.id%}">{{target.parent.name}}</a></li>
+      {%endif%}
+      <li class="breadcrumb-item active">{{target.name}}</li>
+   </ol>
+
    <h1>{%if target.user%}
       {%trans 'Preference.new' as emptypref%}{%blocktrans with pref=target.name|default:emptypref%}{{pref}} - Preferences{%endblocktrans%}
    {%else%}
@@ -116,7 +124,7 @@ $(document).ready(function(){
       <div class="field form-group">
          <label for="tipeFld">{%trans 'webframe.models.Preference.tipe'%}</label>
          <div class="dropdown" id="tipeFld">
-            <input type="hidden" name="tipe" value="{{target.tipe|default:4}}" required="required"/>
+            <input type="hidden" name="tipe" value="{{target.tipe}}" required="required"/>
             <button type="button dropdown-toggle" data-toggle="dropdown" class="btn btn-secondary {%if prems.webframe.change_preference_type or not target.isNew%}disabled{%endif%}">aaa{%trans '-- Please Select --'%}</button>
             <ul class="dropdown-menu">{%for t in TYPES%}{%with name=t|getitem:1%}
                <li><a class="dropdown-item" val="{{t|getitem:0}}" name="{%trans name%}">{%trans name%}</a></li>
@@ -158,7 +166,7 @@ $(document).ready(function(){
       <label>{%trans 'Preference.childs'%}</label>
       {%render_table childs%}
       <div class="pnl pnl-btns">
-         <a href="{%url 'webframe:pref' user=currentuser.username prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
+         <a href="{%url 'webframe:pref' user=currentuser.username|default:'None' prefId='add'%}?parent={{target.id.hex}}" class="btn btn-primary">
             <i class="fas fa-plus"></i> {%if target.user%}{%trans 'Preference.actions.addChild'%}{%else%}{%trans 'Config.actions.addChild'%}{%endif%}
          </a>
       </div>

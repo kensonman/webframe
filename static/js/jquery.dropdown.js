@@ -127,7 +127,7 @@
         var name=$(item).attr('name');
         if(typeof(name)=='undefined')name=$(item).text();
         var val=$(item).attr('val');
-        $(item).empty().append($('<a></a>').text(name).attr({'href':'#','val':val}).addClass('dropdown-item').on('click', $.wfdropdown.onclick));
+        $(item).empty().append($('<a></a>').text(name).css('cursor','pointer').attr({'val':val}).addClass('dropdown-item').on('click', $.wfdropdown.onclick));
      },
    }});
    

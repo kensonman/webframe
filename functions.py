@@ -1,16 +1,28 @@
 #-*- coding: utf-8 -*-
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+from deprecation import deprecated
 from django.conf import settings
 from django.http import HttpRequest
 from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
-from deprecation import deprecated
-import os, logging, pytz
+from pytz import timezone as tz
+import os, logging, calendar, uuid
 
 logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
-FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'%(FMT_DATE, FMT_TIME))
+FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '%s %s'.format(FMT_DATE, FMT_TIME))
+
+def isUUID(val):
+   '''
+   Returns True if the specified value is a valid UUID. Otherwise, returns False
+   '''
+   try:
+      uuid.UUID(val)
+      return True
+   except ValueError:
+      return False
  
 def valueOf(obj, defval=None):
    '''
@@ -80,15 +92,92 @@ def getBool( val, defval=False, trueOpts=['YES', 'Y', '1', 'TRUE', 'T', 'ON'] ):
       return str(val).upper() in trueOpts
    return defval 
 
+def offsetTime( val, expression ):
+   '''
+   Returns the offset of the specified time/date/datetime.
+
+   @param val        The specified time/date/datetime
+   @param exp        A space delimited offset-expression. The offset-expression is combinated with 
+                     [a offset operator: +/-/=], [a offset value as integer] and [a offset-unit as character]. e.g.: 
+                        =0f   (set the microsecond to be 0);
+                        +1S   (move forward one second);
+                        -2M   (move backward two minutes);
+                        -3H   (move backward three hours);
+                        +4d   (move forward four days);
+                        +5W   (move forward five weeks); (= operator not supported)
+                        +6m   (move forward six months);
+                        +7y   (move forward seven years);
+   Usage: "+1M -1d"     Move to the end of current month;
+          "+1W -1S"     Move to the end of the current week (down to second);
+   '''
+   rst=val
+   for exp in expression.strip().split(' '):
+      #parsing the exp
+      op=exp[0]
+      exp=exp[1:]
+      unit=exp[-1:]
+      try:
+         value=int(exp[:-1])
+      except ValueError:
+         raise SyntaxError('offset expression syntax: {+/-}{int-value}{offset unit character}')
+
+      if op=='=':
+         if unit=='f':
+            rst=rst.replace(microsecond=value)
+         elif unit=='S':
+            rst=rst.replace(second=value)
+         elif unit=='M':
+            rst=rst.replace(minute=value)
+         elif unit=='H':
+            rst=rst.replace(hour=value)
+         elif unit=='d':
+            rst=rst.replace(day=value)
+         elif unit=='W':
+            raise ValueError('= operator is not support the Week')
+         elif unit=='m':
+            rst=rst.replace(month=value)
+         elif unit=='y':
+            rst.rst.replace(year=value)
+         else:
+            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+      elif (op=='+' or op=='-'): 
+         if op=='-': value=value*-1
+         if unit=='f':
+            rst=rst.replace(microsecond=value)
+         elif unit=='S':
+            rst=rst+timedelta(seconds=value)
+         elif unit=='M':
+            rst=rst+timedelta(minutes=value)
+         elif unit=='H':
+            rst=rst+timedelta(hours=value)
+         elif unit=='d':
+            rst=rst+timedelta(days=value)
+         elif unit=='W':
+            rst=rst+timedelta(weeks=value)
+         elif unit=='m':
+            rst=rst+relativedelta(months=value)
+         elif unit=='y':
+            rst=rst+relativedelta(years=value)
+         else:
+            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+      else:
+         raise SyntaxError('Offset Operator only support +, - and =')
+   return rst
+
 def getDate( val, **kwargs ):
    '''
    Retrieve the date from string.
 
-   @param val        The value to be parse to bool;
+   @param val        The value to be parse to time; If "now", return the current time;
    @param defval     The default value if the val is None;
-   @param fmt        The specified format according to Python: datetime.strptime;
+   @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_DATE
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param monthstart The indicator to get the begining of the specified month;
+   @param monthend   The indicator to get the end of the specified month;
+   @param tzAware    The indicate the result should be timezone aware; default is True
+   @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
+   @param offset     The offset expression according to offsetTime( val, expression )
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATE
    return getTime(val, **kwargs)
@@ -97,33 +186,54 @@ def getTime( val, **kwargs ):
    '''
    Retrieve the time from string.
 
-   @param val        The value to be parse to bool;
+   @param val        The value to be parse to time; If "now", return the current time;
    @param defval     The default value if the val is None;
-   @param fmt        The specified format according to Python: datetime.strptime;
+   @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_TIME
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param monthstart The indicator to get the begining of the specified month;
+   @param monthend   The indicator to get the end of the specified month;
+   @param tzAware    The indicate the result should be timezone aware (in Django, use the TIME_ZONE at settings); default is True
+   @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
+   @param offset     The offset expression according to offsetTime( val, expression )
    '''
-   if not val: return kwargs.get('defval', None) 
-   if isinstance(val, datetime): return val
-   fmt=kwargs.get('fmt', FMT_TIME)
-   try:
-      rst=datetime.strptime(val, fmt)
-      rst=timezone.make_aware(rst)
-      if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
-      if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
-      return rst
-   except ValueError:
-      return kwargs.get('defval', None) 
+   if not val: val=kwargs.get('defval', None)
+   if val=='now': val=datetime.utcnow().astimezone(timezone.get_current_timezone())
+   if isinstance(val, datetime): 
+      rst=val
+   else:
+      logger.warning('Parsing datetime with format: {0}'.format(kwargs.get('fmt', FMT_TIME)))
+      fmt=kwargs.get('fmt', FMT_TIME)
+      try:
+         rst=datetime.strptime(val, fmt)
+      except ValueError:
+         rst=kwargs.get('defval', None)
+         if rst == None: return rst
+   if kwargs.get('tzAware', True): 
+      if not rst.tzinfo: rst=timezone.make_aware(rst)
+   if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
+   if 'offset' in kwargs: rst=offsetTime(rst, kwargs['offset'])
+   if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
+   if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
+   if 'monthstart' in kwargs: rst=rst.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+   if 'monthend' in kwargs: rst=rst.replace(day=calendar.monthrange(rst.year, rst.month)[1], hour=23, minute=59, second=59, microsecond=999999)
+
+   return rst
 
 def getDateTime( val, **kwargs ):
    '''
    Retrieve the datetime from string.
 
-   @param val        The value to be parse to bool;
+   @param val        The value to be parse to time; If "now", return the current time;
    @param defval     The default value if the val is None;
-   @param fmt        The specified format according to Python: datetime.strptime;
+   @param fmt        The specified format according to Python: datetime.strptime; Default is FMT_DATETIME
    @param daystart   The indicator to get the begining of the day;
    @param dayend     The indicator to get the end of the day;
+   @param monthstart The indicator to get the begining of the specified month;
+   @param monthend   The indicator to get the end of the specified month;
+   @param tzAware    The indicate the result should be timezone aware; default is True
+   @param astimezone Localize the result to specified timezone; e.g.: Asia/Hong_Kong
+   @param offset     The offset expression according to offsetTime( val, expression )
    '''
    if not 'fmt' in kwargs or kwargs['fmt']==None: kwargs['fmt']=FMT_DATETIME
    return getTime(val, **kwargs)
