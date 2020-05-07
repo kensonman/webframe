@@ -159,7 +159,9 @@ class Command(BaseCommand):
             self.__get_pref__(owner, parent)
             logger.warning('The specified preference already exists, discard all changes')
          except Preference.DoesNotExist:
-            Preference(name=self.kwargs['name'], value=self.kwargs['value'], owner=owner, parent=parent).save()
+            p=Preference(name=self.kwargs['name'], value=self.kwargs['value'], owner=owner, parent=parent)
+            p.save()
+            logger.info('The preference<{0}> has been created with value: {1}'.format(p.name, p.value))
 
    def update(self):
       owner=self.__get_owner__()
