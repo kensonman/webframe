@@ -34,5 +34,5 @@ class PreferenceChildParentFilter(admin.SimpleListFilter):
 class PreferenceAdmin(admin.ModelAdmin):
    list_display=('id', 'name', 'parent', 'reserved', 'lmb', 'lmd')
    list_filter=('reserved', PreferenceChildParentFilter, 'tipe',)
-   search_fields=('name', 'value', 'owner__username', 'owner__username')
+   search_fields=('name', 'value', 'owner__username')
    ordering=('owner__username', 'name', 'value')
