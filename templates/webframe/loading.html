@@ -63,13 +63,15 @@ $(document).ready(function(){
    });
 
    //Mandatory Indicator
-   $('form').find('.field').each(function(){
-      $(this).find('input[required],textarea[required],select[required]').each(function(){
-         $(this).parents('.field:first').find('label:first')
-            .find('.mandatory').remove().end()
-            .append('{{INDICATOR_MANDATORY|safe}}')
-         ;
+   if(typeof(_AutoRequiredIndicator)=='undefined' || _AutoRequiredIndicator){
+      $('form').find('.field').each(function(){
+         $(this).find('input[required],textarea[required],select[required]').each(function(){
+            $(this).parents('.field:first').find('label:first')
+               .find('.mandatory').remove().end()
+               .append('{{INDICATOR_MANDATORY|safe}}')
+            ;
+         });
       });
-   });
+   };
 });
 //--></script>
