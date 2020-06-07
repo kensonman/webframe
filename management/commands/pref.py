@@ -40,6 +40,7 @@ class Command(BaseCommand):
       parser.add_argument('--pattern', dest='pattern', type=str, help='The output pattern. {0}'.format(pattern), default=pattern)
       parser.add_argument('--max', dest='max', type=int, help='The maximum number of preference to show. Default is {0}'.format(max), default=max)
       parser.add_argument('--wildcard', dest='wildcard', type=str, help='Specify the wildcard; Default is {0}'.format(wildcard), default=wildcard)
+      parser.add_argument('--force', '-f ', dest='force', action='store_true', help='Force the import', default=False)
 
    def __get_owner__(self, owner=None):
       owner=owner if owner else self.kwargs['owner']
@@ -210,7 +211,7 @@ class Command(BaseCommand):
                pref.reserved=reserved
                pref.save()
             except Preference.DoesNotExist:
-               Preference(name=self.kwargs['name'], value=self.kwargs['value'], owner=owner, parent=parent, reserved=reserved).save()
+               Preference(name=name, value=val, owner=owner, parent=parent, reserved=reserved).save()
             cnt+=1
       logger.debug('   Imported {0} row(s)'.format(cnt))
 
@@ -229,6 +230,9 @@ class Command(BaseCommand):
          for f in glob.glob(os.path.join(d, '*.xlsx')):
             try:
                Preference.objects.get(name=f, parent=p, reserved=True)
+               if self.kwargs['force']:
+                  self.impfile( f )
+                  cnt+=1
             except Preference.DoesNotExist:
                self.impfile( f )
                cnt+=1
