@@ -12,6 +12,7 @@ parser.add_argument('--to', '-t', default='rem', help='The target unit; Default 
 parser.add_argument('--factor', default=1, type=float, help='The factor to be multiplex before convert')
 parser.add_argument('--verbosity', '-v', type=int, default=2, help='The verbosity when running; Default is 2')
 parser.add_argument('--format', type=str, default="%(asctime)-15s %(message)s", help='The default logging format')
+parser.add_argument('--round', type=int, default=3, help='Roundup the number; Default is 3')
 parser.add_argument('files', nargs='+', type=str, help='The target source file/folder')
 args=parser.parse_args()
 
@@ -49,7 +50,7 @@ def convert( line ):
       val=float(re.search(r'\d+(\.\d+)?', trg).group())
       val*=units[getattr(args, 'from')][getattr(args, 'to')]
       val*=getattr(args, 'factor')
-      val="{0}rem".format(val)
+      val="{0}rem".format(0 if val==0 else round(val, getattr(args, 'round', 3)))
       line='{0}{1}{2}'.format(line[0:m.start()], val, line[m.end():])
       m=re.search(r'\d+(\.\d*)?px', line)
 
