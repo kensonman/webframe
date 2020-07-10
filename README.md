@@ -327,3 +327,88 @@ if LDAP_ENABLED:
       'django.contrib.auth.backends.ModelBackend',
    )
 ```
+
+Manipulate Preference Command
+---
+From v2.7.0, the webframe package support the Django Management Command to operate the Preference.
+It's including Create/Update/Delete/Show/Import the preference.
+
+### Create
+Create the preference into database. If the specified preference already exists in database, the error will be shown.
+Usage:
+```bash
+./manage.py pref create --name <PrefName> --value <PrefValue> [--parent <ParentPrefName_OR_ID>] [--owner <OwnerUsername_OR_ID>] [--reserved]
+```
+
+Example: 
+```bash
+./manage.py pref create --name TEST --value=Hello\ Word!
+./manage.py pref create --name TEST2 --value=Hello\ Word! --parent TEST --owner kenson --reserved
+```
+
+### Update
+Update the existing preference from database. If this is not exists, just create it.
+```bash
+./manage.py pref update --name <PrefName> --value <PrefValue> [--parent <ParentPrefName_OR_ID>] [--owner <OwnerUsername_OR_ID>] [--reserved]
+```
+
+Example: 
+```bash
+./manage.py pref update --name TEST --value=Hello\ Word!
+./manage.py pref update --name TEST2 --value=Hello\ Word! --parent TEST --owner kenson --reserved
+```
+
+### Show
+Listing the preference
+Example:
+```bash
+./manage.py pref show --name TEST
+./manage.py pref show --name *TEST*
+./manage.py pref show --reserved
+```
+
+### Delete
+Delete the specified preference from database. The name will be the required argument;
+Example:
+```bash
+./manage.py pref delete --name=TEST2 --parent TEST --owner kenson --reserved
+./manage.py pref delete --name=TEST
+```
+
+### Import
+It can import a directory/file excel (*.xlsx) file into database.
+
+The file format should be: 
+``bash
+NAME/ID, Value, Parent, Owner, Reserved
+TEST,Hello World, , , true
+```
+
+HeaderAuthenticationMiddleware
+----
+
+The middleware to authenticate user by HTTP headers (Usefull when API access).
+
+### Configuration
+1. Add "webframe.middlewares.HeaderAuthenticationMiddleware" into settings.py
+2. Add "HEADER_AUTHENTICATION_MIDDLEWARE_KEY" into settings.py and set as secret password
+
+### Usage
+```python
+# Let HEADER_AUTHENTICATION_MIDDLEWARE_KEY='Abc123***###'
+import hashlib, requests
+
+passphrase='{0}:{1}-{2}'.format('username', 'password', 'Abc123***###')
+m=hashlib.md5()
+m.update(passphrase.encode('utf-8'))
+requests.get('http://url.com', headers={'X-USERNAME': 'username', 'X-PASSWORD': 'password', 'X-SECRET': m.hexdigest()})
+
+
+### Available Configuration
+- HEADER_AUTHENTICATION_MIDDLEWARE_USERNAME - Default as "X-USERNAME"
+- HEADER_AUTHENTICATION_MIDDLEWARE_PASSWORD - Default as "X-PASSWORD"
+- HEADER_AUTHENTICATION_MIDDLEWARE_SECRET - Default as "X-SECRET"
+- HEADER_AUTHENTICATION_MIDDLEWARE_KEY - 
+```
+
+
