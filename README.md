@@ -384,6 +384,31 @@ NAME/ID, Value, Parent, Owner, Reserved
 TEST,Hello World, , , true
 ```
 
+HeaderAuthenticationMiddleware
+----
 
+The middleware to authenticate user by HTTP headers (Usefull when API access).
+
+### Configuration
+1. Add "webframe.middlewares.HeaderAuthenticationMiddleware" into settings.py
+2. Add "HEADER_AUTHENTICATION_MIDDLEWARE_KEY" into settings.py and set as secret password
+
+### Usage
+```python
+# Let HEADER_AUTHENTICATION_MIDDLEWARE_KEY='Abc123***###'
+import hashlib, requests
+
+passphrase='{0}:{1}-{2}'.format('username', 'password', 'Abc123***###')
+m=hashlib.md5()
+m.update(passphrase.encode('utf-8'))
+requests.get('http://url.com', headers={'X-USERNAME': 'username', 'X-PASSWORD': 'password', 'X-SECRET': m.hexdigest()})
+
+
+### Available Configuration
+- HEADER_AUTHENTICATION_MIDDLEWARE_USERNAME - Default as "X-USERNAME"
+- HEADER_AUTHENTICATION_MIDDLEWARE_PASSWORD - Default as "X-PASSWORD"
+- HEADER_AUTHENTICATION_MIDDLEWARE_SECRET - Default as "X-SECRET"
+- HEADER_AUTHENTICATION_MIDDLEWARE_KEY - 
+```
 
 
