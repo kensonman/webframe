@@ -63,7 +63,7 @@ def login( req ):
          auth_login(req, u)
          nextUrl=params.get('next', reverse('dashboard'))
          return redirect(nextUrl)
-      messages.warning(req, gettext('Invalid username or password'))
+      if getattr(settings, 'WF_DEFAULT_LOGIN_WARNINGS', True): messages.warning(req, gettext('Invalid username or password'))
       params['username']=username
    params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
    params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
