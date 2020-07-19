@@ -436,6 +436,22 @@ class PrefManager(models.Manager):
       logger.exception('Cannot get preferences<%s>'%name)
       return defval
 
+   def update_or_create(self, *args, **kwargs):
+      name=kwargs['name']
+      owner=kwargs.get('owner', None)
+      if not owner: owner=kwargs.get('user', None)
+      try:
+         p=Preference.objects.get(name=name, owner=owner)
+      except Preference.DoesNotExist:
+         p=Preference(name=name, owner=owner)
+      p.parent=kwargs.get('parent', None)
+      p.sequence=kwargs.get('sequence', 1000)
+      p.value=kwargs.get('value', None)
+      p.tipe=kwargs.get('tipe', Preference.TYPE_TEXT)
+      p.reserved=kwargs.get('reserved', False)
+      p.save()
+      return p
+
 class AbstractPreference(OrderableValueObject):
    class Meta(object):
       permissions       = (
