@@ -35,6 +35,10 @@ def login( req ):
    params=dict()
    try:
       params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+      if params['next']==reverse('webframe:login'):
+         raise ValueError #Make sure do not loopback the login page.
+      if params['next']==reverse('webframe:logout'):
+         raise ValueError #Make sure do not loopback the login page.
    except:
       params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
    if req.method=='POST':

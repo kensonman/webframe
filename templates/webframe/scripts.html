@@ -1,4 +1,4 @@
-{%load staticfiles%}
+{%load static pref%}
 {%comment "SyncLineNumber"%}
 The line number is aligned with "./loading.html". You can view it by belows commands:
 
@@ -28,14 +28,16 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 
 
 
-<link rel="stylesheet" href="{%static 'js/bootstrap-treeview.min.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/bootstrap-treeview.min.css'%}"/>
 {%comment "EndSyncLineNumber"%}{%endcomment%}
 <link rel="stylesheet" href="{%static 'css/messages.css'%}"/>
 <link rel="stylesheet" href="{%static 'css/basic.css'%}"/>
 <link rel="stylesheet" href="{%static 'css/bootstrap4-switches.css'%}"/>
 {%block themes%}
-	<link rel="stylesheet" href="{%static 'css/base-theme.css'%}"/>
+   {%static 'css/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
+	<link rel="stylesheet" href="{{THEME}}"/>
 	<style type="text/css">
+   {%pref 'STYLES' defval=''%}
 	{{wf_theme_styles|safe}}
 	</style>
 {%endblock%}

@@ -136,7 +136,7 @@ class ValueObject(models.Model, Dictable):
      abstract      = True
      verbose_name      = _('webframe.models.ValueObject')
      verbose_name_plural = _('webframe.models.ValueObjects')
-     permissions    = ( ('view_%(class)s', 'Can view this model without ownership'), )
+     # view_* permission becomes the default permissions Django 3.0
 
    id              = models.UUIDField(
      primary_key=True,
