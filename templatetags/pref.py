@@ -2,7 +2,7 @@ from django import template
 from django.contrib.auth.models import User, AnonymousUser
 from django.utils.functional import SimpleLazyObject
 from webframe.models import Preference
-from webframe.functions import valueOf
+from webframe.functions import valueOf, TRUE_VALUES
 from webframe.CurrentUserMiddleware import get_current_user
 import logging
 
@@ -51,4 +51,4 @@ def boolean(value):
    Cast the value into bool
    '''
    if not value: return False
-   return str(value).upper() in ['TRUE', 'T', 'YES', 'Y', '1']
+   return value in TRUE_VALUES
