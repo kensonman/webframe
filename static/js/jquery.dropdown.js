@@ -119,7 +119,7 @@
            $.wfdropdown.populate(item);
         }
         var selected=$(this).find('input:first').val();
-        var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
+        var label=$(this).find('.dropdown-item[val="'+selected.replace('\"', '\\\"')+'"]:first').text();
         $(this).find('button:first').text(label).append($('<span></span>').text()).append('<i class="symbol-dropdown fas '+$(this).attr('wfsymbol')+'"></i>');
         $(this).trigger('ready');
      },
@@ -163,7 +163,7 @@
      }
 
      var selected=$(this).find('input:first').val();
-     var label=$(this).find('.dropdown-item[val="'+selected+'"]:first').text();
+     var label=$(this).find('.dropdown-item[val="'+selected.replace('\"', '\\\"')+'"]:first').text();
      var symbol=params.symbol==''?'':'<i class="symbol-dropdown fas '+params.symbol+'"></i>';
      if(label.length<1) label=$(this).find('buttton:first').text();
      $(this)
