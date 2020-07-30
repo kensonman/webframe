@@ -3,6 +3,7 @@ from deprecation import deprecated
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.db import models
 from django.utils import timezone as tz
 from django.shortcuts import get_object_or_404 as getObj
@@ -392,46 +393,47 @@ class PrefManager(models.Manager):
      parent=kwargs.get('parent', None)
      value=kwargs.get('value', None)
      if not name: name=kwargs.get('name', None)
+     if isinstance(user, str):  user=get_user_model().objects.get(username=user)
+     rst=cache.get(AbstractPreference.get_identifier(name, user))
+     if rst: return rst #Using the cache
      if isUUID(name):
         rst=self.filter(id=name)
      else:
         rst=self.filter(name=name)
-     if isinstance(user, str):
-      user=get_user_model().objects.get(username=user)
      try:
-      if user and user.is_authenticated: 
-         if len(rst.filter(owner=user))>0:
-           rst=rst.filter(owner=user)
-         else:
-           rst=rst.filter(owner__isnull=True)
-      else:
-         if not kwargs.get('config', False) in TRUE_VALUES:
-            rst=rst.filter(owner__isnull=True)
-      if parent: rst=rst.filter(parent=parent)
-      if value: 
-         value=str(value)
-         if value.startswith('=='): 
-            rst=rst.filter(value=value[2:].strip())
-         elif value.startswith('!='):
-            rst=rst.exclude(value=value[2:].strip())
-         elif value.startswith('^='):
-            rst=rst.filter(value__startswith=value[2:].strip())
-         elif value.startswith('$='):
-            rst=rst.filter(value__endswith=value[2:].strip())
-         elif value.startswith('*='):
-            rst=rst.filter(value__icontains=value[2:].strip())
-         else:
-            rst=rst.filter(value=value)
-      rst=rst.order_by('owner')
-      if kwargs.get('returnQuery', 'False') in TRUE_VALUES:
-         return rst.query
-      if len(rst)>0:
-         rst=rst[0]
-      else:
-         rst=Preference(name=name, value=defval)
-      if kwargs.get('returnValue', 'True') in TRUE_VALUES:
-         return rst.value
-      return rst
+        if user and user.is_authenticated: 
+           if len(rst.filter(owner=user))>0:
+             rst=rst.filter(owner=user)
+           else:
+             rst=rst.filter(owner__isnull=True)
+        else:
+           if not kwargs.get('config', False) in TRUE_VALUES:
+              rst=rst.filter(owner__isnull=True)
+        if parent: rst=rst.filter(parent=parent)
+        if value: 
+           value=str(value)
+           if value.startswith('=='): 
+              rst=rst.filter(value=value[2:].strip())
+           elif value.startswith('!='):
+              rst=rst.exclude(value=value[2:].strip())
+           elif value.startswith('^='):
+              rst=rst.filter(value__startswith=value[2:].strip())
+           elif value.startswith('$='):
+              rst=rst.filter(value__endswith=value[2:].strip())
+           elif value.startswith('*='):
+              rst=rst.filter(value__icontains=value[2:].strip())
+           else:
+              rst=rst.filter(value=value)
+        rst=rst.order_by('owner')
+        if kwargs.get('returnQuery', 'False') in TRUE_VALUES:
+           return rst.query
+        if len(rst)>0:
+           rst=rst[0]
+        else:
+           rst=Preference(name=name, value=defval)
+        if kwargs.get('returnValue', 'True') in TRUE_VALUES:
+           return rst.value
+        return rst
      except:
       logger.exception('Cannot get preferences<%s>'%name)
       return defval
@@ -463,6 +465,8 @@ class AbstractPreference(OrderableValueObject):
          ('change_preference_type', 'Can change the preference type'),
       )
       abstract         = True
+      unique_together  = ( ('name', 'owner'), )
+
    TYPE_NONE           = 0 
    TYPE_INT            = 1
    TYPE_DECIMAL        = 2 
@@ -520,11 +524,15 @@ class AbstractPreference(OrderableValueObject):
    tipe                = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('webframe.models.Preference.tipe'), help_text=_('webframe.models.Preference.tipe.helptext'))
    objects             = PrefManager()
 
+   @staticmethod
+   def get_identifier(name, owner):
+      return '{0}@User:{1}'.format(name, owner.id if owner and owner.is_authenticated else 'n/a')
+
    def __str__(self):
-      return '(None)' if self.value is None else "{0}::{1}".format(self.name, self.value)
+      return '(None)' if self.value is None else AbstractPreference.get_identifier(self.name, self.owner)
 
    def __unicode__(self):
-      return '(None)' if self.value is None else "{0}::{1}".format(self.name, self.value)
+      return self.__str__
 
    @property
    def realValue(self):
