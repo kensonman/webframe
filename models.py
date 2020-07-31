@@ -648,6 +648,20 @@ class AbstractPreference(OrderableValueObject):
    def user(self, val):
       self.owner=val
 
+   def setTipe( self, tipe ):
+      '''
+      Set the tipe into this preference. 
+
+      @param tipe can be integer value (refer to AbstractPreference.TYPES) or string value;
+      '''
+      if isinstance(tipe, str):
+         ao=['NONE', 'INT', 'DECIMAL', 'BOOLEAN', 'TEXT', 'RICHTEXT', 'URL', 'EMAIL', 'DATE', 'TIME', 'DATETIME', 'UUIDS', 'LIST', 'JSON']
+         try:
+            tipe=ao.index(tipe.upper().strip())
+         except:
+            tipe=AbstractPreference.TYPE_TEXT
+      self.tipe=int(tipe)
+
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
 

@@ -36,7 +36,7 @@ class Command(BaseCommand):
       parser.add_argument('--owner', dest='owner', type=str, help='The owner of the preference. Optional;', default=None)
       parser.add_argument('--parent', dest='parent', type=str, help='The parent\'s name of the preference. Optional;', default=None)
       parser.add_argument('--reserved', dest='reserved', action='store_true', help='The reserved indicator of the preference. Used at insert/update; Optional; Default False')
-      parser.add_argument('--file', dest='file', type=str, help='The file (or directory) to be import. Required when import', default=None)
+      parser.add_argument('--file', dest='file', type=str, help='The file (or directory) to be import. You can refer the \"webframe/static/tmpl/prefs-template.xlsx\" for more detail. Required when import', default=None)
       parser.add_argument('--pattern', dest='pattern', type=str, help='The output pattern. {0}'.format(pattern), default=pattern)
       parser.add_argument('--max', dest='max', type=int, help='The maximum number of preference to show. Default is {0}'.format(max), default=max)
       parser.add_argument('--wildcard', dest='wildcard', type=str, help='Specify the wildcard; Default is {0}'.format(wildcard), default=wildcard)
@@ -202,13 +202,15 @@ class Command(BaseCommand):
             parent=self.__get_parent__(ws.cell(row=r, column=3).value)
             owner=self.__get_owner__(ws.cell(row=r, column=4).value)
             reserved=ws.cell(row=r, column=5).value in TRUE_VALUES
+            tipe=ws.cell(row=r, column=6).value
             logger.debug('     Importing row: {0}: {1} ({2})'.format(r, name, 'reserved' if reserved else 'normal'))
-            #ID/NAME,VALUES,PARENT,OWNER,RESERVED
+            #ID/NAME,VALUES,PARENT,OWNER,RESERVED,TIPE
             try:
                self.kwargs['name']=name
                pref=self.__get_pref__(owner, parent)
                pref.value=val
                pref.reserved=reserved
+               pref.setTipe(tipe)
                pref.save()
             except Preference.DoesNotExist:
                Preference(name=name, value=val, owner=owner, parent=parent, reserved=reserved).save()
