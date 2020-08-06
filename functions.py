@@ -199,26 +199,29 @@ def getTime( val, **kwargs ):
    @param offset     The offset expression according to offsetTime( val, expression )
    '''
    if not val: val=kwargs.get('defval', None)
+   if val=='now': 
+      val=datetime.utcnow().astimezone(timezone.get_current_timezone())
+      rst=val
    if isinstance(val, datetime): 
       rst=val
    else:
-      logger.warning('Parsing datetime with format: {0}'.format(kwargs.get('fmt', FMT_TIME)))
+      logger.debug('Parsing datetime with format: {0}'.format(kwargs.get('fmt', FMT_TIME)))
       fmt=kwargs.get('fmt', FMT_TIME)
       try:
          rst=datetime.strptime(val, fmt)
       except (ValueError, TypeError):
          rst=kwargs.get('defval', None)
-         if rst == None: return rst
-   if rst=='now': rst=datetime.utcnow().astimezone(timezone.get_current_timezone())
-   if kwargs.get('tzAware', True): 
-      if not rst.tzinfo: rst=timezone.make_aware(rst)
-   if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
-   if 'offset' in kwargs: rst=offsetTime(rst, kwargs['offset'])
-   if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
-   if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
-   if 'monthstart' in kwargs: rst=rst.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-   if 'monthend' in kwargs: rst=rst.replace(day=calendar.monthrange(rst.year, rst.month)[1], hour=23, minute=59, second=59, microsecond=999999)
+   if rst:
+      if kwargs.get('tzAware', True): 
+         if not rst.tzinfo: rst=timezone.make_aware(rst)
+      if 'astimezone' in kwargs: rst=rst.astimezone(tz(kwargs['astimezone']))
+      if 'offset' in kwargs: rst=offsetTime(rst, kwargs['offset'])
+      if 'daystart' in kwargs: rst=rst.replace(hour=0, minute=0, second=0, microsecond=0)
+      if 'dayend' in kwargs:   rst=rst.replace(hour=23, minute=59, second=59, microsecond=999999)
+      if 'monthstart' in kwargs: rst=rst.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+      if 'monthend' in kwargs: rst=rst.replace(day=calendar.monthrange(rst.year, rst.month)[1], hour=23, minute=59, second=59, microsecond=999999)
 
+   logger.debug('Returning: {0}'.format(rst))
    return rst
 
 def getDateTime( val, **kwargs ):
