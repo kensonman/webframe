@@ -31,10 +31,12 @@ class Command(BaseCommand):
       wildcard='*'
       #Adding arguments
       parser.add_argument('action', type=str, help='The action to be taken. One of import/create/update/delete; Default is {0}'.format(action), default=action)
-      parser.add_argument('--name', dest='name', type=str, help='The name of the preference. Optional when import, otherwise required;', default=None)
+      parser.add_argument('--name', dest='name', type=str, help='The name of the preference. Optional when import or delete, otherwise required;', default=None)
       parser.add_argument('--value', dest='value', type=str, help='The value of the preference. Required when create/update;', default=None)
       parser.add_argument('--owner', dest='owner', type=str, help='The owner of the preference. Optional;', default=None)
+      parser.add_argument('--noowner', dest='noowner', action='store_true', help='To specified the target preference has no owner; Optional; Default False')
       parser.add_argument('--parent', dest='parent', type=str, help='The parent\'s name of the preference. Optional;', default=None)
+      parser.add_argument('--noparent', dest='noparent', action='store_true', help='To specified the target preference has no parent; Optional; Default False')
       parser.add_argument('--reserved', dest='reserved', action='store_true', help='The reserved indicator of the preference. Used at insert/update; Optional; Default False')
       parser.add_argument('--file', dest='file', type=str, help='The file (or directory) to be import. You can refer the \"webframe/static/tmpl/prefs-template.xlsx\" for more detail. Required when import', default=None)
       parser.add_argument('--pattern', dest='pattern', type=str, help='The output pattern. {0}'.format(pattern), default=pattern)
@@ -66,24 +68,20 @@ class Command(BaseCommand):
       if self.kwargs['parent'] and parent==None:
          raise Preference.DoesNotExist('Parent Preference not found: {0}'.format(self.kwargs['parent']))
 
-      rst=Preference.objects.filter(name=self.kwargs['name'])
+      rst=Preference.objects.all()
+      if self.kwargs['name'] and self.kwargs['name']!='*':
+         rst=rst.filter(name=self.kwargs['name'])
       if owner:
          rst=rst.filter(owner=owner)
-      else:
+      elif self.kwargs['noowner']:
          rst=rst.filter(owner__isnull=True)
 
       if parent:
          rst=rst.filter(parent=parent)
-      else:
+      elif self.kwargs['noparent']:
          rst=rst.filter(parent__isnull=True)
 
-      size=len(rst)
-      if size<1:
-         raise Preference.DoesNotExist
-      elif size>1:
-         raise MultipleObjectsReturned
-      else:
-         return rst[0]
+      return rst
 
    def output( self, pref, pattern=None ):
       pattern=pattern if pattern else self.kwargs['pattern']
@@ -157,7 +155,8 @@ class Command(BaseCommand):
       parent=self.__get_parent__()
       with transaction.atomic():
          try:
-            self.__get_pref__(owner, parent)
+            pref=self.__get_pref__(owner, parent)
+            if pref.count()<1: raise Preference.DoesNotExist
             logger.warning('The specified preference already exists, discard all changes')
          except Preference.DoesNotExist:
             p=Preference(name=self.kwargs['name'], value=self.kwargs['value'], owner=owner, parent=parent)
@@ -170,9 +169,12 @@ class Command(BaseCommand):
       with transaction.atomic():
          try:
             pref=self.__get_pref__(owner, parent)
-            pref.value=self.kwargs['value']
-            pref.save()
-            logger.info('Preference has been updated')
+            cnt=pref.count()
+            if cnt<1: raise Preference.DoesNotExist
+            for p in pref:
+               p.value=self.kwargs['value']
+               p.save()
+            logger.info('{0} of Preference(s) has been updated'.format(cnt))
             self.output(pref)
          except Preference.DoesNotExist:
             Preference(name=self.kwargs['name'], value=self.kwargs['value'], owner=owenr, parent=parent).save()
@@ -180,8 +182,9 @@ class Command(BaseCommand):
 
    def delete(self):
       pref=self.__get_pref__()
+      cnt=pref.count()
       pref.delete()
-      logger.warning('Preference has been deleted')
+      logger.warning('{0} of Preference(s) has been deleted'.format(cnt))
 
    def impfile( self, f ):
       if os.path.isfile(f) and os.access(f, os.R_OK):
@@ -197,6 +200,8 @@ class Command(BaseCommand):
       with transaction.atomic():
          for r in range(1, ws.max_row+1):
             name=ws.cell(row=r, column=1).value
+            if isinstance(name, str): name=name.strip()
+            if not name: continue #Skip the row when it has no pref.name
             if r==1 and (name.upper()=='ID' or name.upper()=='NAME'): continue #Skip the first row if header row
             val=ws.cell(row=r, column=2).value
             parent=self.__get_parent__(ws.cell(row=r, column=3).value)
@@ -208,13 +213,17 @@ class Command(BaseCommand):
             try:
                self.kwargs['name']=name
                pref=self.__get_pref__(owner, parent)
-               pref.value=val
-               pref.reserved=reserved
-               pref.setTipe(tipe)
-               pref.save()
+               if pref.count()<1: raise Preference.DoesNotExist
+               for p in pref:
+                  p.value=val
+                  p.reserved=reserved
+                  p.setTipe(tipe)
+                  cnt+=1
+                  logger.debug('IMPORTED, {0}'.format(cnt))
+                  p.save()
             except Preference.DoesNotExist:
                Preference(name=name, value=val, owner=owner, parent=parent, reserved=reserved).save()
-            cnt+=1
+               cnt+=1
       logger.debug('   Imported {0} row(s)'.format(cnt))
 
    def impdir( self, d ):
