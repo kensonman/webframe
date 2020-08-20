@@ -22,73 +22,59 @@ $(document).ready(function(){
    messages={};
    $('#tipeFld')
       .on('ready', function(){
-         var type=parseInt($('#tipeFld > input:first').val());
-         switch(type){
-            case 0: //NONE
-               $('#valueFld').val('').prop('readonly', 'readonly');
-               break;
-            case 1: //Integer
-               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" digits="digits" value="{{target.value|default:''}}" required="required"/>');
-               break;
-            case 2: //Decimal
-               $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" number="number" value="{{target.value|default:''}}" required="required"/>');
-               break;
-            case 3: //Boolean
-               $('<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" {%if target.boolValue%}checked="checked"{%endif%}/>').insertAfter(
-                  $('#valueFld').css('display', 'none')
-               ).on('change', function(evt){ $('#valueFld').val($(this).is(':checked')) }).trigger('change');
-               break;
-            case 4: //Text
-               break;
-            case 5: //Rich text
-               $('#valueFld').summernote({height: 100});
-               break;
-            case 6: //URL
-               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" url="url" value="{{target.value|default:''}}"/>');
-               break;
-            case 7: //Email
-               $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" email="email" value="{{target.value|default:''}}"/>');
-               break;
-            case 8: //Date
-               $('#valueFld').replaceWith(
-                  '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
-                  ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
-                  '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
-                  ' </div>'+
-                  '</div>'
-               );
-               $('#valueFldCtr').find('input:first').attr('placeholder', '{{FMT_JSDATE}}').end().datetimepicker({format: '{{FMT_JSDATE}}'});
-               break;
-            case 9: //Time
-               $('#valueFld').replaceWith(
-                  '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
-                  ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
-                  '  <div class="input-group-text"><i class="fa fa-clock"></i></div>'+
-                  ' </div>'+
-                  '</div>'
-               );
-               $('#valueFldCtr').find('input:first').attr('placeholder', '{{FMT_JSTIME}}').end().datetimepicker({format: '{{FMT_JSTIME}}'});
-               break;
-            case 10: //Date Time
-               $('#valueFld').replaceWith(
-                  '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
-                  ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
-                  ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
-                  '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
-                  ' </div>'+
-                  '</div>'
-               );
-               $('#valueFldCtr').find('input:first').attr('placeholder', '{{FMT_JSDATETIME}}').end().datetimepicker({format: '{{FMT_JSDATETIME}}'});
-               break;
-            case 11: //UUIDs
-               rules['value']={'regex': '^([,\\s]*\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b[,\\s]*)+$'};
-               messages['value']={'regex': "{%trans 'Preference.value.validation.uuid'%}"};
-               break;
-            default:
-               break;
-         }
+         {%if target.tipe == 0%}//NONE
+            $('#valueFld').val('').prop('readonly', 'readonly');
+         {%elif target.tipe == 1%}//Integer
+            $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" digits="digits" value="{{target.value|default:''}}" required="required"/>');
+         {%elif target.tipe == 2%}//Decimal
+            $('#valueFld').replaceWith('<input type="number" name="value" id="valueFld" class="form-control" number="number" value="{{target.value|default:''}}" required="required"/>');
+         {%elif target.tipe == 3%}//Boolean
+            $('<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" {%if target.boolValue%}checked="checked"{%endif%}/>').insertAfter(
+               $('#valueFld').css('display', 'none')
+            ).on('change', function(evt){ $('#valueFld').val($(this).is(':checked')) }).trigger('change');
+         {%elif target.tipe == 4%}//Text
+         {%elif target.tipe == 5%}//Rich text
+            $('#valueFld').summernote({height: 100});
+         {%elif target.tipe == 6%}//URL
+            $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" url="url" value="{{target.value|default:''}}"/>');
+         {%elif target.tipe == 7%}//Email
+            $('#valueFld').replaceWith('<input type="text" name="value" id="valueFld" class="form-control" email="email" value="{{target.value|default:''}}"/>');
+         {%elif target.tipe == 8%}//Date
+            $('#valueFld').replaceWith(
+               '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
+               ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
+               ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
+               '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
+               ' </div>'+
+               '</div>'
+            );
+            $('#valueFldCtr').find('input:first').attr('placeholder', '{{FMT_JSDATE}}').end().datetimepicker({format: '{{FMT_JSDATE}}'});
+         {%elif target.tipe == 9%}//Time
+            $('#valueFld').replaceWith(
+               '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
+               ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
+               ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
+               '  <div class="input-group-text"><i class="fa fa-clock"></i></div>'+
+               ' </div>'+
+               '</div>'
+            );
+            $('#valueFldCtr').find('input:first').attr('placeholder', '{{FMT_JSTIME}}').end().datetimepicker({format: '{{FMT_JSTIME}}'});
+         {%elif target.tipe == 10%}//DateTime
+            $('#valueFld').replaceWith(
+               '<div class="input-group" id="valueFldCtr" data-target-input="nearest">'+
+               ' <input type="text" class="form-control datetimepicker-input" name="value" id="valueFld" data-target="#valueFldCtr" value="{{target.value}}"/>'+
+               ' <div class="input-group-append" data-target="#valueFldCtr" data-toggle="datetimepicker">'+
+               '  <div class="input-group-text"><i class="fa fa-calendar"></i></div>'+
+               ' </div>'+
+               '</div>'
+            );
+            $('#valueFldCtr').find('input:first').attr('placeholder', '{{FMT_JSDATETIME}}').end().datetimepicker({format: '{{FMT_JSDATETIME}}'});
+         {%elif target.tipe == 11%}//UUID
+            rules['value']={'regex': '^([,\\s]*\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b[,\\s]*)+$'};
+            messages['value']={'regex': "{%trans 'Preference.value.validation.uuid'%}"};
+         {%else%}//Unknow
+            console.log('Unknown type: {{target.tipe}}');
+         {%endif%}
       })
       .on('change', function(){ location.reload(); })
       .wfdropdown({
@@ -125,7 +111,7 @@ $(document).ready(function(){
          <label for="tipeFld">{%trans 'webframe.models.Preference.tipe'%}</label>
          <div class="dropdown" id="tipeFld">
             <input type="hidden" name="tipe" value="{{target.tipe}}" required="required"/>
-            <button type="button dropdown-toggle" data-toggle="dropdown" class="btn btn-secondary {%if prems.webframe.change_preference_type or not target.isNew%}disabled{%endif%}">aaa{%trans '-- Please Select --'%}</button>
+            <button type="button dropdown-toggle" data-toggle="dropdown" class="btn btn-secondary {%if prems.webframe.change_preference_type or not target.isNew%}disabled{%endif%}">{%trans '-- Please Select --'%}</button>
             <ul class="dropdown-menu">{%for t in TYPES%}{%with name=t|getitem:1%}
                <li><a class="dropdown-item" val="{{t|getitem:0}}" name="{%trans name%}">{%trans name%}</a></li>
             {%endwith%}{%endfor%}</ul>
@@ -150,7 +136,7 @@ $(document).ready(function(){
       </div>
       <div class="field form-group">
          <label for="valueFld">{%trans 'webframe.models.Preference.value'%}</label>
-         <textarea name="value" id="valueFld" class="form-control" placeholder="{%trans 'webframe.models.Preference.value'%}">{{target.value|default:''|safe}}</textarea>
+         <textarea name="value" id="valueFld" class="form-control" placeholder="{%trans 'webframe.models.Preference.value'%}">{{target.value|default:''}}</textarea>
       </div>
       <div class="field form-group">
          <label for="sequenceFld">{%trans 'webframe.models.Preference.sequence'%}</label>

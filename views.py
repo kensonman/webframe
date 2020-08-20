@@ -251,6 +251,7 @@ def pref(req, user=None, prefId=None):
             if req.user.username!=user: return HttpResponseForbidden('<h1>403-Forbidden</h1>')
          user=getObj(get_user_model(), username=user)
    params=dict()
+   params['TYPES']=Preference.TYPES
 
    # Get the target preference
    if prefId=='add' or prefId=='new':
