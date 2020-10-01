@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone as tz
 from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
@@ -669,6 +669,7 @@ class Preference(AbstractPreference):
    def pref(self, name, **kwargs):
       return Preference.objects.pref(name, **kwargs)
 
+@deprecated(deprecated_in="2020-10-01", details="Use Celery-Result instead")
 class AsyncManipulationObject(models.Model):
    class Meta(object):
      verbose_name         = _('webframe.models.AsyncManipulationObject')
@@ -686,3 +687,41 @@ class AsyncManipulationObject(models.Model):
    def is_ready(self):
      _('AsyncManipulationObject.is_ready')
      return self.task_id is None
+
+class Numbering(ValueObject, AliveObject):
+   class Meta(object):
+      verbose_name          = _('webframe.models.AsyncManipulationObject')
+      verbose_name_plural   = _('webframe.models.AsyncManipulationObjects')
+      permissions           = [
+         ('exec_numbering', 'Can execute the number'),
+      ]
+
+   name                    = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.name'), help_text=_('webframe.models.Numbering.name.helptxt')) 
+   pattern                 = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.pattern'), help_text=_('webframe.models.Numbering.pattern.helptxt'))
+   next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
+   step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
+
+   @transaction.atomic
+   def getNextVal(self, **kwargs):
+      '''
+      Get the next value and step forward of this numbering.
+      Usage: numbering.getNextVal(user='username', now=tz.now(), name='object-name')
+      Result:
+         if pattern=='INV-{now:%Y%m%d}-{user}-{next:05d}', then return 'INV-20201030-username-00001'
+
+      ** You HAVE TO check permission by yourself **
+      '''
+      params={**{'now': tz.now(), 'name': self.name}, **kwargs}
+      params['next']=self.next_val #The "next" cannot be defined in kwargs
+      val=self.pattern.format(**params)
+      self.next_val+=self.step_val
+      self.save()
+      return val
+      
+   @property
+   def next(self):
+      '''
+      The quick way to get the next value of this numbering. It will auto inject the "now" variable.
+      If you want required more options, use @getNextVal(**kwargs) instead.
+      '''
+      return self.getNextVal()
