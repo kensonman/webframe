@@ -32,7 +32,18 @@ class PreferenceChildParentFilter(admin.SimpleListFilter):
 
 @admin.register(Preference)
 class PreferenceAdmin(admin.ModelAdmin):
-   list_display=('id', 'name', 'parent', 'reserved', 'lmb', 'lmd')
-   list_filter=('reserved', PreferenceChildParentFilter, 'tipe',)
-   search_fields=('name', 'value', 'owner__username')
-   ordering=('owner__username', 'name', 'value')
+   fields=('id', 'name', 'tipe', 'parent', 'owner', '_value', 'reserved', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'name', 'parent', 'owner', 'reserved', 'lmb', 'lmd')
+   list_filter=('reserved', PreferenceChildParentFilter, 'tipe', 'encrypted')
+   readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
+   ordering=('owner__username', 'name')
+   search_fields=('name', '_value', 'owner__username')
+
+@admin.register(Numbering)
+class NumberingAdmin(admin.ModelAdmin):
+   fields=('id', 'name', 'pattern', 'next_val', 'step_val', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'name', 'pattern', 'effDate', 'expDate', 'enabled', 'lmb', 'lmd')
+   list_filter=('enabled', )
+   readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
+   ordering=('name', )
+   search_fields=('name', 'pattern',)

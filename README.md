@@ -376,12 +376,19 @@ Example:
 ```
 
 ### Import
-It can import a directory/file excel (*.xlsx) file into database.
+It can import a directory/file excel file into database.
 
 The file format should be: 
 ``bash
 NAME/ID, Value, Parent, Owner, Reserved
 TEST,Hello World, , , true
+```
+
+### Generate Secret Key
+Preference support encryption. Use the following command to generate the secret key for encryption/decryption.
+
+```bash
+./manage.py pref gensecret
 ```
 
 HeaderAuthenticationMiddleware
@@ -411,4 +418,8 @@ requests.get('http://url.com', headers={'X-USERNAME': 'username', 'X-PASSWORD': 
 - HEADER_AUTHENTICATION_MIDDLEWARE_KEY - 
 ```
 
+Preference Encryption
+----
+The preference support the encryption and decryption since v2.2.
 
+The key for encryption and decryption key can be setup by PREFERENCE_SECRET environment variable or AbstractPreference.secret right beside the models.py

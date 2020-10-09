@@ -497,9 +497,10 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
       (TYPE_JSON, _('webframe.models.Preference.TYPE.JSON')),
    )
+   ENCRYPTED_PREFIX    ='ENC:'
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
-   value               = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
+   _value              = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
    owner               = models.ForeignKey(
      settings.AUTH_USER_MODEL,null=True,
      blank=True,
@@ -522,11 +523,35 @@ class AbstractPreference(OrderableValueObject):
      help_text=_('webframe.models.Preference.sequence.helptext'),
    )
    tipe                = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('webframe.models.Preference.tipe'), help_text=_('webframe.models.Preference.tipe.helptext'))
+   encrypted           = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.encrypted'), help_text=_('webframe.models.Preference.encrypted.helptxt'))
    objects             = PrefManager()
 
    @staticmethod
    def get_identifier(name, owner):
       return '{0}@User:{1}'.format(name, owner.id if owner and owner.is_authenticated else 'n/a')
+
+   @classmethod
+   def __getSecret__(cls):
+      from cryptography.fernet import Fernet
+      import os
+      
+      keyfile=os.getenv('PREFERENCE_SECRET', None)
+      if keyfile: return keyfile.encode('utf-8')
+
+      keyfile=os.path.abspath(__file__)
+      keyfile=os.path.dirname(keyfile)
+      keyfile=os.path.join(keyfile, getattr(settings, 'PREFERENCE_SECRET', '{0}.secret'.format(cls.__name__)))
+      if os.path.isfile(keyfile):
+         #Loading the key
+         return open(keyfile, 'rb').read()
+      else:
+         #Generate the key
+         key=Fernet.generate_key()
+         with open(keyfile, 'wb') as f:
+            f.write(key)
+         os.chmod(keyfile, 0o600)
+         logger.warning('Generated the secret-key at {0}. Please ***BACKUP*** and keep it carefully!'.format(keyfile))
+         return key
 
    def __str__(self):
       return '(None)' if self.value is None else AbstractPreference.get_identifier(self.name, self.owner)
@@ -536,6 +561,10 @@ class AbstractPreference(OrderableValueObject):
 
    @property
    def realValue(self):
+      return self._value
+
+   @property
+   def translatedValue(self):
       if self.tipe==AbstractPreference.TYPE_NONE:
          return None
       elif self.tipe==AbstractPreference.TYPE_INT or self.tipe==AbstractPreference.TYPE_DECIMAL:
@@ -559,6 +588,31 @@ class AbstractPreference(OrderableValueObject):
          return self.jsonValue
       else:
          raise TypeError('Unknow DataType: {0}'.format(self.tipe))
+
+   @property
+   def value(self):
+      if self.encrypted:
+         from cryptography.fernet import Fernet
+         v=self._value
+         if v.startswith(AbstractPreference.ENCRYPTED_PREFIX): v=v[len(AbstractPreference.ENCRYPTED_PREFIX):]
+         return Fernet(AbstractPreference.__getSecret__()).decrypt(v.encode('utf-8')).decode('utf-8')
+      else:
+         return self._value
+   @value.setter
+   def value(self, val):
+      if self.encrypted:
+         val=str(val)
+         if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
+            self._value=val
+         else:
+            from cryptography.fernet import Fernet
+            self._value=AbstractPreference.ENCRYPTED_PREFIX+Fernet(AbstractPreference.__getSecret__()).encrypt(str(val).encode('utf-8')).decode('utf-8')
+      else:
+         if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
+            from cryptography.fernet import Fernet
+            self._value=Fernet(AbstractPreference.__getSecret__()).encrypt(str(val).encode('utf-8'))
+         else:
+            self._value=str(val)
 
    @property
    def asDict(self):
@@ -662,6 +716,15 @@ class AbstractPreference(OrderableValueObject):
             tipe=AbstractPreference.TYPE_TEXT
       self.tipe=int(tipe)
 
+   def save(self, *args, **kwargs):
+      if self.encrypted:
+         self.value=self._value
+      else:
+         if self._value:
+            if self._value.startswith(AbstractPreference.ENCRYPTED_PREFIX):
+               self.value=self._value
+      super().save(*args, **kwargs)
+
 class Preference(AbstractPreference):
    reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
 
@@ -690,8 +753,8 @@ class AsyncManipulationObject(models.Model):
 
 class Numbering(ValueObject, AliveObject):
    class Meta(object):
-      verbose_name          = _('webframe.models.AsyncManipulationObject')
-      verbose_name_plural   = _('webframe.models.AsyncManipulationObjects')
+      verbose_name          = _('webframe.models.Numbering')
+      verbose_name_plural   = _('webframe.models.Numberings')
       permissions           = [
          ('exec_numbering', 'Can execute the number'),
       ]

@@ -30,7 +30,7 @@ class Command(BaseCommand):
       max=256
       wildcard='*'
       #Adding arguments
-      parser.add_argument('action', type=str, help='The action to be taken. One of import/create/update/delete; Default is {0}'.format(action), default=action)
+      parser.add_argument('action', type=str, help='The action to be taken. One of import/create/update/delete/gensecret; Default is {0}'.format(action), default=action)
       parser.add_argument('--name', dest='name', type=str, help='The name of the preference. Optional when import or delete, otherwise required;', default=None)
       parser.add_argument('--value', dest='value', type=str, help='The value of the preference. Required when create/update;', default=None)
       parser.add_argument('--owner', dest='owner', type=str, help='The owner of the preference. Optional;', default=None)
@@ -113,6 +113,8 @@ class Command(BaseCommand):
          self.delete()
       elif action=='show':
          self.show()
+      elif action=='gensecret':
+         self.gensecret()
       else:
          logger.warning('Unknown action: {0}'.format(action))
       logger.info('DONE!')
@@ -208,13 +210,15 @@ class Command(BaseCommand):
             owner=self.__get_owner__(ws.cell(row=r, column=4).value)
             reserved=ws.cell(row=r, column=5).value in TRUE_VALUES
             tipe=ws.cell(row=r, column=6).value
-            logger.debug('     Importing row: {0}: {1} ({2})'.format(r, name, 'reserved' if reserved else 'normal'))
+            encrypted=ws.cell(row=r, collumn=7).value in TRUE_VALUES
+            logger.debug('     Importing row: {0}: {1} ({2})[{3}]'.format(r, name, 'reserved' if reserved else 'normal', 'encrypted' if encrypted else 'clear-text'))
             #ID/NAME,VALUES,PARENT,OWNER,RESERVED,TIPE
             try:
                self.kwargs['name']=name
                pref=self.__get_pref__(owner, parent)
                if pref.count()<1: raise Preference.DoesNotExist
                for p in pref:
+                  p.encrypted=encrypted
                   p.value=val
                   p.reserved=reserved
                   p.setTipe(tipe)
@@ -256,3 +260,8 @@ class Command(BaseCommand):
          self.impdir(f)
       elif os.path.isfile(f):
          self.impfile(f)
+
+   def gensecret(self):
+      from webframe.models import AbstractPreference
+      key=AbstractPreference.__getSecret__()
+      logger.warning('Your secret is: {0}'.format(key))

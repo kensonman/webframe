@@ -8,6 +8,7 @@ deprecation
 django_tables2
 python-dateutil
 pytimeparse
+cryptography
 
 #Optional
 django-impersonate

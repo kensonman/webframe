@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-14 04:22+0000\n"
+"POT-Creation-Date: 2020-10-09 17:06+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -27,238 +27,286 @@ msgstr "Is Parent"
 msgid "webframe.models.Preference.childParentFilter.child"
 msgstr "Is Child"
 
-#: models.py:20
+#: models.py:21
 msgid "null"
 msgstr "<i class=\"fas fa-code\"></i>"
 
-#: models.py:22
+#: models.py:23
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
-#: models.py:23
+#: models.py:24
 msgid "English"
 msgstr "English"
 
-#: models.py:137
+#: models.py:138
 msgid "webframe.models.ValueObject"
 msgstr "ValueObject"
 
-#: models.py:138
+#: models.py:139
 msgid "webframe.models.ValueObjects"
 msgstr "ValueObjects"
 
-#: models.py:145
+#: models.py:146
 msgid "webframe.models.ValueObject.id"
 msgstr "ID"
 
-#: models.py:146
+#: models.py:147
 msgid "webframe.models.ValueObject.id.helptext"
 msgstr "The id of the value-object"
 
-#: models.py:150
+#: models.py:151
 msgid "webframe.models.ValueObject.lmd"
 msgstr "Last Modify Date"
 
-#: models.py:151
+#: models.py:152
 msgid "webframe.models.ValueObject.lmd.helptext"
 msgstr "The last modify date of the value-object"
 
-#: models.py:160
+#: models.py:161
 msgid "webframe.models.ValueObject.lmb"
 msgstr "Last Modify By"
 
-#: models.py:161
+#: models.py:162
 msgid "webframe.models.ValueObject.lmb.helptext"
 msgstr "The person that modified the value-object last time"
 
-#: models.py:165
+#: models.py:166
 msgid "webframe.models.ValueObject.cd"
 msgstr "Create Date"
 
-#: models.py:166
+#: models.py:167
 msgid "webframe.models.ValueObject.cd.helptext"
 msgstr "The creation date of the value-object"
 
-#: models.py:175
+#: models.py:176
 msgid "webframe.models.ValueObject.cb"
 msgstr "Created By"
 
-#: models.py:176
+#: models.py:177
 msgid "webframe.models.ValueObject.cb.helptext"
 msgstr "The person that create this value-object"
 
-#: models.py:292
+#: models.py:293
 msgid "webframe.models.AliveObject"
 msgstr "AliveObject"
 
-#: models.py:293
+#: models.py:294
 msgid "webframe.models.AliveObjects"
 msgstr "AliveObject"
 
-#: models.py:297
+#: models.py:298
 msgid "webframe.models.AliveObject.effDate"
 msgstr "Effective Date"
 
-#: models.py:298
+#: models.py:299
 msgid "webframe.models.AliveObject.effDate.helptext"
 msgstr "The date(Included) to start the life-cycle of the object"
 
-#: models.py:303
+#: models.py:304
 msgid "webframe.models.AliveObject.expDate"
 msgstr "Expiry Date"
 
-#: models.py:304
+#: models.py:305
 msgid "webframe.models.AliveObject.expDate.helptext"
 msgstr "The date(Excluded) to end the life-cycle of the object"
 
-#: models.py:308
+#: models.py:309
 msgid "webframe.models.AliveObject.enabled"
 msgstr "Enabled"
 
-#: models.py:309
+#: models.py:310
 msgid "webframe.models.AliveObject.enabled.helptext"
 msgstr "The enabling status of the object"
 
-#: models.py:354
+#: models.py:355
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "Ordering"
 
-#: models.py:438
+#: models.py:485
 msgid "webframe.models.Preference.TYPE.NONE"
 msgstr "None (Must be empty)"
 
-#: models.py:439
+#: models.py:486
 msgid "webframe.models.Preference.TYPE.INT"
 msgstr "Integer"
 
-#: models.py:440
+#: models.py:487
 msgid "webframe.models.Preference.TYPE.DECIMAL"
 msgstr "Decimal"
 
-#: models.py:441
+#: models.py:488
 msgid "webframe.models.Preference.TYPE.BOOLEAN"
 msgstr "Boolean"
 
-#: models.py:442
+#: models.py:489
 msgid "webframe.models.Preference.TYPE.TEXT"
 msgstr "Text"
 
-#: models.py:443
+#: models.py:490
 msgid "webframe.models.Preference.TYPE.RICHTEXT"
 msgstr "Rich Text (HTML)"
 
-#: models.py:444
+#: models.py:491
 msgid "webframe.models.Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:445
+#: models.py:492
 msgid "webframe.models.Preference.TYPE.EMAIL"
 msgstr "Email"
 
-#: models.py:446
+#: models.py:493
 msgid "webframe.models.Preference.TYPE.DATE"
 msgstr "Date"
 
-#: models.py:447
+#: models.py:494
 msgid "webframe.models.Preference.TYPE.TIME"
 msgstr "Time"
 
-#: models.py:448
+#: models.py:495
 msgid "webframe.models.Preference.TYPE.DATETIME"
 msgstr "Date Time"
 
-#: models.py:449
+#: models.py:496
 msgid "webframe.models.Preference.TYPE.UUIDS"
 msgstr "Comma delimited UUIDs"
 
-#: models.py:450
+#: models.py:497
 msgid "webframe.models.Preference.TYPE.LIST"
 msgstr "Comma, Semicolon or | delimited strigns"
 
-#: models.py:451
+#: models.py:498
 msgid "webframe.models.Preference.TYPE.JSON"
 msgstr "JSON object"
 
-#: models.py:454 templates/webframe/preference.html:148
-#: templates/webframe/preference.html:149
+#: models.py:502 templates/webframe/preference.html:134
+#: templates/webframe/preference.html:135
 msgid "webframe.models.Preference.name"
 msgstr "Name"
 
-#: models.py:454
+#: models.py:502
 msgid "webframe.models.Preference.name.helptext"
 msgstr "The name of the preference"
 
-#: models.py:455 templates/webframe/preference.html:152
-#: templates/webframe/preference.html:153
+#: models.py:503 templates/webframe/preference.html:138
+#: templates/webframe/preference.html:139
 msgid "webframe.models.Preference.value"
 msgstr "Value"
 
-#: models.py:455
+#: models.py:503
 msgid "webframe.models.Preference.value.helptext"
 msgstr "The value of the perference"
 
-#: models.py:461
+#: models.py:509
 msgid "Pwebframe.models.reference.owner"
 msgstr "Owner"
 
-#: models.py:462
+#: models.py:510
 msgid "webframe.models.Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:469 templates/webframe/preference.html:139
-#: templates/webframe/preference.html:140
+#: models.py:517 templates/webframe/preference.html:125
+#: templates/webframe/preference.html:126
 msgid "webframe.models.Preference.parent"
 msgstr "Parent"
 
-#: models.py:470
+#: models.py:518
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:474 templates/webframe/preference.html:156
-#: templates/webframe/preference.html:157
+#: models.py:522 templates/webframe/preference.html:142
+#: templates/webframe/preference.html:143
 msgid "webframe.models.Preference.sequence"
 msgstr "Sequence"
 
-#: models.py:475
+#: models.py:523
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:477 templates/webframe/preference.html:125
+#: models.py:525 templates/webframe/preference.html:111
 msgid "webframe.models.Preference.tipe"
 msgstr "Type"
 
-#: models.py:477
+#: models.py:525
 msgid "webframe.models.Preference.tipe.helptext"
 msgstr "The type of the preference value"
 
-#: models.py:601
+#: models.py:526
+msgid "webframe.models.Preference.encrypted"
+msgstr "Encrypted"
+
+#: models.py:526
+msgid "webframe.models.Preference.encrypted.helptxt"
+msgstr "The field should be encrypted b4 save"
+
+#: models.py:720
 msgid "webframe.models.Preference.reserved"
 msgstr "Reserved?"
 
-#: models.py:601
+#: models.py:720
 msgid "webframe.models.Preference.reserved.helptext"
 msgstr ""
 "The preference is reserved for system use (Should not shown on front-end UI)."
 
-#: models.py:605
+#: models.py:729
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:606
+#: models.py:730
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:609
+#: models.py:733
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:613
+#: models.py:737
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:618
+#: models.py:742
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
+
+#: models.py:747
+msgid "webframe.models.Numbering"
+msgstr "Numbering"
+
+#: models.py:748
+msgid "webframe.models.Numberings"
+msgstr "Numberings"
+
+#: models.py:753
+msgid "webframe.models.Numbering.name"
+msgstr "Name"
+
+#: models.py:753
+msgid "webframe.models.Numbering.name.helptxt"
+msgstr "The name of the Numbering"
+
+#: models.py:754
+msgid "webframe.models.Numbering.pattern"
+msgstr "Pattern"
+
+#: models.py:754
+msgid "webframe.models.Numbering.pattern.helptxt"
+msgstr "The pattern to generate the number. now, next can be the variable"
+
+#: models.py:755
+msgid "webframe.models.Numbering.next_val"
+msgstr "Next Value"
+
+#: models.py:755
+msgid "webframe.models.Numbering.next_val.helptxt"
+msgstr "The next number that will be generated"
+
+#: models.py:756
+msgid "webframe.models.Numbering.step_val"
+msgstr "Step Value"
+
+#: models.py:756
+msgid "webframe.models.Numbering.step_val.helptxt"
+msgstr "After generation, the step value will be added"
 
 #: templates/webframe/footer.html:3
 #, python-format
@@ -379,13 +427,13 @@ msgstr "Showing %(size)s of %(total)s record(s); Page %(x)s of %(y)s;"
 msgid "pagination-norecord"
 msgstr "No Record Found"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:107
-#: templates/webframe/preference.html:115
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:93
+#: templates/webframe/preference.html:101
 msgid "Preference.new"
 msgstr "New Preference"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:107
-#: templates/webframe/preference.html:115
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:93
+#: templates/webframe/preference.html:101
 #, python-format
 msgid "%(pref)s - Preferences"
 msgstr "%(pref)s - Preferences"
@@ -394,50 +442,50 @@ msgstr "%(pref)s - Preferences"
 msgid "brand"
 msgstr "Brand"
 
-#: templates/webframe/preference.html:87
+#: templates/webframe/preference.html:74
 msgid "Preference.value.validation.uuid"
 msgstr "Pleaes input the comma delimited UUIDs"
 
-#: templates/webframe/preference.html:117
+#: templates/webframe/preference.html:103
 msgid "Config.new"
 msgstr "New Configuration"
 
-#: templates/webframe/preference.html:117
+#: templates/webframe/preference.html:103
 #, python-format
 msgid "%(pref)s - Configuration"
 msgstr "%(pref)s - Configuration"
 
-#: templates/webframe/preference.html:128
+#: templates/webframe/preference.html:114
 msgid "-- Please Select --"
 msgstr ""
 
-#: templates/webframe/preference.html:135
-#: templates/webframe/preference.html:136
+#: templates/webframe/preference.html:121
+#: templates/webframe/preference.html:122
 msgid "webframe.models.Preference.id"
 msgstr "ID"
 
-#: templates/webframe/preference.html:143
-#: templates/webframe/preference.html:144
+#: templates/webframe/preference.html:129
+#: templates/webframe/preference.html:130
 msgid "webframe.models.Preference.owner"
 msgstr "Owner"
 
-#: templates/webframe/preference.html:160
+#: templates/webframe/preference.html:146
 msgid "Preference.actions.delete"
 msgstr "Delete Preference"
 
-#: templates/webframe/preference.html:161
+#: templates/webframe/preference.html:147
 msgid "Preference.actions.save"
 msgstr "Save Preference"
 
-#: templates/webframe/preference.html:166
+#: templates/webframe/preference.html:152
 msgid "Preference.childs"
 msgstr "Lookup"
 
-#: templates/webframe/preference.html:170
+#: templates/webframe/preference.html:156
 msgid "Preference.actions.addChild"
 msgstr "Add Lookup"
 
-#: templates/webframe/preference.html:170
+#: templates/webframe/preference.html:156
 msgid "Config.actions.addChild"
 msgstr "Add Config"
 
@@ -595,14 +643,14 @@ msgstr "Standard Username and Password"
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP/Active Directory"
 
-#: views.py:66
+#: views.py:70
 msgid "Invalid username or password"
 msgstr "Invalid username or password"
 
-#: views.py:142
+#: views.py:146
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:304
+#: views.py:309
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
