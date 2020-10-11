@@ -188,18 +188,6 @@ class ValueObject(models.Model, Dictable):
          return 'new'
       return self.id.hex
 
-   @deprecated(deprecated_in="v2.1", removed_in="v2.2", current_version="v2.1", details="Use Dictable.expDict() instead")
-   def asDict(self):
-     return {'id': self.id.hex, 'lmd':fmt(self.lmd), 'lmb':self.lmb.username, 'cd':fmt(self.cd), 'cb':self.cb.username}
-
-   @deprecated(deprecated_in="v2.1", removed_in="v2.2", current_version="v2.1", details="Use Dictable.impDict(data) instead")
-   def fromDict(self, data):
-     self.id=data['id']
-     self.lmd=rfmt(data['lmd'])
-     self.lmb=getObj(get_user_model(), username=data['lmb'])
-     self.cd=rfmt(data['cd'])
-     self.cb=getObj(get_user_model(), username=data['cb'])
-
    def save(self, *args, **kwargs):
       '''
       Saving the value-object. The method will setup the lmb default value
@@ -215,24 +203,6 @@ class ValueObject(models.Model, Dictable):
          except TypeError:
             self.cb=user
       super(ValueObject, self).save()
-
-   def cached(self, name, fn, useCache=True):
-     '''
-     Retrieve the value from cache. This is used to cache and retrieve the specific data from the object cache. 
-     If the specific data is existed, the function will return the cached value directly. Otherwise, the fn will be invited
-     and save the result as a cache for next time.
-
-     @param name The name of the cache
-     @param fn The target function to retrieve the value. e.g.: lambda: self.__class__.objects.filter(id=123)
-     @param useCache Force to clear the cache when this is Flase
-     '''
-     if not hasattr(self, ValueObject.CACHED): setattr(self, ValueObject.CACHED, dict()) #Create the cache dict if not exists
-     c=getattr(self, ValueObject.CACHED) #Retrieve the caches
-     if (not useCache) and name in c: del c[name] #Remove the cache if not useCache
-
-     if name not in c: c[name]=fn()
-
-     return c[name]
 
 class AliveObjectManager(models.Manager):
    def living(self, timestamp=None):
@@ -360,18 +330,26 @@ class OrderableValueObject(ValueObject):
 
    # Get the ordering features
    def __get_ordered_list__(self):
+      '''
+      Get the ordered list. Returns None to disable the re-ordering feature when saving
+      '''
+      if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'): return None
       return self.__class__.objects.all().order_by('sequence')
 
    # Saving and reorder the models
    def save(self, *args, **kwargs):
       if not self.sequence: self.sequence=1
-      self.sequence-=0.5
-      ValueObject.save(self)
-      counter=1
-      for i in self.__get_ordered_list__():
-         i.sequence=counter
-         counter+=1
-         ValueObject.save(i, update_lmb='false')
+      reordered=self.__get_reordered_list__()
+      if reordered:
+         self.sequence-=0.5
+         super().save()
+         cnt=1
+         for i in reordered:
+            i.sequence=cnt
+            cnt+=1
+            super().save(i, update_lmb=False)
+      else:
+         super().save()
 
 class PrefManager(models.Manager):
    def pref(self, name=None, **kwargs):
@@ -595,7 +573,7 @@ class AbstractPreference(OrderableValueObject):
          from cryptography.fernet import Fernet
          v=self._value
          if v.startswith(AbstractPreference.ENCRYPTED_PREFIX): v=v[len(AbstractPreference.ENCRYPTED_PREFIX):]
-         return Fernet(AbstractPreference.__getSecret__()).decrypt(v.encode('utf-8')).decode('utf-8')
+         return Fernet(self.__class__.__getSecret__()).decrypt(v.encode('utf-8')).decode('utf-8')
       else:
          return self._value
    @value.setter
@@ -606,11 +584,11 @@ class AbstractPreference(OrderableValueObject):
             self._value=val
          else:
             from cryptography.fernet import Fernet
-            self._value=AbstractPreference.ENCRYPTED_PREFIX+Fernet(AbstractPreference.__getSecret__()).encrypt(str(val).encode('utf-8')).decode('utf-8')
+            self._value=AbstractPreference.ENCRYPTED_PREFIX+Fernet(self.__class__.__getSecret__()).encrypt(str(val).encode('utf-8')).decode('utf-8')
       else:
          if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
             from cryptography.fernet import Fernet
-            self._value=Fernet(AbstractPreference.__getSecret__()).encrypt(str(val).encode('utf-8'))
+            self._value=Fernet(self.__class__.__getSecret__()).encrypt(str(val).encode('utf-8'))
          else:
             self._value=str(val)
 
@@ -626,6 +604,7 @@ class AbstractPreference(OrderableValueObject):
       return Preference.objects.filter(parent=self).order_by('sequence')
 
    def __get_ordered_list__(self):
+      if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'): return None
       if self.parent:
          result=self.__class__.objects.filter(parent=self.parent)
       else:
