@@ -339,7 +339,7 @@ class OrderableValueObject(ValueObject):
    # Saving and reorder the models
    def save(self, *args, **kwargs):
       if not self.sequence: self.sequence=1
-      reordered=self.__get_reordered_list__()
+      reordered=self.__get_ordered_list__()
       if reordered:
          self.sequence-=0.5
          super().save()
