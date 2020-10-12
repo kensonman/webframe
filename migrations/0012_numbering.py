@@ -34,8 +34,8 @@ class Migration(migrations.Migration):
                 ('lmb', models.ForeignKey(blank=True, default=webframe.CurrentUserMiddleware.get_current_user, help_text='webframe.models.ValueObject.lmb.helptext', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='numbering_lmb', to=settings.AUTH_USER_MODEL, verbose_name='webframe.models.ValueObject.lmb')),
             ],
             options={
-                'verbose_name': 'webframe.models.AsyncManipulationObject',
-                'verbose_name_plural': 'webframe.models.AsyncManipulationObjects',
+                'verbose_name': 'webframe.models.Numbering', 
+                'verbose_name_plural': 'webframe.models.Numberings'
                 'permissions': [('exec_numbering', 'Can execute the number')],
             },
             bases=(models.Model, webframe.models.Dictable),

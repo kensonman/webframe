@@ -177,9 +177,11 @@ class ValueObject(models.Model, Dictable):
      help_text=_('webframe.models.ValueObject.cb.helptext'),
    )
 
+   @property
    def isNew(self):
       return self.lmd is None
 
+   @property
    def isNotNew(self):
       return self.lmd is not None
 
