@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name': 'webframe.models.Numbering', 
-                'verbose_name_plural': 'webframe.models.Numberings'
+                'verbose_name_plural': 'webframe.models.Numberings',
                 'permissions': [('exec_numbering', 'Can execute the number')],
             },
             bases=(models.Model, webframe.models.Dictable),
