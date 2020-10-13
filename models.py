@@ -410,7 +410,7 @@ class PrefManager(models.Manager):
         if len(rst)>0:
            rst=rst[0]
         else:
-           rst=Preference(name=name, value=defval)
+           rst=Preference(name=name, _value=defval)
         if kwargs.get('returnValue', 'True') in TRUE_VALUES:
            return rst.value
         return rst
