@@ -745,6 +745,11 @@ class Numbering(ValueObject, AliveObject):
    next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
    step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
 
+   def __str__(self):
+      if self.lmd is None:
+         return _('webframe.models.Numbering.new')
+      return _('webframe.models.Numbering[{name}::{next_val}]').format(name=self.name, next_val=self.next_val)
+
    @transaction.atomic
    def getNextVal(self, **kwargs):
       '''
