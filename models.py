@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# File:     webframe/models.py
+# Author:   Kenson Man <kenson@kensonidv.hk>
+# Date:     2020-10-17 12:29
+# Desc:     Provide the basic model for webframe
 from datetime import datetime
 from deprecation import deprecated
 from django.conf import settings
@@ -443,7 +448,10 @@ class AbstractPreference(OrderableValueObject):
          ('change_preference_type', 'Can change the preference type'),
       )
       abstract         = True
-      unique_together  = ( ('name', 'owner'), )
+      constraints      = [
+         models.UniqueConstraint(fields=('name', 'owner'), name='unique_name_and_owner'),
+         models.UniqueConstraint(fields=('name', ), condition=models.Q(owner=None), name='unique_name'),
+      ]
 
    TYPE_NONE           = 0 
    TYPE_INT            = 1
@@ -506,7 +514,7 @@ class AbstractPreference(OrderableValueObject):
 
    @staticmethod
    def get_identifier(name, owner):
-      return '{0}@User:{1}'.format(name, owner.id if owner and owner.is_authenticated else 'n/a')
+      return 'Pref::{0}@{1}'.format(name, owner.id if owner and owner.is_authenticated else 'n/a')
 
    @classmethod
    def __getSecret__(cls):
