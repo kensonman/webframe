@@ -210,7 +210,7 @@ class Command(BaseCommand):
             owner=self.__get_owner__(ws.cell(row=r, column=4).value)
             reserved=ws.cell(row=r, column=5).value in TRUE_VALUES
             tipe=ws.cell(row=r, column=6).value
-            encrypted=ws.cell(row=r, collumn=7).value in TRUE_VALUES
+            encrypted=ws.cell(row=r, column=7).value in TRUE_VALUES
             logger.debug('     Importing row: {0}: {1} ({2})[{3}]'.format(r, name, 'reserved' if reserved else 'normal', 'encrypted' if encrypted else 'clear-text'))
             #ID/NAME,VALUES,PARENT,OWNER,RESERVED,TIPE
             try:
@@ -226,7 +226,7 @@ class Command(BaseCommand):
                   logger.debug('IMPORTED, {0}'.format(cnt))
                   p.save()
             except Preference.DoesNotExist:
-               Preference(name=name, value=val, owner=owner, parent=parent, reserved=reserved).save()
+               Preference(name=name, _value=val, owner=owner, parent=parent, reserved=reserved).save()
                cnt+=1
       logger.debug('   Imported {0} row(s)'.format(cnt))
 

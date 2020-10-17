@@ -714,7 +714,8 @@ class AbstractPreference(OrderableValueObject):
          self.value=self._value
       else:
          if self._value:
-            if self._value.startswith(AbstractPreference.ENCRYPTED_PREFIX):
+            val=str(self._value)
+            if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
                self.value=self._value
       super().save(*args, **kwargs)
 
