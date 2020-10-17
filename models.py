@@ -16,7 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
 from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES
-import math, uuid, logging, json, pytz, re
+import math, uuid, logging, json, pytz, re, sys
 
 logger=logging.getLogger('webframe.models')
 
@@ -182,9 +182,11 @@ class ValueObject(models.Model, Dictable):
      help_text=_('webframe.models.ValueObject.cb.helptext'),
    )
 
+   @property
    def isNew(self):
       return self.lmd is None
 
+   @property
    def isNotNew(self):
       return self.lmd is not None
 
@@ -327,7 +329,7 @@ class AliveObject(models.Model, Dictable):
 
 # The abstract value=object that provide the sequence field and related ordering features
 class OrderableValueObject(ValueObject):
-   sequence      = models.FloatField(default=1,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
+   sequence      = models.FloatField(default=sys.maxsize,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
 
    class Meta:
       abstract   = True
@@ -344,17 +346,21 @@ class OrderableValueObject(ValueObject):
    # Saving and reorder the models
    def save(self, *args, **kwargs):
       if not self.sequence: self.sequence=1
-      reordered=self.__get_ordered_list__()
-      if reordered:
+      if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'):
+         super().save()
+      else:
          self.sequence-=0.5
          super().save()
-         cnt=1
-         for i in reordered:
-            i.sequence=cnt
-            cnt+=1
-            super().save(i, update_lmb=False)
-      else:
-         super().save()
+         reordered=self.__get_ordered_list__()
+
+         if reordered:
+            self.sequence-=0.5
+            super().save()
+            cnt=1
+            for i in reordered:
+               i.sequence=cnt
+               cnt+=1
+               ValueObject.save(i, update_lmb=False)
 
 class PrefManager(models.Manager):
    def pref(self, name=None, **kwargs):
@@ -413,7 +419,7 @@ class PrefManager(models.Manager):
         if len(rst)>0:
            rst=rst[0]
         else:
-           rst=Preference(name=name, value=defval)
+           rst=Preference(name=name, _value=defval)
         if kwargs.get('returnValue', 'True') in TRUE_VALUES:
            return rst.value
         return rst
@@ -750,6 +756,11 @@ class Numbering(ValueObject, AliveObject):
    pattern                 = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.pattern'), help_text=_('webframe.models.Numbering.pattern.helptxt'))
    next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
    step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
+
+   def __str__(self):
+      if self.lmd is None:
+         return _('webframe.models.Numbering.new')
+      return _('webframe.models.Numbering[{name}::{next_val}]').format(name=self.name, next_val=self.next_val)
 
    @transaction.atomic
    def getNextVal(self, **kwargs):
