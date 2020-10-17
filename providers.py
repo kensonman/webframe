@@ -26,6 +26,7 @@ def absolute_path(req):
     except ValueError:
         ''' url.index('%s') will raise the ValueError if string not found '''
         pass
+    if hasattr(settings, 'MEDIA_URL'): RST['MEDIA_URL']=getattr(settings, 'MEDIA_URL')
     RST['ABSOLUTE_PATH']=url
     RST['now']=datetime.now()
     RST['lang']=req.session.get(LANGUAGE_SESSION_KEY, 'en-US')

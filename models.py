@@ -329,6 +329,7 @@ class AliveObject(models.Model, Dictable):
 
 # The abstract value=object that provide the sequence field and related ordering features
 class OrderableValueObject(ValueObject):
+   DISABLED_REORDER = 'DISABLED_REORDER'
    sequence      = models.FloatField(default=sys.maxsize,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
 
    class Meta:
@@ -340,13 +341,12 @@ class OrderableValueObject(ValueObject):
       '''
       Get the ordered list. Returns None to disable the re-ordering feature when saving
       '''
-      if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'): return None
+      if hasattr(self.__class__, OrderableValueObject.DISABLED_REORDER) or hasattr(settings, OrderableValueObject.DISABLED_REORDER): return None
       return self.__class__.objects.all().order_by('sequence')
 
    # Saving and reorder the models
    def save(self, *args, **kwargs):
-      if not self.sequence: self.sequence=1
-      if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'):
+      if hasattr(self.__class__, OrderableValueObject.DISABLED_REORDER) or hasattr(settings, OrderableValueObject.DISABLED_REORDER) or hasattr(kwargs, OrderableValueObject.DISABLED_REORDER):
          super().save()
       else:
          self.sequence-=0.5
