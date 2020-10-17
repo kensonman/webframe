@@ -592,19 +592,19 @@ class AbstractPreference(OrderableValueObject):
          return self._value
    @value.setter
    def value(self, val):
+      val=str(val)
       if self.encrypted:
-         val=str(val)
          if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
             self._value=val
          else:
             from cryptography.fernet import Fernet
-            self._value=AbstractPreference.ENCRYPTED_PREFIX+Fernet(self.__class__.__getSecret__()).encrypt(str(val).encode('utf-8')).decode('utf-8')
+            self._value=AbstractPreference.ENCRYPTED_PREFIX+Fernet(self.__class__.__getSecret__()).encrypt(val.encode('utf-8')).decode('utf-8')
       else:
          if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
             from cryptography.fernet import Fernet
-            self._value=Fernet(self.__class__.__getSecret__()).encrypt(str(val).encode('utf-8'))
+            self._value=Fernet(self.__class__.__getSecret__()).encrypt(val.encode('utf-8'))
          else:
-            self._value=str(val)
+            self._value=val
 
    @property
    def asDict(self):
