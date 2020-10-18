@@ -707,6 +707,8 @@ class AbstractPreference(OrderableValueObject):
             tipe=ao.index(tipe.upper().strip())
          except:
             tipe=AbstractPreference.TYPE_TEXT
+      elif tipe is None:
+         tipe=AbstractPreference.TYPE_TEXT
       self.tipe=int(tipe)
 
    def save(self, *args, **kwargs):
