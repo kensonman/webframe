@@ -756,7 +756,7 @@ class Numbering(ValueObject, AliveObject):
       ]
 
    name                    = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.name'), help_text=_('webframe.models.Numbering.name.helptxt')) 
-   pattern                 = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.pattern'), help_text=_('webframe.models.Numbering.pattern.helptxt'))
+   pattern                 = models.CharField(max_length=100, default='{next}', verbose_name=_('webframe.models.Numbering.pattern'), help_text=_('webframe.models.Numbering.pattern.helptxt'))
    next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
    step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
 
@@ -788,4 +788,4 @@ class Numbering(ValueObject, AliveObject):
       The quick way to get the next value of this numbering. It will auto inject the "now" variable.
       If you want required more options, use @getNextVal(**kwargs) instead.
       '''
-      return self.getNextVal()
+      return self.getNextVal(user=get_current_user())
