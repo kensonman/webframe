@@ -5,9 +5,10 @@
 {%block scripts%}{{block.super}}
 <style type="text/css">
 .btn-login{ min-width: 200px; min-height: 40px; display:inline-block;}
-
 .seperator{ border-bottom: 1px solid black; text-align: center; margin-bottom:20px;}
 .seperator span{ position:relative; top:1rem; background-color:white; padding:10px;}
+ul.ul-messages{ list-style:none; padding:0rem; }
+ul.ul-messages li{list-style:none;}
 </style>
 <script type="text/javascript"><!--
 $(document).ready(function(){
@@ -49,8 +50,8 @@ $(document).ready(function(){
                {%endblock%}
 
                <input type="hidden" name="next" value="{{next|default:'/'}}"/>
-               {%block messages%}{%if messages%}<div><ul>{%for msg in messages%}
-                   <li class="animated flash"><span class="label{%if msg.tags%} label-{{msg.tags}}{%endif%}">{{msg}}</span></li>
+               {%block messages%}{%if messages%}<div><ul class="ul-messages">{%for msg in messages%}
+                   <li class="animated flash"><span class="alert alert-{{msg.tags|default:''}}">{{msg}}</span></li>
                {%endfor%}</ul></div>{%endif%}{%endblock%}
                
                {%block authenticationBackendsBlock%}<div class="field form-group">
