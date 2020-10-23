@@ -4,3 +4,4 @@
 *.log
 *.secret
 AbstractPreference.secret
+secret.key

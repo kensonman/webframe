@@ -15,7 +15,7 @@ from django.shortcuts import get_object_or_404 as getObj
 from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
 from .CurrentUserMiddleware import get_current_user
-from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES
+from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX
 import math, uuid, logging, json, pytz, re, sys
 
 logger=logging.getLogger('webframe.models')
@@ -489,7 +489,6 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
       (TYPE_JSON, _('webframe.models.Preference.TYPE.JSON')),
    )
-   ENCRYPTED_PREFIX    ='ENC:'
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
    _value              = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
@@ -522,28 +521,6 @@ class AbstractPreference(OrderableValueObject):
    def get_identifier(name, owner):
       return 'Pref::{0}@{1}'.format(name, owner.id if owner and owner.is_authenticated else 'n/a')
 
-   @classmethod
-   def __getSecret__(cls):
-      from cryptography.fernet import Fernet
-      import os
-      
-      keyfile=os.getenv('PREFERENCE_SECRET', None)
-      if keyfile: return keyfile.encode('utf-8')
-
-      keyfile=os.path.abspath(__file__)
-      keyfile=os.path.dirname(keyfile)
-      keyfile=os.path.join(keyfile, getattr(settings, 'PREFERENCE_SECRET', '{0}.secret'.format(cls.__name__)))
-      if os.path.isfile(keyfile):
-         #Loading the key
-         return open(keyfile, 'rb').read()
-      else:
-         #Generate the key
-         key=Fernet.generate_key()
-         with open(keyfile, 'wb') as f:
-            f.write(key)
-         os.chmod(keyfile, 0o600)
-         logger.warning('Generated the secret-key at {0}. Please ***BACKUP*** and keep it carefully!'.format(keyfile))
-         return key
 
    def __str__(self):
       return '(None)' if self.value is None else AbstractPreference.get_identifier(self.name, self.owner)
@@ -583,28 +560,12 @@ class AbstractPreference(OrderableValueObject):
 
    @property
    def value(self):
-      if self.encrypted:
-         from cryptography.fernet import Fernet
-         v=self._value
-         if v.startswith(AbstractPreference.ENCRYPTED_PREFIX): v=v[len(AbstractPreference.ENCRYPTED_PREFIX):]
-         return Fernet(self.__class__.__getSecret__()).decrypt(v.encode('utf-8')).decode('utf-8')
-      else:
-         return self._value
+      logger.warning('Archiving %s', self.name)
+      return decrypt(self._value) if self.encrypted else self._value
+
    @value.setter
    def value(self, val):
-      val=str(val)
-      if self.encrypted:
-         if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
-            self._value=val
-         else:
-            from cryptography.fernet import Fernet
-            self._value=AbstractPreference.ENCRYPTED_PREFIX+Fernet(self.__class__.__getSecret__()).encrypt(val.encode('utf-8')).decode('utf-8')
-      else:
-         if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
-            from cryptography.fernet import Fernet
-            self._value=Fernet(self.__class__.__getSecret__()).encrypt(val.encode('utf-8'))
-         else:
-            self._value=val
+      self._value=encrypt(self._value) if self.encrypted else self._value
 
    @property
    def asDict(self):
@@ -712,13 +673,13 @@ class AbstractPreference(OrderableValueObject):
       self.tipe=int(tipe)
 
    def save(self, *args, **kwargs):
-      if self.encrypted:
-         self.value=self._value
-      else:
-         if self._value:
-            val=str(self._value)
-            if val.startswith(AbstractPreference.ENCRYPTED_PREFIX):
-               self.value=self._value
+      if self._value:
+         # If self.encrypted turn on, but not encrypted: e.g.: Read the preference from database, then change the encrypted value
+         if self.encrypted and not self._value.startswith(ENCRYPTED_PREFIX):
+            #Just encrypte it
+            self._value=encrypt(self._value)
+         if self._value.startswith(ENCRYPTED_PREFIX) and not self.encrypted: #Reversed. If self.encrypted turn off but not encrypted
+            self._value=decrypt(self._value)
       super().save(*args, **kwargs)
 
 class Preference(AbstractPreference):
