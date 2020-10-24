@@ -560,7 +560,6 @@ class AbstractPreference(OrderableValueObject):
 
    @property
    def value(self):
-      logger.warning('Archiving %s', self.name)
       return decrypt(self._value) if self.encrypted else self._value
 
    @value.setter
