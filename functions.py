@@ -14,6 +14,7 @@ FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
 FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '{0} {1}'.format(FMT_DATE, FMT_TIME))
 TRUE_VALUES=['TRUE', 'true', 'True', 'T', 'YES', 'yes', 'Yes', 'Y', '1', 'ON', 'on', 'On', True, 1]
+ENCRYPTED_PREFIX='ENC:'
 
 def isUUID(val):
    '''
@@ -395,3 +396,37 @@ def convertDateformat(pydateformat, format='javascript'):
 def getJSDateformat(pydateformat, format='javascript'):
    return convertDateformat(pydateformat, format)
 
+def getSecretKey(keyfile=None):
+   from cryptography.fernet import Fernet
+   import os
+   
+   if not keyfile:
+      keyfile=getattr(settings, 'SECRET_KEY_FILE', 'secret.key')
+      if not os.path.isabs(keyfile): keyfile=os.path.join(os.path.dirname(__file__), keyfile)
+
+   if os.path.isfile(keyfile):
+      #Loading the key
+      return open(keyfile, 'rb').read().decode('utf-8')
+   else:
+      #Generate the key
+      key=Fernet.generate_key()
+      with open(keyfile, 'wb') as f:
+         f.write(key)
+      os.chmod(keyfile, 0o600)
+      logger.warning('Generated the secret-key at {0}. Please ***BACKUP*** and keep it carefully!'.format(keyfile))
+      return key
+
+def encrypt( data, secretKey=None ):
+   data=str(data)
+   if not secretKey: secretKey=getSecretKey()
+
+   from cryptography.fernet import Fernet
+   return '{0}{1}'.format(ENCRYPTED_PREFIX, Fernet(secretKey).encrypt(data.encode('utf-8')).decode('utf-8'))
+
+def decrypt( data, secretKey=None ):
+   data=str(data)
+   if data.startswith(ENCRYPTED_PREFIX): data=data[len(ENCRYPTED_PREFIX):]
+   if not secretKey: secretKey=getSecretKey()
+
+   from cryptography.fernet import Fernet
+   return Fernet(secretKey).decrypt(data.encode('utf-8')).decode('utf-8')

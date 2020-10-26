@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 from datetime import datetime
 from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME, convertDateformat 
-from .models import Preference
+from .models import Preference, TRUE_VALUES
 
 def getPref(k, v, req, t=30):
    v=Preference.objects.pref(k, defval=v, user=req.user, returnValue=True)
@@ -34,6 +34,7 @@ def absolute_path(req):
     RST['IPAddr']=getClientIP(req)
     RST['DEBUG']=getattr(settings, 'DEBUG', False)
     RST['METHOD_OVERRIDE']=getattr(settings, 'METHOD_OVERRIDE_PARAM_KEY', '_method')
+    RST['TRUE_VALUES']=TRUE_VALUES
     if getattr(settings, 'FONTAWESOME_LIC', None): RST['FONTAWESOME_LIC']=getattr(settings, 'FONTAWESOME_LIC', None)
     return RST
 
