@@ -346,7 +346,7 @@ class OrderableValueObject(ValueObject):
 
    # Saving and reorder the models
    def save(self, *args, **kwargs):
-      if hasattr(self.__class__, OrderableValueObject.DISABLED_REORDER) or hasattr(settings, OrderableValueObject.DISABLED_REORDER) or hasattr(kwargs, OrderableValueObject.DISABLED_REORDER):
+      if hasattr(settings, OrderableValueObject.DISABLED_REORDER) or hasattr(kwargs, OrderableValueObject.DISABLED_REORDER):
          super().save()
       else:
          self.sequence-=0.5
