@@ -677,7 +677,7 @@ class AbstractPreference(OrderableValueObject):
          if self.encrypted and not self._value.startswith(ENCRYPTED_PREFIX):
             #Just encrypte it
             self._value=encrypt(self._value)
-         if self._value.startswith(ENCRYPTED_PREFIX) and not self.encrypted: #Reversed. If self.encrypted turn off but not encrypted
+         if str(self._value).startswith(ENCRYPTED_PREFIX) and not self.encrypted: #Reversed. If self.encrypted turn off but not encrypted
             self._value=decrypt(self._value)
       super().save(*args, **kwargs)
 
