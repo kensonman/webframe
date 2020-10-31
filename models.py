@@ -346,21 +346,16 @@ class OrderableValueObject(ValueObject):
 
    # Saving and reorder the models
    def save(self, *args, **kwargs):
-      if hasattr(settings, OrderableValueObject.DISABLED_REORDER) or hasattr(kwargs, OrderableValueObject.DISABLED_REORDER):
-         super().save()
+      reordered=self.__get_ordered_list__()
+      if hasattr(settings, OrderableValueObject.DISABLED_REORDER) or hasattr(kwargs, OrderableValueObject.DISABLED_REORDER) or not reordered:
+         super().save(*args, **kwargs)
       else:
          self.sequence-=0.5
-         super().save()
-         reordered=self.__get_ordered_list__()
-
-         if reordered:
-            self.sequence-=0.5
-            super().save()
-            cnt=1
-            for i in reordered:
-               i.sequence=cnt
-               cnt+=1
-               ValueObject.save(i, update_lmb=False)
+         super().save(*args, **kwargs)
+         cnt=1
+         for i in reordered:
+            self.__class__.objects.filter(id=i.id).update(sequence=cnt)
+            cnt+=1
 
 class PrefManager(models.Manager):
    def pref(self, name=None, **kwargs):
