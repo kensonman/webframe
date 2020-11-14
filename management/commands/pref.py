@@ -10,7 +10,6 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import Q
-from openpyxl import load_workbook
 from pathlib import Path
 from webframe.functions import TRUE_VALUES
 from webframe.models import Preference
@@ -38,13 +37,17 @@ class Command(BaseCommand):
       parser.add_argument('--parent', dest='parent', type=str, help='The parent\'s name of the preference. Optional;', default=None)
       parser.add_argument('--noparent', dest='noparent', action='store_true', help='To specified the target preference has no parent; Optional; Default False')
       parser.add_argument('--reserved', dest='reserved', action='store_true', help='The reserved indicator of the preference. Used at insert/update; Optional; Default False')
-      parser.add_argument('--file', dest='file', type=str, help='The file (or directory) to be import. You can refer the \"webframe/static/tmpl/prefs-template.xlsx\" for more detail. Required when import', default=None)
+      parser.add_argument('--file', dest='file', type=str, help='The file (or directory) to be import. You can refer the \"webframe/static/tmpl/prefs-template.xlsx\" or \"webframe/static/tmpl/prefs-template.csv\" for more detail. Required when import', default=None)
+      parser.add_argument('--sep', dest='separator', type=str, default=',', help='The separator when CSV importing; Default \",\"')
+      parser.add_argument('--encoding', dest='encoding', type=str, default='utf-8', help='The encoding when CSV importing; Default \"utf-8\"')
+      parser.add_argument('--quotechar', dest='quotechar', type=str, default='\"', help='The quote-char when CSV importing; Default double quote: \"')
       parser.add_argument('--pattern', dest='pattern', type=str, help='The output pattern. {0}'.format(pattern), default=pattern)
       parser.add_argument('--max', dest='max', type=int, help='The maximum number of preference to show. Default is {0}'.format(max), default=max)
       parser.add_argument('--wildcard', dest='wildcard', type=str, help='Specify the wildcard; Default is {0}'.format(wildcard), default=wildcard)
       parser.add_argument('--force', '-f ', dest='force', action='store_true', help='Force the import', default=False)
 
    def __get_owner__(self, owner=None):
+      if not owner: return None
       owner=owner if owner else self.kwargs['owner']
       return get_user_model().objects.get(username=owner) if owner else None
 
@@ -188,47 +191,74 @@ class Command(BaseCommand):
       pref.delete()
       logger.warning('{0} of Preference(s) has been deleted'.format(cnt))
 
-   def impfile( self, f ):
-      if os.path.isfile(f) and os.access(f, os.R_OK):
-         logger.info('Importing file: {0}'.format(f))
-      else:
-         logger.warning('The file is not readable: {0}'.format(f))
-         return
+   def improw( self, cols, idx=0 ):
+      name=cols[0]
+      val=cols[1]
+      parent=self.__get_parent__(cols[2])
+      owner=self.__get_owner__(cols[3])
+      reserved=cols[4] in TRUE_VALUES
+      tipe=cols[5]
+      encrypted=cols[6] in TRUE_VALUES
+      logger.debug('     Importing row: {0}: {1} ({2})[{3}]'.format(idx, name, 'reserved' if reserved else 'normal', 'encrypted' if encrypted else 'clear-text'))
+      try:
+         self.kwargs['name']=name
+         pref=self.__get_pref__(owner, parent)
+         if pref.count()<1: raise Preference.DoesNotExist
+         for p in pref:
+            p.encrypted=encrypted
+            p.value=val
+            p.reserved=reserved
+            p.setTipe(tipe)
+            p.save()
+      except Preference.DoesNotExist:
+         Preference(name=name, _value=val, owner=owner, parent=parent, reserved=reserved, encrypted=encrypted).save()
 
+   def impXlsx( self, f ):
+      '''
+      Import xlsx file.
+      '''
+      from openpyxl import load_workbook
       wb=load_workbook(filename=f)
       ws=wb.active
       logger.debug('   Importing worksheet: {0}'.format(ws.title))
       cnt=0
       with transaction.atomic():
          for r in range(1, ws.max_row+1):
+            cols=list()
             name=ws.cell(row=r, column=1).value
             if isinstance(name, str): name=name.strip()
             if not name: continue #Skip the row when it has no pref.name
-            if r==1 and (name.upper()=='ID' or name.upper()=='NAME'): continue #Skip the first row if header row
-            val=ws.cell(row=r, column=2).value
-            parent=self.__get_parent__(ws.cell(row=r, column=3).value)
-            owner=self.__get_owner__(ws.cell(row=r, column=4).value)
-            reserved=ws.cell(row=r, column=5).value in TRUE_VALUES
-            tipe=ws.cell(row=r, column=6).value
-            encrypted=ws.cell(row=r, column=7).value in TRUE_VALUES
-            logger.debug('     Importing row: {0}: {1} ({2})[{3}]'.format(r, name, 'reserved' if reserved else 'normal', 'encrypted' if encrypted else 'clear-text'))
-            #ID/NAME,VALUES,PARENT,OWNER,RESERVED,TIPE
-            try:
-               self.kwargs['name']=name
-               pref=self.__get_pref__(owner, parent)
-               if pref.count()<1: raise Preference.DoesNotExist
-               for p in pref:
-                  p.encrypted=encrypted
-                  p.value=val
-                  p.reserved=reserved
-                  p.setTipe(tipe)
-                  cnt+=1
-                  logger.debug('IMPORTED, {0}'.format(cnt))
-                  p.save()
-            except Preference.DoesNotExist:
-               Preference(name=name, _value=val, owner=owner, parent=parent, reserved=reserved).save()
-               cnt+=1
+            if r==1 and (name.upper()=='ID' or name.upper()=='NAME' or name.upper()=='ID/Name'): continue #Skip the first row if header row
+            cols.append(name) #Name/ID
+            cols.append(ws.cell(row=r, column=2).value) #Value
+            cols.append(ws.cell(row=r, column=3).value) #Parent
+            cols.append(ws.cell(row=r, column=4).value) #Owner
+            cols.append(ws.cell(row=r, column=5).value) #Reserved
+            cols.append(ws.cell(row=r, column=6).value) #Tipe
+            cols.append(ws.cell(row=r, column=7).value) #encrypted
+            self.improw( cols, r )
+            cnt+=1
       logger.debug('   Imported {0} row(s)'.format(cnt))
+
+   def impCsv( self, f ):
+      '''
+      Import the csv file.
+      '''
+      import csv
+      with transaction.atomic():
+         cnt=0
+         with open(f, 'r', encoding=self.kwargs['encoding']) as fp:
+            if self.kwargs['quotechar']:
+               rows=csv.reader(fp, delimiter=self.kwargs['separator'], quotechar=self.kwargs['quotechar'], quoting=csv.QUOTE_MINIMAL, skipinitialspace=True)
+            else:
+               rows=csv.reader(fp, delimiter=self.kwargs['separator'], quoting=csv.QUOTE_NONE, skipinitialspace=True)
+            for row in rows:
+               name=row[0]
+               if not name: continue #Skip the row when it has no name
+               if cnt==0 and (name.upper()=='ID' or name.upper()=='NAME' or name.upper()=='ID/NAME'): continue #Skip the first row if header row
+               self.improw( row, cnt )
+               cnt+=1
+         logger.debug('   Imported {0} row(s)'.format(cnt))
 
    def impdir( self, d ):
       if os.path.isdir(d):
@@ -242,17 +272,29 @@ class Command(BaseCommand):
          p=Preference.objects.pref('IMPORTED_PREFERENCES', returnValue=False)
          p.reserved=True
          p.save()
-         for f in glob.glob(os.path.join(d, '*.xlsx')):
+         for f in os.listdir(d):
+            if not (f.upper().endswith('.XLSX') or f.upper().endswith('.CSV')): continue #only support *.xlsx and *.csv
+            f=os.path.join(d, f)
             try:
                Preference.objects.get(name=f, parent=p, reserved=True)
-               if self.kwargs['force']:
-                  self.impfile( f )
-                  cnt+=1
+               if self.kwargs['force']: raise Preference.DoesNotExist
             except Preference.DoesNotExist:
                self.impfile( f )
                cnt+=1
                Preference(name=f, reserved=True, parent=p).save()
       logger.debug('Imported {0} file(s)'.format(cnt))
+
+   def impfile( self, f ):
+      if not (os.path.isfile(f) and os.access(f, os.R_OK)):
+         logger.warning('The file is not readable: {0}'.format(f))
+         return
+      fn=f.lower()
+      if fn.endswith('.xlsx'):
+         self.impXlsx(f)
+      elif fn.endswith('.csv'):
+         self.impCsv(f)
+      else:
+         logger.info('Unsupported file: {0}'.format(f))
 
    def imp(self):
       f=self.kwargs['file']
