@@ -220,7 +220,7 @@ class Command(BaseCommand):
       from openpyxl import load_workbook
       wb=load_workbook(filename=f)
       ws=wb.active
-      logger.debug('   Importing worksheet: {0}'.format(ws.title))
+      logger.debug('   Importing worksheet: {0}!{1}'.format(f, ws.title))
       cnt=0
       with transaction.atomic():
          for r in range(1, ws.max_row+1):
@@ -246,6 +246,7 @@ class Command(BaseCommand):
       '''
       import csv
       with transaction.atomic():
+         logger.debug('   Importing csv: {0}'.format(f))
          cnt=0
          with open(f, 'r', encoding=self.kwargs['encoding']) as fp:
             if self.kwargs['quotechar']:
