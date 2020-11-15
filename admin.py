@@ -6,6 +6,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _, ugettext
 from .models import *
+from webframe.templatetags.trim import trim
 import logging
 
 logger=logging.getLogger('webframe.admin')
@@ -33,11 +34,16 @@ class PreferenceChildParentFilter(admin.SimpleListFilter):
 @admin.register(Preference)
 class PreferenceAdmin(admin.ModelAdmin):
    fields=('id', 'name', 'tipe', 'parent', 'owner', '_value', 'reserved', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
-   list_display=('id', 'name', 'parent', 'owner', 'reserved', 'lmb', 'lmd')
+   list_display=('id', 'name', 'shortValue', 'parent', 'owner', 'reserved', 'lmb', 'lmd')
    list_filter=('reserved', PreferenceChildParentFilter, 'tipe', 'encrypted')
    readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
    ordering=('owner__username', 'name')
    search_fields=('name', '_value', 'owner__username')
+
+   def shortValue(self, obj):
+      return trim(obj._value, 20)
+   shortValue.short_description=_('webframe.models.Preference.value')
+   shortValue.admin_order_field='_value'
 
 @admin.register(Numbering)
 class NumberingAdmin(admin.ModelAdmin):

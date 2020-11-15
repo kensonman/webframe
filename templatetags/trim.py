@@ -12,5 +12,5 @@ def trim(value, length=10):
 		value=''
 	if len(value)<length: return value
 	beg=int(length/2)
-	end=int((length-3)/2)
-	return '%s...%s'%(value[0:beg], value[end*-1])
+	end=5
+	return '%s...%s'%(value[0:beg], value[end*-1:])
