@@ -352,6 +352,7 @@ class OrderableValueObject(ValueObject):
       else:
          self.sequence-=0.5
          super().save(*args, **kwargs)
+         reordered=self.__get_ordered_list__() #Retrieve the list again due to the sequence changed
          cnt=1
          for i in reordered:
             self.__class__.objects.filter(id=i.id).update(sequence=cnt)
