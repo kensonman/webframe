@@ -120,7 +120,7 @@ class Command(BaseCommand):
          self.gensecret()
       else:
          logger.warning('Unknown action: {0}'.format(action))
-      logger.info('DONE!')
+      logger.warn('DONE!')
 
    def show(self):
       logger.info('Showing the preference ...')
@@ -220,7 +220,7 @@ class Command(BaseCommand):
       from openpyxl import load_workbook
       wb=load_workbook(filename=f)
       ws=wb.active
-      logger.debug('   Importing worksheet: {0}!{1}'.format(f, ws.title))
+      logger.info('   Importing worksheet: {0}!{1}'.format(f, ws.title))
       cnt=0
       with transaction.atomic():
          for r in range(1, ws.max_row+1):
@@ -238,7 +238,7 @@ class Command(BaseCommand):
             cols.append(ws.cell(row=r, column=7).value) #encrypted
             self.improw( cols, r )
             cnt+=1
-      logger.debug('   Imported {0} row(s)'.format(cnt))
+      logger.info('   Imported {0} row(s)'.format(cnt))
 
    def impCsv( self, f ):
       '''
@@ -246,7 +246,7 @@ class Command(BaseCommand):
       '''
       import csv
       with transaction.atomic():
-         logger.debug('   Importing csv: {0}'.format(f))
+         logger.info('   Importing csv: {0}'.format(f))
          cnt=0
          with open(f, 'r', encoding=self.kwargs['encoding']) as fp:
             if self.kwargs['quotechar']:
@@ -259,7 +259,7 @@ class Command(BaseCommand):
                if cnt==0 and (name.upper()=='ID' or name.upper()=='NAME' or name.upper()=='ID/NAME'): continue #Skip the first row if header row
                self.improw( row, cnt )
                cnt+=1
-         logger.debug('   Imported {0} row(s)'.format(cnt))
+         logger.info('   Imported {0} row(s)'.format(cnt))
 
    def impdir( self, d ):
       if os.path.isdir(d):
