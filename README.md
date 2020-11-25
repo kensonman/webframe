@@ -8,7 +8,7 @@ Installation
 - Download the zip file and extract to your project folder. Then do the configuration;
 - Checkout as a submodule in GIT. Then do the configuration;
 
-      git submodule add ssh://dev.breakthrough.org.hk/var/git/kenson.webframe.git dev/webframe
+      git submodule add http://repos.kenson.idv.hk/kenson/webframe.git src/webframe
 
 Configuration
 ----
@@ -209,6 +209,7 @@ Social Authentication
 ------
 The social authentication can be supported by django-social-app-auth. The Instruction can be found (here)[https://simpleisbetterthancomplex.com/tutorial/2016/10/24/how-to-add-social-login-to-django.html].
 
+
 Compile SCSS
 ----
 The package is develed under scss code. It can be customizes the style by scss engine. Execute the following code to compile:
@@ -289,7 +290,7 @@ if LDAP_ENABLED:
       'port': int(os.getenv('LDAP_PORT', '389')),
       'use_ssl': os.getenv('LDAP_USE_SSL', 'False').lower() in ['true', 't', 'yes', 'y', '1'],
    }  
-   LDAP_BIND_USER=os.getenv('LDAP_BIND_USER', 'CN=webmaster,OU=IT,OU=BT_Staff,DC=breakthrough,DC=org,DC=hk')
+   LDAP_BIND_USER=os.getenv('LDAP_BIND_USER', 'CN=webmaster,DC=breakthrough,DC=org,DC=hk')
    LDAP_BIND_PWD =os.getenv('LDAP_BIND_PASS', 'BIND Password')
    LDAP_USER_BASE=os.getenv('LDAP_USER_BASE', 'OU=BT_STAFF,DC=breakthrough,DC=org,DC=hk')
    LDAP_GROUP_BASE=os.getenv('LDAP_GROUP_BASE', 'DC=breakthrough,DC=org,DC=hk')
@@ -376,12 +377,12 @@ Example:
 ```
 
 ### Import
-It can import a directory/file excel file into database.
+It can import a directory/file excel or csv files into database.
 
 The file format should be: 
 ``bash
-NAME/ID, Value, Parent, Owner, Reserved
-TEST,Hello World, , , true
+NAME/ID, Value, Parent, Owner, Reserved, Encrypted
+TEST,Hello World, , , true, false
 ```
 
 ### Generate Secret Key
