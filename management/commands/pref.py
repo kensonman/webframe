@@ -20,7 +20,7 @@ import logging, os, glob
 logger=logging.getLogger('webframe.commands.prefs')
 
 class Command(BaseCommand):
-   help     = '''Mainpulate the preference in database. Including insert/update/delete/view/import;'''
+   help     = '''Mainpulate the preference in database. Including insert/update/delete/view/import; Importing support csv|xlsx file.'''
 
    def add_arguments(self, parser):
       #Default Value
@@ -30,14 +30,13 @@ class Command(BaseCommand):
       wildcard='*'
       #Adding arguments
       parser.add_argument('action', type=str, help='The action to be taken. One of import/create/update/delete/gensecret; Default is {0}'.format(action), default=action)
-      parser.add_argument('--name', dest='name', type=str, help='The name of the preference. Optional when import or delete, otherwise required;', default=None)
+      parser.add_argument('name', type=str, nargs='?', help='The name of the preference or path of importing; ', defualt=None)
       parser.add_argument('--value', dest='value', type=str, help='The value of the preference. Required when create/update;', default=None)
       parser.add_argument('--owner', dest='owner', type=str, help='The owner of the preference. Optional;', default=None)
       parser.add_argument('--noowner', dest='noowner', action='store_true', help='To specified the target preference has no owner; Optional; Default False')
       parser.add_argument('--parent', dest='parent', type=str, help='The parent\'s name of the preference. Optional;', default=None)
       parser.add_argument('--noparent', dest='noparent', action='store_true', help='To specified the target preference has no parent; Optional; Default False')
       parser.add_argument('--reserved', dest='reserved', action='store_true', help='The reserved indicator of the preference. Used at insert/update; Optional; Default False')
-      parser.add_argument('--file', dest='file', type=str, help='The file (or directory) to be import. You can refer the \"webframe/static/tmpl/prefs-template.xlsx\" or \"webframe/static/tmpl/prefs-template.csv\" for more detail. Required when import', default=None)
       parser.add_argument('--sep', dest='separator', type=str, default=',', help='The separator when CSV importing; Default \",\"')
       parser.add_argument('--encoding', dest='encoding', type=str, default='utf-8', help='The encoding when CSV importing; Default \"utf-8\"')
       parser.add_argument('--quotechar', dest='quotechar', type=str, default='\"', help='The quote-char when CSV importing; Default double quote: \"')
@@ -298,7 +297,7 @@ class Command(BaseCommand):
          logger.info('Unsupported file: {0}'.format(f))
 
    def imp(self):
-      f=self.kwargs['file']
+      f=self.kwargs['name']
       if os.path.isdir(f):
          self.impdir(f)
       elif os.path.isfile(f):
