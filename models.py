@@ -560,7 +560,7 @@ class AbstractPreference(OrderableValueObject):
 
    @value.setter
    def value(self, val):
-      self._value=encrypt(self._value) if self.encrypted else self._value
+      self._value=encrypt(self._value) if self.encrypted else val
 
    @property
    def asDict(self):

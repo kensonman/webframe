@@ -30,7 +30,7 @@ class Command(BaseCommand):
       wildcard='*'
       #Adding arguments
       parser.add_argument('action', type=str, help='The action to be taken. One of import/create/update/delete/gensecret; Default is {0}'.format(action), default=action)
-      parser.add_argument('name', type=str, nargs='?', help='The name of the preference or path of importing; ', defualt=None)
+      parser.add_argument('name', type=str, nargs='?', help='The name of the preference or path of importing file (csv|xlsx);')
       parser.add_argument('--value', dest='value', type=str, help='The value of the preference. Required when create/update;', default=None)
       parser.add_argument('--owner', dest='owner', type=str, help='The owner of the preference. Optional;', default=None)
       parser.add_argument('--noowner', dest='noowner', action='store_true', help='To specified the target preference has no owner; Optional; Default False')
