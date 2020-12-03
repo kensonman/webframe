@@ -16,7 +16,7 @@ from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
 from .decorators import is_enabled
-from .functions import getBool
+from .functions import getBool, isUUID
 from .models import *
 from .tables import *
 import hashlib, logging
@@ -258,10 +258,15 @@ def pref(req, user=None, prefId=None):
       pref=Preference()
       pref.owner=user
       if 'parent' in req.GET: pref.parent=getObj(Preference, id=req.GET['parent'])
-   else:
+   elif isUUID(prefId):
       pref=getObj(Preference, id=prefId)
+   else:
+      pref=getObj(Preference, name=prefId, owner=user)
+      if 'admin' in req.GET and req.GET['admin'] in  TRUE_VALUES: return redirect('admin:webframe_preference_change', object_id=pref.id)
+      return redirect('webframe:pref', prefId=pref.id, user=user.username if user else 'none')
    
    if req.method=='GET':
+      if 'admin' in req.GET and req.GET['admin'] in  TRUE_VALUES: return redirect('admin:webframe_preference_change', object_id=pref.id)
       isConfig=getBool(req.GET.get('config', 'False'))
       if isConfig:
          if not (req.user.has_perm('webframe.add_config') or req.user.has_perm('webframe.change_config')):
