@@ -29,21 +29,22 @@ class Command(BaseCommand):
       max=256
       wildcard='*'
       #Adding arguments
-      parser.add_argument('action', type=str, help='The action to be taken. One of import/create/update/delete/gensecret; Default is {0}'.format(action), default=action)
-      parser.add_argument('name', type=str, nargs='?', help='The name of the preference or path of importing file (csv|xlsx);')
-      parser.add_argument('--value', dest='value', type=str, help='The value of the preference. Required when create/update;', default=None)
-      parser.add_argument('--owner', dest='owner', type=str, help='The owner of the preference. Optional;', default=None)
-      parser.add_argument('--noowner', dest='noowner', action='store_true', help='To specified the target preference has no owner; Optional; Default False')
-      parser.add_argument('--parent', dest='parent', type=str, help='The parent\'s name of the preference. Optional;', default=None)
-      parser.add_argument('--noparent', dest='noparent', action='store_true', help='To specified the target preference has no parent; Optional; Default False')
-      parser.add_argument('--reserved', dest='reserved', action='store_true', help='The reserved indicator of the preference. Used at insert/update; Optional; Default False')
-      parser.add_argument('--sep', dest='separator', type=str, default=',', help='The separator when CSV importing; Default \",\"')
-      parser.add_argument('--encoding', dest='encoding', type=str, default='utf-8', help='The encoding when CSV importing; Default \"utf-8\"')
-      parser.add_argument('--quotechar', dest='quotechar', type=str, default='\"', help='The quote-char when CSV importing; Default double quote: \"')
-      parser.add_argument('--pattern', dest='pattern', type=str, help='The output pattern. {0}'.format(pattern), default=pattern)
-      parser.add_argument('--max', dest='max', type=int, help='The maximum number of preference to show. Default is {0}'.format(max), default=max)
-      parser.add_argument('--wildcard', dest='wildcard', type=str, help='Specify the wildcard; Default is {0}'.format(wildcard), default=wildcard)
-      parser.add_argument('--force', '-f ', dest='force', action='store_true', help='Force the import', default=False)
+      parser.add_argument('action', type=str, help='The action to be taken. One of import/show/set/delete/gensecret; Default is {0}'.format(action), default=action)
+      parser.add_argument('name', type=str, nargs='?', help='[import/show/set/delete]; The name of the preference or path of importing file (csv|xlsx);')
+      parser.add_argument('--value', dest='value', type=str, help='[set/delete]; The value of the preference;', default=None)
+      parser.add_argument('--owner', dest='owner', type=str, help='[set/delete]; The owner of the preference; Optional;', default=None)
+      parser.add_argument('--noowner', dest='noowner', action='store_true', help='[show/set/delete]; The target preference has no owner; Optional; Default False')
+      parser.add_argument('--parent', dest='parent', type=str, help='[show/set/delete]; The parent\'s name of the preference. Optional;', default=None)
+      parser.add_argument('--noparent', dest='noparent', action='store_true', help='[show/set/delete]; The target preference has no parent; Optional; Default False')
+      parser.add_argument('--reserved', dest='reserved', action='store_true', help='[show/set/delete]; The reserved indicator of the preference; Optional; Default False')
+      parser.add_argument('--pattern', dest='pattern', type=str, help='[show]; The output pattern. {0}'.format(pattern), default=pattern)
+      parser.add_argument('--max', dest='max', type=int, help='[show]; The maximum number of preference to show. Default is {0}'.format(max), default=max)
+      parser.add_argument('--wildcard', dest='wildcard', type=str, help='[show]; Specify the wildcard; Default is {0}'.format(wildcard), default=wildcard)
+
+      parser.add_argument('--sep', dest='separator', type=str, default=',', help='[import]; The separator when CSV importing; Default \",\"')
+      parser.add_argument('--encoding', dest='encoding', type=str, default='utf-8', help='[import]; The encoding when CSV importing; Default \"utf-8\"')
+      parser.add_argument('--quotechar', dest='quotechar', type=str, default='\"', help='[import]; The quote-char when CSV importing; Default double quote: \"')
+      parser.add_argument('--force', '-f ', dest='force', action='store_true', help='[import]; Force the import', default=False)
 
    def __get_owner__(self, owner=None):
       if not owner: return None
@@ -107,10 +108,12 @@ class Command(BaseCommand):
       action=kwargs['action']
       if action=='import':
          self.imp()
-      elif action=='create':
-         self.create()
-      elif action=='update':
-         self.update()
+      elif action=='create': #for backward compatibility
+         self.set()
+      elif action=='update': #for backward compatibility
+         self.set()
+      elif action=='set':
+         self.set()
       elif action=='delete':
          self.delete()
       elif action=='show':
@@ -154,35 +157,17 @@ class Command(BaseCommand):
          self.output(p)
       logger.warning('There have {0} preference(s) has been shown'.format(len(q)))
 
-   def create(self):
-      owner=self.__get_owner__()
-      parent=self.__get_parent__()
+   def set(self):
       with transaction.atomic():
          try:
-            pref=self.__get_pref__(owner, parent)
+            pref=self.__get_pref__()
             if pref.count()<1: raise Preference.DoesNotExist
-            logger.warning('The specified preference already exists, discard all changes')
+            cnt=pref.update(value=self.kwargs['value'])
+            logger.info('{0} of Preference(s) has been updated'.format(cnt))
          except Preference.DoesNotExist:
             p=Preference(name=self.kwargs['name'], value=self.kwargs['value'], owner=owner, parent=parent)
             p.save()
             logger.info('The preference<{0}> has been created with value: {1}'.format(p.name, p.value))
-
-   def update(self):
-      owner=self.__get_owner__()
-      parent=self.__get_parent__()
-      with transaction.atomic():
-         try:
-            pref=self.__get_pref__(owner, parent)
-            cnt=pref.count()
-            if cnt<1: raise Preference.DoesNotExist
-            for p in pref:
-               p.value=self.kwargs['value']
-               p.save()
-            logger.info('{0} of Preference(s) has been updated'.format(cnt))
-            self.output(pref)
-         except Preference.DoesNotExist:
-            Preference(name=self.kwargs['name'], value=self.kwargs['value'], owner=owenr, parent=parent).save()
-            logger.info('Preference has been created')
 
    def delete(self):
       pref=self.__get_pref__()
