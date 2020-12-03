@@ -12,7 +12,7 @@ from django.db import transaction
 from django.db.models import Q
 from pathlib import Path
 from webframe.functions import TRUE_VALUES
-from webframe.models import Preference
+from webframe.models import Preference, AbstractPreference
 from uuid import UUID
 import logging, os, glob
 
@@ -44,6 +44,7 @@ class Command(BaseCommand):
       parser.add_argument('--sep', dest='separator', type=str, default=',', help='[import]; The separator when CSV importing; Default \",\"')
       parser.add_argument('--encoding', dest='encoding', type=str, default='utf-8', help='[import]; The encoding when CSV importing; Default \"utf-8\"')
       parser.add_argument('--quotechar', dest='quotechar', type=str, default='\"', help='[import]; The quote-char when CSV importing; Default double quote: \"')
+      parser.add_argument('--filepath', dest='filepath', action='store_true', help='[import]; Import the file-path in preferences; Default False')
       parser.add_argument('--force', '-f ', dest='force', action='store_true', help='[import]; Force the import', default=False)
 
    def __get_owner__(self, owner=None):
@@ -65,15 +66,18 @@ class Command(BaseCommand):
                pass
       return None
 
-   def __get_pref__(self, owner=None, parent=None):
-      owner=owner if owner else self.__get_owner__()
-      parent=parent if parent else self.__get_parent__()
+   def __get_pref__(self, **kwargs):
+      owner=kwargs['owner'] if 'owner' in kwargs else self.__get_owner__()
+      parent=kwargs['parent'] if 'parent' in kwargs else self.__get_parent__()
+      name=kwargs['name'] if 'name' in kwargs else self.kwargs['name']
+      if self.kwargs['filepath']: name=os.path.basename(name)
+
       if self.kwargs['parent'] and parent==None:
          raise Preference.DoesNotExist('Parent Preference not found: {0}'.format(self.kwargs['parent']))
 
       rst=Preference.objects.all()
-      if self.kwargs['name'] and self.kwargs['name']!='*':
-         rst=rst.filter(name=self.kwargs['name'])
+      if name and name!='*':
+         rst=rst.filter(name=name)
       if owner:
          rst=rst.filter(owner=owner)
       elif self.kwargs['noowner']:
@@ -83,6 +87,9 @@ class Command(BaseCommand):
          rst=rst.filter(parent=parent)
       elif self.kwargs['noparent']:
          rst=rst.filter(parent__isnull=True)
+
+      if self.kwargs['filepath']:
+         rst=rst.filter(tipe=AbstractPreference.TYPE_FILEPATH)
 
       return rst
 
@@ -281,9 +288,38 @@ class Command(BaseCommand):
       else:
          logger.info('Unsupported file: {0}'.format(f))
 
+   def imppath( self, p, parent=None):
+      if os.path.isdir(p):
+         try:
+            pref=self.__get_pref__(name=os.path.basename(p))
+            if pref.count()<1: raise Preference.DoesNotExist
+            pref=pref[0]
+         except Preference.DoesNotExist:
+            pref=Preference(name=os.path.basename(p), parent=parent)
+         pref.reserved=self.kwargs['reserved']
+         pref.tipe=AbstractPreference.TYPE_FILEPATH
+         pref.save()
+
+         for f in os.listdir(p):
+            path=os.path.join(p, f)
+            self.imppath(path, pref)
+      else:
+         try:
+            pref=self.__get_pref__(name=os.path.basename(p))
+            if pref.count()<1: raise Preference.DoesNotExist
+            pref=pref[0]
+         except Preference.DoesNotExist:
+            pref=Preference(name=os.path.basename(p), parent=parent)
+         pref.pathValue=p if os.path.isabs(p) else os.path.abspath(p)
+         pref.reserved=self.kwargs['reserved']
+         pref.tipe=AbstractPreference.TYPE_FILEPATH
+         pref.save()
+
    def imp(self):
       f=self.kwargs['name']
-      if os.path.isdir(f):
+      if self.kwargs['filepath']:
+         self.imppath(f)
+      elif os.path.isdir(f):
          self.impdir(f)
       elif os.path.isfile(f):
          self.impfile(f)

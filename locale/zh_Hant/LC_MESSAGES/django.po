@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-18 14:10+0000\n"
+"POT-Creation-Date: 2020-12-03 07:41+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -15,306 +15,311 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:14
+#: admin.py:15
 msgid "webframe.models.Preference.childParentFilter"
 msgstr "是否有歸類"
 
-#: admin.py:19
+#: admin.py:20
 msgid "webframe.models.Preference.childParentFilter.parent"
 msgstr "被歸類"
 
-#: admin.py:20
+#: admin.py:21
 msgid "webframe.models.Preference.childParentFilter.child"
 msgstr "歸類於"
 
-#: models.py:26
-msgid "null"
-msgstr "<i class=\"fas fa-code\"></i>"
-
-#: models.py:28
-msgid "Traditional Chinese"
-msgstr ""
-
-#: models.py:29
-msgid "English"
-msgstr ""
-
-#: models.py:143
-msgid "webframe.models.ValueObject"
-msgstr "ValueObject"
-
-#: models.py:144
-msgid "webframe.models.ValueObjects"
-msgstr "ValueObjects"
-
-#: models.py:151
-msgid "webframe.models.ValueObject.id"
-msgstr "ID"
-
-#: models.py:152
-msgid "webframe.models.ValueObject.id.helptext"
-msgstr "用作系統識別。使用 UUID 格式。"
-
-#: models.py:156
-msgid "webframe.models.ValueObject.lmd"
-msgstr "最後修改日期"
-
-#: models.py:157
-msgid "webframe.models.ValueObject.lmd.helptext"
-msgstr ""
-"這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
-
-#: models.py:166
-msgid "webframe.models.ValueObject.lmb"
-msgstr "最後修改人"
-
-#: models.py:167
-msgid "webframe.models.ValueObject.lmb.helptext"
-msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
-
-#: models.py:171
-msgid "webframe.models.ValueObject.cd"
-msgstr "建立日期"
-
-#: models.py:172
-msgid "webframe.models.ValueObject.cd.helptext"
-msgstr "這項資料的建立日期。"
-
-#: models.py:181
-msgid "webframe.models.ValueObject.cb"
-msgstr "建立人"
-
-#: models.py:182
-msgid "webframe.models.ValueObject.cb.helptext"
-msgstr "這項資料的建立人。"
-
-#: models.py:270
-msgid "webframe.models.AliveObject"
-msgstr "Alive Object"
-
-#: models.py:271
-msgid "webframe.models.AliveObjects"
-msgstr "生命週期物件"
-
-#: models.py:275
-msgid "webframe.models.AliveObject.effDate"
-msgstr "有效日期"
-
-#: models.py:276
-msgid "webframe.models.AliveObject.effDate.helptext"
-msgstr "這項資料的有效日期"
-
-#: models.py:281
-msgid "webframe.models.AliveObject.expDate"
-msgstr "失效日期"
-
-#: models.py:282
-msgid "webframe.models.AliveObject.expDate.helptext"
-msgstr "這項資料的失效日期"
-
-#: models.py:286
-msgid "webframe.models.AliveObject.enabled"
-msgstr "啟用"
-
-#: models.py:287
-msgid "webframe.models.AliveObject.enabled.helptext"
-msgstr "這項資料是否啟用"
-
-#: models.py:333
-msgid "webframe.models.OrderableValueObject.sequence"
-msgstr "排序"
-
-#: models.py:477
-msgid "webframe.models.Preference.TYPE.NONE"
-msgstr "必需為空值"
-
-#: models.py:478
-msgid "webframe.models.Preference.TYPE.INT"
-msgstr "整數"
-
-#: models.py:479
-msgid "webframe.models.Preference.TYPE.DECIMAL"
-msgstr "常數 (可以處理小數)"
-
-#: models.py:480
-msgid "webframe.models.Preference.TYPE.BOOLEAN"
-msgstr "真假值"
-
-#: models.py:481
-msgid "webframe.models.Preference.TYPE.TEXT"
-msgstr "純文字"
-
-#: models.py:482
-msgid "webframe.models.Preference.TYPE.RICHTEXT"
-msgstr "可格式化文字 (HTML)"
-
-#: models.py:483
-msgid "webframe.models.Preference.TYPE.URL"
-msgstr "URL"
-
-#: models.py:484
-msgid "webframe.models.Preference.TYPE.EMAIL"
-msgstr "電郵地址"
-
-#: models.py:485
-msgid "webframe.models.Preference.TYPE.DATE"
-msgstr "日期"
-
-#: models.py:486
-msgid "webframe.models.Preference.TYPE.TIME"
-msgstr "時間"
-
-#: models.py:487
-msgid "webframe.models.Preference.TYPE.DATETIME"
-msgstr "日期時間"
-
-#: models.py:488
-msgid "webframe.models.Preference.TYPE.UUIDS"
-msgstr "豆號分隔的 UUIDs"
-
-#: models.py:489
-msgid "webframe.models.Preference.TYPE.LIST"
-msgstr "豆號、分號或｜分隔的字串"
-
-#: models.py:490
-msgid "webframe.models.Preference.TYPE.JSON"
-msgstr "JSON 物件"
-
-#: models.py:494 templates/webframe/preference.html:134
-#: templates/webframe/preference.html:135
-msgid "webframe.models.Preference.name"
-msgstr "設定名稱"
-
-#: models.py:494
-msgid "webframe.models.Preference.name.helptext"
-msgstr "這個設定的的名稱。"
-
-#: models.py:495 templates/webframe/preference.html:138
+#: admin.py:45 models.py:500 templates/webframe/preference.html:138
 #: templates/webframe/preference.html:139
 msgid "webframe.models.Preference.value"
 msgstr "值"
 
+#: models.py:30
+msgid "null"
+msgstr "<i class=\"fas fa-code\"></i>"
+
+#: models.py:32
+msgid "Traditional Chinese"
+msgstr ""
+
+#: models.py:33
+msgid "English"
+msgstr ""
+
+#: models.py:147
+msgid "webframe.models.ValueObject"
+msgstr "ValueObject"
+
+#: models.py:148
+msgid "webframe.models.ValueObjects"
+msgstr "ValueObjects"
+
+#: models.py:155
+msgid "webframe.models.ValueObject.id"
+msgstr "ID"
+
+#: models.py:156
+msgid "webframe.models.ValueObject.id.helptext"
+msgstr "用作系統識別。使用 UUID 格式。"
+
+#: models.py:160
+msgid "webframe.models.ValueObject.lmd"
+msgstr "最後修改日期"
+
+#: models.py:161
+msgid "webframe.models.ValueObject.lmd.helptext"
+msgstr ""
+"這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
+
+#: models.py:170
+msgid "webframe.models.ValueObject.lmb"
+msgstr "最後修改人"
+
+#: models.py:171
+msgid "webframe.models.ValueObject.lmb.helptext"
+msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
+
+#: models.py:175
+msgid "webframe.models.ValueObject.cd"
+msgstr "建立日期"
+
+#: models.py:176
+msgid "webframe.models.ValueObject.cd.helptext"
+msgstr "這項資料的建立日期。"
+
+#: models.py:185
+msgid "webframe.models.ValueObject.cb"
+msgstr "建立人"
+
+#: models.py:186
+msgid "webframe.models.ValueObject.cb.helptext"
+msgstr "這項資料的建立人。"
+
+#: models.py:274
+msgid "webframe.models.AliveObject"
+msgstr "Alive Object"
+
+#: models.py:275
+msgid "webframe.models.AliveObjects"
+msgstr "生命週期物件"
+
+#: models.py:279
+msgid "webframe.models.AliveObject.effDate"
+msgstr "有效日期"
+
+#: models.py:280
+msgid "webframe.models.AliveObject.effDate.helptext"
+msgstr "這項資料的有效日期"
+
+#: models.py:285
+msgid "webframe.models.AliveObject.expDate"
+msgstr "失效日期"
+
+#: models.py:286
+msgid "webframe.models.AliveObject.expDate.helptext"
+msgstr "這項資料的失效日期"
+
+#: models.py:290
+msgid "webframe.models.AliveObject.enabled"
+msgstr "啟用"
+
+#: models.py:291
+msgid "webframe.models.AliveObject.enabled.helptext"
+msgstr "這項資料是否啟用"
+
+#: models.py:337
+msgid "webframe.models.OrderableValueObject.sequence"
+msgstr "排序"
+
+#: models.py:482
+msgid "webframe.models.Preference.TYPE.NONE"
+msgstr "必需為空值"
+
+#: models.py:483
+msgid "webframe.models.Preference.TYPE.INT"
+msgstr "整數"
+
+#: models.py:484
+msgid "webframe.models.Preference.TYPE.DECIMAL"
+msgstr "常數 (可以處理小數)"
+
+#: models.py:485
+msgid "webframe.models.Preference.TYPE.BOOLEAN"
+msgstr "真假值"
+
+#: models.py:486
+msgid "webframe.models.Preference.TYPE.TEXT"
+msgstr "純文字"
+
+#: models.py:487
+msgid "webframe.models.Preference.TYPE.RICHTEXT"
+msgstr "可格式化文字 (HTML)"
+
+#: models.py:488
+msgid "webframe.models.Preference.TYPE.URL"
+msgstr "URL"
+
+#: models.py:489
+msgid "webframe.models.Preference.TYPE.EMAIL"
+msgstr "電郵地址"
+
+#: models.py:490
+msgid "webframe.models.Preference.TYPE.DATE"
+msgstr "日期"
+
+#: models.py:491
+msgid "webframe.models.Preference.TYPE.TIME"
+msgstr "時間"
+
+#: models.py:492
+msgid "webframe.models.Preference.TYPE.DATETIME"
+msgstr "日期時間"
+
+#: models.py:493
+msgid "webframe.models.Preference.TYPE.UUIDS"
+msgstr "豆號分隔的 UUIDs"
+
+#: models.py:494
+msgid "webframe.models.Preference.TYPE.LIST"
+msgstr "豆號、分號或｜分隔的字串"
+
 #: models.py:495
+msgid "webframe.models.Preference.TYPE.JSON"
+msgstr "JSON 物件"
+
+#: models.py:496
+msgid "webframe.models.Preference.TYPE.FILEPATH"
+msgstr "檔案地址"
+
+#: models.py:499 templates/webframe/preference.html:134
+#: templates/webframe/preference.html:135
+msgid "webframe.models.Preference.name"
+msgstr "設定名稱"
+
+#: models.py:499
+msgid "webframe.models.Preference.name.helptext"
+msgstr "這個設定的的名稱。"
+
+#: models.py:500
 msgid "webframe.models.Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:501
+#: models.py:506
 msgid "Pwebframe.models.reference.owner"
 msgstr "擁有人"
 
-#: models.py:502
+#: models.py:507
 msgid "webframe.models.Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:509 templates/webframe/preference.html:125
+#: models.py:514 templates/webframe/preference.html:125
 #: templates/webframe/preference.html:126
 msgid "webframe.models.Preference.parent"
 msgstr "歸類"
 
-#: models.py:510
+#: models.py:515
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:514 templates/webframe/preference.html:142
+#: models.py:519 templates/webframe/preference.html:142
 #: templates/webframe/preference.html:143
 msgid "webframe.models.Preference.sequence"
 msgstr "排序"
 
-#: models.py:515
+#: models.py:520
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
-#: models.py:517 templates/webframe/preference.html:111
+#: models.py:522 templates/webframe/preference.html:111
 msgid "webframe.models.Preference.tipe"
 msgstr "類型"
 
-#: models.py:517
+#: models.py:522
 msgid "webframe.models.Preference.tipe.helptext"
 msgstr "設定值的類列"
 
-#: models.py:518
+#: models.py:523
 msgid "webframe.models.Preference.encrypted"
 msgstr "加密"
 
-#: models.py:518
+#: models.py:523
 msgid "webframe.models.Preference.encrypted.helptxt"
 msgstr "這個設定是否需要在儲存時加密？"
 
-#: models.py:725
+#: models.py:712
 msgid "webframe.models.Preference.reserved"
 msgstr "系統保留？"
 
-#: models.py:725
+#: models.py:712
 msgid "webframe.models.Preference.reserved.helptext"
 msgstr "這個設定是否為系統保留（前台不應該顯示與使用者）？"
 
-#: models.py:734
+#: models.py:730
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "異步程序物件"
 
-#: models.py:735
+#: models.py:731
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "異步程序物件"
 
-#: models.py:738
+#: models.py:734
 msgid "AsyncManipulationObject.task_id"
 msgstr "異步程序#"
 
-#: models.py:742
+#: models.py:738
 msgid "AsyncManipulationObject.is_processing"
 msgstr "異步程序進行中⋯⋯"
 
-#: models.py:747
+#: models.py:743
 msgid "AsyncManipulationObject.is_ready"
 msgstr "異步程序已準備就緒"
 
-#: models.py:752
+#: models.py:748
 msgid "webframe.models.Numbering"
 msgstr "序列號碼"
 
-#: models.py:753
+#: models.py:749
 msgid "webframe.models.Numberings"
 msgstr "序列號碼"
 
-#: models.py:758
+#: models.py:754
 msgid "webframe.models.Numbering.name"
 msgstr "序列號碼名稱"
 
-#: models.py:758
+#: models.py:754
 msgid "webframe.models.Numbering.name.helptxt"
 msgstr "這個設定的的名稱。"
 
-#: models.py:759
+#: models.py:755
 msgid "webframe.models.Numbering.pattern"
 msgstr "樣式."
 
-#: models.py:759
+#: models.py:755
 msgid "webframe.models.Numbering.pattern.helptxt"
 msgstr "你可以用 now, next 和 user 等變數"
 
-#: models.py:760
+#: models.py:756
 msgid "webframe.models.Numbering.next_val"
 msgstr "下一個值"
 
-#: models.py:760
+#: models.py:756
 msgid "webframe.models.Numbering.next_val.helptxt"
 msgstr "下次產生號碼時的 next 變數"
 
-#: models.py:761
+#: models.py:757
 msgid "webframe.models.Numbering.step_val"
 msgstr "每次增加值"
 
-#: models.py:761
+#: models.py:757
 msgid "webframe.models.Numbering.step_val.helptxt"
 msgstr "每次產生號嗎後，「下一個值」所需要增加的值"
 
-#: models.py:765
+#: models.py:761
 msgid "webframe.models.Numbering.new"
 msgstr "新的序列號碼"
 
-#: models.py:766
+#: models.py:762
+#, python-brace-format
 msgid "webframe.models.Numbering[{name}::{next_val}]"
 msgstr "序列號碼[{name}::{next_val}]"
 
@@ -331,15 +336,11 @@ msgstr "版本"
 msgid "render-date"
 msgstr "輸出日期"
 
-#: templates/webframe/framework.html:9
-msgid "appName"
-msgstr ""
-
-#: templates/webframe/framework.html:19
+#: templates/webframe/framework.html:16
 msgid "Javascript is required"
 msgstr "無法正常顯示網頁"
 
-#: templates/webframe/framework.html:20
+#: templates/webframe/framework.html:17
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
@@ -347,7 +348,7 @@ msgstr ""
 "這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
 "頁能正確顯示."
 
-#: templates/webframe/framework.html:21
+#: templates/webframe/framework.html:18
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
@@ -382,55 +383,59 @@ msgstr "個人設定"
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header.html:57 templates/webframe/login.html:77
+#: templates/webframe/header.html:57 templates/webframe/login.html:78
 msgid "login"
 msgstr "登入"
 
-#: templates/webframe/login.html:3 templates/webframe/login.html:24
+#: templates/webframe/login.html:3 templates/webframe/login.html:25
 msgid "Login Required"
 msgstr "請先登入"
 
-#: templates/webframe/login.html:28
+#: templates/webframe/login.html:29
 msgid "login-title"
 msgstr "登入"
 
-#: templates/webframe/login.html:34
+#: templates/webframe/login.html:35
 msgid "login-facebook"
 msgstr "Facebook 登入"
 
-#: templates/webframe/login.html:37
+#: templates/webframe/login.html:38
 msgid "login-twitter"
 msgstr "Twitter 登入"
 
-#: templates/webframe/login.html:40
+#: templates/webframe/login.html:41
 msgid "login-github"
 msgstr "GitHub 登入"
 
-#: templates/webframe/login.html:43
+#: templates/webframe/login.html:44
 msgid "login-google"
 msgstr "Google 登入"
 
-#: templates/webframe/login.html:48
+#: templates/webframe/login.html:49
 msgid "OR"
 msgstr "使用者登入"
 
-#: templates/webframe/login.html:59
-msgid "IPAddr"
-msgstr "IP 地址"
-
-#: templates/webframe/login.html:63
+#: templates/webframe/login.html:58
 msgid "Authentication Backends"
 msgstr "可使用登入方法"
 
-#: templates/webframe/login.html:69 templates/webframe/login.html:70
+#: templates/webframe/login.html:66
+msgid "IPAddr"
+msgstr "IP 地址"
+
+#: templates/webframe/login.html:70 templates/webframe/login.html:71
 #: templates/webframe/user.html:32 templates/webframe/user.html:33
 msgid "username"
 msgstr "用戶名稱"
 
-#: templates/webframe/login.html:73 templates/webframe/login.html:74
+#: templates/webframe/login.html:74 templates/webframe/login.html:75
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
+
+#: templates/webframe/meta.html:3
+msgid "appName"
+msgstr ""
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format

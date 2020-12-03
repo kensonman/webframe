@@ -10,13 +10,17 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db import models, transaction
-from django.utils import timezone as tz
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.shortcuts import get_object_or_404 as getObj
+from django.utils import timezone as tz
 from django.utils.translation import ugettext_lazy as _
 from json import JSONEncoder
+from pathlib import Path
+from shutil import copyfile
 from .CurrentUserMiddleware import get_current_user
 from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX
-import math, uuid, logging, json, pytz, re, sys
+import math, uuid, logging, json, pytz, re, sys, os
 
 logger=logging.getLogger('webframe.models')
 
@@ -455,6 +459,10 @@ class AbstractPreference(OrderableValueObject):
          models.UniqueConstraint(fields=('name', ), condition=models.Q(owner=None), name='unique_name'),
       ]
 
+   def pref_path(self, filename):
+      ext=os.path.splitext(os.path.basename(str(filename)))[1]
+      return 'prefs/{0}{1}'.format(self.id, ext)
+
    TYPE_NONE           = 0 
    TYPE_INT            = 1
    TYPE_DECIMAL        = 2 
@@ -469,6 +477,7 @@ class AbstractPreference(OrderableValueObject):
    TYPE_UUIDS          = 11
    TYPE_LIST           = 12
    TYPE_JSON           = 13
+   TYPE_FILEPATH       = 14
    TYPES               = (
       (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
       (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
@@ -484,6 +493,7 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_UUIDS, _('webframe.models.Preference.TYPE.UUIDS')),
       (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
       (TYPE_JSON, _('webframe.models.Preference.TYPE.JSON')),
+      (TYPE_FILEPATH, _('webframe.models.Preference.TYPE.FILEPATH')),
    )
 
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
@@ -519,7 +529,7 @@ class AbstractPreference(OrderableValueObject):
 
 
    def __str__(self):
-      return '(None)' if self.value is None else AbstractPreference.get_identifier(self.name, self.owner)
+      return AbstractPreference.get_identifier(self.name, self.owner)
 
    def __unicode__(self):
       return self.__str__
@@ -551,6 +561,8 @@ class AbstractPreference(OrderableValueObject):
          return self.listValue
       elif self.tipe==AbstractPreference.TYPE_JSON:
          return self.jsonValue
+      elif self.tipe==AbstractPreference.TYPE_FILEPATH:
+         return self.pathValue
       else:
          raise TypeError('Unknow DataType: {0}'.format(self.tipe))
 
@@ -651,6 +663,25 @@ class AbstractPreference(OrderableValueObject):
    def user(self, val):
       self.owner=val
 
+   @property
+   def pathValue(self):
+      return self._value
+   @pathValue.setter
+   def pathValue(self, path):
+      if path:
+         if not os.path.isfile(path) and not os.path.isdir(path):
+           raise FileNotFoundError(path)
+
+         src=path
+         trg=os.path.join(settings.MEDIA_ROOT, self.pref_path(os.path.basename(path)))
+         if not os.path.isdir(os.path.dirname(trg)):
+            logger.info('Creating the prefs folder: {0}...'.format(trg))
+            Path(os.path.dirname(trg)).mkdir(parents=True, exist_ok=True)
+         logger.warning('{0} the file: {1} => {2} ...'.format('Replace' if os.path.isfile(trg) else 'Clone', src, trg))
+         copyfile(src, trg)
+         path=trg
+      self.value=path
+
    def setTipe( self, tipe ):
       '''
       Set the tipe into this preference. 
@@ -683,6 +714,15 @@ class Preference(AbstractPreference):
    @classmethod
    def pref(self, name, **kwargs):
       return Preference.objects.pref(name, **kwargs)
+
+@receiver(post_delete, sender=Preference)
+def cleanFilepath(sender, **kwargs):
+   instance=kwargs['instance']
+   if instance.tipe==AbstractPreference.TYPE_FILEPATH:
+      logger.debug('Catch delete singal on Preference which is FILEPATH.')
+      if instance._value and os.path.isfile(instance._value):
+         logger.debug('Going to delete: {0}'.format(instance._value))
+         os.unlink(instance._value)
 
 @deprecated(deprecated_in="2020-10-01", details="Use Celery-Result instead")
 class AsyncManipulationObject(models.Model):

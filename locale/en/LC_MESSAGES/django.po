@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-18 14:10+0000\n"
+"POT-Creation-Date: 2020-12-03 07:41+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -15,304 +15,309 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:14
+#: admin.py:15
 msgid "webframe.models.Preference.childParentFilter"
 msgstr "Parent/Child"
 
-#: admin.py:19
+#: admin.py:20
 msgid "webframe.models.Preference.childParentFilter.parent"
 msgstr "Is Parent"
 
-#: admin.py:20
+#: admin.py:21
 msgid "webframe.models.Preference.childParentFilter.child"
 msgstr "Is Child"
 
-#: models.py:26
-msgid "null"
-msgstr "<i class=\"fas fa-code\"></i>"
-
-#: models.py:28
-msgid "Traditional Chinese"
-msgstr "繁體中文"
-
-#: models.py:29
-msgid "English"
-msgstr "English"
-
-#: models.py:143
-msgid "webframe.models.ValueObject"
-msgstr "ValueObject"
-
-#: models.py:144
-msgid "webframe.models.ValueObjects"
-msgstr "ValueObjects"
-
-#: models.py:151
-msgid "webframe.models.ValueObject.id"
-msgstr "ID"
-
-#: models.py:152
-msgid "webframe.models.ValueObject.id.helptext"
-msgstr "The id of the value-object"
-
-#: models.py:156
-msgid "webframe.models.ValueObject.lmd"
-msgstr "Last Modify Date"
-
-#: models.py:157
-msgid "webframe.models.ValueObject.lmd.helptext"
-msgstr "The last modify date of the value-object"
-
-#: models.py:166
-msgid "webframe.models.ValueObject.lmb"
-msgstr "Last Modify By"
-
-#: models.py:167
-msgid "webframe.models.ValueObject.lmb.helptext"
-msgstr "The person that modified the value-object last time"
-
-#: models.py:171
-msgid "webframe.models.ValueObject.cd"
-msgstr "Create Date"
-
-#: models.py:172
-msgid "webframe.models.ValueObject.cd.helptext"
-msgstr "The creation date of the value-object"
-
-#: models.py:181
-msgid "webframe.models.ValueObject.cb"
-msgstr "Created By"
-
-#: models.py:182
-msgid "webframe.models.ValueObject.cb.helptext"
-msgstr "The person that create this value-object"
-
-#: models.py:270
-msgid "webframe.models.AliveObject"
-msgstr "AliveObject"
-
-#: models.py:271
-msgid "webframe.models.AliveObjects"
-msgstr "AliveObject"
-
-#: models.py:275
-msgid "webframe.models.AliveObject.effDate"
-msgstr "Effective Date"
-
-#: models.py:276
-msgid "webframe.models.AliveObject.effDate.helptext"
-msgstr "The date(Included) to start the life-cycle of the object"
-
-#: models.py:281
-msgid "webframe.models.AliveObject.expDate"
-msgstr "Expiry Date"
-
-#: models.py:282
-msgid "webframe.models.AliveObject.expDate.helptext"
-msgstr "The date(Excluded) to end the life-cycle of the object"
-
-#: models.py:286
-msgid "webframe.models.AliveObject.enabled"
-msgstr "Enabled"
-
-#: models.py:287
-msgid "webframe.models.AliveObject.enabled.helptext"
-msgstr "The enabling status of the object"
-
-#: models.py:333
-msgid "webframe.models.OrderableValueObject.sequence"
-msgstr "Ordering"
-
-#: models.py:477
-msgid "webframe.models.Preference.TYPE.NONE"
-msgstr "None (Must be empty)"
-
-#: models.py:478
-msgid "webframe.models.Preference.TYPE.INT"
-msgstr "Integer"
-
-#: models.py:479
-msgid "webframe.models.Preference.TYPE.DECIMAL"
-msgstr "Decimal"
-
-#: models.py:480
-msgid "webframe.models.Preference.TYPE.BOOLEAN"
-msgstr "Boolean"
-
-#: models.py:481
-msgid "webframe.models.Preference.TYPE.TEXT"
-msgstr "Text"
-
-#: models.py:482
-msgid "webframe.models.Preference.TYPE.RICHTEXT"
-msgstr "Rich Text (HTML)"
-
-#: models.py:483
-msgid "webframe.models.Preference.TYPE.URL"
-msgstr "URL"
-
-#: models.py:484
-msgid "webframe.models.Preference.TYPE.EMAIL"
-msgstr "Email"
-
-#: models.py:485
-msgid "webframe.models.Preference.TYPE.DATE"
-msgstr "Date"
-
-#: models.py:486
-msgid "webframe.models.Preference.TYPE.TIME"
-msgstr "Time"
-
-#: models.py:487
-msgid "webframe.models.Preference.TYPE.DATETIME"
-msgstr "Date Time"
-
-#: models.py:488
-msgid "webframe.models.Preference.TYPE.UUIDS"
-msgstr "Comma delimited UUIDs"
-
-#: models.py:489
-msgid "webframe.models.Preference.TYPE.LIST"
-msgstr "Comma, Semicolon or | delimited strigns"
-
-#: models.py:490
-msgid "webframe.models.Preference.TYPE.JSON"
-msgstr "JSON object"
-
-#: models.py:494 templates/webframe/preference.html:134
-#: templates/webframe/preference.html:135
-msgid "webframe.models.Preference.name"
-msgstr "Name"
-
-#: models.py:494
-msgid "webframe.models.Preference.name.helptext"
-msgstr "The name of the preference"
-
-#: models.py:495 templates/webframe/preference.html:138
+#: admin.py:45 models.py:500 templates/webframe/preference.html:138
 #: templates/webframe/preference.html:139
 msgid "webframe.models.Preference.value"
 msgstr "Value"
 
+#: models.py:30
+msgid "null"
+msgstr "<i class=\"fas fa-code\"></i>"
+
+#: models.py:32
+msgid "Traditional Chinese"
+msgstr "繁體中文"
+
+#: models.py:33
+msgid "English"
+msgstr "English"
+
+#: models.py:147
+msgid "webframe.models.ValueObject"
+msgstr "ValueObject"
+
+#: models.py:148
+msgid "webframe.models.ValueObjects"
+msgstr "ValueObjects"
+
+#: models.py:155
+msgid "webframe.models.ValueObject.id"
+msgstr "ID"
+
+#: models.py:156
+msgid "webframe.models.ValueObject.id.helptext"
+msgstr "The id of the value-object"
+
+#: models.py:160
+msgid "webframe.models.ValueObject.lmd"
+msgstr "Last Modify Date"
+
+#: models.py:161
+msgid "webframe.models.ValueObject.lmd.helptext"
+msgstr "The last modify date of the value-object"
+
+#: models.py:170
+msgid "webframe.models.ValueObject.lmb"
+msgstr "Last Modify By"
+
+#: models.py:171
+msgid "webframe.models.ValueObject.lmb.helptext"
+msgstr "The person that modified the value-object last time"
+
+#: models.py:175
+msgid "webframe.models.ValueObject.cd"
+msgstr "Create Date"
+
+#: models.py:176
+msgid "webframe.models.ValueObject.cd.helptext"
+msgstr "The creation date of the value-object"
+
+#: models.py:185
+msgid "webframe.models.ValueObject.cb"
+msgstr "Created By"
+
+#: models.py:186
+msgid "webframe.models.ValueObject.cb.helptext"
+msgstr "The person that create this value-object"
+
+#: models.py:274
+msgid "webframe.models.AliveObject"
+msgstr "AliveObject"
+
+#: models.py:275
+msgid "webframe.models.AliveObjects"
+msgstr "AliveObject"
+
+#: models.py:279
+msgid "webframe.models.AliveObject.effDate"
+msgstr "Effective Date"
+
+#: models.py:280
+msgid "webframe.models.AliveObject.effDate.helptext"
+msgstr "The date(Included) to start the life-cycle of the object"
+
+#: models.py:285
+msgid "webframe.models.AliveObject.expDate"
+msgstr "Expiry Date"
+
+#: models.py:286
+msgid "webframe.models.AliveObject.expDate.helptext"
+msgstr "The date(Excluded) to end the life-cycle of the object"
+
+#: models.py:290
+msgid "webframe.models.AliveObject.enabled"
+msgstr "Enabled"
+
+#: models.py:291
+msgid "webframe.models.AliveObject.enabled.helptext"
+msgstr "The enabling status of the object"
+
+#: models.py:337
+msgid "webframe.models.OrderableValueObject.sequence"
+msgstr "Ordering"
+
+#: models.py:482
+msgid "webframe.models.Preference.TYPE.NONE"
+msgstr "None (Must be empty)"
+
+#: models.py:483
+msgid "webframe.models.Preference.TYPE.INT"
+msgstr "Integer"
+
+#: models.py:484
+msgid "webframe.models.Preference.TYPE.DECIMAL"
+msgstr "Decimal"
+
+#: models.py:485
+msgid "webframe.models.Preference.TYPE.BOOLEAN"
+msgstr "Boolean"
+
+#: models.py:486
+msgid "webframe.models.Preference.TYPE.TEXT"
+msgstr "Text"
+
+#: models.py:487
+msgid "webframe.models.Preference.TYPE.RICHTEXT"
+msgstr "Rich Text (HTML)"
+
+#: models.py:488
+msgid "webframe.models.Preference.TYPE.URL"
+msgstr "URL"
+
+#: models.py:489
+msgid "webframe.models.Preference.TYPE.EMAIL"
+msgstr "Email"
+
+#: models.py:490
+msgid "webframe.models.Preference.TYPE.DATE"
+msgstr "Date"
+
+#: models.py:491
+msgid "webframe.models.Preference.TYPE.TIME"
+msgstr "Time"
+
+#: models.py:492
+msgid "webframe.models.Preference.TYPE.DATETIME"
+msgstr "Date Time"
+
+#: models.py:493
+msgid "webframe.models.Preference.TYPE.UUIDS"
+msgstr "Comma delimited UUIDs"
+
+#: models.py:494
+msgid "webframe.models.Preference.TYPE.LIST"
+msgstr "Comma, Semicolon or | delimited strigns"
+
 #: models.py:495
+msgid "webframe.models.Preference.TYPE.JSON"
+msgstr "JSON object"
+
+#: models.py:496
+msgid "webframe.models.Preference.TYPE.FILEPATH"
+msgstr "File Resource"
+
+#: models.py:499 templates/webframe/preference.html:134
+#: templates/webframe/preference.html:135
+msgid "webframe.models.Preference.name"
+msgstr "Name"
+
+#: models.py:499
+msgid "webframe.models.Preference.name.helptext"
+msgstr "The name of the preference"
+
+#: models.py:500
 msgid "webframe.models.Preference.value.helptext"
 msgstr "The value of the perference"
 
-#: models.py:501
+#: models.py:506
 msgid "Pwebframe.models.reference.owner"
 msgstr "Owner"
 
-#: models.py:502
+#: models.py:507
 msgid "webframe.models.Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:509 templates/webframe/preference.html:125
+#: models.py:514 templates/webframe/preference.html:125
 #: templates/webframe/preference.html:126
 msgid "webframe.models.Preference.parent"
 msgstr "Parent"
 
-#: models.py:510
+#: models.py:515
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:514 templates/webframe/preference.html:142
+#: models.py:519 templates/webframe/preference.html:142
 #: templates/webframe/preference.html:143
 msgid "webframe.models.Preference.sequence"
 msgstr "Sequence"
 
-#: models.py:515
+#: models.py:520
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:517 templates/webframe/preference.html:111
+#: models.py:522 templates/webframe/preference.html:111
 msgid "webframe.models.Preference.tipe"
 msgstr "Type"
 
-#: models.py:517
+#: models.py:522
 msgid "webframe.models.Preference.tipe.helptext"
 msgstr "The type of the preference value"
 
-#: models.py:518
+#: models.py:523
 msgid "webframe.models.Preference.encrypted"
 msgstr "Encrypted"
 
-#: models.py:518
+#: models.py:523
 msgid "webframe.models.Preference.encrypted.helptxt"
 msgstr "The field should be encrypted b4 save"
 
-#: models.py:725
+#: models.py:712
 msgid "webframe.models.Preference.reserved"
 msgstr "Reserved?"
 
-#: models.py:725
+#: models.py:712
 msgid "webframe.models.Preference.reserved.helptext"
 msgstr ""
 "The preference is reserved for system use (Should not shown on front-end UI)."
 
-#: models.py:734
+#: models.py:730
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:735
+#: models.py:731
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:738
+#: models.py:734
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:742
+#: models.py:738
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:747
+#: models.py:743
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
 
-#: models.py:752
+#: models.py:748
 msgid "webframe.models.Numbering"
 msgstr "Numbering"
 
-#: models.py:753
+#: models.py:749
 msgid "webframe.models.Numberings"
 msgstr "Numberings"
 
-#: models.py:758
+#: models.py:754
 msgid "webframe.models.Numbering.name"
 msgstr "Name"
 
-#: models.py:758
+#: models.py:754
 msgid "webframe.models.Numbering.name.helptxt"
 msgstr "The name of the Numbering"
 
-#: models.py:759
+#: models.py:755
 msgid "webframe.models.Numbering.pattern"
 msgstr "Pattern"
 
-#: models.py:759
+#: models.py:755
 msgid "webframe.models.Numbering.pattern.helptxt"
 msgstr "The pattern to generate the number. now, next can be the variable"
 
-#: models.py:760
+#: models.py:756
 msgid "webframe.models.Numbering.next_val"
 msgstr "Next Value"
 
-#: models.py:760
+#: models.py:756
 msgid "webframe.models.Numbering.next_val.helptxt"
 msgstr "The next number that will be generated"
 
-#: models.py:761
+#: models.py:757
 msgid "webframe.models.Numbering.step_val"
 msgstr "Step Value"
 
-#: models.py:761
+#: models.py:757
 msgid "webframe.models.Numbering.step_val.helptxt"
 msgstr "After generation, the step value will be added"
 
-#: models.py:765
+#: models.py:761
 msgid "webframe.models.Numbering.new"
 msgstr "New Numbering"
 
-#: models.py:766
+#: models.py:762
+#, python-brace-format
 msgid "webframe.models.Numbering[{name}::{next_val}]"
 msgstr "Numbering[{name}::{next_val}]"
 
@@ -329,21 +334,17 @@ msgstr "Version"
 msgid "render-date"
 msgstr "Render Date"
 
-#: templates/webframe/framework.html:9
-msgid "appName"
-msgstr ""
-
-#: templates/webframe/framework.html:19
+#: templates/webframe/framework.html:16
 msgid "Javascript is required"
 msgstr ""
 
-#: templates/webframe/framework.html:20
+#: templates/webframe/framework.html:17
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
 msgstr ""
 
-#: templates/webframe/framework.html:21
+#: templates/webframe/framework.html:18
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
@@ -376,55 +377,59 @@ msgstr "Preference"
 msgid "logout"
 msgstr "Logout"
 
-#: templates/webframe/header.html:57 templates/webframe/login.html:77
+#: templates/webframe/header.html:57 templates/webframe/login.html:78
 msgid "login"
 msgstr "Login"
 
-#: templates/webframe/login.html:3 templates/webframe/login.html:24
+#: templates/webframe/login.html:3 templates/webframe/login.html:25
 msgid "Login Required"
 msgstr "Login Required"
 
-#: templates/webframe/login.html:28
+#: templates/webframe/login.html:29
 msgid "login-title"
 msgstr "Login"
 
-#: templates/webframe/login.html:34
+#: templates/webframe/login.html:35
 msgid "login-facebook"
 msgstr ""
 
-#: templates/webframe/login.html:37
+#: templates/webframe/login.html:38
 msgid "login-twitter"
 msgstr ""
 
-#: templates/webframe/login.html:40
+#: templates/webframe/login.html:41
 msgid "login-github"
 msgstr ""
 
-#: templates/webframe/login.html:43
+#: templates/webframe/login.html:44
 msgid "login-google"
 msgstr ""
 
-#: templates/webframe/login.html:48
+#: templates/webframe/login.html:49
 msgid "OR"
 msgstr ""
 
-#: templates/webframe/login.html:59
-msgid "IPAddr"
-msgstr "IPAddr"
-
-#: templates/webframe/login.html:63
+#: templates/webframe/login.html:58
 msgid "Authentication Backends"
 msgstr "Authentication Backends"
 
-#: templates/webframe/login.html:69 templates/webframe/login.html:70
+#: templates/webframe/login.html:66
+msgid "IPAddr"
+msgstr "IPAddr"
+
+#: templates/webframe/login.html:70 templates/webframe/login.html:71
 #: templates/webframe/user.html:32 templates/webframe/user.html:33
 msgid "username"
 msgstr "Username"
 
-#: templates/webframe/login.html:73 templates/webframe/login.html:74
+#: templates/webframe/login.html:74 templates/webframe/login.html:75
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "Password"
+
+#: templates/webframe/meta.html:3
+msgid "appName"
+msgstr ""
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
