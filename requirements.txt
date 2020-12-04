@@ -9,6 +9,7 @@ django_tables2
 python-dateutil
 pytimeparse
 cryptography
+django-ajax-selects
 
 #Optional
 django-impersonate

@@ -3,8 +3,13 @@
 # Date:   2019-11-21 14:55
 # Author: Kenson Man <kenson@breakthrough.org.hk>
 # Desc:   The file provide the Admin-Tools in webframe module
+from ajax_select import make_ajax_form
+from ajax_select.admin import AjaxSelectAdmin
+from ajax_select.fields import AutoCompleteSelectField
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.safestring import mark_safe
+from django.urls import reverse
 from .models import *
 from webframe.templatetags.trim import trim
 import logging
@@ -31,19 +36,43 @@ class PreferenceChildParentFilter(admin.SimpleListFilter):
       else:
          return q.filter(parent__isnull=False)
 
+class PreferenceInline(admin.TabularInline):
+   model    = Preference 
+   fields   =['expand', 'sequence', 'name', 'tipe', '_value', 'reserved', 'encrypted']
+   readonly_fields=['id', 'cb', 'cd', 'lmb', 'lmd', 'expand']
+   extra    =0
+   ordering =('parent', 'sequence', 'name')
+
+   def expand(self, obj):
+      return mark_safe('[<a href="{0}">Details</a>]'.format(reverse('admin:webframe_preference_change', kwargs={'object_id': obj.id})))
+   expand.show_description=_('webframe.models.Preference.expand')
+
 @admin.register(Preference)
 class PreferenceAdmin(admin.ModelAdmin):
-   fields=('id', 'name', 'tipe', 'parent', 'owner', '_value', 'reserved', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
+   fields=('id', 'parent', 'parent_id', 'tipe', 'owner', 'name', '_value', 'reserved', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
+   form = make_ajax_form(Preference, {
+        # fieldname: channel_name
+        'parent':  'preferences',
+   })
+   form=make_ajax_form(Preference, { 'parent': 'preferences', })
+   inlines=[
+      PreferenceInline,
+   ]
    list_display=('id', 'name', 'shortValue', 'parent', 'owner', 'reserved', 'lmb', 'lmd')
    list_filter=('reserved', PreferenceChildParentFilter, 'tipe', 'encrypted')
-   readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
    ordering=('owner__username', 'name')
+   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'parent_id')
    search_fields=('name', '_value', 'owner__username')
 
    def shortValue(self, obj):
       return trim(obj._value, 20)
    shortValue.short_description=_('webframe.models.Preference.value')
    shortValue.admin_order_field='_value'
+
+   def parent_id(self, obj):
+      url=reverse('admin:webframe_preference_change', kwargs={'object_id': obj.parent.id})
+      return mark_safe('<a href="{1}">{0}</a>'.format(str(obj.parent.id), url))
+   parent_id.short_description=_('webframe.models.Preference.parent')
 
 @admin.register(Numbering)
 class NumberingAdmin(admin.ModelAdmin):

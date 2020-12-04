@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-03 07:41+0000\n"
+"POT-Creation-Date: 2020-12-04 06:22+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -15,19 +15,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:15
+#: admin.py:17
 msgid "webframe.models.Preference.childParentFilter"
 msgstr "是否有歸類"
 
-#: admin.py:20
+#: admin.py:22
 msgid "webframe.models.Preference.childParentFilter.parent"
 msgstr "被歸類"
 
-#: admin.py:21
+#: admin.py:23
 msgid "webframe.models.Preference.childParentFilter.child"
 msgstr "歸類於"
 
-#: admin.py:45 models.py:500 templates/webframe/preference.html:138
+#: admin.py:45
+msgid "webframe.models.Preference.expand"
+msgstr "展開"
+
+#: admin.py:61 models.py:500 templates/webframe/preference.html:138
 #: templates/webframe/preference.html:139
 msgid "webframe.models.Preference.value"
 msgstr "值"
@@ -671,6 +675,6 @@ msgstr "使用者名稱或密碼有誤"
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:309
+#: views.py:314
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
