@@ -1,5 +1,5 @@
 from django import template
-import mimetypes, os
+import mimetypes, os, logging
 register=template.Library()
 
 @register.filter
@@ -14,6 +14,7 @@ def mime(value):
    {{'path/to/unknown.abcdefg'|mime}} => "abcdefg"
    '''
    try:
-      return mimetypes.guest_type(value, strict=True)
+      return mimetypes.guess_type(value, strict=True)[0]
    except:
+      logging.getLogger('webframe.templatetags.mime').exception('Unexpected exception')
       return os.path.splitext(value)[1][1:]
