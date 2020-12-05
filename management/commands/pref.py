@@ -14,7 +14,7 @@ from pathlib import Path
 from webframe.functions import TRUE_VALUES
 from webframe.models import Preference, AbstractPreference
 from uuid import UUID
-import logging, os, glob
+import logging, os, glob, sys, re
 
 
 logger=logging.getLogger('webframe.commands.prefs')
@@ -92,6 +92,18 @@ class Command(BaseCommand):
          rst=rst.filter(tipe=AbstractPreference.TYPE_FILEPATH)
 
       return rst
+
+   def __get_name__( self, name ):
+      '''
+      Get the name and sequence according to the name.
+      @param name The string including the sequence and name. For example, '01.Target' will return a tuple (1, 'Target')
+      @return A tuple including the sequence and the name
+      '''
+      p=re.search(r'^\d+\.', name)
+      if p:
+         s=p.group(0)
+         return name[len(s):].strip(), int(name[0:len(s)-1])
+      return (name, sys.maxsize if hasattr(sys, 'maxsize') else sys.maxint) #Default append
 
    def output( self, pref, pattern=None ):
       pattern=pattern if pattern else self.kwargs['pattern']
@@ -289,40 +301,55 @@ class Command(BaseCommand):
          logger.info('Unsupported file: {0}'.format(f))
 
    def imppath( self, p, parent=None):
+      name, seq=self.__get_name__(os.path.basename(p))
       if os.path.isdir(p):
          try:
-            pref=self.__get_pref__(name=os.path.basename(p))
+            pref=self.__get_pref__(name=name)
             if pref.count()<1: raise Preference.DoesNotExist
             pref=pref[0]
          except Preference.DoesNotExist:
-            pref=Preference(name=os.path.basename(p), parent=parent)
+            pref=Preference(name=name, parent=parent)
          pref.reserved=self.kwargs['reserved']
          pref.tipe=AbstractPreference.TYPE_FILEPATH
+         pref.sequence=seq
          pref.save()
 
          for f in os.listdir(p):
             path=os.path.join(p, f)
             self.imppath(path, pref)
+
+         #Handling the ordering after import all the childs
+         ord=1
+         for c in pref.childs:
+            c.sequence=ord
+            c.save()
+            ord+=1
       else:
          try:
-            pref=self.__get_pref__(name=os.path.basename(p))
+            pref=self.__get_pref__(name=name)
             if pref.count()<1: raise Preference.DoesNotExist
             pref=pref[0]
          except Preference.DoesNotExist:
-            pref=Preference(name=os.path.basename(p), parent=parent)
+            pref=Preference(name=name, parent=parent)
          pref.pathValue=p if os.path.isabs(p) else os.path.abspath(p)
          pref.reserved=self.kwargs['reserved']
          pref.tipe=AbstractPreference.TYPE_FILEPATH
+         pref.sequence=seq
          pref.save()
 
    def imp(self):
-      f=self.kwargs['name']
-      if self.kwargs['filepath']:
-         self.imppath(f)
-      elif os.path.isdir(f):
-         self.impdir(f)
-      elif os.path.isfile(f):
-         self.impfile(f)
+      disableOrder=getattr(settings, 'DISABLE_REORDER', False)
+      setattr(settings, 'DISABLE_REORDER', True) #Disable the re-ordering features during importing
+      try:
+         f=self.kwargs['name']
+         if self.kwargs['filepath']:
+            self.imppath(f)
+         elif os.path.isdir(f):
+            self.impdir(f)
+         elif os.path.isfile(f):
+            self.impfile(f)
+      finally:
+         setattr(settings, 'DISABLE_REORDER', disableOrder) #Resume the re-ordering features after importing
 
    def gensecret(self):
       from webframe.models import AbstractPreference

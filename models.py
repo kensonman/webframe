@@ -583,7 +583,7 @@ class AbstractPreference(OrderableValueObject):
 
    @property
    def childs(self):
-      return Preference.objects.filter(parent=self).order_by('sequence')
+      return Preference.objects.filter(parent=self).order_by('sequence', 'name')
 
    def __get_ordered_list__(self):
       if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'): return None
