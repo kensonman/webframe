@@ -1,3 +1,4 @@
-webframe v2.7.6 - 2020-12-05 17:23 +0800
+webframe v2.7.8 - 2020-12-07 10:19 +0800
 
-Allow to specify the ordering when importing preference
+templatetags imgwidth and imgheight to support FileField to retrieve image width and height
+
