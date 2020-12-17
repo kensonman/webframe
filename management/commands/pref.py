@@ -36,7 +36,6 @@ class Command(BaseCommand):
       parser.add_argument('--noowner', dest='noowner', action='store_true', help='[show/set/delete]; The target preference has no owner; Optional; Default False')
       parser.add_argument('--parent', dest='parent', type=str, help='[show/set/delete]; The parent\'s name of the preference. Optional;', default=None)
       parser.add_argument('--noparent', dest='noparent', action='store_true', help='[show/set/delete]; The target preference has no parent; Optional; Default False')
-      parser.add_argument('--reserved', dest='reserved', action='store_true', help='[show/set/delete]; The reserved indicator of the preference; Optional; Default False')
       parser.add_argument('--pattern', dest='pattern', type=str, help='[show]; The output pattern. {0}'.format(pattern), default=pattern)
       parser.add_argument('--max', dest='max', type=int, help='[show]; The maximum number of preference to show. Default is {0}'.format(max), default=max)
       parser.add_argument('--wildcard', dest='wildcard', type=str, help='[show]; Specify the wildcard; Default is {0}'.format(wildcard), default=wildcard)
@@ -168,10 +167,6 @@ class Command(BaseCommand):
       else:
          q=q.filter(parent__isnull=True)
 
-      if 'reserved' in self.kwargs:
-         logger.info('   which {0} system reserved'.format('is' if self.kwargs['reserved'] else 'is not'))
-         q=q.filter(reserved=self.kwargs['reserved'])
-
       for p in q:
          self.output(p)
       logger.warning('There have {0} preference(s) has been shown'.format(len(q)))
@@ -216,7 +211,7 @@ class Command(BaseCommand):
             p.regex=regex
             p.save()
       except Preference.DoesNotExist:
-         Preference(name=name, _value=val, owner=owner, parent=parent, reserved=reserved, encrypted=encrypted).save()
+         Preference(name=name, _value=val, owner=owner, parent=parent, encrypted=encrypted, helptext=helptext, regex=regex).save()
 
    def impXlsx( self, f ):
       '''
@@ -276,18 +271,18 @@ class Command(BaseCommand):
       cnt=0
       with transaction.atomic():
          p=Preference.objects.pref('IMPORTED_PREFERENCES', returnValue=False)
-         p.reserved=True
+         p.helptext='<p>Sysetm use only! <strong>DO NOT MODIFY</strong> youself unless you understand the risk.</p>'
          p.save()
          for f in os.listdir(d):
             if not (f.upper().endswith('.XLSX') or f.upper().endswith('.CSV')): continue #only support *.xlsx and *.csv
             f=os.path.join(d, f)
             try:
-               Preference.objects.get(name=f, parent=p, reserved=True)
+               Preference.objects.get(name=f, parent=p)
                if self.kwargs['force']: raise Preference.DoesNotExist
             except Preference.DoesNotExist:
                self.impfile( f )
                cnt+=1
-               Preference(name=f, reserved=True, parent=p).save()
+               Preference(name=f, parent=p).save()
       logger.debug('Imported {0} file(s)'.format(cnt))
 
    def impfile( self, f ):
@@ -311,7 +306,6 @@ class Command(BaseCommand):
             pref=pref[0]
          except Preference.DoesNotExist:
             pref=Preference(name=name, parent=parent)
-         pref.reserved=self.kwargs['reserved']
          pref.tipe=AbstractPreference.TYPE_FILEPATH
          pref.sequence=seq
          pref.save()
@@ -334,7 +328,6 @@ class Command(BaseCommand):
          except Preference.DoesNotExist:
             pref=Preference(name=name, parent=parent)
          pref.pathValue=p if os.path.isabs(p) else os.path.abspath(p)
-         pref.reserved=self.kwargs['reserved']
          pref.tipe=AbstractPreference.TYPE_FILEPATH
          pref.sequence=seq
          pref.save()
