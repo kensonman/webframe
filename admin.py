@@ -10,6 +10,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django_summernote.admin import SummernoteModelAdmin
 from .models import *
 from webframe.templatetags.trim import trim
 import logging
@@ -38,7 +39,7 @@ class PreferenceChildParentFilter(admin.SimpleListFilter):
 
 class PreferenceInline(admin.TabularInline):
    model    = Preference 
-   fields   =['expand', 'sequence', 'name', 'tipe', '_value', 'reserved', 'encrypted']
+   fields   =['expand', 'sequence', 'name', '_tipe', '_value', 'encrypted']
    readonly_fields=['id', 'cb', 'cd', 'lmb', 'lmd', 'expand']
    extra    =0
    ordering =('parent', 'sequence', 'name')
@@ -48,8 +49,8 @@ class PreferenceInline(admin.TabularInline):
    expand.show_description=_('webframe.models.Preference.expand')
 
 @admin.register(Preference)
-class PreferenceAdmin(admin.ModelAdmin):
-   fields=('id', 'parent', 'parent_id', 'tipe', 'owner', 'name', '_value', 'reserved', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
+class PreferenceAdmin(SummernoteModelAdmin):
+   fields=('id', 'parent', 'parent_id', '_tipe', 'owner', 'name', '_value', 'helptext_', 'regex', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
    form = make_ajax_form(Preference, {
         # fieldname: channel_name
         'parent':  'preferences',
@@ -58,11 +59,12 @@ class PreferenceAdmin(admin.ModelAdmin):
    inlines=[
       PreferenceInline,
    ]
-   list_display=('id', 'name', 'shortValue', 'parent', 'owner', 'reserved', 'lmb', 'lmd')
-   list_filter=('reserved', PreferenceChildParentFilter, 'tipe', 'encrypted')
+   list_display=('id', 'name', 'shortValue', 'parent', 'owner', 'lmb', 'lmd')
+   list_filter=(PreferenceChildParentFilter, '_tipe', 'encrypted')
    ordering=('owner__username', 'name')
-   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'parent_id')
+   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'parent_id', 'regex', 'helptext_')
    search_fields=('name', '_value', 'owner__username')
+   summernote_fields=('helptext',)
 
    def shortValue(self, obj):
       return trim(obj._value, 20)
@@ -73,6 +75,10 @@ class PreferenceAdmin(admin.ModelAdmin):
       url=reverse('admin:webframe_preference_change', kwargs={'object_id': obj.parent.id})
       return mark_safe('<a href="{1}">{0}</a>'.format(str(obj.parent.id), url))
    parent_id.short_description=_('webframe.models.Preference.parent')
+
+   def helptext_(self, obj):
+      return mark_safe(obj.helptext)
+   helptext_.short_description=_('webframe.models.Preference.helptext')
 
 @admin.register(Numbering)
 class NumberingAdmin(admin.ModelAdmin):

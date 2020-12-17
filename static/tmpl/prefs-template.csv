@@ -1,2 +1,2 @@
-ID/Name,Value,Parent,Owner,Reserved,Tipe,Encrypted
-"Preference Name","Preference Value",,,True,BOOLEAN,False
+ID/Name,Value,Parent,Owner,HelpText,Tipe,Encrypted,Regex
+"Preference Name","Preference Value",,,<p>It can be a boolean value</p>,BOOLEAN,False,^(?i)(true|false)$

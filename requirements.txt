@@ -10,6 +10,7 @@ python-dateutil
 pytimeparse
 cryptography
 django-ajax-selects
+django-summernote
 
 #Optional
 django-impersonate

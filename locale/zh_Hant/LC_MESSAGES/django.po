@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-04 06:22+0000\n"
+"POT-Creation-Date: 2020-12-17 16:11+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -15,26 +15,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:17
+#: admin.py:21
 msgid "webframe.models.Preference.childParentFilter"
 msgstr "是否有歸類"
 
-#: admin.py:22
+#: admin.py:26
 msgid "webframe.models.Preference.childParentFilter.parent"
 msgstr "被歸類"
 
-#: admin.py:23
+#: admin.py:27
 msgid "webframe.models.Preference.childParentFilter.child"
 msgstr "歸類於"
 
-#: admin.py:45
+#: admin.py:49
 msgid "webframe.models.Preference.expand"
 msgstr "展開"
 
-#: admin.py:61 models.py:500 templates/webframe/preference.html:138
+#: admin.py:71 models.py:500 templates/webframe/preference.html:138
 #: templates/webframe/preference.html:139
 msgid "webframe.models.Preference.value"
 msgstr "值"
+
+#: admin.py:77 models.py:514 templates/webframe/preference.html:125
+#: templates/webframe/preference.html:126
+msgid "webframe.models.Preference.parent"
+msgstr "歸類"
+
+#: admin.py:81 models.py:524
+msgid "webframe.models.Preference.helptext"
+msgstr "這個設定的說明"
 
 #: models.py:30
 msgid "null"
@@ -216,11 +225,6 @@ msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:514 templates/webframe/preference.html:125
-#: templates/webframe/preference.html:126
-msgid "webframe.models.Preference.parent"
-msgstr "歸類"
-
 #: models.py:515
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
@@ -250,79 +254,83 @@ msgstr "加密"
 msgid "webframe.models.Preference.encrypted.helptxt"
 msgstr "這個設定是否需要在儲存時加密？"
 
-#: models.py:712
-msgid "webframe.models.Preference.reserved"
-msgstr "系統保留？"
+#: models.py:524
+msgid "webframe.models.Preference.helptext.helptext"
+msgstr "這個設定的說明文字"
 
-#: models.py:712
-msgid "webframe.models.Preference.reserved.helptext"
-msgstr "這個設定是否為系統保留（前台不應該顯示與使用者）？"
+#: models.py:525
+msgid "webframe.models.Preference.regex"
+msgstr "正則表達式"
 
-#: models.py:730
+#: models.py:525
+msgid "webframe.models.Preference.regex.helptext"
+msgstr "用於驗證輸入，這不能於 Admin-Tools 更改."
+
+#: models.py:777
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "異步程序物件"
 
-#: models.py:731
+#: models.py:778
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "異步程序物件"
 
-#: models.py:734
+#: models.py:781
 msgid "AsyncManipulationObject.task_id"
 msgstr "異步程序#"
 
-#: models.py:738
+#: models.py:785
 msgid "AsyncManipulationObject.is_processing"
 msgstr "異步程序進行中⋯⋯"
 
-#: models.py:743
+#: models.py:790
 msgid "AsyncManipulationObject.is_ready"
 msgstr "異步程序已準備就緒"
 
-#: models.py:748
+#: models.py:795
 msgid "webframe.models.Numbering"
 msgstr "序列號碼"
 
-#: models.py:749
+#: models.py:796
 msgid "webframe.models.Numberings"
 msgstr "序列號碼"
 
-#: models.py:754
+#: models.py:801
 msgid "webframe.models.Numbering.name"
 msgstr "序列號碼名稱"
 
-#: models.py:754
+#: models.py:801
 msgid "webframe.models.Numbering.name.helptxt"
 msgstr "這個設定的的名稱。"
 
-#: models.py:755
+#: models.py:802
 msgid "webframe.models.Numbering.pattern"
 msgstr "樣式."
 
-#: models.py:755
+#: models.py:802
 msgid "webframe.models.Numbering.pattern.helptxt"
 msgstr "你可以用 now, next 和 user 等變數"
 
-#: models.py:756
+#: models.py:803
 msgid "webframe.models.Numbering.next_val"
 msgstr "下一個值"
 
-#: models.py:756
+#: models.py:803
 msgid "webframe.models.Numbering.next_val.helptxt"
 msgstr "下次產生號碼時的 next 變數"
 
-#: models.py:757
+#: models.py:804
 msgid "webframe.models.Numbering.step_val"
 msgstr "每次增加值"
 
-#: models.py:757
+#: models.py:804
 msgid "webframe.models.Numbering.step_val.helptxt"
 msgstr "每次產生號嗎後，「下一個值」所需要增加的值"
 
-#: models.py:761
+#: models.py:808
 msgid "webframe.models.Numbering.new"
 msgstr "新的序列號碼"
 
-#: models.py:762
+#: models.py:809
 #, python-brace-format
 msgid "webframe.models.Numbering[{name}::{next_val}]"
 msgstr "序列號碼[{name}::{next_val}]"

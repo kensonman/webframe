@@ -1,4 +1,3 @@
-webframe v2.7.8 - 2020-12-07 10:19 +0800
+webframe v2.8.9 - 2020-12-18 00:28 +0800
 
-templatetags imgwidth and imgheight to support FileField to retrieve image width and height
-
+Preference model to the instruction to setup

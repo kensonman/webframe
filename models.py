@@ -519,8 +519,10 @@ class AbstractPreference(OrderableValueObject):
      verbose_name=_('webframe.models.Preference.sequence'),
      help_text=_('webframe.models.Preference.sequence.helptext'),
    )
-   tipe                = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('webframe.models.Preference.tipe'), help_text=_('webframe.models.Preference.tipe.helptext'))
+   _tipe               = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('webframe.models.Preference.tipe'), help_text=_('webframe.models.Preference.tipe.helptext'))
    encrypted           = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.encrypted'), help_text=_('webframe.models.Preference.encrypted.helptxt'))
+   helptext            = models.TextField(max_length=8192, null=True, blank=True, verbose_name=_('webframe.models.Preference.helptext'), help_text=_('webframe.models.Preference.helptext.helptext'))
+   regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('webframe.models.Preference.regex'), help_text=_('webframe.models.Preference.regex.helptext'))
    objects             = PrefManager()
 
    @staticmethod
@@ -534,45 +536,110 @@ class AbstractPreference(OrderableValueObject):
    def __unicode__(self):
       return self.__str__
 
+   def __get_ordered_list__(self):
+      if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'): return None
+      if self.parent:
+         result=self.__class__.objects.filter(parent=self.parent)
+      else:
+         result=self.__class__.objects.filter(parent__isnull=True)
+      if self.owner: result=result.filter(owner=self.owner)
+      return result.order_by('sequence')
+
    @property
    def realValue(self):
       return self._value
-
-   @property
-   def translatedValue(self):
-      if self.tipe==AbstractPreference.TYPE_NONE:
-         return None
-      elif self.tipe==AbstractPreference.TYPE_INT or self.tipe==AbstractPreference.TYPE_DECIMAL:
-         return self.intValue
-      elif self.tipe==AbstractPreference.TYPE_BOOLEAN:
-         return self.boolValue
-      elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL:
-         return self.value
-      elif self.tipe==AbstractPreference.TYPE_DATE:
-         return getTime(self.value, fmt=FMT_DATE)
-      elif self.tipe==AbstractPreference.TYPE_TIME:
-         return getTime(self.value, fmt=FMT_TIME)
-      elif self.tipe==AbstractPreference.TYPE_DATETIME:
-         return getTime(self.value, fmt=FMT_DATETIME)
-      elif self.tipe==AbstractPreference.TYPE_UUIDS:
-         v=self.listValue
-         return [uuid.UUID(uid) for uid in v]
-      elif self.tipe==AbstractPreference.TYPE_LIST:
-         return self.listValue
-      elif self.tipe==AbstractPreference.TYPE_JSON:
-         return self.jsonValue
-      elif self.tipe==AbstractPreference.TYPE_FILEPATH:
-         return self.pathValue
-      else:
-         raise TypeError('Unknow DataType: {0}'.format(self.tipe))
+   @realValue.setter
+   def realValue(self, val):
+      self._value=val
 
    @property
    def value(self):
-      return decrypt(self._value) if self.encrypted else self._value
+      val=decrypt(self._value) if self.encrypted else self._value
+      if self.tipe==AbstractPreference.TYPE_NONE:
+         return None
+      elif not val:
+         return None
+      elif self.tipe==AbstractPreference.TYPE_INT or self.tipe==AbstractPreference.TYPE_DECIMAL:
+         return int(val)
+      elif self.tipe==AbstractPreference.TYPE_BOOLEAN:
+         return val in TRUE_VALUES
+      elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL:
+         return val
+      elif self.tipe==AbstractPreference.TYPE_DATE:
+         return getTime(val, fmt=FMT_DATE)
+      elif self.tipe==AbstractPreference.TYPE_TIME:
+         return getTime(val, fmt=FMT_TIME)
+      elif self.tipe==AbstractPreference.TYPE_DATETIME:
+         return getTime(val, fmt=FMT_DATETIME)
+      elif self.tipe==AbstractPreference.TYPE_UUIDS:
+         v=re.findall(r'[^,;|]+', val)
+         return [uuid.UUID(uid) for uid in v]
+      elif self.tipe==AbstractPreference.TYPE_LIST:
+         return re.findall(r'[^,;|]+', val)
+      elif self.tipe==AbstractPreference.TYPE_JSON:
+         return json.loads(val)
+      elif self.tipe==AbstractPreference.TYPE_FILEPATH:
+         return val
+      else:
+         raise TypeError('Unknow DataType: {0}'.format(self.tipe))
 
    @value.setter
    def value(self, val):
-      self._value=encrypt(self._value) if self.encrypted else val
+      if self.tipe==AbstractPreference.TYPE_NONE:
+         val=None
+      elif self.tipe==AbstractPreference.TYPE_INT or self.tipe==AbstractPreference.TYPE_DECIMAL:
+         val=str(val)
+      elif self.tipe==AbstractPreference.TYPE_BOOLEAN:
+         val=str(val)
+      elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL:
+         val=str(val)
+         if not re.match(self.regex, val): raise ValueError('The value not match with regex: '+self.regex)
+      elif self.tipe==AbstractPreference.TYPE_DATE:
+         if hasattr(val, 'strftime'):
+            if not val.tzinfo: val=pytz.utc.localize(val)
+         else:
+            val=getTime(val, FMT_DATE)
+         self.value=val.strftime(FMT_DATE)
+      elif self.tipe==AbstractPreference.TYPE_TIME:
+         if hasattr(val, 'strftime'):
+            if not val.tzinfo: val=pytz.utc.localize(val)
+         else:
+            val=getTime(val, FMT_TIME)
+         self.value=val.strftime(FMT_TIME)
+      elif self.tipe==AbstractPreference.TYPE_DATETIME:
+         if hasattr(val, 'strftime'):
+            if not val.tzinfo: val=pytz.utc.localize(val)
+         else:
+            val=getTime(val, FMT_DATETIME)
+         self.value=val.strftime(FMT_DATETIME)
+      elif self.tipe==AbstractPreference.TYPE_UUIDS:
+         if hasattr(val, '__iter__'):
+            val='|'.join([s for s in val if isUUID(s)])
+         else:
+            raise ValueError('Expected a list of UUIDs')
+      elif self.tipe==AbstractPreference.TYPE_LIST:
+         val='|'.join(val) if hasattr(val, '__iter__') else val
+      elif self.tipe==AbstractPreference.TYPE_JSON:
+         val=json.dumps(val)
+      elif self.tipe==AbstractPreference.TYPE_FILEPATH:
+         if path:
+            if not os.path.isfile(path) and not os.path.isdir(path):
+              raise FileNotFoundError(path)
+
+            src=path
+            trg=os.path.join(settings.MEDIA_ROOT, self.pref_path(os.path.basename(path)))
+            if not os.path.isdir(os.path.dirname(trg)):
+               logger.info('Creating the prefs folder: {0}...'.format(trg))
+               Path(os.path.dirname(trg)).mkdir(parents=True, exist_ok=True)
+            logger.warning('{0} the file: {1} => {2} ...'.format('Replace' if os.path.isfile(trg) else 'Clone', src, trg))
+            copyfile(src, trg)
+            path=trg
+         self.value=path
+
+      if not val:
+         self._value=None
+      else:
+         self._value=encrypt(val) if self.encrypted else val
 
    @property
    def asDict(self):
@@ -585,76 +652,55 @@ class AbstractPreference(OrderableValueObject):
    def childs(self):
       return Preference.objects.filter(parent=self).order_by('sequence', 'name')
 
-   def __get_ordered_list__(self):
-      if hasattr(self.__class__, 'DISABLE_REORDER') or hasattr(settings, 'DISABLE_REORDER'): return None
-      if self.parent:
-         result=self.__class__.objects.filter(parent=self.parent)
-      else:
-         result=self.__class__.objects.filter(parent__isnull=True)
-      if self.owner: result=result.filter(owner=self.owner)
-      return result.order_by('sequence')
-
    @property
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def intValue(self):
-      if self.value is None: return None
-      return int(self.value)
+      return self.value
+
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @intValue.setter
    def intValue(self, val):
-      if isinstance(val, int):
-         self.value=str(val)
-      else:
-         raise ValueError('Expected integer value, but {0}'.format(type(val)))
+      self.value=val
 
    @property
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def boolValue(self):
-      if self.value is None: return None
-      return self.value in TRUE_VALUES
+      return self.value
+
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @boolValue.setter
    def boolValue(self, val):
-      if isinstance(val, bool):
-         self.value=str(val)
-      else:
-         raise ValueError('Expected boolean value, but {0}'.format(type(val)))
+      self.value=val
 
    @property
-   def floatValue(self):
-      if self.value is None: return None
-      return float(self.value)
-   @floatValue.setter
-   def floatValue(self, val):
-      if isinstance(val, float):
-         self.value=str(val)
-      else:
-         raise ValueError('Expected float value, but {0}'.format(type(val)))
-
-   @property
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def datetimeValue(self):
-      if self.value is None: return None
-      return datetime.strptime(self.value, DATEFMT)
+      return self.value
+
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @datetimeValue.setter
    def datetimeValue(self, val):
-      if hasattr(val, 'strftime'):
-         if not val.tzinfo:
-            val=pytz.utc.localize(val)
-         self.value=val.strftime(DATEFMT)
-      else:
-         raise ValueError('Expected datetime value, but {0}'.format(type(val)))
+      self.value=val
 
    @property
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def jsonValue(self):
-      if self.value is None: return None
-      return json.loads(self.value)
+      return self.value
+
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @jsonValue.setter
    def jsonValue(self, val):
-      self.value=json.dumps(val)
+      self.value=val
 
    @property
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def listValue(self):
-      if self.value is None: return list()
-      return re.findall(r'[^,;|]+', self.value)
+      return self.value
+
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @listValue.setter
    def listValue(self, val):
-      self.value='|'.join(val)
+      self.value=val
 
    @property
    def user(self):
@@ -664,25 +710,21 @@ class AbstractPreference(OrderableValueObject):
       self.owner=val
 
    @property
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def pathValue(self):
-      return self._value
+      return self.value
+
+   @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @pathValue.setter
    def pathValue(self, path):
-      if path:
-         if not os.path.isfile(path) and not os.path.isdir(path):
-           raise FileNotFoundError(path)
-
-         src=path
-         trg=os.path.join(settings.MEDIA_ROOT, self.pref_path(os.path.basename(path)))
-         if not os.path.isdir(os.path.dirname(trg)):
-            logger.info('Creating the prefs folder: {0}...'.format(trg))
-            Path(os.path.dirname(trg)).mkdir(parents=True, exist_ok=True)
-         logger.warning('{0} the file: {1} => {2} ...'.format('Replace' if os.path.isfile(trg) else 'Clone', src, trg))
-         copyfile(src, trg)
-         path=trg
       self.value=path
 
-   def setTipe( self, tipe ):
+   @property
+   def tipe(self):
+      return self._tipe
+
+   @tipe.setter
+   def tipe( self, tipe ):
       '''
       Set the tipe into this preference. 
 
@@ -696,6 +738,8 @@ class AbstractPreference(OrderableValueObject):
             tipe=AbstractPreference.TYPE_TEXT
       elif tipe is None:
          tipe=AbstractPreference.TYPE_TEXT
+      if tipe==AbstractPreference.TYPE_EMAIL: 
+         self.regex='^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
       self.tipe=int(tipe)
 
    def save(self, *args, **kwargs):
@@ -709,7 +753,10 @@ class AbstractPreference(OrderableValueObject):
       super().save(*args, **kwargs)
 
 class Preference(AbstractPreference):
-   reserved             = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.reserved'), help_text=_('webframe.models.Preference.reserved.helptext'))
+
+   @property
+   def reserved(self):
+      return self.helptext != None
 
    @classmethod
    def pref(self, name, **kwargs):

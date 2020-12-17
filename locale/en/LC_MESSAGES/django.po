@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-04 06:22+0000\n"
+"POT-Creation-Date: 2020-12-17 16:11+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -15,26 +15,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:17
+#: admin.py:21
 msgid "webframe.models.Preference.childParentFilter"
 msgstr "Parent/Child"
 
-#: admin.py:22
+#: admin.py:26
 msgid "webframe.models.Preference.childParentFilter.parent"
 msgstr "Is Parent"
 
-#: admin.py:23
+#: admin.py:27
 msgid "webframe.models.Preference.childParentFilter.child"
 msgstr "Is Child"
 
-#: admin.py:45
+#: admin.py:49
 msgid "webframe.models.Preference.expand"
 msgstr "Expand"
 
-#: admin.py:61 models.py:500 templates/webframe/preference.html:138
+#: admin.py:71 models.py:500 templates/webframe/preference.html:138
 #: templates/webframe/preference.html:139
 msgid "webframe.models.Preference.value"
 msgstr "Value"
+
+#: admin.py:77 models.py:514 templates/webframe/preference.html:125
+#: templates/webframe/preference.html:126
+msgid "webframe.models.Preference.parent"
+msgstr "Parent"
+
+#: admin.py:81 models.py:524
+msgid "webframe.models.Preference.helptext"
+msgstr "Help?"
 
 #: models.py:30
 msgid "null"
@@ -213,11 +222,6 @@ msgstr "Owner"
 msgid "webframe.models.Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:514 templates/webframe/preference.html:125
-#: templates/webframe/preference.html:126
-msgid "webframe.models.Preference.parent"
-msgstr "Parent"
-
 #: models.py:515
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
@@ -247,80 +251,83 @@ msgstr "Encrypted"
 msgid "webframe.models.Preference.encrypted.helptxt"
 msgstr "The field should be encrypted b4 save"
 
-#: models.py:712
-msgid "webframe.models.Preference.reserved"
-msgstr "Reserved?"
+#: models.py:524
+msgid "webframe.models.Preference.helptext.helptext"
+msgstr "The help for user admin"
 
-#: models.py:712
-msgid "webframe.models.Preference.reserved.helptext"
-msgstr ""
-"The preference is reserved for system use (Should not shown on front-end UI)."
+#: models.py:525
+msgid "webframe.models.Preference.regex"
+msgstr "The regex validation rule"
 
-#: models.py:730
+#: models.py:525
+msgid "webframe.models.Preference.regex.helptext"
+msgstr "This cannot be updated thru admin-tools."
+
+#: models.py:777
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:731
+#: models.py:778
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:734
+#: models.py:781
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:738
+#: models.py:785
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:743
+#: models.py:790
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
 
-#: models.py:748
+#: models.py:795
 msgid "webframe.models.Numbering"
 msgstr "Numbering"
 
-#: models.py:749
+#: models.py:796
 msgid "webframe.models.Numberings"
 msgstr "Numberings"
 
-#: models.py:754
+#: models.py:801
 msgid "webframe.models.Numbering.name"
 msgstr "Name"
 
-#: models.py:754
+#: models.py:801
 msgid "webframe.models.Numbering.name.helptxt"
 msgstr "The name of the Numbering"
 
-#: models.py:755
+#: models.py:802
 msgid "webframe.models.Numbering.pattern"
 msgstr "Pattern"
 
-#: models.py:755
+#: models.py:802
 msgid "webframe.models.Numbering.pattern.helptxt"
 msgstr "The pattern to generate the number. now, next can be the variable"
 
-#: models.py:756
+#: models.py:803
 msgid "webframe.models.Numbering.next_val"
 msgstr "Next Value"
 
-#: models.py:756
+#: models.py:803
 msgid "webframe.models.Numbering.next_val.helptxt"
 msgstr "The next number that will be generated"
 
-#: models.py:757
+#: models.py:804
 msgid "webframe.models.Numbering.step_val"
 msgstr "Step Value"
 
-#: models.py:757
+#: models.py:804
 msgid "webframe.models.Numbering.step_val.helptxt"
 msgstr "After generation, the step value will be added"
 
-#: models.py:761
+#: models.py:808
 msgid "webframe.models.Numbering.new"
 msgstr "New Numbering"
 
-#: models.py:762
+#: models.py:809
 #, python-brace-format
 msgid "webframe.models.Numbering[{name}::{next_val}]"
 msgstr "Numbering[{name}::{next_val}]"
