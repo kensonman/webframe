@@ -199,10 +199,11 @@ class Command(BaseCommand):
       val=cols[1]
       parent=self.__get_parent__(cols[2])
       owner=self.__get_owner__(cols[3])
-      reserved=cols[4] in TRUE_VALUES
+      helptext=cols[4] in TRUE_VALUES
       tipe=cols[5]
       encrypted=cols[6] in TRUE_VALUES
-      logger.debug('     Importing row: {0}: {1} ({2})[{3}]'.format(idx, name, 'reserved' if reserved else 'normal', 'encrypted' if encrypted else 'clear-text'))
+      regex=cols[7]
+      logger.debug('     Importing row: {0}: {1} [{3}]'.format(idx, name, 'encrypted' if encrypted else 'clear-text'))
       try:
          self.kwargs['name']=name
          pref=self.__get_pref__(owner, parent)
@@ -210,8 +211,9 @@ class Command(BaseCommand):
          for p in pref:
             p.encrypted=encrypted
             p.value=val
-            p.reserved=reserved
-            p.setTipe(tipe)
+            p.helptext=helptext
+            p.tipe=tipe
+            p.regex=regex
             p.save()
       except Preference.DoesNotExist:
          Preference(name=name, _value=val, owner=owner, parent=parent, reserved=reserved, encrypted=encrypted).save()
