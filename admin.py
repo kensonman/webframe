@@ -50,7 +50,7 @@ class PreferenceInline(admin.TabularInline):
 
 @admin.register(Preference)
 class PreferenceAdmin(SummernoteModelAdmin):
-   fields=('id', 'parent', 'parent_id', '_tipe', 'owner', 'name', '_value', 'helptext_', 'regex', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
+   fields=('id', 'parent', 'parent_id', '_tipe', 'owner', 'name', 'helptext_', 'regex', '_value', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
    form = make_ajax_form(Preference, {
         # fieldname: channel_name
         'parent':  'preferences',

@@ -740,7 +740,7 @@ class AbstractPreference(OrderableValueObject):
          tipe=AbstractPreference.TYPE_TEXT
       if tipe==AbstractPreference.TYPE_EMAIL: 
          self.regex='^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
-      self.tipe=int(tipe)
+      self._tipe=int(tipe)
 
    def save(self, *args, **kwargs):
       if self._value:

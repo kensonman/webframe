@@ -48,6 +48,7 @@ class Command(BaseCommand):
 
    def __get_owner__(self, owner=None):
       if not owner: return None
+      logger.debug('Getting owner by: "%s"', owner)
       owner=owner if owner else self.kwargs['owner']
       return get_user_model().objects.get(username=owner) if owner else None
 
@@ -194,14 +195,14 @@ class Command(BaseCommand):
       val=cols[1]
       parent=self.__get_parent__(cols[2])
       owner=self.__get_owner__(cols[3])
-      helptext=cols[4] in TRUE_VALUES
+      helptext=cols[4]
       tipe=cols[5]
       encrypted=cols[6] in TRUE_VALUES
       regex=cols[7]
-      logger.debug('     Importing row: {0}: {1} [{3}]'.format(idx, name, 'encrypted' if encrypted else 'clear-text'))
+      logger.debug('     Importing row: {0}: {1} [{2}]'.format(idx, name, 'encrypted' if encrypted else 'clear-text'))
       try:
          self.kwargs['name']=name
-         pref=self.__get_pref__(owner, parent)
+         pref=self.__get_pref__(name=name, owner=owner, parent=parent)
          if pref.count()<1: raise Preference.DoesNotExist
          for p in pref:
             p.encrypted=encrypted
@@ -254,7 +255,8 @@ class Command(BaseCommand):
             else:
                rows=csv.reader(fp, delimiter=self.kwargs['separator'], quoting=csv.QUOTE_NONE, skipinitialspace=True)
             for row in rows:
-               name=row[0]
+               if len(row)<1: continue #Skip the empty row
+               name=row[0].strip()
                if not name: continue #Skip the row when it has no name
                if cnt==0 and (name.upper()=='ID' or name.upper()=='NAME' or name.upper()=='ID/NAME'): continue #Skip the first row if header row
                self.improw( row, cnt )
