@@ -191,28 +191,34 @@ class Command(BaseCommand):
       logger.warning('{0} of Preference(s) has been deleted'.format(cnt))
 
    def improw( self, cols, idx=0 ):
-      name=cols[0]
-      val=cols[1]
-      parent=self.__get_parent__(cols[2])
-      owner=self.__get_owner__(cols[3])
-      helptext=cols[4]
-      tipe=cols[5]
-      encrypted=cols[6] in TRUE_VALUES
-      regex=cols[7]
-      logger.debug('     Importing row: {0}: {1} [{2}]'.format(idx, name, 'encrypted' if encrypted else 'clear-text'))
       try:
+         name=cols[0]
+         val=cols[1]
+         parent=self.__get_parent__(cols[2])
+         owner=self.__get_owner__(cols[3])
+         helptext=cols[4]
+         tipe=cols[5]
+         encrypted=cols[6] in TRUE_VALUES
+         regex=cols[7]
+         logger.debug('     Importing row: {0}: {1} [{2}]'.format(idx, name, 'encrypted' if encrypted else 'clear-text'))
+
          self.kwargs['name']=name
          pref=self.__get_pref__(name=name, owner=owner, parent=parent)
          if pref.count()<1: raise Preference.DoesNotExist
          for p in pref:
             p.encrypted=encrypted
-            p.value=val
             p.helptext=helptext
             p.tipe=tipe
             p.regex=regex
+            #The value must be the last steps to set due to validation. Otherwise, once importing/assign a new value into this field, the last validation rule may be applied incorrectly
+            p.value=val 
             p.save()
       except Preference.DoesNotExist:
          Preference(name=name, _value=val, owner=owner, parent=parent, encrypted=encrypted, helptext=helptext, regex=regex).save()
+      except:
+         logger.debug(cols)
+         logger.exception('Error when handling the column')
+         raise
 
    def impXlsx( self, f ):
       '''

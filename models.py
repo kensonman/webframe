@@ -593,7 +593,7 @@ class AbstractPreference(OrderableValueObject):
          val=str(val)
       elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL:
          val=str(val)
-         if not re.match(self.regex, val): raise ValueError('The value not match with regex: '+self.regex)
+         if not re.match(self.regex, val): raise ValueError('The value [%s] not match with regex: %s'%(self._value,self.regex))
       elif self.tipe==AbstractPreference.TYPE_DATE:
          if hasattr(val, 'strftime'):
             if not val.tzinfo: val=pytz.utc.localize(val)
