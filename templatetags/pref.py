@@ -1,6 +1,7 @@
 from django import template
 from django.contrib.auth.models import User, AnonymousUser
 from django.utils.functional import SimpleLazyObject
+from django.utils.safestring import SafeString
 from webframe.models import Preference
 from webframe.functions import valueOf, TRUE_VALUES
 from webframe.CurrentUserMiddleware import get_current_user
@@ -24,6 +25,7 @@ def pref(prefName, **kwargs):
          @param defval      The default value. If the preference/config not found, return the default value instead;
          @param user        The owner of this preference. If you would like to access the config, setup this parameter to None;
          @param returnValue It will told the template-tag to return the preference's value instead of the preference instead; DEFAULT True
+         @param markSafe    When returnValue is True, indicate the value should be mark-safe; Default False
    '''
    try:
       if 'user' in kwargs:
@@ -40,7 +42,10 @@ def pref(prefName, **kwargs):
       else:
          kwargs['user']=get_current_user()
       pref=Preference.objects.pref(prefName, **kwargs)
-      logger.info('pref[{0}]=={1}'.format(prefName, pref))
+      logger.debug('pref[{0}]=={1}'.format(prefName, pref))
+      if kwargs.get('returnValue', 'True') in TRUE_VALUES:
+         if kwargs.get('markSafe', 'False') in TRUE_VALUES:
+            pref=SafeString(pref)
       return pref
    except Preference.DoesNotExist:
       return "{Pref<%s> Not Found}"

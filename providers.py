@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 from datetime import datetime
-from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME, convertDateformat 
+from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME, FMT_TIME_SHORT, FMT_DATETIME_SHORT, convertDateformat 
 from .models import Preference, TRUE_VALUES
 
 def getPref(k, v, req, t=30):
@@ -66,10 +66,14 @@ def fmt_injection(req):
     Inject the following parameter into request:
       - FMT_DATE: The date-format according to strftime/strptime behavior for date
       - FMT_TIME: The date-format according to strftime/strptime behavior for time
+      - FMT_TIME_SHORT: The date-format according to strftime/strptime behavior for time
       - FMT_DATETIME: The date-format according to strftime/strptime behavior for date and time
+      - FMT_DATETIME_SHORT: The date-format according to strftime/strptime behavior for date and time
       - FMT_JSDATE: The date-format according to momentjs behavior for date
       - FMT_JSTIME: The date-format according to momentjs behavior for time 
+      - FMT_JSTIME_SHORT: The date-format according to momentjs behavior for time 
       - FMT_JSDATETIME: The date-format according to momentjs behavior for date and time
+      - FMT_JSDATETIME_SHORT: The date-format according to momentjs behavior for date and time
 
     strftime/strptime behavior can be found more here: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
     momentjs format can be found more here: http://momentjs.com/docs/#/use-it/
@@ -77,11 +81,15 @@ def fmt_injection(req):
     RST={}
     RST['FMT_DATE']=getPref('FMT_DATE', FMT_DATE, req)
     RST['FMT_TIME']=getPref('FMT_TIME', FMT_TIME, req)
+    RST['FMT_TIME_SHORT']=getPref('FMT_TIME_SHORT', FMT_TIME_SHORT, req)
     RST['FMT_DATETIME']=getPref('FMT_DATETIME',  FMT_DATETIME, req)
+    RST['FMT_DATETIME_SHORT']=getPref('FMT_DATETIME_SHORT',  FMT_DATETIME_SHORT, req)
 
     RST['FMT_JSDATE']=convertDateformat(RST['FMT_DATE'], format='javascript')
     RST['FMT_JSTIME']=convertDateformat(RST['FMT_TIME'], format='javascript')
+    RST['FMT_JSTIME_SHORT']=convertDateformat(RST['FMT_TIME_SHORT'], format='javascript')
     RST['FMT_JSDATETIME']=convertDateformat(RST['FMT_DATETIME'], format='javascript')
+    RST['FMT_JSDATETIME_SHORT']=convertDateformat(RST['FMT_DATETIME_SHORT'], format='javascript')
 
     RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fas fa-shield-alt"></i></span>')
     return RST

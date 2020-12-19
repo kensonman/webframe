@@ -12,7 +12,9 @@ import os, logging, calendar, uuid
 logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
 FMT_TIME=getattr(settings, 'FMT_TIME', '%H:%M:%S')
+FMT_TIME_SHORT=getattr(settings, 'FMT_TIME_SHORT', '%H:%M')
 FMT_DATETIME=getattr(settings, 'FMT_DATETIME', '{0} {1}'.format(FMT_DATE, FMT_TIME))
+FMT_DATETIME_SHORT=getattr(settings, 'FMT_DATETIME_SHORT', '{0} {1}'.format(FMT_DATE, FMT_TIME_SHORT))
 TRUE_VALUES=['TRUE', 'true', 'True', 'T', 'YES', 'yes', 'Yes', 'Y', '1', 'ON', 'on', 'On', True, 1]
 ENCRYPTED_PREFIX='ENC:'
 
