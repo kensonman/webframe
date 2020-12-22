@@ -6,32 +6,51 @@
       <th>{%trans 'webframe.models.Preference.owner'%}</th>
       <th>{%trans 'webframe.models.Preference.sequence'%}</th>
       <th>{%trans 'webframe.models.Preference.tipe'%}</th>
-      <th>{%trans 'webframe.models.Preference.regex'%}</th>
    </thead>
    <tbody>
       {%for p in target%}<tr>
-         <td><a href="#{{p.id}}" target="_self">{{p.id}}</a></td>
+         <td><a href="#{{p.id}}" target="_self" class="goto">{{p.id}}</a></td>
          <td>{{p.name}}</td>
          <td>{{p.owner}}</td>
          <td>{{p.sequence}}</td>
          <td>{{p.tipe|choice:TYPES}}</td>
-         <td>{{p.regex}}</td>
-      </tr>{%endfor%}
+      </tr>{%endfor%}<tr>
    </tbody>
 </table>
 
 {%for p in target%}
 <section id="{{p.id}}" class="pref">
-   <h3><a name="{{target.id}}">{%if target.id%}{{target.name}}{%else%}{%trans 'prefDoc.title'%}{%endif%}</a></h3>
-   {%if target.helptext%}
-      <div class="pref-helptext-title">{%trans 'prefDoc.helptext.title'%}</div>
-      <div class="pref-helptext">{{target.helptext|safe}}</div>
-   {%endif%}
+   <h3><a name="{{p.id}}">{%if p.name%}{{p.name}}{%else%}{{p.id}}{%endif%}</a></h3>
 
-   {%if target.realValue%}
-      <div class="pref-value-title">{%trans 'prefDoc.value.title'%}</div>
-      <div class="pref-value">{{target.realValue}}</div>
-   {%endif%}
+   {%if p.tipe%}<div class="field">
+      <label>{%trans 'webframe.models.Preference.tipe'%}</label>
+      <div class="value">{{p.tipe|choice:TYPES}}</div>
+   </div>{%endif%}
+
+   {%if p.parent%}<div class="field">
+      <label>{%trans 'webframe.models.Preference.parent'%}</label>
+      <div class="value">{{p.parent}}</div>
+   </div>{%endif%}
+
+   {%if p.sequence%}<div class="field">
+      <label>{%trans 'webframe.models.Preference.sequence'%}</label>
+      <div class="value">{{p.sequence}}</div>
+   </div>{%endif%}
+
+   {%if p.helptext%}<div class="field">
+      <label>{%trans 'webframe.models.Preference.helptext'%}</label>
+      <div class="value">{{p.helptext|safe}}</div>
+   </div>{%endif%}
+
+   {%if p.regex%}<div class="field">
+      <label>{%trans 'webframe.models.Preference.regex'%}</label>
+      <div class="value">{{p.regex}}</div>
+   </div>{%endif%}
+
+   {%if p.realValue%}<div class="field">
+      <label>{%trans 'webframe.models.Preference.value'%}</label>
+      <div class="value">{{p.realValue}}</div>
+   </div>{%endif%}
 
    {%if p.childs%}{%include 'webframe/prefDoc-each.html' with target=p.childs%}{%endif%}
 </section>

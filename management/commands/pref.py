@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import Q
 from pathlib import Path
-from webframe.functions import TRUE_VALUES, LogMessage as lm
+from webframe.functions import TRUE_VALUES, LogMessage as lm, getTime
 from webframe.models import Preference, AbstractPreference
 from uuid import UUID
 import logging, os, glob, sys, re
@@ -390,6 +390,7 @@ class Command(BaseCommand):
       params.update(fmt_injection(None))
       params['target']=Preference.objects.filter(parent__isnull=True).order_by('owner', 'name')
       params['TYPES']=Preference.TYPES
+      params['now']=getTime('now')
       txt=tmpl.render(params)
       output=self.kwargs.get('name')
       if not output: output='prefsDoc.html'
