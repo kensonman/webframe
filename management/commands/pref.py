@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import Q
 from pathlib import Path
-from webframe.functions import TRUE_VALUES
+from webframe.functions import TRUE_VALUES, LogMessage as lm
 from webframe.models import Preference, AbstractPreference
 from uuid import UUID
 import logging, os, glob, sys, re
@@ -20,7 +20,17 @@ import logging, os, glob, sys, re
 logger=logging.getLogger('webframe.commands.prefs')
 
 class Command(BaseCommand):
-   help     = '''Mainpulate the preference in database. Including insert/update/delete/view/import; Importing support csv|xlsx file.'''
+   help     = '''Mainpulate the preference in database. Including insert/update/delete/view/import/gensecret/gendoc; Importing support csv|xlsx file.'''
+
+   def create_parser(self, cmdName, subcommand, **kwargs):
+      parser=super().create_parser(cmdName, subcommand, **kwargs)
+      parser.epilog='''Example:\r\n
+\tpref import path_to_prefs   #Import a folder or a csv/xlsx file\r\n
+\tpref set ABC --value="def"  #Set the preference "ABC" to value "def"\r\n
+\tpref gensecret              #Generate the encryption secret; PLEASE backup in secure way.\r\n
+\tpref gendoc prefsDoc.html     #Generate the documentation and save as as output.html
+'''
+      return parser
 
    def add_arguments(self, parser):
       #Default Value
@@ -28,9 +38,11 @@ class Command(BaseCommand):
       action='show'
       max=256
       wildcard='*'
+      tmpl='webframe/prefDoc.html'
+
       #Adding arguments
-      parser.add_argument('action', type=str, help='The action to be taken. One of import/show/set/delete/gensecret; Default is {0}'.format(action), default=action)
-      parser.add_argument('name', type=str, nargs='?', help='[import/show/set/delete]; The name of the preference or path of importing file (csv|xlsx);')
+      parser.add_argument('action', type=str, help='The action to be taken. One of import/show/set/delete/gensecret/gendoc; Default is {0}'.format(action), default=action)
+      parser.add_argument('name', type=str, nargs='?', help='[import/show/set/delete/gendoc]; The name of the preference or path of importing file (csv|xlsx);')
       parser.add_argument('--value', dest='value', type=str, help='[set/delete]; The value of the preference;', default=None)
       parser.add_argument('--owner', dest='owner', type=str, help='[set/delete]; The owner of the preference; Optional;', default=None)
       parser.add_argument('--noowner', dest='noowner', action='store_true', help='[show/set/delete]; The target preference has no owner; Optional; Default False')
@@ -40,11 +52,15 @@ class Command(BaseCommand):
       parser.add_argument('--max', dest='max', type=int, help='[show]; The maximum number of preference to show. Default is {0}'.format(max), default=max)
       parser.add_argument('--wildcard', dest='wildcard', type=str, help='[show]; Specify the wildcard; Default is {0}'.format(wildcard), default=wildcard)
 
+      #Importing 
       parser.add_argument('--sep', dest='separator', type=str, default=',', help='[import]; The separator when CSV importing; Default \",\"')
       parser.add_argument('--encoding', dest='encoding', type=str, default='utf-8', help='[import]; The encoding when CSV importing; Default \"utf-8\"')
       parser.add_argument('--quotechar', dest='quotechar', type=str, default='\"', help='[import]; The quote-char when CSV importing; Default double quote: \"')
       parser.add_argument('--filepath', dest='filepath', action='store_true', help='[import]; Import the file-path in preferences; Default False')
       parser.add_argument('--force', '-f ', dest='force', action='store_true', help='[import]; Force the import', default=False)
+
+      #Generate Doc
+      parser.add_argument('--tmpl', dest='tmpl', type=str, help="[gendoc]; The template name when generating document; Default: {0}".format(tmpl), default=tmpl)
 
    def __get_owner__(self, owner=None):
       if not owner: return None
@@ -139,6 +155,8 @@ class Command(BaseCommand):
          self.show()
       elif action=='gensecret':
          self.gensecret()
+      elif action=='gendoc':
+         self.gendoc()
       else:
          logger.warning('Unknown action: {0}'.format(action))
       logger.warn('DONE!')
@@ -357,4 +375,25 @@ class Command(BaseCommand):
    def gensecret(self):
       from webframe.models import AbstractPreference
       key=AbstractPreference.__getSecret__()
-      logger.warning('Your secret is: {0}'.format(key))
+      logger.warning(lm('Your secret is: {0}', key))
+
+   def gendoc(self):
+      from django.shortcuts import render
+      from django.template import loader, Template, Context
+      from webframe.providers import template_injection, fmt_injection
+      tmpl=getattr(self.kwargs, 'tmpl', 'webframe/prefDoc.html') 
+      logger.warning(lm('Generating the documents according template: {0}', tmpl))
+      tmpl=loader.get_template(tmpl)
+
+      params=dict()
+      params.update(template_injection(None))
+      params.update(fmt_injection(None))
+      params['target']=Preference.objects.filter(parent__isnull=True).order_by('owner', 'name')
+      params['TYPES']=Preference.TYPES
+      txt=tmpl.render(params)
+      output=self.kwargs.get('name')
+      if not output: output='prefsDoc.html'
+      logger.warning(lm('Generated! Outputing into: {0}', output))
+      with open(output, 'w') as f:
+         f.write(txt)
+

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-17 16:11+0000\n"
+"POT-Creation-Date: 2020-12-22 10:06+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -201,7 +201,8 @@ msgstr "JSON object"
 msgid "webframe.models.Preference.TYPE.FILEPATH"
 msgstr "File Resource"
 
-#: models.py:499 templates/webframe/preference.html:134
+#: models.py:499 templates/webframe/prefDoc-each.html:5
+#: templates/webframe/preference.html:134
 #: templates/webframe/preference.html:135
 msgid "webframe.models.Preference.name"
 msgstr "Name"
@@ -226,7 +227,8 @@ msgstr "The owner of the perference"
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:519 templates/webframe/preference.html:142
+#: models.py:519 templates/webframe/prefDoc-each.html:7
+#: templates/webframe/preference.html:142
 #: templates/webframe/preference.html:143
 msgid "webframe.models.Preference.sequence"
 msgstr "Sequence"
@@ -235,7 +237,8 @@ msgstr "Sequence"
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:522 templates/webframe/preference.html:111
+#: models.py:522 templates/webframe/prefDoc-each.html:8
+#: templates/webframe/preference.html:111
 msgid "webframe.models.Preference.tipe"
 msgstr "Type"
 
@@ -255,7 +258,7 @@ msgstr "The field should be encrypted b4 save"
 msgid "webframe.models.Preference.helptext.helptext"
 msgstr "The help for user admin"
 
-#: models.py:525
+#: models.py:525 templates/webframe/prefDoc-each.html:9
 msgid "webframe.models.Preference.regex"
 msgstr "The regex validation rule"
 
@@ -451,6 +454,24 @@ msgstr "Showing %(size)s of %(total)s record(s); Page %(x)s of %(y)s;"
 msgid "pagination-norecord"
 msgstr "No Record Found"
 
+#: templates/webframe/prefDoc-each.html:6
+#: templates/webframe/preference.html:129
+#: templates/webframe/preference.html:130
+msgid "webframe.models.Preference.owner"
+msgstr "Owner"
+
+#: templates/webframe/prefDoc-each.html:25
+msgid "prefDoc.title"
+msgstr "Preference Setup Reference"
+
+#: templates/webframe/prefDoc-each.html:27
+msgid "prefDoc.helptext.title"
+msgstr "Description"
+
+#: templates/webframe/prefDoc-each.html:32
+msgid "prefDoc.value.title"
+msgstr "Value:"
+
 #: templates/webframe/preference.html:3 templates/webframe/preference.html:93
 #: templates/webframe/preference.html:101
 msgid "Preference.new"
@@ -487,11 +508,6 @@ msgstr ""
 #: templates/webframe/preference.html:122
 msgid "webframe.models.Preference.id"
 msgstr "ID"
-
-#: templates/webframe/preference.html:129
-#: templates/webframe/preference.html:130
-msgid "webframe.models.Preference.owner"
-msgstr "Owner"
 
 #: templates/webframe/preference.html:146
 msgid "Preference.actions.delete"

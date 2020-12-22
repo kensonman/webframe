@@ -432,3 +432,13 @@ def decrypt( data, secretKey=None ):
 
    from cryptography.fernet import Fernet
    return Fernet(secretKey).decrypt(data.encode('utf-8')).decode('utf-8')
+
+#According to [Python Logging Codebook](https://docs.python.org/3/howto/logging-cookbook.html#formatting-styles)
+class LogMessage(object):
+   def __init__(self, fmt, *args, **kwargs):
+      self.fmt = fmt
+      self.args = args
+      self.kwargs = kwargs
+
+   def __str__(self):
+      return self.fmt.format(*self.args, **self.kwargs)

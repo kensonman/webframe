@@ -5,7 +5,10 @@ from .functions import getClientIP, FMT_DATE, FMT_TIME, FMT_DATETIME, FMT_TIME_S
 from .models import Preference, TRUE_VALUES
 
 def getPref(k, v, req, t=30):
-   v=Preference.objects.pref(k, defval=v, user=req.user, returnValue=True)
+   if req is None:
+      v=Preference.objects.pref(k, defval=v, returnValue=True)
+   else:
+      v=Preference.objects.pref(k, defval=v, user=req.user, returnValue=True)
    return v 
 
 def absolute_path(req):

@@ -1,0 +1,38 @@
+{%load i18n choice%}
+<table class="table tbl-index">
+   <thead>
+      <th>ID</th>
+      <th>{%trans 'webframe.models.Preference.name'%}</th>
+      <th>{%trans 'webframe.models.Preference.owner'%}</th>
+      <th>{%trans 'webframe.models.Preference.sequence'%}</th>
+      <th>{%trans 'webframe.models.Preference.tipe'%}</th>
+      <th>{%trans 'webframe.models.Preference.regex'%}</th>
+   </thead>
+   <tbody>
+      {%for p in target%}<tr>
+         <td><a href="#{{p.id}}" target="_self">{{p.id}}</a></td>
+         <td>{{p.name}}</td>
+         <td>{{p.owner}}</td>
+         <td>{{p.sequence}}</td>
+         <td>{{p.tipe|choice:TYPES}}</td>
+         <td>{{p.regex}}</td>
+      </tr>{%endfor%}
+   </tbody>
+</table>
+
+{%for p in target%}
+<section id="{{p.id}}" class="pref">
+   <h3><a name="{{target.id}}">{%if target.id%}{{target.name}}{%else%}{%trans 'prefDoc.title'%}{%endif%}</a></h3>
+   {%if target.helptext%}
+      <div class="pref-helptext-title">{%trans 'prefDoc.helptext.title'%}</div>
+      <div class="pref-helptext">{{target.helptext|safe}}</div>
+   {%endif%}
+
+   {%if target.realValue%}
+      <div class="pref-value-title">{%trans 'prefDoc.value.title'%}</div>
+      <div class="pref-value">{{target.realValue}}</div>
+   {%endif%}
+
+   {%if p.childs%}{%include 'webframe/prefDoc-each.html' with target=p.childs%}{%endif%}
+</section>
+{%endfor%}
