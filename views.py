@@ -6,7 +6,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
 from django.db import transaction
 from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
@@ -344,3 +344,17 @@ def ajaxPrefs(req, name):
    rst=Preference.objects.pref(name, user=req.user, defval=None, returnValue=False)
    rst=[{'id': i.id, 'name':i.name, 'value':i.value} for i in rst.childs]
    return JsonResponse(rst, safe=False)
+
+@login_required
+@permission_required('webframe.view_preference')
+@is_enabled('WF-PREFS_DOC')
+def prefsDoc(req):
+   '''
+   Show the preference docs
+   '''
+   logger.debug('Showing the prefs-doc...')
+   params=dict()
+   params['target']=Preference.objects.filter(parent__isnull=True).order_by('owner', 'sequence', 'name')
+   params['TYPES']=Preference.TYPES
+   params['now']=getTime('now')
+   return render(req, 'webframe/prefsDoc.html', params)

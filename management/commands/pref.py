@@ -388,7 +388,7 @@ class Command(BaseCommand):
       params=dict()
       params.update(template_injection(None))
       params.update(fmt_injection(None))
-      params['target']=Preference.objects.filter(parent__isnull=True).order_by('owner', 'name')
+      params['target']=Preference.objects.filter(parent__isnull=True).order_by('owner', 'sequence', 'name')
       params['TYPES']=Preference.TYPES
       params['now']=getTime('now')
       txt=tmpl.render(params)

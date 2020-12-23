@@ -19,5 +19,7 @@ urlpatterns=[
    re_path(r'^ajax/pref/(?P<name>[^/]+)/?$', views.ajaxPref, name='ajax-pref'),     #It can be disabled in WF-AJAX_PREF
    re_path(r'^ajax/prefs/(?P<name>[^/]+)/?$', views.ajaxPrefs, name='ajax-prefs'),  #It can be disabled in WF-AJAX_PREFS
 
+   re_path(r'^prefsDoc/?$', views.prefsDoc, name='prefs-doc'),                      #It can be disabled in WF-PREFS_DOC, required vgallery.view_preference
+
    re_path('jsi18n/', JavaScriptCatalog.as_view(domain='django', packages=['webframe',]), name='js'),
 ] 
