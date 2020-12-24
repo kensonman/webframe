@@ -22,6 +22,9 @@ logger=logging.getLogger('webframe.commands.prefs')
 class Command(BaseCommand):
    help     = '''Mainpulate the preference in database. Including insert/update/delete/view/import/gensecret/gendoc; Importing support csv|xlsx file.'''
 
+   def __getIndent__(self, indent=0, ch=' '):
+      return ch*indent
+
    def create_parser(self, cmdName, subcommand, **kwargs):
       parser=super().create_parser(cmdName, subcommand, **kwargs)
       parser.epilog='''Example:\r\n
@@ -43,6 +46,7 @@ class Command(BaseCommand):
       #Adding arguments
       parser.add_argument('action', type=str, help='The action to be taken. One of import/export/show/set/delete/gensecret/gendoc; Default is {0}'.format(action), default=action)
       parser.add_argument('name', type=str, nargs='?', help='[import/export/show/set/delete/gendoc]; The name of the preference or path of importing/exporting file (csv|xlsx);')
+      parser.add_argument('--file', dest='file', type=str, help='[import/export/gendoc]; The file path for import/export/output.')
       parser.add_argument('--value', dest='value', type=str, help='[set/delete]; The value of the preference;', default=None)
       parser.add_argument('--owner', dest='owner', type=str, help='[set/delete]; The owner of the preference; Optional;', default=None)
       parser.add_argument('--noowner', dest='noowner', action='store_true', help='[show/set/delete]; The target preference has no owner; Optional; Default False')
@@ -212,26 +216,40 @@ class Command(BaseCommand):
       pref.delete()
       logger.warning('{0} of Preference(s) has been deleted'.format(cnt))
 
-   def expCsv( self ):
+   def expRow( self, wr, pref, indent=0 ):
       '''
       Import the specified preference to csv.
       '''
+      cnt=0
+      tab=self.__getIndent__(indent)
+      logger.debug(lm('{0}Exporting preference: {1}::{2}...', tab, pref.id, pref.name))
+      wr.writerow([
+         pref.name                                    # [0]
+         , pref.realValue                             # [1]
+         , pref.parent.id if pref.parent else ''      # [2]
+         , pref.owner.username if pref.owner else ''  # [3]
+         , pref.helptext                              # [4]
+         , Preference.TYPES[pref.tipe][1]             # [5]
+         , pref.encrypted                             # [6]
+         , pref.regex                                 # [7]
+      ])
+      cnt+=1
+      for p in pref.childs:
+         cnt+=self.expRow(wr, p, indent+3)
+      return cnt
+
+   def expCsv( self ):
+      '''
+      Import the specified list of preferences to csv.
+      '''
       import csv
-      f=self.kwargs['name']
+      f=self.kwargs['file']
       with open(f, 'w', encoding=self.kwargs['encoding']) as fp:
          wr=csv.writer(fp, delimiter=self.kwargs['separator'], quotechar=self.kwargs['quotechar'], quoting=csv.QUOTE_MINIMAL, skipinitialspace=True)
+         cnt=0
          for p in self.__get_pref__():
-            logger.debug(lm('      Exporting preference: {0}::{1}...', p.id, p.name))
-            wr.writerow([
-               p.name                                 # [0]
-               , p.realValue                          # [1]
-               , p.parent.id if p.parent else ''      # [2]
-               , p.owner.username if p.owner else ''  # [3]
-               , p.helptext                           # [4]
-               , Preference.TYPE[p.tipe][1]           # [5]
-               , p.encrypted                          # [6]
-               , p.regex                              # [7]
-            ])
+           cnt+=self.expRow(wr, p, 0) 
+      logger.info(lm('Exported {0} records', cnt))
 
    def improw( self, cols, idx=0 ):
       try:
@@ -387,7 +405,7 @@ class Command(BaseCommand):
       disableOrder=getattr(settings, 'DISABLE_REORDER', False)
       setattr(settings, 'DISABLE_REORDER', True) #Disable the re-ordering features during importing
       try:
-         f=self.kwargs['name']
+         f=self.kwargs['file']
          if self.kwargs['filepath']:
             self.imppath(f)
          elif os.path.isdir(f):
@@ -418,9 +436,8 @@ class Command(BaseCommand):
       params['TYPES']=Preference.TYPES
       params['now']=getTime('now')
       txt=tmpl.render(params)
-      output=self.kwargs.get('name')
+      output=self.kwargs.get('file')
       if not output: output='prefsDoc.html'
       logger.warning(lm('Generated! Outputing into: {0}', output))
       with open(output, 'w') as f:
          f.write(txt)
-
