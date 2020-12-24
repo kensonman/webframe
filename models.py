@@ -439,7 +439,6 @@ class PrefManager(models.Manager):
       p.sequence=kwargs.get('sequence', 1000)
       p.value=kwargs.get('value', None)
       p.tipe=kwargs.get('tipe', Preference.TYPE_TEXT)
-      p.reserved=kwargs.get('reserved', False)
       p.save()
       return p
 

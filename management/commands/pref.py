@@ -38,11 +38,11 @@ class Command(BaseCommand):
       action='show'
       max=256
       wildcard='*'
-      tmpl='webframe/prefDoc.html'
+      tmpl='webframe/prefsDoc.html'
 
       #Adding arguments
-      parser.add_argument('action', type=str, help='The action to be taken. One of import/show/set/delete/gensecret/gendoc; Default is {0}'.format(action), default=action)
-      parser.add_argument('name', type=str, nargs='?', help='[import/show/set/delete/gendoc]; The name of the preference or path of importing file (csv|xlsx);')
+      parser.add_argument('action', type=str, help='The action to be taken. One of import/export/show/set/delete/gensecret/gendoc; Default is {0}'.format(action), default=action)
+      parser.add_argument('name', type=str, nargs='?', help='[import/export/show/set/delete/gendoc]; The name of the preference or path of importing/exporting file (csv|xlsx);')
       parser.add_argument('--value', dest='value', type=str, help='[set/delete]; The value of the preference;', default=None)
       parser.add_argument('--owner', dest='owner', type=str, help='[set/delete]; The owner of the preference; Optional;', default=None)
       parser.add_argument('--noowner', dest='noowner', action='store_true', help='[show/set/delete]; The target preference has no owner; Optional; Default False')
@@ -107,6 +107,8 @@ class Command(BaseCommand):
       if self.kwargs['filepath']:
          rst=rst.filter(tipe=AbstractPreference.TYPE_FILEPATH)
 
+      rst=rst.order_by('owner', 'parent', 'sequence', 'name')
+
       return rst
 
    def __get_name__( self, name ):
@@ -157,6 +159,8 @@ class Command(BaseCommand):
          self.gensecret()
       elif action=='gendoc':
          self.gendoc()
+      elif action=='export':
+         self.expCsv()
       else:
          logger.warning('Unknown action: {0}'.format(action))
       logger.warn('DONE!')
@@ -207,6 +211,27 @@ class Command(BaseCommand):
       cnt=pref.count()
       pref.delete()
       logger.warning('{0} of Preference(s) has been deleted'.format(cnt))
+
+   def expCsv( self ):
+      '''
+      Import the specified preference to csv.
+      '''
+      import csv
+      f=self.kwargs['name']
+      with open(f, 'w', encoding=self.kwargs['encoding']) as fp:
+         wr=csv.writer(fp, delimiter=self.kwargs['separator'], quotechar=self.kwargs['quotechar'], quoting=csv.QUOTE_MINIMAL, skipinitialspace=True)
+         for p in self.__get_pref__():
+            logger.debug(lm('      Exporting preference: {0}::{1}...', p.id, p.name))
+            wr.writerow([
+               p.name                                 # [0]
+               , p.realValue                          # [1]
+               , p.parent.id if p.parent else ''      # [2]
+               , p.owner.username if p.owner else ''  # [3]
+               , p.helptext                           # [4]
+               , Preference.TYPE[p.tipe][1]           # [5]
+               , p.encrypted                          # [6]
+               , p.regex                              # [7]
+            ])
 
    def improw( self, cols, idx=0 ):
       try:
@@ -388,7 +413,8 @@ class Command(BaseCommand):
       params=dict()
       params.update(template_injection(None))
       params.update(fmt_injection(None))
-      params['target']=Preference.objects.filter(parent__isnull=True).order_by('owner', 'sequence', 'name')
+      #params['target']=Preference.objects.filter(parent__isnull=True)
+      params['target']=self.__get_pref__()
       params['TYPES']=Preference.TYPES
       params['now']=getTime('now')
       txt=tmpl.render(params)

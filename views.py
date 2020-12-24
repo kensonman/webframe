@@ -222,8 +222,8 @@ def prefs(req, user=None):
          return redirect('webframe:prefs', user=user)
 
    params=dict()
-   params['preference']=PreferenceTable(Preference.objects.filter(owner=req.user, parent__isnull=True, reserved=False))
-   params['config']=PreferenceTable(Preference.objects.filter(owner__isnull=True, parent__isnull=True, reserved=False))
+   params['preference']=PreferenceTable(Preference.objects.filter(owner=req.user, parent__isnull=True))
+   params['config']=PreferenceTable(Preference.objects.filter(owner__isnull=True, parent__isnull=True))
    rc=RequestConfig(req)
    rc.configure(params['preference'])
    rc.configure(params['config'])
