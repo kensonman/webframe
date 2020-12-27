@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from deprecation import deprecated
 from django.conf import settings
+from django.core.cache import cache
 from django.http import HttpRequest
 from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
@@ -442,3 +443,11 @@ class LogMessage(object):
 
    def __str__(self):
       return self.fmt.format(*self.args, **self.kwargs)
+
+def cache(key, defval, **kwargs):
+   rst=cache.get(key)
+   if not rst:
+      timeout=int(kwargs.get('timeout', 30))
+      rst=defval(kwargs) if hasattr(defval, '__call__') else defval
+      cache.set(key, rst, timeout)
+   return rst

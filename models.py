@@ -8,7 +8,6 @@ from deprecation import deprecated
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-from django.core.cache import cache
 from django.db import models, transaction
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
@@ -19,7 +18,7 @@ from json import JSONEncoder
 from pathlib import Path
 from shutil import copyfile
 from .CurrentUserMiddleware import get_current_user
-from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX, LogMessage as lm
+from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX, LogMessage as lm, cache
 import math, uuid, logging, json, pytz, re, sys, os
 
 logger=logging.getLogger('webframe.models')
