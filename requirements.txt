@@ -11,6 +11,7 @@ pytimeparse
 cryptography
 django-ajax-selects
 django-summernote
+django-ajax-selects
 
 #Optional
 django-impersonate
