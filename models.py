@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db import models, transaction
-from django.db.models.signals import post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404 as getObj
 from django.utils import timezone as tz
@@ -19,7 +19,7 @@ from json import JSONEncoder
 from pathlib import Path
 from shutil import copyfile
 from .CurrentUserMiddleware import get_current_user
-from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX
+from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX, LogMessage as lm
 import math, uuid, logging, json, pytz, re, sys, os
 
 logger=logging.getLogger('webframe.models')
@@ -331,6 +331,10 @@ class AliveObject(models.Model, Dictable):
       self.expDate=rfmt(data['expDate'])
       self.enabled=getBool(data['enabled'])
 
+   @property
+   def alive(self):
+      return self.isAlive()
+
 # The abstract value=object that provide the sequence field and related ordering features
 class OrderableValueObject(ValueObject):
    DISABLED_REORDER = 'DISABLED_REORDER'
@@ -350,17 +354,17 @@ class OrderableValueObject(ValueObject):
 
    # Saving and reorder the models
    def save(self, *args, **kwargs):
-      reordered=self.__get_ordered_list__()
-      if hasattr(settings, OrderableValueObject.DISABLED_REORDER) or hasattr(kwargs, OrderableValueObject.DISABLED_REORDER) or not reordered:
+      if getBool(getattr(self.__class__, OrderableValueObject.DISABLED_REORDER, 'False')) or getBool(getattr(kwargs, OrderableValueObject.DISABLED_REORDER,'False')):
          super().save(*args, **kwargs)
       else:
          self.sequence-=0.5
          super().save(*args, **kwargs)
          reordered=self.__get_ordered_list__() #Retrieve the list again due to the sequence changed
          cnt=1
-         for i in reordered:
-            self.__class__.objects.filter(id=i.id).update(sequence=cnt)
-            cnt+=1
+         if reordered: 
+            for i in reordered:
+               self.__class__.objects.filter(id=i.id).update(sequence=cnt)
+               cnt+=1
 
 class PrefManager(models.Manager):
    def pref(self, name=None, **kwargs):
@@ -831,3 +835,21 @@ class Numbering(ValueObject, AliveObject):
       If you want required more options, use @getNextVal(**kwargs) instead.
       '''
       return self.getNextVal(user=get_current_user())
+
+class Profile(ValueObject, AliveObject):
+   class Meta(object):
+      verbose_name          = _('webframe.models.Profile')
+      verbose_name_plural   = _('webframe.models.Profiles')
+
+   user                    = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, verbose_name=_('webframe.models.Profile'), help_text=_('webframe.models.Profile.helptext'))
+
+   @property
+   def preferences(self):
+      return Preference.objects.filter(owner=self.user, parent__isnull=True).order_by('sequence', 'name')
+
+@receiver(post_save, sender=get_user_model())
+def postsave_user(sender, **kwargs):
+   if kwargs['created']:
+      p=Profile(user=kwargs['instance'])
+      p.effDate=getTime('now')
+      p.save()

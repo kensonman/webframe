@@ -7,7 +7,7 @@ from . import views
 
 app_name='webframe'
 urlpatterns=[
-   re_path(r'^login/?$', views.login, name='login'),
+   re_path(r'^login/?$', views.Login.as_view(), name='login'),
    re_path(r'^logout/?$', views.logout, name='logout'),
 
    re_path(r'^users/?$', views.users, name='users'),

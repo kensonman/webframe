@@ -12,11 +12,12 @@ from django.db import transaction
 from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
+from django.views import View
 from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
 from .decorators import is_enabled
-from .functions import getBool, isUUID
+from .functions import getBool, isUUID, LogMessage as lm
 from .models import *
 from .tables import *
 import hashlib, logging
@@ -28,27 +29,41 @@ logger=logging.getLogger('webframe.views')
 _('django.contrib.auth.backends.ModelBackend')
 _('django_auth_ldap.backend.LDAPBackend')
 
-def login( req ):
-   '''
-   Login the session.
-   '''
-   params=dict()
-   try:
-      params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
-      if params['next']==reverse('webframe:login'):
-         raise ValueError #Make sure do not loopback the login page.
-      if params['next']==reverse('webframe:logout'):
-         raise ValueError #Make sure do not loopback the login page.
-   except:
-      params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
-   if req.method=='POST':
+class Login( View ):
+   def __loadDefault__(req):
+      params=dict()
+      try:
+         params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+         if params['next']==reverse('webframe:login'):
+            raise ValueError #Make sure do not loopback the login page.
+         if params['next']==reverse('webframe:logout'):
+            raise ValueError #Make sure do not loopback the login page.
+      except:
+         params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
+      params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
+      params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
+      params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
+      params['socialLogin_google']=hasattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+      req.session['next']=params['next']
+      logger.debug('Next URL: {0}'.format(params['next']))
+      logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
+      params['backends']=[_(b) for b in settings.AUTHENTICATION_BACKENDS]
+      return params
+
+   def get(self, req):
+      'Return the login form'
+      params=self.__loadDefault__(req)
+      return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
+
+   def post(self, req):
+      params=self.__loadDefault__(req)
       username=req.POST['username']
       password=req.POST['password']
 
-      ## 2017-09-30 10:44, Kenson Man
-      ## Let the first login user be the system administrator
       User=get_user_model()
       if User.objects.exclude(username=getattr(settings, 'ANONYMOUS_USER_NAME', 'AnonymousUser')).count()<1:
+         ## 2017-09-30 10:44, Kenson Man
+         ## Let the first login user be the system administrator
          u=User()
          u.username=username
          u.first_name='System'
@@ -58,8 +73,12 @@ def login( req ):
          u.set_password(password)
          u.save()
          messages.warning(req, 'Created the first user %s as system administroator'%username)
+
       try:
          u=authenticate(req, username=username, password=password)
+         if u.profile:
+            if not u.profile.alive:
+               raise Error(lm('User[{0}] is expired! {1}~{2}', u.id, u.profile.effDate, u.profile.expDate))
       except:
          logger.debug('Failed to login')
          u=None
@@ -69,16 +88,7 @@ def login( req ):
          return redirect(nextUrl)
       if getattr(settings, 'WF_DEFAULT_LOGIN_WARNINGS', True): messages.warning(req, gettext('Invalid username or password'))
       params['username']=username
-   params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
-   params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
-   params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
-   params['socialLogin_google']=hasattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-   req.session['next']=params['next']
-   logger.debug('Next URL: {0}'.format(params['next']))
-   logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
-   #warning about the Authentication Backends
-   params['backends']=[_(b) for b in settings.AUTHENTICATION_BACKENDS]
-   return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
+      return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
 def logout(req):
    '''
