@@ -118,7 +118,7 @@ class Dictable(object):
      '''
      The method to import from dictionary.
      '''
-     if not Dictable.META_TYPE in data: raise TypeError('This is not the dictionary created by asDict. No type information found')
+     if not Dictable.META_TYPE in data: raise TypeError('This is not the dictionary created by expDict. No type information found')
      if not isinstance(self, getClass(data[Dictable.META_TYPE])): raise TypeError('Cannot import %s as %s'%(data[Dictable.META_TYPE], self.__class__))
      if hasattr(self, Dictable.META_VERS):
        if self._getDictVers() != data[Dictable.META_VERS]: raise IOError('Version mismatched. Requesting %s but %s'%(getattr(self, Dictable.META_VERS), data[Dictable.META_VERS]))
@@ -213,6 +213,22 @@ class ValueObject(models.Model, Dictable):
          except TypeError:
             self.cb=user
       super(ValueObject, self).save()
+   
+   def expDict(self):
+      mod=self.__class__.__module__
+      if mod is None or mod==str.__class__.__module__:
+         clazz=self.__class__.__name__
+      else:
+         clazz='{0}.{1}'.format(mod, self.__class__.__name__)
+      return {
+           '_VERS_':    1
+         , '_TYPE_':    clazz
+         , 'id':        self.id
+         , 'cb':        self.cb
+         , 'cd':        self.cd
+         , 'lmb':       self.lmb
+         , 'lmd':       self.lmd
+      }
 
 class AliveObjectManager(models.Manager):
    def living(self, timestamp=None):
@@ -364,6 +380,11 @@ class OrderableValueObject(ValueObject):
             for i in reordered:
                self.__class__.objects.filter(id=i.id).update(sequence=cnt)
                cnt+=1
+
+   def expDict(self):
+      rst=super().expDict()
+      rst['sequence']=self.sequence
+      return rst
 
 class PrefManager(models.Manager):
    def pref(self, name=None, **kwargs):
@@ -546,6 +567,14 @@ class AbstractPreference(OrderableValueObject):
          result=self.__class__.objects.filter(parent__isnull=True)
       if self.owner: result=result.filter(owner=self.owner)
       return result.order_by('sequence')
+
+   def expDict(self):
+      rst=super().expDict()
+      rst['tipe']=self._tipe
+      rst['encrypted']=self.encrypted
+      rst['helptext']=self.helptext
+      rst['regex']=self.regex
+      return rst
 
    @property
    def realValue(self):
@@ -809,6 +838,14 @@ class Numbering(ValueObject, AliveObject):
       if self.lmd is None:
          return _('webframe.models.Numbering.new')
       return _('webframe.models.Numbering[{name}::{next_val}]').format(name=self.name, next_val=self.next_val)
+
+   def expDict(self):
+      rst=super().expDict()
+      rst['name']=self.name
+      rst['pattern']=self.pattern
+      rst['next_val']=self.next_val
+      rst['step_val']=self.step_val
+      return rst
 
    @transaction.atomic
    def getNextVal(self, **kwargs):
