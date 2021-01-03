@@ -138,6 +138,14 @@ class Dictable(object):
      '''
      return getattr(self, Dictable.META_VERS, '1')
 
+   @staticmethod
+   def getType( instance ):
+      mod=instance.__class__.__module__
+      if mod is None or mod==str.__class__.__module__:
+         return instance.__class__.__name__
+      else:
+         return '{0}.{1}'.format(mod, instance.__class__.__name__)
+
 class ValueObject(models.Model, Dictable):
    CACHED='__CACHED__'
 
@@ -185,6 +193,13 @@ class ValueObject(models.Model, Dictable):
      help_text=_('webframe.models.ValueObject.cb.helptext'),
    )
 
+   def __init__(self, **kwargs):
+      if 'id' in kwargs: self.id=kwargs['id']
+      if 'cb' in kwargs: self.cb=kwargs['cb']
+      if 'cd' in kwargs: self.cd=kwargs['cd']
+      if 'lmb' in kwargs: self.lmb=kwargs['lmb']
+      if 'lmd' in kwargs: self.lmd=kwargs['lmd']
+
    @property
    def isNew(self):
       return self.lmd is None
@@ -215,18 +230,14 @@ class ValueObject(models.Model, Dictable):
       super(ValueObject, self).save()
    
    def expDict(self):
-      mod=self.__class__.__module__
-      if mod is None or mod==str.__class__.__module__:
-         clazz=self.__class__.__name__
-      else:
-         clazz='{0}.{1}'.format(mod, self.__class__.__name__)
+
       return {
-           '_VERS_':    1
-         , '_TYPE_':    clazz
+           Dictable.META_VERS:    1
+         , Dictable.META_TYPE:    Dictable.getType(self)
          , 'id':        self.id
-         , 'cb':        self.cb
+         , 'cb':        {Dictable.META_TYPE: Dictable.getType(self.cb), 'id': self.cb.id, 'username': self.cb.username, 'email': self.cb.email} if self.cb else None
          , 'cd':        self.cd
-         , 'lmb':       self.lmb
+         , 'lmb':       {Dictable.META_TYPE: Dictable.getType(self.lmb), 'id': self.lmb.id, 'username': self.lmb.username, 'email': self.lmb.email} if self.lmb else None
          , 'lmd':       self.lmd
       }
 
@@ -288,6 +299,11 @@ class AliveObject(models.Model, Dictable):
       abstract         = True
       verbose_name      = _('webframe.models.AliveObject')
       verbose_name_plural = _('webframe.models.AliveObjects')
+
+   def __init__(self, **kwargs):
+      if 'effDate' in kwargs: self.effDate=kwargs['effDate']
+      if 'expDate' in kwargs: self.expDate=kwargs['expDate']
+      if 'enabled' in kwargs: self.enabled=kwargs['enabled']
    
    effDate             = models.DateTimeField(
                      default=tz.now,
@@ -354,6 +370,9 @@ class AliveObject(models.Model, Dictable):
 class OrderableValueObject(ValueObject):
    DISABLED_REORDER = 'DISABLED_REORDER'
    sequence      = models.FloatField(default=sys.maxsize,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
+
+   def __init__(self, **kwargs):
+      if 'sequence' in kwargs: self.sequence=kwargs['sequence']
 
    class Meta:
       abstract   = True
@@ -547,6 +566,18 @@ class AbstractPreference(OrderableValueObject):
    helptext            = models.TextField(max_length=8192, null=True, blank=True, verbose_name=_('webframe.models.Preference.helptext'), help_text=_('webframe.models.Preference.helptext.helptext'))
    regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('webframe.models.Preference.regex'), help_text=_('webframe.models.Preference.regex.helptext'))
    objects             = PrefManager()
+
+   def __init__(self, **kwargs):
+      super().__init__(**kargs)
+      if 'name' in kwargs: self.name=kwargs['name']
+      if 'value' in kwargs: self.value=kwargs['value']
+      if 'owner' in kwargs: self.owner=kwargs['owner']
+      if 'parent' in kwargs: self.parent=kwargs['parent']
+      if 'sequence' in kwargs: self.sequence=kwargs['sequence']
+      if 'tipe' in kwargs: self.tipe=kwargs['tipe']
+      if 'encrypted' in kwargs: self.encrypted=kwargs['encrypted'] in TRUE_VALUES
+      if 'helptext' in kwargs: self.helptext=kwargs['helptext'] 
+      if 'regex' in kwargs: self.regex=kwargs['regex']
 
    @staticmethod
    def get_identifier(name, owner):
@@ -834,6 +865,13 @@ class Numbering(ValueObject, AliveObject):
    next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
    step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
 
+   def __init__(self, **kwargs):
+      super().__init__(**kwargs)
+      if 'name' in kwargs: self.name=kwargs['name']
+      if 'pattern' in kwargs: self.pattern=kwargs['pattern']
+      if 'next_val' in kwargs: self.next_val=kwargs['next_val']
+      if 'step_val' in kwargs: self.step_val=kwargs['step_val']
+
    def __str__(self):
       if self.lmd is None:
          return _('webframe.models.Numbering.new')
@@ -880,7 +918,7 @@ class Profile(ValueObject, AliveObject):
    user                    = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, verbose_name=_('webframe.models.Profile'), help_text=_('webframe.models.Profile.helptext'))
 
    @property
-   def preferences(self):
+  def preferences(self):
       return Preference.objects.filter(owner=self.user, parent__isnull=True).order_by('sequence', 'name')
 
 @receiver(post_save, sender=get_user_model())
