@@ -918,7 +918,7 @@ class Profile(ValueObject, AliveObject):
    user                    = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, verbose_name=_('webframe.models.Profile'), help_text=_('webframe.models.Profile.helptext'))
 
    @property
-  def preferences(self):
+   def preferences(self):
       return Preference.objects.filter(owner=self.user, parent__isnull=True).order_by('sequence', 'name')
 
 @receiver(post_save, sender=get_user_model())
