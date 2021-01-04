@@ -426,8 +426,6 @@ class PrefManager(models.Manager):
      value=kwargs.get('value', None)
      if not name: name=kwargs.get('name', None)
      if isinstance(user, str):  user=get_user_model().objects.get(username=user)
-     rst=cache.get(AbstractPreference.get_identifier(name, user))
-     if rst: return rst #Using the cache
      if isUUID(name):
         rst=self.filter(id=name)
      else:

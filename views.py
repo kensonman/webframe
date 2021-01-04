@@ -30,10 +30,10 @@ _('django.contrib.auth.backends.ModelBackend')
 _('django_auth_ldap.backend.LDAPBackend')
 
 class Login( View ):
-   def __loadDefault__(req):
+   def __loadDefault__(self, req):
       params=dict()
       try:
-         params['next']=req.POST.get('next', req.GET.get('next', reverse('dashboard')))
+         params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
          if params['next']==reverse('webframe:login'):
             raise ValueError #Make sure do not loopback the login page.
          if params['next']==reverse('webframe:logout'):
@@ -84,7 +84,7 @@ class Login( View ):
          u=None
       if u:
          auth_login(req, u)
-         nextUrl=params.get('next', reverse('dashboard'))
+         nextUrl=params.get('next', reverse('index'))
          return redirect(nextUrl)
       if getattr(settings, 'WF_DEFAULT_LOGIN_WARNINGS', True): messages.warning(req, gettext('Invalid username or password'))
       params['username']=username
