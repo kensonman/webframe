@@ -193,7 +193,8 @@ class ValueObject(models.Model, Dictable):
      help_text=_('webframe.models.ValueObject.cb.helptext'),
    )
 
-   def __init__(self, **kwargs):
+   def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
       if 'id' in kwargs: self.id=kwargs['id']
       if 'cb' in kwargs: self.cb=kwargs['cb']
       if 'cd' in kwargs: self.cd=kwargs['cd']
@@ -300,7 +301,8 @@ class AliveObject(models.Model, Dictable):
       verbose_name      = _('webframe.models.AliveObject')
       verbose_name_plural = _('webframe.models.AliveObjects')
 
-   def __init__(self, **kwargs):
+   def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
       if 'effDate' in kwargs: self.effDate=kwargs['effDate']
       if 'expDate' in kwargs: self.expDate=kwargs['expDate']
       if 'enabled' in kwargs: self.enabled=kwargs['enabled']
@@ -371,7 +373,8 @@ class OrderableValueObject(ValueObject):
    DISABLED_REORDER = 'DISABLED_REORDER'
    sequence      = models.FloatField(default=sys.maxsize,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
 
-   def __init__(self, **kwargs):
+   def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
       if 'sequence' in kwargs: self.sequence=kwargs['sequence']
 
    class Meta:
@@ -565,14 +568,14 @@ class AbstractPreference(OrderableValueObject):
    regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('webframe.models.Preference.regex'), help_text=_('webframe.models.Preference.regex.helptext'))
    objects             = PrefManager()
 
-   def __init__(self, **kwargs):
-      super().__init__(**kargs)
+   def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
+      self.tipe=kwargs['tipe'] if 'tipe' in kwargs else TYPE_TEXT
       if 'name' in kwargs: self.name=kwargs['name']
-      if 'value' in kwargs: self.value=kwargs['value']
+      if 'value' in kwargs: self._value=str(kwargs['value'])
       if 'owner' in kwargs: self.owner=kwargs['owner']
       if 'parent' in kwargs: self.parent=kwargs['parent']
       if 'sequence' in kwargs: self.sequence=kwargs['sequence']
-      if 'tipe' in kwargs: self.tipe=kwargs['tipe']
       if 'encrypted' in kwargs: self.encrypted=kwargs['encrypted'] in TRUE_VALUES
       if 'helptext' in kwargs: self.helptext=kwargs['helptext'] 
       if 'regex' in kwargs: self.regex=kwargs['regex']
@@ -580,7 +583,6 @@ class AbstractPreference(OrderableValueObject):
    @staticmethod
    def get_identifier(name, owner):
       return 'Pref::{0}@{1}'.format(name, owner.id if owner and owner.is_authenticated else 'n/a')
-
 
    def __str__(self):
       return AbstractPreference.get_identifier(self.name, self.owner)
@@ -623,7 +625,7 @@ class AbstractPreference(OrderableValueObject):
          return int(val)
       elif self.tipe==AbstractPreference.TYPE_BOOLEAN:
          return val in TRUE_VALUES
-      elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL:
+      elif self.tipe==AbstractPreference.TYPE_TEXT or self.tipe==AbstractPreference.TYPE_RICHTEXT or self.tipe==AbstractPreference.TYPE_EMAIL or self.tipe==AbstractPreference.TYPE_URL:
          return val
       elif self.tipe==AbstractPreference.TYPE_DATE:
          return getTime(val, fmt=FMT_DATE)
@@ -659,19 +661,19 @@ class AbstractPreference(OrderableValueObject):
             if not val.tzinfo: val=pytz.utc.localize(val)
          else:
             val=getTime(val, FMT_DATE)
-         self.value=val.strftime(FMT_DATE)
+         val=val.strftime(FMT_DATE)
       elif self.tipe==AbstractPreference.TYPE_TIME:
          if hasattr(val, 'strftime'):
             if not val.tzinfo: val=pytz.utc.localize(val)
          else:
             val=getTime(val, FMT_TIME)
-         self.value=val.strftime(FMT_TIME)
+         val=val.strftime(FMT_TIME)
       elif self.tipe==AbstractPreference.TYPE_DATETIME:
          if hasattr(val, 'strftime'):
             if not val.tzinfo: val=pytz.utc.localize(val)
          else:
             val=getTime(val, FMT_DATETIME)
-         self.value=val.strftime(FMT_DATETIME)
+         val=val.strftime(FMT_DATETIME)
       elif self.tipe==AbstractPreference.TYPE_UUIDS:
          if hasattr(val, '__iter__'):
             val='|'.join([s for s in val if isUUID(s)])
@@ -694,12 +696,15 @@ class AbstractPreference(OrderableValueObject):
             logger.warning('{0} the file: {1} => {2} ...'.format('Replace' if os.path.isfile(trg) else 'Clone', src, trg))
             copyfile(src, trg)
             path=trg
-         self.value=path
+         val=path
+      elif self.tipe==AbstractPreference.TYPE_URL:
+         from urllib.parse import urlparse
+         val=urlparse(val).geturl()
 
       if not val:
          self._value=None
       else:
-         self._value=encrypt(val) if self.encrypted else val
+         self._value=encrypt(val) if self.encrypted and val else val
 
    @property
    def asDict(self):
@@ -782,7 +787,6 @@ class AbstractPreference(OrderableValueObject):
    @property
    def tipe(self):
       return self._tipe
-
    @tipe.setter
    def tipe( self, tipe ):
       '''
@@ -801,6 +805,9 @@ class AbstractPreference(OrderableValueObject):
       if tipe==AbstractPreference.TYPE_EMAIL: 
          self.regex='^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
       self._tipe=int(tipe)
+   @property
+   def tipeName(self):
+      return AbstractPreference.TYPES[self.tipe][1]
 
    def save(self, *args, **kwargs):
       if self._value:
@@ -863,8 +870,8 @@ class Numbering(ValueObject, AliveObject):
    next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
    step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
 
-   def __init__(self, **kwargs):
-      super().__init__(**kwargs)
+   def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
       if 'name' in kwargs: self.name=kwargs['name']
       if 'pattern' in kwargs: self.pattern=kwargs['pattern']
       if 'next_val' in kwargs: self.next_val=kwargs['next_val']
