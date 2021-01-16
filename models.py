@@ -570,7 +570,7 @@ class AbstractPreference(OrderableValueObject):
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
-      self.tipe=kwargs['tipe'] if 'tipe' in kwargs else TYPE_TEXT
+      self.tipe=kwargs['tipe'] if 'tipe' in kwargs else AbstractPreference.TYPE_TEXT
       if 'name' in kwargs: self.name=kwargs['name']
       if 'value' in kwargs: self._value=str(kwargs['value'])
       if 'owner' in kwargs: self.owner=kwargs['owner']

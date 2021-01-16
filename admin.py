@@ -6,6 +6,7 @@
 from ajax_select import make_ajax_form
 from ajax_select.admin import AjaxSelectAdmin
 from ajax_select.fields import AutoCompleteSelectField
+from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.safestring import mark_safe
@@ -50,7 +51,7 @@ class PreferenceInline(admin.TabularInline):
 
 @admin.register(Preference)
 class PreferenceAdmin(SummernoteModelAdmin):
-   fields=('id', 'parent', 'parent_id', '_tipe', 'owner', 'name', 'helptext_', 'regex', '_value', 'encrypted', 'cb', 'cd', 'lmb', 'lmd')
+   fields=['id', 'parent', 'parent_id', '_tipe', 'owner', 'name', 'helptext_', 'regex', '_value', 'encrypted', 'cb', 'cd', 'lmb', 'lmd']
    form = make_ajax_form(Preference, {
         # fieldname: channel_name
         'parent':  'preferences',
@@ -62,7 +63,7 @@ class PreferenceAdmin(SummernoteModelAdmin):
    list_display=('id', 'name', 'shortValue', 'parent', 'owner', 'lmb', 'lmd')
    list_filter=(PreferenceChildParentFilter, '_tipe', 'encrypted')
    ordering=('owner__username', 'name')
-   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'parent_id', 'regex', 'helptext_')
+   readonly_fields=['id', 'cb', 'cd', 'lmb', 'lmd', 'parent_id', 'regex', 'helptext_']
    search_fields=('name', '_value', 'owner__username')
    summernote_fields=('helptext',)
 
@@ -79,6 +80,18 @@ class PreferenceAdmin(SummernoteModelAdmin):
    def helptext_(self, obj):
       return mark_safe(obj.helptext)
    helptext_.short_description=_('webframe.models.Preference.helptext')
+
+   #2021-01-16 16:35, Kenson Man
+   #Make the helptext field readonly if and only if superuser
+   def get_fields(self, req, obj=None):
+      rst=super().get_fields(req, obj)
+      if req.user.is_superuser:
+         if 'helptext_' in rst:
+            rst[rst.index('helptext_')]='helptext'
+      else:
+         if 'helptext' in rst:
+            rst[rst.index('helptext')]='helptext_'
+      return rst
 
 @admin.register(Numbering)
 class NumberingAdmin(admin.ModelAdmin):
