@@ -51,7 +51,7 @@ class PreferenceInline(admin.TabularInline):
 
 @admin.register(Preference)
 class PreferenceAdmin(SummernoteModelAdmin):
-   fields=['id', 'parent', 'parent_id', '_tipe', 'owner', 'name', 'helptext_', 'regex', '_value', 'encrypted', 'cb', 'cd', 'lmb', 'lmd']
+   fields=['id', 'parent', 'parent_id', '_tipe', 'owner', 'name', 'lang', 'helptext_', 'regex', '_value', 'encrypted', 'cb', 'cd', 'lmb', 'lmd']
    form = make_ajax_form(Preference, {
         # fieldname: channel_name
         'parent':  'preferences',
@@ -60,8 +60,8 @@ class PreferenceAdmin(SummernoteModelAdmin):
    inlines=[
       PreferenceInline,
    ]
-   list_display=('id', 'name', 'shortValue', 'parent', 'owner', 'lmb', 'lmd')
-   list_filter=(PreferenceChildParentFilter, '_tipe', 'encrypted')
+   list_display=('id', 'name', 'lang', 'shortValue', 'parent', 'owner', 'lmb', 'lmd')
+   list_filter=(PreferenceChildParentFilter, '_tipe', 'encrypted', 'lang')
    ordering=('owner__username', 'name')
    readonly_fields=['id', 'cb', 'cd', 'lmb', 'lmd', 'parent_id', 'regex', 'helptext_']
    search_fields=('name', '_value', 'owner__username')
@@ -83,6 +83,7 @@ class PreferenceAdmin(SummernoteModelAdmin):
 
    #2021-01-16 16:35, Kenson Man
    #Make the helptext field readonly if and only if superuser
+   # Reference: [Django Docs](https://docs.djangoproject.com/en/3.1/ref/contrib/admin/#django.contrib.admin.ModelAdmin.get_fields)
    def get_fields(self, req, obj=None):
       rst=super().get_fields(req, obj)
       if req.user.is_superuser:

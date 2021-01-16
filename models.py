@@ -421,12 +421,39 @@ class PrefManager(models.Manager):
      @kwargs['returnValue']  Default True;  The boolean value indicate the method return the preference's value instead of preference instance.
      @kwargs['returnQuery']  Default False; The boolean value indicate the method return the query instead of others; [for debug];
      @kwargs['parent']       The filter of parent preference of result instance
-     @kwargs['value']        The filter of preference value
+     @kwargs['value']        The filter of preference value; the below operators can be used:
+                                 == The equals operator.             e.g.: "==Abc" will find all preference's value equals to "Abc"
+                                 != The not equals operator.         e.g.: "!=Abc" will find all preference's value not equals to "Abc"
+                                 ^= The starts-with operator.        e.g.: "^=Abc" will find all preference's value that starts with "Abc"
+                                 $= The ends-with operator.          e.g.: "$=Abc" will find all preference's value that ends with "Abc"
+                                 *= The constaints operator.         e.g.: "*=Abc" will find all preference's value that contains "Abc" (case-insensitive)
+                                 ~= The case insensitive operator.   e.g.: "~=ABC" will find all preference's value that equals to "ABC" (case-insensitive)
+     @kwargs['lang']         The filter of the language. Accrording to [MDN Web Doc](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language),
+                             it should be the list of accepted language, e.g.: zn_HK, zh_TW, zh, en, *
      '''
      defval=kwargs.get('defval', None)
      user=kwargs.get('owner', kwargs.get('user', None))
      parent=kwargs.get('parent', None)
      value=kwargs.get('value', None)
+     langs=kwargs.get('lang', None)
+     if langs:
+       #Preparing the langs list according to "lang" property: parsing "en;q=0.1, zh;q=0.2, zh_HK;q=0.5, zh_TW;q=0.4, zh_CN;q=0.2" into 
+       #   [
+       #      {"code":"zh_hk","weight:0.5},
+       #      {"code":"zh_TW","weight":0.4},
+       #      {"code":"zh","weight":0.2},
+       #      {"code":"zh_cn","weight":0.2},
+       #      {"code":"en","weight":0.1},
+       #   ]
+       def parse(s): #Parsing "zh_HK;q=0.1" into {code, weight}
+         if ';' in s:
+            w=s[s.index(';')+1:].strip()
+            s=s[:s.index(';')]
+            w=float(re.findall(r'\d*\.\d+|\d+', w)[0])
+            return {'code': s.lower(), 'weight': w}
+         return {'code': s.lower(), 'weight': 0.1}
+       langs=[parse(s.strip()) for s in langs.split(',')]
+       langs=sorted(langs, key=lambda ele: ele['weight'], reverse=True)
      if not name: name=kwargs.get('name', None)
      if isinstance(user, str):  user=get_user_model().objects.get(username=user)
      if isUUID(name):
@@ -455,13 +482,36 @@ class PrefManager(models.Manager):
               rst=rst.filter(value__endswith=value[2:].strip())
            elif value.startswith('*='):
               rst=rst.filter(value__icontains=value[2:].strip())
+           elif value.startswith('~='):
+              rst=rst.filter(value__iexact=value[2:].strip())
            else:
               rst=rst.filter(value=value)
-        rst=rst.order_by('owner')
+        if langs:
+           rst=rst.order_by('owner')
+           rst=rst.filter(models.Q(lang__in=[l['code'] for l in langs])|models.Q(lang__isnull=True))
+        else:
+           rst=rst.order_by('lang', 'owner')
+        # parseing the result
         if kwargs.get('returnQuery', 'False') in TRUE_VALUES:
            return rst.query
         if len(rst)>0:
-           rst=rst[0]
+           found=False
+           if langs:
+              for l in langs:
+                 for p in rst:
+                    if p.lang==l['code']:
+                       rst=p
+                       found=True
+                       break
+                 if found: break
+           else:
+              #If not specified langs, defualt using the fallback. Otherwise, select the first 
+              for p in rst:
+                 if p.lang is None:
+                    rst=p
+                    found=True
+                    break
+           if not found: rst=rst[0]
         else:
            rst=Preference(name=name, _value=defval)
         if kwargs.get('returnValue', 'True') in TRUE_VALUES:
@@ -497,9 +547,12 @@ class AbstractPreference(OrderableValueObject):
          ('change_preference_type', 'Can change the preference type'),
       )
       abstract         = True
+      unique_together  = [
+         ['name', 'lang'],
+      ]
       constraints      = [
          models.UniqueConstraint(fields=('name', 'owner'), name='unique_name_and_owner'),
-         models.UniqueConstraint(fields=('name', ), condition=models.Q(owner=None), name='unique_name'),
+         #models.UniqueConstraint(fields=('name', ), condition=models.Q(owner=None), name='unique_name'),
       ]
 
    def pref_path(self, filename):
@@ -566,6 +619,7 @@ class AbstractPreference(OrderableValueObject):
    encrypted           = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.encrypted'), help_text=_('webframe.models.Preference.encrypted.helptxt'))
    helptext            = models.TextField(max_length=8192, null=True, blank=True, verbose_name=_('webframe.models.Preference.helptext'), help_text=_('webframe.models.Preference.helptext.helptext'))
    regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('webframe.models.Preference.regex'), help_text=_('webframe.models.Preference.regex.helptext'))
+   lang                = models.CharField(max_length=20, null=True, blank=True, verbose_name=_('webframe.models.Preference.lang'), help_text=_('webframe.models.Preference.lang.helptext'))
    objects             = PrefManager()
 
    def __init__(self, *args, **kwargs):
@@ -579,6 +633,7 @@ class AbstractPreference(OrderableValueObject):
       if 'encrypted' in kwargs: self.encrypted=kwargs['encrypted'] in TRUE_VALUES
       if 'helptext' in kwargs: self.helptext=kwargs['helptext'] 
       if 'regex' in kwargs: self.regex=kwargs['regex']
+      if 'lang' in kwargs: self.lang=kwargs['lang']
 
    @staticmethod
    def get_identifier(name, owner):
@@ -817,6 +872,7 @@ class AbstractPreference(OrderableValueObject):
             self._value=encrypt(self._value)
          if str(self._value).startswith(ENCRYPTED_PREFIX) and not self.encrypted: #Reversed. If self.encrypted turn off but not encrypted
             self._value=decrypt(self._value)
+      if self.lang: self.lang=self.lang.lower()
       super().save(*args, **kwargs)
 
 class Preference(AbstractPreference):

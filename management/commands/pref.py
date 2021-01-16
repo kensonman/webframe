@@ -90,6 +90,7 @@ class Command(BaseCommand):
       owner=kwargs['owner'] if 'owner' in kwargs else self.__get_owner__()
       parent=kwargs['parent'] if 'parent' in kwargs else self.__get_parent__()
       name=kwargs['name'] if 'name' in kwargs else self.kwargs['name']
+      lang=kwargs['lang'] if 'lang' in kwargs else None
       if self.kwargs['filepath']: name=os.path.basename(name)
 
       if self.kwargs['parent'] and parent==None:
@@ -261,10 +262,11 @@ class Command(BaseCommand):
          tipe=cols[5]
          encrypted=cols[6] in TRUE_VALUES
          regex=cols[7]
+         lang=cols[8] if len(cols)>8 else None
          logger.debug('     Importing row: {0}: {1} [{2}]'.format(idx, name, 'encrypted' if encrypted else 'clear-text'))
 
          self.kwargs['name']=name
-         pref=self.__get_pref__(name=name, owner=owner, parent=parent)
+         pref=self.__get_pref__(name=name, owner=owner, parent=parent, lang=lang)
          if pref.count()<1: raise Preference.DoesNotExist
          for p in pref:
             p.encrypted=encrypted
@@ -275,7 +277,7 @@ class Command(BaseCommand):
             p.value=val 
             p.save()
       except Preference.DoesNotExist:
-         Preference(name=name, _value=val, owner=owner, parent=parent, encrypted=encrypted, helptext=helptext, regex=regex).save()
+         Preference(name=name, _value=val, owner=owner, parent=parent, encrypted=encrypted, helptext=helptext, regex=regex, lang=lang).save()
       except:
          logger.debug(cols)
          logger.exception('Error when handling the column')

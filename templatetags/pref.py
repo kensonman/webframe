@@ -11,8 +11,8 @@ logger=logging.getLogger('webframe.templatetags')
 
 register=template.Library()
 
-@register.simple_tag
-def pref(prefName, **kwargs):
+@register.simple_tag(takes_context=True)
+def pref(context, prefName, **kwargs):
    '''
    Retrieve the preference from the database.
 
@@ -41,6 +41,11 @@ def pref(prefName, **kwargs):
                kwargs['user']=User.objects.get(username=str(kwargs['user']))
       else:
          kwargs['user']=get_current_user()
+      if 'lang' not in kwargs:
+         lang=context.request.headers.get('Accept-Language', '*')
+         if lang!='*':
+            lang='{0},en;q=0.0001'.format(lang)
+            kwargs['lang']=lang
       pref=Preference.objects.pref(prefName, **kwargs)
       logger.debug('pref[{0}]=={1}'.format(prefName, pref))
       if kwargs.get('returnValue', 'True') in TRUE_VALUES:

@@ -1,2 +1,2 @@
-ID/Name,Value,Parent,Owner,HelpText,Tipe,Encrypted,Regex
-"Preference Name","Preference Value",,,<p>It can be a boolean value</p>,BOOLEAN,False,^(?i)(true|false)$
+ID/Name,Value,Parent,Owner,HelpText,Tipe,Encrypted,Regex,Lang
+"Preference Name","Preference Value",,,<p>It can be a boolean value</p>,BOOLEAN,False,^(?i)(true|false)$,zh_HK
