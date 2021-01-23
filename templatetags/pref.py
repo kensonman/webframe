@@ -26,6 +26,7 @@ def pref(context, prefName, **kwargs):
          @param user        The owner of this preference. If you would like to access the config, setup this parameter to None;
          @param returnValue It will told the template-tag to return the preference's value instead of the preference instead; DEFAULT True
          @param markSafe    When returnValue is True, indicate the value should be mark-safe; Default False
+         @param lang        Using the lang parameter when loading preference (refer to Preference.objects.pref(name, **kwargs) for more details
    '''
    try:
       if 'user' in kwargs:

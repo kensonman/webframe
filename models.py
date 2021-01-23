@@ -488,9 +488,10 @@ class PrefManager(models.Manager):
               rst=rst.filter(value=value)
         if langs:
            rst=rst.order_by('owner')
-           rst=rst.filter(models.Q(lang__in=[l['code'] for l in langs])|models.Q(lang__isnull=True))
+           if not '*' in [l['code'] for l in langs]:
+              rst=rst.filter(models.Q(lang__in=[l['code'] for l in langs])|models.Q(lang__isnull=True))
         else:
-           rst=rst.order_by('lang', 'owner')
+           rst=rst.order_by('lang', '-owner')
         # parseing the result
         if kwargs.get('returnQuery', 'False') in TRUE_VALUES:
            return rst.query
