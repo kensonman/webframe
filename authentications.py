@@ -7,6 +7,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import *
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import Q
@@ -42,7 +43,7 @@ class AuthenticationBackend(ModelBackend):
                except Profile.DoesNotExist:
                   allow=getattr(settings, 'WF_ALLOW_USER_NO_PROFILE', True)
                   if getBool(allow):
-                     logger.warn('Ignored effective-period checking due to the specified user does\'not contains the profile: {0}'.format(username)
+                     logger.warn('Ignored effective-period checking due to the specified user does\'not contains the profile: {0}'.format(username))
                   else:
                      logger.warn('User<{0}> is not configured properly!'.format(user.username))
                      messages.info(req, _('Your account is not configured correctly'))
@@ -57,3 +58,18 @@ class AuthenticationBackend(ModelBackend):
             return None
       except:
          logger.exception('Unexpected exception when authenticate the user: {0}'.format(username))
+
+class ActiveUserRequiredMixin(UserPassesTestMixin):
+   def test_func(self):
+      if not self.request: return False
+      if not self.request.user: return False
+      if not self.request.user.is_authenticated: return False
+      if not self.request.user.is_active: return False
+
+      try:
+         pf=self.request.user.profile
+         return pf.alive
+      except Profile.DoesNotExist:
+         #Ignore the checking
+         pass
+      return True
