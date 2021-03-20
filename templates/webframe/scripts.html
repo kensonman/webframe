@@ -39,10 +39,11 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 <link rel="stylesheet" href="{%static 'css/bootstrap4-switches.css'%}"/>
 {%block themes%}
    {%static 'css/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
-	<link rel="stylesheet" href="{{THEME}}?"/> <!-- File file changing frequencely, force to reload -->
+	<link rel="stylesheet" href="{{THEME}}?"/> <!-- File changing frequencely, force to reload -->
 	<style type="text/css">
-   {%pref 'STYLES' defval=''%}
-	{{wf_theme_styles|safe}}
+   /*Pref:STYLES*/
+   {%pref 'STYLES' defval=' ' var="styles"%}{%if styles%}{{styles|safe}}{%endif%}
+	{%if wf_theme_styles%}{{wf_theme_styles|safe}}{%endif%}
 	</style>
 {%endblock%}
 {%comment "Application Style"%}Loading the application style{%endcomment%}
