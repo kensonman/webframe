@@ -6,6 +6,7 @@
 from datetime import datetime
 from deprecation import deprecated
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db import models, transaction
@@ -989,3 +990,10 @@ def postsave_user(sender, **kwargs):
       p=Profile(user=kwargs['instance'])
       p.effDate=getTime('now')
       p.save()
+
+class EnhancedDjangoJSONEncoder(DjangoJSONEncoder):
+   def default(self, obj):
+      logger.debug('Encoding object with type: {0}'.format(type(obj)))
+      if isinstance(obj, uuid.UUID):
+         return str(obj)
+      return super().default(obj)
