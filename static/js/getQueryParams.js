@@ -5,8 +5,8 @@
  * Desc:       Provide the getQueryParam(name) and getQueryParams() javascript function.
  */
 
-function getQueryParams() {
-   qs=window.location.search;
+function getQueryParams(qs=null) {
+   if(qs==null)qs=window.location.search;
    params=Array();
    if(qs){
       vars=qs.substr(1).split('&');
@@ -26,6 +26,6 @@ function getQueryParams() {
    return params
 };
 
-function getQueryParam( name ){
-   return getQueryParams()[name];
+function getQueryParam( name, queryStr=null ){
+   return getQueryParams(queryStr)[name];
 };
