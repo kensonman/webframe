@@ -468,7 +468,7 @@ class PrefManager(models.Manager):
            else:
              rst=rst.filter(owner__isnull=True)
         else:
-           if not kwargs.get('config', False) in TRUE_VALUES:
+           if not getBool(kwargs.get('config', False)):
               rst=rst.filter(owner__isnull=True)
         if parent: rst=rst.filter(parent=parent)
         if value: 
@@ -494,7 +494,7 @@ class PrefManager(models.Manager):
         else:
            rst=rst.order_by('lang', '-owner')
         # parseing the result
-        if kwargs.get('returnQuery', 'False') in TRUE_VALUES:
+        if getBool(kwargs.get('returnQuery', 'False')):
            return rst.query
         if len(rst)>0:
            found=False
@@ -516,7 +516,7 @@ class PrefManager(models.Manager):
            if not found: rst=rst[0]
         else:
            rst=Preference(name=name, _value=defval)
-        if kwargs.get('returnValue', 'True') in TRUE_VALUES:
+        if getBool(kwargs.get('returnValue', 'True')):
            return rst.value
         return rst
      except:
