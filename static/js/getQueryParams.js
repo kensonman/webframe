@@ -7,7 +7,7 @@
 
 function getQueryParams(qs=null) {
    if(qs==null)qs=window.location.search;
-   params=Array();
+   params={};
    if(qs){
       vars=qs.substr(1).split('&');
       for(var i=0; i<vars.length; i++){
@@ -15,12 +15,15 @@ function getQueryParams(qs=null) {
          key=decodeURIComponent(pair[0]);
          val=decodeURIComponent(pair[1]);
          t=typeof(params[key]);
-         if(t=='undefined')
+         if(t=='undefined' || t=='function') //t=='function' is used for key is reserved keywords, e.g.: filter
             params[key]=val
          else if(t=='string')
             params[key]=Array(params[key], val)
-         else
+         else if(Array.isArray(params[key]))
             params[key].push(val);
+         else{
+            console.log('Supported type['+key+']: '+t);
+         }
       }
    }
    return params
