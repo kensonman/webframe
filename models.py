@@ -594,6 +594,10 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_FILEPATH, _('webframe.models.Preference.TYPE.FILEPATH')),
    )
 
+   def get_filecontent_location(self, filename):
+      filename=os.path.basename(str(filename))
+      return 'prefs/{0}/{1}'.format(self.id, filename)
+
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
    _value              = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
    owner               = models.ForeignKey(
@@ -622,11 +626,12 @@ class AbstractPreference(OrderableValueObject):
    helptext            = models.TextField(max_length=8192, null=True, blank=True, verbose_name=_('webframe.models.Preference.helptext'), help_text=_('webframe.models.Preference.helptext.helptext'))
    regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('webframe.models.Preference.regex'), help_text=_('webframe.models.Preference.regex.helptext'))
    lang                = models.CharField(max_length=20, null=True, blank=True, verbose_name=_('webframe.models.Preference.lang'), help_text=_('webframe.models.Preference.lang.helptext'))
+   filecontent         = models.FileField(max_length=1024, null=True, blank=True, upload_to=get_filecontent_location, verbose_name=_('webframe.models.Preference.filecontent'), help_text=_('webframe.models.Preference.filecontent.helptext'))
    objects             = PrefManager()
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
-      self.tipe=kwargs['tipe'] if 'tipe' in kwargs else AbstractPreference.TYPE_TEXT
+      if 'tipe' in kwargs: self._tipe=int(kwargs['tipe'])
       if 'name' in kwargs: self.name=kwargs['name']
       if 'value' in kwargs: self._value=str(kwargs['value'])
       if 'owner' in kwargs: self.owner=kwargs['owner']
@@ -674,7 +679,9 @@ class AbstractPreference(OrderableValueObject):
    @property
    def value(self):
       val=decrypt(self._value) if self.encrypted else self._value
-      if self.tipe==AbstractPreference.TYPE_NONE:
+      if self.filecontent:
+         return self.filecontent.url
+      elif self.tipe==AbstractPreference.TYPE_NONE:
          return None
       elif not val:
          return None
@@ -787,7 +794,7 @@ class AbstractPreference(OrderableValueObject):
    @property
    @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def boolValue(self):
-      return self.value
+      return getBool(self.value)
 
    @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @boolValue.setter
@@ -851,10 +858,10 @@ class AbstractPreference(OrderableValueObject):
 
       @param tipe can be integer value (refer to AbstractPreference.TYPES) or string value;
       '''
+      import pdb; pdb.set_trace()
       if isinstance(tipe, str):
-         ao=['NONE', 'INT', 'DECIMAL', 'BOOLEAN', 'TEXT', 'RICHTEXT', 'URL', 'EMAIL', 'DATE', 'TIME', 'DATETIME', 'UUIDS', 'LIST', 'JSON']
          try:
-            tipe=ao.index(tipe.upper().strip())
+            tipe=getattr(AbstractPreference, 'TYPE_{0}'.format(tipe.upper().strip()))
          except:
             tipe=AbstractPreference.TYPE_TEXT
       elif tipe is None:
@@ -862,11 +869,13 @@ class AbstractPreference(OrderableValueObject):
       if tipe==AbstractPreference.TYPE_EMAIL: 
          self.regex='^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
       self._tipe=int(tipe)
+      logger.warning('_tipe set to {0}'.format(int(tipe)))
    @property
    def tipeName(self):
       return AbstractPreference.TYPES[self.tipe][1]
 
    def save(self, *args, **kwargs):
+      logger.warning('AbstractPreference.save() invited')
       if self._value:
          # If self.encrypted turn on, but not encrypted: e.g.: Read the preference from database, then change the encrypted value
          if self.encrypted and not self._value.startswith(ENCRYPTED_PREFIX):
@@ -875,6 +884,11 @@ class AbstractPreference(OrderableValueObject):
          if str(self._value).startswith(ENCRYPTED_PREFIX) and not self.encrypted: #Reversed. If self.encrypted turn off but not encrypted
             self._value=decrypt(self._value)
       if self.lang: self.lang=self.lang.lower()
+      if self.filecontent: 
+         logger.warning('Forcing the tipe to be TYPE_FILEPATH')
+         self._tipe=AbstractPreference.TYPE_FILEPATH
+      else:
+         logger.warning('The filecontent is empty')
       super().save(*args, **kwargs)
 
 class Preference(AbstractPreference):
