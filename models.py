@@ -376,7 +376,7 @@ class OrderableValueObject(ValueObject):
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
-      if 'sequence' in kwargs: self.sequence=kwargs['sequence']
+      if 'sequence' in kwargs: self.sequence=float(kwargs['sequence'])
 
    class Meta:
       abstract   = True
@@ -617,7 +617,7 @@ class AbstractPreference(OrderableValueObject):
      help_text=_('webframe.models.Preference.parent.helptext'),
    )
    sequence            = models.FloatField(
-     default=0.5,
+     default=sys.maxsize,
      verbose_name=_('webframe.models.Preference.sequence'),
      help_text=_('webframe.models.Preference.sequence.helptext'),
    )
