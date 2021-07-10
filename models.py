@@ -387,12 +387,11 @@ class OrderableValueObject(ValueObject):
       '''
       Get the ordered list. Returns None to disable the re-ordering feature when saving
       '''
-      if hasattr(self.__class__, OrderableValueObject.DISABLED_REORDER) or hasattr(settings, OrderableValueObject.DISABLED_REORDER): return None
       return self.__class__.objects.all().order_by('sequence')
 
    # Saving and reorder the models
    def save(self, *args, **kwargs):
-      if getBool(getattr(self.__class__, OrderableValueObject.DISABLED_REORDER, 'False')) or getBool(getattr(kwargs, OrderableValueObject.DISABLED_REORDER,'False')):
+      if getBool(getattr(kwargs, OrderableValueObject.DISABLED_REORDER,'False')):
          super().save(*args, **kwargs)
       else:
          self.sequence-=0.5
