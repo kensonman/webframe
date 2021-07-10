@@ -858,7 +858,6 @@ class AbstractPreference(OrderableValueObject):
 
       @param tipe can be integer value (refer to AbstractPreference.TYPES) or string value;
       '''
-      import pdb; pdb.set_trace()
       if isinstance(tipe, str):
          try:
             tipe=getattr(AbstractPreference, 'TYPE_{0}'.format(tipe.upper().strip()))
