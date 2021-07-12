@@ -12,6 +12,7 @@ cryptography
 django-ajax-selects
 django-summernote
 django-ajax-selects
+django-maintenance-mode
 
 #Optional
 django-impersonate

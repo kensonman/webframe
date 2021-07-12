@@ -1,0 +1,14 @@
+{%extends 'webframe/framework.html'%}{%load i18n pref%}
+
+{%block title%}{%trans 'errorpage.503.title'%} - {%trans 'appName'%}{%endblock%}
+
+{%block body%}
+   <div class="jumbotron">
+      <h1>{%trans 'errorpage.503.title'%}</h1>
+      <p>{%trans 'errorpage.503.description'%}</p>
+      <hr class="my-4">
+      {%pref 'CONTACT_US_EMAIL' defval="pref:CONTACT_US_EMAIL" as contactUsEmail%}
+      <p>{%blocktrans with enquiry=contactUsEmail%}errorpage.503.inquiry:<a href="mailto:{{enquiry}}">{{enquiry}}</a>.{%endblocktrans%}</p>
+   </div>
+{%endblock%}
+

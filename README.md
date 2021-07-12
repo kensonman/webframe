@@ -20,7 +20,7 @@ Configuration
 
       ```python    
       #file: settings.py
-      INSTALLED_APPS += ('webframe', 'method_override')
+      INSTALLED_APPS += ('webframe', 'method_override', 'maintenance_mode', )
       ```
 
 3. Install the context-processors:
@@ -31,7 +31,8 @@ Configuration
          #...
          'context_processors':[
             #...
-            'webframe.providers.absolute_path', 'webframe.providers.fmt_injection', 'webframe.providers.template_injection'
+            'webframe.providers.absolute_path', 'webframe.providers.fmt_injection', 'webframe.providers.template_injection',
+            'maintenance_mode.context_processors.maintenance_mode',
             #...
          ]
       ]
@@ -51,6 +52,8 @@ Configuration
          'webframe.LangMiddleware.LangMiddleware',
          'webframe.CurrentUserMiddleware.CurrentUserMiddleware',
          'django.middleware.locale.LocaleMiddleware',
+         ...
+         'maintenance_mode.middleware.MaintenanceModeMiddleware',      #Maintenance Mode
       ]
       ```
 
@@ -63,6 +66,19 @@ Configuration
       MEDIA_URL  = '/media/'
       MEDIA_ROOT = 'media'
       DJANGO_TABLES2_TEMPLATE = 'webframe/tables.html'
+      ```
+
+6. Setup the Maintenance support. Refer to [django-maintenance-mode](https://pypi.org/project/django-maintenance-mode/) for more details.
+
+      ```pythong
+      # Maintenance Mode
+      MAINTENANCE_MODE                             = os.getenv('MAINTENANCE_MODE', None) 
+      MAINTENANCE_MODE_IGNORE_ADMIN_SITE           = os.getenv('MAINTENANCE_MODE_IGNORE_ADMIN_SITE', True) in TRUE_VALUES# if True admin site will not be affected by the maintenance-mode page
+      MAINTENANCE_MODE_IGNORE_ANONYMOUS_USER       = os.getenv('MAINTENANCE_MODE_IGNORE_ANONYMOUS_USER', False) in TRUE_VALUES# if True anonymous users will not see the maintenance-mode page
+      MAINTENANCE_MODE_IGNORE_AUTHENTICATED_USER   = os.getenv('MAINTENANCE_MODE_IGNORE_AUTHENTICATED_USER', False) in TRUE_VALUES # if True authenticated users will not see the maintenance-mode page
+      MAINTENANCE_MODE_IGNORE_STAFF                = os.getenv('MAINTENANCE_MODE_IGNORE_STAFF', False) in TRUE_VALUES # if True the staff will not see the maintenance-mode page
+      MAINTENANCE_MODE_IGNORE_SUPERUSER            = os.getenv('MAINTENANCE_MODE_IGNORE_SUPERUSER', False) in TRUE_VALUES # if True the superuser will not see the maintenance-mode page
+      # more [maintenance-mode settings](https://pypi.org/project/django-maintenance-mode/)
       ```
 
 Application
