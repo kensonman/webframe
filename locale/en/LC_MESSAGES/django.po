@@ -63,95 +63,95 @@ msgstr "Invalid username or password"
 msgid "null"
 msgstr "<i class=\"fas fa-code\"></i>"
 
-#: models.py:31
+#: models.py:32
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
-#: models.py:32
+#: models.py:33
 msgid "English"
 msgstr "English"
 
-#: models.py:154
+#: models.py:155
 msgid "webframe.models.ValueObject"
 msgstr "ValueObject"
 
-#: models.py:155
+#: models.py:156
 msgid "webframe.models.ValueObjects"
 msgstr "ValueObjects"
 
-#: models.py:162
+#: models.py:163
 msgid "webframe.models.ValueObject.id"
 msgstr "ID"
 
-#: models.py:163
+#: models.py:164
 msgid "webframe.models.ValueObject.id.helptext"
 msgstr "The id of the value-object"
 
-#: models.py:167
+#: models.py:168
 msgid "webframe.models.ValueObject.lmd"
 msgstr "Last Modify Date"
 
-#: models.py:168
+#: models.py:169
 msgid "webframe.models.ValueObject.lmd.helptext"
 msgstr "The last modify date of the value-object"
 
-#: models.py:177
+#: models.py:178
 msgid "webframe.models.ValueObject.lmb"
 msgstr "Last Modify By"
 
-#: models.py:178
+#: models.py:179
 msgid "webframe.models.ValueObject.lmb.helptext"
 msgstr "The person that modified the value-object last time"
 
-#: models.py:182
+#: models.py:183
 msgid "webframe.models.ValueObject.cd"
 msgstr "Create Date"
 
-#: models.py:183
+#: models.py:184
 msgid "webframe.models.ValueObject.cd.helptext"
 msgstr "The creation date of the value-object"
 
-#: models.py:192
+#: models.py:193
 msgid "webframe.models.ValueObject.cb"
 msgstr "Created By"
 
-#: models.py:193
+#: models.py:194
 msgid "webframe.models.ValueObject.cb.helptext"
 msgstr "The person that create this value-object"
 
-#: models.py:301
+#: models.py:302
 msgid "webframe.models.AliveObject"
 msgstr "AliveObject"
 
-#: models.py:302
+#: models.py:303
 msgid "webframe.models.AliveObjects"
 msgstr "AliveObject"
 
-#: models.py:312
+#: models.py:313
 msgid "webframe.models.AliveObject.effDate"
 msgstr "Effective Date"
 
-#: models.py:313
+#: models.py:314
 msgid "webframe.models.AliveObject.effDate.helptext"
 msgstr "The date(Included) to start the life-cycle of the object"
 
-#: models.py:318
+#: models.py:319
 msgid "webframe.models.AliveObject.expDate"
 msgstr "Expiry Date"
 
-#: models.py:319
+#: models.py:320
 msgid "webframe.models.AliveObject.expDate.helptext"
 msgstr "The date(Excluded) to end the life-cycle of the object"
 
-#: models.py:323
+#: models.py:324
 msgid "webframe.models.AliveObject.enabled"
 msgstr "Enabled"
 
-#: models.py:324
+#: models.py:325
 msgid "webframe.models.AliveObject.enabled.helptext"
 msgstr "The enabling status of the object"
 
-#: models.py:374
+#: models.py:375
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "Ordering"
 
@@ -260,7 +260,9 @@ msgstr "Type"
 
 #: models.py:619
 msgid "webframe.models.Preference.tipe.helptext"
-msgstr "The type of the preference value"
+msgstr ""
+"The type of the preference value. If File Content provided, it will "
+"<strong>always be</strong> File Resource"
 
 #: models.py:620
 msgid "webframe.models.Preference.encrypted"
@@ -372,7 +374,7 @@ msgstr "Profiles"
 
 #: models.py:980
 msgid "webframe.models.Profile.helptext"
-msgstr "Help?"
+msgstr "The profile settings"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
@@ -735,6 +737,9 @@ msgstr "Are you user to delete this user? This action can not be un-do."
 #: views.py:327
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
+
+#~ msgid "webframe.models.Preference.TYPE.FILE"
+#~ msgstr "File Content"
 
 #~ msgid "prefDoc.helptext.title"
 #~ msgstr "Description"

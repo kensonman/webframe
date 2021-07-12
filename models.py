@@ -6,6 +6,7 @@
 from datetime import datetime
 from deprecation import deprecated
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db import models, transaction
@@ -375,7 +376,7 @@ class OrderableValueObject(ValueObject):
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
-      if 'sequence' in kwargs: self.sequence=kwargs['sequence']
+      if 'sequence' in kwargs: self.sequence=float(kwargs['sequence'])
 
    class Meta:
       abstract   = True
@@ -386,12 +387,11 @@ class OrderableValueObject(ValueObject):
       '''
       Get the ordered list. Returns None to disable the re-ordering feature when saving
       '''
-      if hasattr(self.__class__, OrderableValueObject.DISABLED_REORDER) or hasattr(settings, OrderableValueObject.DISABLED_REORDER): return None
       return self.__class__.objects.all().order_by('sequence')
 
    # Saving and reorder the models
    def save(self, *args, **kwargs):
-      if getBool(getattr(self.__class__, OrderableValueObject.DISABLED_REORDER, 'False')) or getBool(getattr(kwargs, OrderableValueObject.DISABLED_REORDER,'False')):
+      if getBool(getattr(kwargs, OrderableValueObject.DISABLED_REORDER,'False')):
          super().save(*args, **kwargs)
       else:
          self.sequence-=0.5
@@ -467,7 +467,7 @@ class PrefManager(models.Manager):
            else:
              rst=rst.filter(owner__isnull=True)
         else:
-           if not kwargs.get('config', False) in TRUE_VALUES:
+           if not getBool(kwargs.get('config', False)):
               rst=rst.filter(owner__isnull=True)
         if parent: rst=rst.filter(parent=parent)
         if value: 
@@ -493,7 +493,7 @@ class PrefManager(models.Manager):
         else:
            rst=rst.order_by('lang', '-owner')
         # parseing the result
-        if kwargs.get('returnQuery', 'False') in TRUE_VALUES:
+        if getBool(kwargs.get('returnQuery', 'False')):
            return rst.query
         if len(rst)>0:
            found=False
@@ -515,7 +515,7 @@ class PrefManager(models.Manager):
            if not found: rst=rst[0]
         else:
            rst=Preference(name=name, _value=defval)
-        if kwargs.get('returnValue', 'True') in TRUE_VALUES:
+        if getBool(kwargs.get('returnValue', 'True')):
            return rst.value
         return rst
      except:
@@ -593,6 +593,10 @@ class AbstractPreference(OrderableValueObject):
       (TYPE_FILEPATH, _('webframe.models.Preference.TYPE.FILEPATH')),
    )
 
+   def get_filecontent_location(self, filename):
+      filename=os.path.basename(str(filename))
+      return 'prefs/{0}/{1}'.format(self.id, filename)
+
    name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
    _value              = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
    owner               = models.ForeignKey(
@@ -612,7 +616,7 @@ class AbstractPreference(OrderableValueObject):
      help_text=_('webframe.models.Preference.parent.helptext'),
    )
    sequence            = models.FloatField(
-     default=0.5,
+     default=sys.maxsize,
      verbose_name=_('webframe.models.Preference.sequence'),
      help_text=_('webframe.models.Preference.sequence.helptext'),
    )
@@ -621,11 +625,12 @@ class AbstractPreference(OrderableValueObject):
    helptext            = models.TextField(max_length=8192, null=True, blank=True, verbose_name=_('webframe.models.Preference.helptext'), help_text=_('webframe.models.Preference.helptext.helptext'))
    regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('webframe.models.Preference.regex'), help_text=_('webframe.models.Preference.regex.helptext'))
    lang                = models.CharField(max_length=20, null=True, blank=True, verbose_name=_('webframe.models.Preference.lang'), help_text=_('webframe.models.Preference.lang.helptext'))
+   filecontent         = models.FileField(max_length=1024, null=True, blank=True, upload_to=get_filecontent_location, verbose_name=_('webframe.models.Preference.filecontent'), help_text=_('webframe.models.Preference.filecontent.helptext'))
    objects             = PrefManager()
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
-      self.tipe=kwargs['tipe'] if 'tipe' in kwargs else AbstractPreference.TYPE_TEXT
+      if 'tipe' in kwargs: self._tipe=int(kwargs['tipe'])
       if 'name' in kwargs: self.name=kwargs['name']
       if 'value' in kwargs: self._value=str(kwargs['value'])
       if 'owner' in kwargs: self.owner=kwargs['owner']
@@ -673,7 +678,9 @@ class AbstractPreference(OrderableValueObject):
    @property
    def value(self):
       val=decrypt(self._value) if self.encrypted else self._value
-      if self.tipe==AbstractPreference.TYPE_NONE:
+      if self.filecontent:
+         return self.filecontent.url
+      elif self.tipe==AbstractPreference.TYPE_NONE:
          return None
       elif not val:
          return None
@@ -786,7 +793,7 @@ class AbstractPreference(OrderableValueObject):
    @property
    @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    def boolValue(self):
-      return self.value
+      return getBool(self.value)
 
    @deprecated(deprecated_in="v2.8", removed_in="v3.0", current_version="v2.8", details="Use value directly")
    @boolValue.setter
@@ -851,9 +858,8 @@ class AbstractPreference(OrderableValueObject):
       @param tipe can be integer value (refer to AbstractPreference.TYPES) or string value;
       '''
       if isinstance(tipe, str):
-         ao=['NONE', 'INT', 'DECIMAL', 'BOOLEAN', 'TEXT', 'RICHTEXT', 'URL', 'EMAIL', 'DATE', 'TIME', 'DATETIME', 'UUIDS', 'LIST', 'JSON']
          try:
-            tipe=ao.index(tipe.upper().strip())
+            tipe=getattr(AbstractPreference, 'TYPE_{0}'.format(tipe.upper().strip()))
          except:
             tipe=AbstractPreference.TYPE_TEXT
       elif tipe is None:
@@ -861,11 +867,13 @@ class AbstractPreference(OrderableValueObject):
       if tipe==AbstractPreference.TYPE_EMAIL: 
          self.regex='^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
       self._tipe=int(tipe)
+      logger.warning('_tipe set to {0}'.format(int(tipe)))
    @property
    def tipeName(self):
       return AbstractPreference.TYPES[self.tipe][1]
 
    def save(self, *args, **kwargs):
+      logger.warning('AbstractPreference.save() invited')
       if self._value:
          # If self.encrypted turn on, but not encrypted: e.g.: Read the preference from database, then change the encrypted value
          if self.encrypted and not self._value.startswith(ENCRYPTED_PREFIX):
@@ -874,6 +882,11 @@ class AbstractPreference(OrderableValueObject):
          if str(self._value).startswith(ENCRYPTED_PREFIX) and not self.encrypted: #Reversed. If self.encrypted turn off but not encrypted
             self._value=decrypt(self._value)
       if self.lang: self.lang=self.lang.lower()
+      if self.filecontent: 
+         logger.warning('Forcing the tipe to be TYPE_FILEPATH')
+         self._tipe=AbstractPreference.TYPE_FILEPATH
+      else:
+         logger.warning('The filecontent is empty')
       super().save(*args, **kwargs)
 
 class Preference(AbstractPreference):
@@ -989,3 +1002,10 @@ def postsave_user(sender, **kwargs):
       p=Profile(user=kwargs['instance'])
       p.effDate=getTime('now')
       p.save()
+
+class EnhancedDjangoJSONEncoder(DjangoJSONEncoder):
+   def default(self, obj):
+      logger.debug('Encoding object with type: {0}'.format(type(obj)))
+      if isinstance(obj, uuid.UUID):
+         return str(obj)
+      return super().default(obj)

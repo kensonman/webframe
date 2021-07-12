@@ -63,96 +63,96 @@ msgstr "使用者名稱或密碼有誤"
 msgid "null"
 msgstr "<i class=\"fas fa-code\"></i>"
 
-#: models.py:31
+#: models.py:32
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
-#: models.py:32
+#: models.py:33
 msgid "English"
 msgstr "English"
 
-#: models.py:154
+#: models.py:155
 msgid "webframe.models.ValueObject"
 msgstr "ValueObject"
 
-#: models.py:155
+#: models.py:156
 msgid "webframe.models.ValueObjects"
 msgstr "ValueObjects"
 
-#: models.py:162
+#: models.py:163
 msgid "webframe.models.ValueObject.id"
 msgstr "ID"
 
-#: models.py:163
+#: models.py:164
 msgid "webframe.models.ValueObject.id.helptext"
 msgstr "用作系統識別。使用 UUID 格式。"
 
-#: models.py:167
+#: models.py:168
 msgid "webframe.models.ValueObject.lmd"
 msgstr "最後修改日期"
 
-#: models.py:168
+#: models.py:169
 msgid "webframe.models.ValueObject.lmd.helptext"
 msgstr ""
 "這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:177
+#: models.py:178
 msgid "webframe.models.ValueObject.lmb"
 msgstr "最後修改人"
 
-#: models.py:178
+#: models.py:179
 msgid "webframe.models.ValueObject.lmb.helptext"
 msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:182
+#: models.py:183
 msgid "webframe.models.ValueObject.cd"
 msgstr "建立日期"
 
-#: models.py:183
+#: models.py:184
 msgid "webframe.models.ValueObject.cd.helptext"
 msgstr "這項資料的建立日期。"
 
-#: models.py:192
+#: models.py:193
 msgid "webframe.models.ValueObject.cb"
 msgstr "建立人"
 
-#: models.py:193
+#: models.py:194
 msgid "webframe.models.ValueObject.cb.helptext"
 msgstr "這項資料的建立人。"
 
-#: models.py:301
+#: models.py:302
 msgid "webframe.models.AliveObject"
 msgstr "Alive Object"
 
-#: models.py:302
+#: models.py:303
 msgid "webframe.models.AliveObjects"
 msgstr "生命週期物件"
 
-#: models.py:312
+#: models.py:313
 msgid "webframe.models.AliveObject.effDate"
 msgstr "有效日期"
 
-#: models.py:313
+#: models.py:314
 msgid "webframe.models.AliveObject.effDate.helptext"
 msgstr "這項資料的有效日期"
 
-#: models.py:318
+#: models.py:319
 msgid "webframe.models.AliveObject.expDate"
 msgstr "失效日期"
 
-#: models.py:319
+#: models.py:320
 msgid "webframe.models.AliveObject.expDate.helptext"
 msgstr "這項資料的失效日期"
 
-#: models.py:323
+#: models.py:324
 msgid "webframe.models.AliveObject.enabled"
 msgstr "啟用"
 
-#: models.py:324
+#: models.py:325
 msgid "webframe.models.AliveObject.enabled.helptext"
 msgstr "這項資料是否啟用"
 
-#: models.py:374
+#: models.py:375
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "排序"
 
@@ -263,7 +263,7 @@ msgstr "類型"
 
 #: models.py:619
 msgid "webframe.models.Preference.tipe.helptext"
-msgstr "設定值的類列"
+msgstr "設定值的類列。如果有設定 上載內容，這個設為永遠為: 檔案地址"
 
 #: models.py:620
 msgid "webframe.models.Preference.encrypted"
@@ -375,7 +375,7 @@ msgstr "帳戶"
 
 #: models.py:980
 msgid "webframe.models.Profile.helptext"
-msgstr "這個設定的說明"
+msgstr "這個帳戶的說明"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
