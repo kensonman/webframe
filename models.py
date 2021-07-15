@@ -867,13 +867,12 @@ class AbstractPreference(OrderableValueObject):
       if tipe==AbstractPreference.TYPE_EMAIL: 
          self.regex='^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
       self._tipe=int(tipe)
-      logger.warning('_tipe set to {0}'.format(int(tipe)))
+
    @property
    def tipeName(self):
       return AbstractPreference.TYPES[self.tipe][1]
 
    def save(self, *args, **kwargs):
-      logger.warning('AbstractPreference.save() invited')
       if self._value:
          # If self.encrypted turn on, but not encrypted: e.g.: Read the preference from database, then change the encrypted value
          if self.encrypted and not self._value.startswith(ENCRYPTED_PREFIX):
@@ -883,10 +882,7 @@ class AbstractPreference(OrderableValueObject):
             self._value=decrypt(self._value)
       if self.lang: self.lang=self.lang.lower()
       if self.filecontent: 
-         logger.warning('Forcing the tipe to be TYPE_FILEPATH')
          self._tipe=AbstractPreference.TYPE_FILEPATH
-      else:
-         logger.warning('The filecontent is empty')
       super().save(*args, **kwargs)
 
 class Preference(AbstractPreference):
