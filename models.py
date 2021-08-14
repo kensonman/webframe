@@ -550,11 +550,10 @@ class AbstractPreference(OrderableValueObject):
       )
       abstract         = True
       unique_together  = [
-         ['name', 'lang'],
+         ['parent', 'name', 'lang',],
       ]
       constraints      = [
-         models.UniqueConstraint(fields=('name', 'owner'), name='unique_name_and_owner'),
-         #models.UniqueConstraint(fields=('name', ), condition=models.Q(owner=None), name='unique_name'),
+         models.UniqueConstraint(fields=('name', 'owner', 'parent'), name='unique_name_owner_n_parent'),
       ]
 
    def pref_path(self, filename):

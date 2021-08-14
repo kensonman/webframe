@@ -20,10 +20,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='preference',
-            constraint=models.UniqueConstraint(fields=('name', 'owner'), name='unique_name_and_owner'),
+            constraint=models.UniqueConstraint(fields=('name', 'owner', 'parent'), name='unique_name_and_owner'),
         ),
         migrations.AddConstraint(
             model_name='preference',
-            constraint=models.UniqueConstraint(condition=models.Q(owner=None), fields=('name',), name='unique_name'),
+            constraint=models.UniqueConstraint(condition=models.Q(owner=None), fields=('name', 'parent'), name='unique_name'),
         ),
     ]
