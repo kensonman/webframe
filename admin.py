@@ -96,9 +96,9 @@ class PreferenceAdmin(SummernoteModelAdmin):
 
 @admin.register(Numbering)
 class NumberingAdmin(admin.ModelAdmin):
-   fields=('id', 'name', 'pattern', 'next_val', 'step_val', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
-   list_display=('id', 'name', 'pattern', 'effDate', 'expDate', 'enabled', 'lmb', 'lmd')
+   fields=('id', 'name', 'desc', 'pattern', 'next_val', 'step_val', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'name', 'desc', 'pattern', 'effDate', 'expDate', 'enabled', 'lmb', 'lmd')
    list_filter=('enabled', )
    readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
    ordering=('name', )
-   search_fields=('name', 'pattern',)
+   search_fields=('name', 'pattern', 'desc')

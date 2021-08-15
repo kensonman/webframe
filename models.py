@@ -930,10 +930,11 @@ class Numbering(ValueObject, AliveObject):
          ('exec_numbering', 'Can execute the number'),
       ]
 
-   name                    = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.name'), help_text=_('webframe.models.Numbering.name.helptxt')) 
+   name                    = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.name'), help_text=_('webframe.models.Numbering.name.helptxt'), unique=True) 
    pattern                 = models.CharField(max_length=100, default='{next}', verbose_name=_('webframe.models.Numbering.pattern'), help_text=_('webframe.models.Numbering.pattern.helptxt'))
    next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
    step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
+   desc                    = models.CharField(max_length=1024, null=True, blank=True, verbose_name=_('webframe.models.Numbering.desc'), help_text=_('webframe.models.Numbering.desc.helptext'))
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
@@ -972,13 +973,26 @@ class Numbering(ValueObject, AliveObject):
       self.save()
       return val
       
+   @deprecated(deprecated_in="v2.10", removed_in="v3.0", current_version="v2.10", details="This cannot support the variables; Use Numbering.get_next(name, **kwargs) instead.")
    @property
    def next(self):
       '''
+      <p><strong>Deprecated</strong> since v2.10. Use Numbering.get_next(name, **kwargs) instead.</p>
       The quick way to get the next value of this numbering. It will auto inject the "now" variable.
       If you want required more options, use @getNextVal(**kwargs) instead.
       '''
       return self.getNextVal(user=get_current_user())
+
+   @staticmethod
+   def get_next(name, **kwargs):
+      num=None
+      try:
+         num=Numbering.objects.get(id=name)
+      except Numbering.DoesNotExist:
+         num=Number.objects.get(name=name)
+      if not 'user' in kwargs:
+         kwargs['user']=get_current_user()
+      return num.getNextVal(**kwargs)
 
 class Profile(ValueObject, AliveObject):
    class Meta(object):

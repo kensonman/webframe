@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 13:50+0000\n"
+"POT-Creation-Date: 2021-08-15 17:02+0800\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -31,19 +31,19 @@ msgstr "Is Child"
 msgid "webframe.models.Preference.expand"
 msgstr "Expand"
 
-#: admin.py:72 models.py:597 templates/webframe/preference.html:138
+#: admin.py:72 models.py:600 templates/webframe/preference.html:138
 #: templates/webframe/preference.html:139
 #: templates/webframe/prefsDoc-each.html:51
 msgid "webframe.models.Preference.value"
 msgstr "Value"
 
-#: admin.py:78 models.py:611 templates/webframe/preference.html:125
+#: admin.py:78 models.py:614 templates/webframe/preference.html:125
 #: templates/webframe/preference.html:126
 #: templates/webframe/prefsDoc-each.html:31
 msgid "webframe.models.Preference.parent"
 msgstr "Parent"
 
-#: admin.py:82 models.py:621 templates/webframe/prefsDoc-each.html:41
+#: admin.py:82 models.py:624 templates/webframe/prefsDoc-each.html:41
 msgid "webframe.models.Preference.helptext"
 msgstr "Help?"
 
@@ -59,7 +59,7 @@ msgstr ""
 msgid "invalid username or password"
 msgstr "Invalid username or password"
 
-#: models.py:29
+#: models.py:30
 msgid "null"
 msgstr "<i class=\"fas fa-code\"></i>"
 
@@ -155,224 +155,240 @@ msgstr "The enabling status of the object"
 msgid "webframe.models.OrderableValueObject.sequence"
 msgstr "Ordering"
 
-#: models.py:579
+#: models.py:578
 msgid "webframe.models.Preference.TYPE.NONE"
 msgstr "None (Must be empty)"
 
-#: models.py:580
+#: models.py:579
 msgid "webframe.models.Preference.TYPE.INT"
 msgstr "Integer"
 
-#: models.py:581
+#: models.py:580
 msgid "webframe.models.Preference.TYPE.DECIMAL"
 msgstr "Decimal"
 
-#: models.py:582
+#: models.py:581
 msgid "webframe.models.Preference.TYPE.BOOLEAN"
 msgstr "Boolean"
 
-#: models.py:583
+#: models.py:582
 msgid "webframe.models.Preference.TYPE.TEXT"
 msgstr "Text"
 
-#: models.py:584
+#: models.py:583
 msgid "webframe.models.Preference.TYPE.RICHTEXT"
 msgstr "Rich Text (HTML)"
 
-#: models.py:585
+#: models.py:584
 msgid "webframe.models.Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:586
+#: models.py:585
 msgid "webframe.models.Preference.TYPE.EMAIL"
 msgstr "Email"
 
-#: models.py:587
+#: models.py:586
 msgid "webframe.models.Preference.TYPE.DATE"
 msgstr "Date"
 
-#: models.py:588
+#: models.py:587
 msgid "webframe.models.Preference.TYPE.TIME"
 msgstr "Time"
 
-#: models.py:589
+#: models.py:588
 msgid "webframe.models.Preference.TYPE.DATETIME"
 msgstr "Date Time"
 
-#: models.py:590
+#: models.py:589
 msgid "webframe.models.Preference.TYPE.UUIDS"
 msgstr "Comma delimited UUIDs"
 
-#: models.py:591
+#: models.py:590
 msgid "webframe.models.Preference.TYPE.LIST"
 msgstr "Comma, Semicolon or | delimited strigns"
 
-#: models.py:592
+#: models.py:591
 msgid "webframe.models.Preference.TYPE.JSON"
 msgstr "JSON object"
 
-#: models.py:593
+#: models.py:592
 msgid "webframe.models.Preference.TYPE.FILEPATH"
 msgstr "File Resource"
 
-#: models.py:596 templates/webframe/preference.html:134
+#: models.py:599 templates/webframe/preference.html:134
 #: templates/webframe/preference.html:135
 #: templates/webframe/prefsDoc-each.html:5
 msgid "webframe.models.Preference.name"
 msgstr "Name"
 
-#: models.py:596
+#: models.py:599
 msgid "webframe.models.Preference.name.helptext"
 msgstr "The name of the preference"
 
-#: models.py:597
+#: models.py:600
 msgid "webframe.models.Preference.value.helptext"
 msgstr "The value of the perference"
 
-#: models.py:603
+#: models.py:606
 msgid "Pwebframe.models.reference.owner"
 msgstr "Owner"
 
-#: models.py:604
+#: models.py:607
 msgid "webframe.models.Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:612
+#: models.py:615
 msgid "webframe.models.Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:616 templates/webframe/preference.html:142
+#: models.py:619 templates/webframe/preference.html:142
 #: templates/webframe/preference.html:143
 #: templates/webframe/prefsDoc-each.html:7
 #: templates/webframe/prefsDoc-each.html:36
 msgid "webframe.models.Preference.sequence"
 msgstr "Sequence"
 
-#: models.py:617
+#: models.py:620
 msgid "webframe.models.Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:619 templates/webframe/preference.html:111
+#: models.py:622 templates/webframe/preference.html:111
 #: templates/webframe/prefsDoc-each.html:8
 #: templates/webframe/prefsDoc-each.html:26
 msgid "webframe.models.Preference.tipe"
 msgstr "Type"
 
-#: models.py:619
+#: models.py:622
 msgid "webframe.models.Preference.tipe.helptext"
 msgstr ""
 "The type of the preference value. If File Content provided, it will "
 "<strong>always be</strong> File Resource"
 
-#: models.py:620
+#: models.py:623
 msgid "webframe.models.Preference.encrypted"
 msgstr "Encrypted"
 
-#: models.py:620
+#: models.py:623
 msgid "webframe.models.Preference.encrypted.helptxt"
 msgstr "The field should be encrypted b4 save"
 
-#: models.py:621
+#: models.py:624
 msgid "webframe.models.Preference.helptext.helptext"
 msgstr "The help for user admin"
 
-#: models.py:622 templates/webframe/prefsDoc-each.html:46
+#: models.py:625 templates/webframe/prefsDoc-each.html:46
 msgid "webframe.models.Preference.regex"
 msgstr "The regex validation rule"
 
-#: models.py:622
+#: models.py:625
 msgid "webframe.models.Preference.regex.helptext"
 msgstr "This cannot be updated thru admin-tools."
 
-#: models.py:623
+#: models.py:626
 msgid "webframe.models.Preference.lang"
 msgstr "Language"
 
-#: models.py:623
+#: models.py:626
 msgid "webframe.models.Preference.lang.helptext"
 msgstr ""
 "The <a href=\"https://en.wikipedia.org/wiki/"
 "Language_localisation#Language_tags_and_codes\">language code</a> of this "
 "preference. Empty will set the fallback value."
 
-#: models.py:901
+#: models.py:627
+msgid "webframe.models.Preference.filecontent"
+msgstr "Uploaded Content"
+
+#: models.py:627
+msgid "webframe.models.Preference.filecontent.helptext"
+msgstr "The uploaded content. If provided, the value will be overrided."
+
+#: models.py:909
 msgid "webframe.models.AsyncManipulationObject"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:902
+#: models.py:910
 msgid "webframe.models.AsyncManipulationObjects"
 msgstr "Asynchronously Handling Object"
 
-#: models.py:905
+#: models.py:913
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:909
+#: models.py:917
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:914
+#: models.py:922
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
 
-#: models.py:919
+#: models.py:927
 msgid "webframe.models.Numbering"
 msgstr "Numbering"
 
-#: models.py:920
+#: models.py:928
 msgid "webframe.models.Numberings"
 msgstr "Numberings"
 
-#: models.py:925
+#: models.py:933
 msgid "webframe.models.Numbering.name"
 msgstr "Name"
 
-#: models.py:925
+#: models.py:933
 msgid "webframe.models.Numbering.name.helptxt"
 msgstr "The name of the Numbering"
 
-#: models.py:926
+#: models.py:934
 msgid "webframe.models.Numbering.pattern"
 msgstr "Pattern"
 
-#: models.py:926
+#: models.py:934
 msgid "webframe.models.Numbering.pattern.helptxt"
 msgstr "The pattern to generate the number. now, next can be the variable"
 
-#: models.py:927
+#: models.py:935
 msgid "webframe.models.Numbering.next_val"
 msgstr "Next Value"
 
-#: models.py:927
+#: models.py:935
 msgid "webframe.models.Numbering.next_val.helptxt"
 msgstr "The next number that will be generated"
 
-#: models.py:928
+#: models.py:936
 msgid "webframe.models.Numbering.step_val"
 msgstr "Step Value"
 
-#: models.py:928
+#: models.py:936
 msgid "webframe.models.Numbering.step_val.helptxt"
 msgstr "After generation, the step value will be added"
 
-#: models.py:939
+#: models.py:937
+msgid "webframe.models.Numbering.desc"
+msgstr "Desc"
+
+#: models.py:937
+msgid "webframe.models.Numbering.desc.helptext"
+msgstr "The description of the Numbering"
+
+#: models.py:948
 msgid "webframe.models.Numbering.new"
 msgstr "New Numbering"
 
-#: models.py:940
+#: models.py:949
 #, python-brace-format
 msgid "webframe.models.Numbering[{name}::{next_val}]"
 msgstr "Numbering[{name}::{next_val}]"
 
-#: models.py:977 models.py:980
+#: models.py:999 models.py:1002
 msgid "webframe.models.Profile"
 msgstr "Profile"
 
-#: models.py:978
+#: models.py:1000
 msgid "webframe.models.Profiles"
 msgstr "Profiles"
 
-#: models.py:980
+#: models.py:1002
 msgid "webframe.models.Profile.helptext"
 msgstr "The profile settings"
 
@@ -381,14 +397,22 @@ msgstr "The profile settings"
 msgid "errorpage.503.title"
 msgstr "Service Currently Unavailable"
 
+#: templates/webframe/errorpages/503.html:3 templates/webframe/meta.html:3
+msgid "appName"
+msgstr ""
+
 #: templates/webframe/errorpages/503.html:8
 msgid "errorpage.503.description"
-msgstr "The server is currently under mainteance. We will be back soon. Sorry for any inconveniences."
+msgstr ""
+"The server is currently under mainteance. We will be back soon. Sorry for "
+"any inconveniences."
 
-#: templates/webframe/errorpages/503.html:10
+#: templates/webframe/errorpages/503.html:11
 #, python-format
 msgid "errorpage.503.inquiry:<a href=\"mailto:%(enquiry)s\">%(enquiry)s</a>."
-msgstr "Should you have any inquiry, please feel free to contacts us via <a href=\"mailto:%(enquiry)s\">%(enquiry)s</a>."
+msgstr ""
+"Should you have any inquiry, please feel free to contacts us via <a href="
+"\"mailto:%(enquiry)s\">%(enquiry)s</a>."
 
 #: templates/webframe/footer.html:3
 #, python-format
