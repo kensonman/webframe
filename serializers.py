@@ -4,9 +4,11 @@
 # Date:     2021-08-15 12:32
 # Desc:     Provide the basic model serialization for webframe
 from django.db.models import Model
+from django.db.models.query import QuerySet
 from django.core.paginator import Paginator, Page
 from rest_framework import serializers
 from rest_framework.pagination import PageNumberPagination
+from webframe.models import Preference
 
 class ValueObjectSerializer(serializers.Serializer):
    id             =serializers.UUIDField()
@@ -61,11 +63,11 @@ class APIResult(object):
    '''
    def __init__(self, *args, **kwargs):
       if len(args)!=1: raise ValueError('No result supplied.')
-      self.result=args[0]
-      self.query=kwargs.get('query', None)
-      self.meta=dict()
       req=kwargs['request'].GET if 'request' in kwargs else dict()
       user=kwargs['request'].user if 'request' in kwargs else None
+      self.result=args[0]
+      self.query=kwargs.get('query', {param: req[param] for param in req if not param.startswith('_')})
+      self.meta=dict()
       target=kwargs.get('target', None if len(self.result)<1 else type(self.result[0]))
 
       # Massage the result
@@ -75,7 +77,7 @@ class APIResult(object):
             self.result=self.result.get_page(int(ctx.get('page', '1')))
          else:
             self.result=self.result.get_page(1)
-      elif isinstance(self.result, list) or isinstance(self.result, tuple):
+      elif isinstance(self.result, list) or isinstance(self.result, tuple) or isinstance(self.result, QuerySet):
          pageSize=Preference.objects.pref('page_size', user=user, defval=20)
          pageSize=req.get(kwargs.get('pageSizeParam', 'page_size'), pageSize)
          self.result=Paginator(self.result, pageSize)
