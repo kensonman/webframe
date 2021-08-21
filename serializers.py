@@ -9,6 +9,9 @@ from django.core.paginator import Paginator, Page
 from rest_framework import serializers
 from rest_framework.pagination import PageNumberPagination
 from webframe.models import Preference
+import logging
+
+logger=logging.getLogger('webframe.serializers')
 
 class ValueObjectSerializer(serializers.Serializer):
    id             =serializers.UUIDField()
@@ -62,49 +65,60 @@ class APIResult(object):
       return Response(APIResult(data, target=Model.__class__.__name__, query={}, request=req))
    '''
    def __init__(self, *args, **kwargs):
-      if len(args)!=1: raise ValueError('No result supplied.')
-      req=kwargs['request'].GET if 'request' in kwargs else dict()
-      user=kwargs['request'].user if 'request' in kwargs else None
-      self.result=args[0]
-      self.query=kwargs.get('query', {param: req[param] for param in req if not param.startswith('_')})
-      self.meta=dict()
-      target=kwargs.get('target', None if len(self.result)<1 else type(self.result[0]))
-
-      # Massage the result
-      if isinstance(self.result, Paginator):
-         #Convert the Pagainator to page
-         if 'request' in ctx:
-            self.result=self.result.get_page(int(ctx.get('page', '1')))
-         else:
-            self.result=self.result.get_page(1)
-      elif isinstance(self.result, list) or isinstance(self.result, tuple) or isinstance(self.result, QuerySet):
-         pageSize=Preference.objects.pref('page_size', user=user, defval=20)
-         pageSize=req.get(kwargs.get('pageSizeParam', 'page_size'), pageSize)
-         self.result=Paginator(self.result, pageSize)
-         self.result=self.result.get_page(int(req.get(kwargs.get('pageParam', 'page'), 1)))
-
-      #Populate the meta
-      if isinstance(self.result, Page):
-         self.meta['count']=self.result.end_index()
-         self.meta['total']=self.result.paginator.count
-         self.meta['page']=self.result.number
-         self.meta['size']=self.result.paginator.per_page
-         self.meta['pages']=[p for p in self.result.paginator.page_range]
+      if 'msg' in kwargs: 
+         self.msg=kwargs['msg']
+         if 'error' in kwargs: self.error=kwargs['error']
+         if 'detail' in kwargs: self.detail=kwargs['detail']
       else:
-         self.meta['count']=0
-         self.meta['total']=0
-         self.meta['page']=1
-         self.meta['size']=0
-         self.meta['pages']=list()
-      self.meta['target']=target.__name__
-      self.result=self.result.object_list
-      if 'serializer' in kwargs:
-         self.result=[kwargs['serializer'](d, many=False).data for d in self.result]
+         if len(args)!=1: raise ValueError('No result supplied.')
+         req=kwargs['request'].GET if 'request' in kwargs else dict()
+         user=kwargs['request'].user if 'request' in kwargs else None
+         self.result=args[0]
+         self.query=kwargs.get('query', {param: req[param] for param in req if not param.startswith('_')})
+         self.meta=dict()
+         target=kwargs.get('target', None if len(self.result)<1 else type(self.result[0]))
+
+         # Massage the result
+         if isinstance(self.result, Paginator):
+            #Convert the Pagainator to page
+            if 'request' in ctx:
+               self.result=self.result.get_page(int(ctx.get('page', '1')))
+            else:
+               self.result=self.result.get_page(1)
+         elif isinstance(self.result, list) or isinstance(self.result, tuple) or isinstance(self.result, QuerySet):
+            pageSize=Preference.objects.pref('page_size', user=user, defval=20)
+            pageSize=req.get(kwargs.get('pageSizeParam', 'page_size'), pageSize)
+            self.result=Paginator(self.result, pageSize)
+            self.result=self.result.get_page(int(req.get(kwargs.get('pageParam', 'page'), 1)))
+
+         #Populate the meta
+         if isinstance(self.result, Page):
+            self.meta['count']=self.result.end_index()
+            self.meta['total']=self.result.paginator.count
+            self.meta['page']=self.result.number
+            self.meta['size']=self.result.paginator.per_page
+            self.meta['pages']=[p for p in self.result.paginator.page_range]
+         else:
+            self.meta['count']=0
+            self.meta['total']=0
+            self.meta['page']=1
+            self.meta['size']=0
+            self.meta['pages']=list()
+         if target is not None: self.meta['target']=target.__name__
+         self.result=self.result.object_list
+         if 'serializer' in kwargs:
+            self.result=[kwargs['serializer'](d, many=False).data for d in self.result]
 
    @property
    def data(self):
-      return {
-         'query': self.query,
-         'meta': self.meta,
-         'result': self.result
-      }
+      if hasattr(self, 'msg'):
+         rst={ 'msg': self.msg, }
+         if hasattr(self, 'error'): rst['error']=self.error
+         if hasattr(self, 'detail'): rst['detail']=self.detail
+         return rst
+      else:
+         return {
+            'query': self.query,
+            'meta': self.meta,
+            'result': self.result
+         }

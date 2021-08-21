@@ -451,3 +451,17 @@ def cache(key, defval, **kwargs):
       rst=defval(kwargs) if hasattr(defval, '__call__') else defval
       cache.set(key, rst, timeout)
    return rst
+
+def getRange(value, convert=lambda v:str(v)):
+   try:
+      pos=value.index(':')
+   except ValueError:
+      pos=-1
+   if pos<0:   # exact value
+      rst=(convert(value), convert(value))
+   if pos==0: # only minimize boundary
+      rst=(None, convert(value[1:]))
+   if pos==len(value)-1: #only maximize boundary
+      rst=(convert(value[:-1]), None)
+   rst=(convert(value[0:pos]), convert(value[pos+1:]))
+   return rst
