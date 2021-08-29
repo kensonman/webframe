@@ -13,12 +13,16 @@ from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django.views import View
-from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
+from django_tables2 import RequestConfig
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 from .decorators import is_enabled
 from .functions import getBool, isUUID, LogMessage as lm
 from .models import *
+from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
 import hashlib, logging
 
@@ -371,3 +375,54 @@ def prefsDoc(req):
    params['TYPES']=Preference.TYPES
    params['now']=getTime('now')
    return render(req, 'webframe/prefsDoc.html', params)
+
+def help_menuitem(req):
+   params=dict()
+   return render(req, 'webframe/menuitem.html', params)
+
+@login_required
+@permission_required('webframe.add_menuitem')
+def help_create_menuitem(req):
+   if req.method=='POST':
+      root=MenuItem(name='/', label=_('appName'))
+      root.save()
+      lm=MenuItem(name='/Left', parent=root)
+      lm.save()
+      lroot=MenuItem(name='/Left/Root', label='Goto Root', parent=lm)
+      lroot.save()
+      rm=MenuItem(name='/Right', parent=root, props={'class': 'navbar-right'})
+      rm.save()
+      hi=MenuItem(name='/Right/Hi', parent=rm, label='Hi, {{username}}')
+      hi.save()
+      logout=MenuItem(name='/Right/Hi/Logout', parent=hi, label='Logout', props={'href': reverse('webframe:logout')})
+      logout.save()
+      return redirect('admin:webframe_menuitem_changelist')
+   return HttpResponseForbidden()
+
+class WhoAmIView(APIView):
+   authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+   
+   def get(self, req, format=None):
+      return Response(UserSerializer(req.user).data)
+
+class HeaderView(APIView):
+   authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+      
+   def get(self, req, format=None):
+      logger.warn(req.method)
+      qs=MenuItem.objects.filter(parent__isnull=True)
+      if req.user.is_authenticated:
+         qs=qs.filter(models.Q(user__isnull=True)|models.Q(user=req.user)).order_by('-user')
+      else:
+         qs=qs.filter(user__isnull=True).order_by('-user')
+      if len(qs)>0:
+         return Response(MenuItemSerializer(qs[0]).data)
+      else:
+         rst=MenuItem(name='Default NavBar', label=_('appName'))
+         lhs=MenuItem(parent=rst)
+         hlp=MenuItem(parent=lhs, label='MenuItem Help', props={'href': reverse('webframe:help-menuitem')})
+         lhs.childs=[hlp,]
+         rst.childs=[lhs,]
+         return Response(MenuItemSerializer(rst).data)

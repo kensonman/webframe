@@ -11,6 +11,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.safestring import mark_safe
 from django.urls import reverse
+from django_json_widget.widgets import JSONEditorWidget
 from django_summernote.admin import SummernoteModelAdmin
 from .models import *
 from webframe.templatetags.trim import trim
@@ -102,3 +103,16 @@ class NumberingAdmin(admin.ModelAdmin):
    readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
    ordering=('name', )
    search_fields=('name', 'pattern', 'desc')
+
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+   fields=('id', 'user', 'parent', 'sequence', 'name', 'label', 'icon', 'image', 'effDate', 'expDate', 'onclick', 'mousein', 'mouseout', 'props', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   formfield_overrides = {
+      models.JSONField: {'widget': JSONEditorWidget},
+   }
+
+   list_display=('name', 'user', 'parent', 'sequence', 'label', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_filter=('enabled', )
+   readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
+   ordering=('user', '-parent', 'sequence', 'name')
+   search_fields=('id', 'parent__id', 'user__username', 'label', 'parent__label', 'name')

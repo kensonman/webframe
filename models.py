@@ -1018,3 +1018,82 @@ class EnhancedDjangoJSONEncoder(DjangoJSONEncoder):
       if isinstance(obj, uuid.UUID):
          return str(obj)
       return super().default(obj)
+
+class MenuItem(OrderableValueObject, AliveObject):
+   class Meta(object):
+      verbose_name          = _('webframe.models.MenuItem')
+      verbose_name_plural   = _('webframe.models.MenuItems')
+      unique_together       = [
+         ['parent', 'user', 'name']
+      ]
+
+   def __getImageLocation__(self, filename):
+      filename=os.path.basename(filename)
+      return 'menuitems/{0}'.format(filename)
+
+   name                    = models.CharField(max_length=256, default='/', verbose_name=_('webframe.models.MenuItem.name'), help_text=_('webframe.models.MenuItem.name.helptext'))
+   user                    = models.ForeignKey(get_user_model(), blank=True, null=True, verbose_name=_('webframe.models.MenuItem.user'), help_text=_('webframe.models.MenuItem.user.helptext'), on_delete=models.CASCADE)
+   parent                  = models.ForeignKey('self', blank=True, null=True, verbose_name=_('webframe.models.MenuItem.parent'), help_text=_('webframe.models.MenuItem.parent.helptext'), on_delete=models.CASCADE)
+
+   icon                    = models.CharField(blank=True, null=True, max_length=128, verbose_name=_('webframe.models.MenuItem.icon'), help_text=_('webframe.models.MenuItem.icon.help')) #The icon base on FrontAwesome
+   label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('webframe.models.MenuItem.label'), help_text=_('webframe.models.MenuItem.label.helptext'))
+   image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('webframe.models.MenuItem.image'), help_text=_('webframe.models.MenuItem.image.helptext'))
+   props                   = models.JSONField(blank=True, null=True, default=lambda: {'title':None,'target':None,'class':None,'style':None}, verbose_name=_('webframe.models.MenuItem.props'), help_text=_('webframe.models.MenuItem.props.help')) #HTML properties
+   onclick                 = models.TextField(max_length=2048, 
+      default='window.location.href=this.data.props.href?this.data.props.href:"#";', 
+      verbose_name=_('webframe.models.MenuItem.onclick'), 
+      help_text=_('webframe.models.MenuItem.onclick.helptext')
+   )
+   mousein                 = models.TextField(max_length=1024, 
+      blank=True, null=True,
+      verbose_name=_('webframe.models.MenuItem.mousein'), 
+      help_text=_('webframe.models.MenuItem.mousein.helptext')
+   )
+   mouseout                 = models.TextField(max_length=1024, 
+      blank=True, null=True,
+      verbose_name=_('webframe.models.MenuItem.mouseout'), 
+      help_text=_('webframe.models.MenuItem.mouseout.helptext')
+   )
+
+   def __str__(self):
+      return '{0}:{1}@{2}'.format(
+         _('webframe.models.MenuItem'),
+         self.name,
+         self.user if self.user else 'Anonymous',
+      )
+
+   @property
+   def childs(self):
+      if hasattr(self, '_childs'): #for sometime, the default menuitem when no menuitem provided, user will setup the in-memory menuitem
+         return getattr(self, '_childs')
+
+      return MenuItem.objects.filter(parent=self).order_by('sequence', 'name')
+   @childs.setter
+   def childs(self, val):
+      setattr(self, '_childs', val)
+
+   def __get_ordered_list__(self):
+      '''
+      Get the ordered list. Returns None to disable the re-ordering feature when saving
+      '''
+      return MenuItem.objects.filter(parent=self.parent).order_by('sequence', 'name')
+
+   def clone4(self, user, **kwargs):
+      '''
+      Clone the current menuitem for specified user.
+
+      Usage:
+         user=User.objects.get(id=1) #The target user
+         mi=MenuItem.objects.filter(parent__isnull=True).order_by('-user')[0] #The target root menu-item
+         target=mi.clone4(user) #The target has been saved into database
+         print('The new id of menuitem is {0}'.format(target.id))
+      '''
+      target=MenuItem(name=self.name, user=user, parent=kwargs.get('parent', None), icon=self.icon, label=self.label, image=self.image, props=self.props, onclick=self.onclick, mousein=self.mousein, mouseout=self.mouseout)
+      target.save()
+      childs=[]
+      for c in self.childs:
+         kw=dict(kwargs)
+         kw['parent']=target
+         childs.append(c.clone4(user, **kw))
+      target.childs=c
+      return target
