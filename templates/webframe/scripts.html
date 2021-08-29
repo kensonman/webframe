@@ -29,16 +29,20 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 
 
 
-<link rel="stylesheet" href="{%static 'css/bootstrap-treeview.min.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/bootstrap-treeview.min.css'%}"/>
+
+
+
+
 
 
 
 {%comment "EndSyncLineNumber"%}{%endcomment%}
-<link rel="stylesheet" href="{%static 'css/messages.css'%}"/>
-<link rel="stylesheet" href="{%static 'css/basic.css'%}"/>
-<link rel="stylesheet" href="{%static 'css/bootstrap4-switches.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/messages.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/basic.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/bootstrap4-switches.css'%}"/>
 {%block themes%}
-   {%static 'css/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
+   {%static 'css/webframe/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
 	<link rel="stylesheet" href="{{THEME}}?"/> <!-- File changing frequencely, force to reload -->
 	<style type="text/css">
    /*Pref:STYLES*/

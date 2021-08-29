@@ -1,4 +1,4 @@
-{%load static%}
+{%load static pref%}
 {%comment "SyncLineNumber"%}
 The line number is aligned with "./scripts.html". You can view it by belows commands:
 
@@ -14,8 +14,8 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.1.2/build/js/tempusdominus-bootstrap-4.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js"></script>
-<script type="text/javascript" src="{%static 'js/jqueryvalidation.date.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/jqueryvalidation.regex.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/jqueryvalidation.date.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/jqueryvalidation.regex.js'%}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-form@4.2.2/dist/jquery.form.min.js"></script>
@@ -29,19 +29,23 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeahead.js@0.11.1/dist/typeahead.bundle.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeahead.js@0.11.1/dist/bloodhound.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
-<script type="text/javascript" src="{%static 'js/bootstrap-treeview.min.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/bootstrap-treeview.min.js'%}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+{%conf 'DISABLE_VUEJS' defval=False as disabledVueJs%}{%if not disabledVueJs%}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-loader@15.9.8/lib/index.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-template-compiler@2.6.14/browser.min.js"></script>
+{%endif%}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
 {%comment "EndSyncLineNumber"%}{%endcomment%}
 
-<script type="text/javascript" src="{%static 'js/jquery.actionlink.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/jquery.dropdown.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/jquery.fileupload.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/jquery.animate.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/pydatefmt.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/numformat.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/getQueryParams.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/jquery.actionlink.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/jquery.dropdown.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/jquery.fileupload.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/jquery.animate.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/pydatefmt.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/numformat.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/webframe/getQueryParams.js'%}"></script>
 <script type="text/javascript" src="{% url 'webframe:js' %}"></script>
 <script type="text/javascript"><!--
 //2019-10-11 13:51 by Kenson: Fixing the DateTimePicker for Font Awesome 5
@@ -73,6 +77,7 @@ Array.prototype.remove = function() {
     return this;
 };
 //END
+
 $(document).ready(function(){
    console.log('{{VERSION|default:"beta or VERSION is not ready; Add webframe.providers.absolute_path into context_processors"}}');
    $('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
