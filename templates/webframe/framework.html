@@ -6,6 +6,7 @@
    <meta charset="utf-8"/>
    {%block meta%}{%include TMPL_META|default:'webframe/meta.html'%}{%endblock%}
    <title>{%block title%}{{wf_title|default:'NoTitle'}}{%endblock%}</title>
+   {%block favicon%}<!--favicon block-->{%include TMPL_FAVICON|default:'webframe/favicon.html'%}{%endblock%}
 
    {%block scripts%}{%include TMPL_SCRIPTS%}{%block scripts-blk%}{%endblock%}{%endblock%}
    {%block head-blk%}{%endblock%}
