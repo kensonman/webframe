@@ -21,5 +21,7 @@ urlpatterns=[
 
    re_path(r'^prefsDoc/?$', views.prefsDoc, name='prefs-doc'),                      #It can be disabled in WF-PREFS_DOC, required vgallery.view_preference
 
+   re_path(r'headers/?$', views.HeaderView.as_view(), name='headers'),
+
    re_path('jsi18n/', JavaScriptCatalog.as_view(domain='django', packages=['webframe',]), name='js'),
 ] 

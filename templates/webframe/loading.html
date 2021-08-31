@@ -31,12 +31,8 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="{%static 'js/webframe/bootstrap-treeview.min.js'%}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
-{%conf 'DISABLE_VUEJS' defval=False as disabledVueJs%}{%if not disabledVueJs%}
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-loader@15.9.8/lib/index.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue-template-compiler@2.6.14/browser.min.js"></script>
-{%endif%}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+
 {%comment "EndSyncLineNumber"%}{%endcomment%}
 
 <script type="text/javascript" src="{%static 'js/webframe/jquery.actionlink.js'%}"></script>

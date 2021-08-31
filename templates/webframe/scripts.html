@@ -31,12 +31,7 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 
 <link rel="stylesheet" href="{%static 'css/webframe/bootstrap-treeview.min.css'%}"/>
 
-
-
-
-
-
-
+<script type="text/javascript" src="https://unpkg.com/http-vue-loader"></script>
 {%comment "EndSyncLineNumber"%}{%endcomment%}
 <link rel="stylesheet" href="{%static 'css/webframe/messages.css'%}"/>
 <link rel="stylesheet" href="{%static 'css/webframe/basic.css'%}"/>
@@ -55,6 +50,8 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 
 <!-- Loading the jQuery before everything -->
 <script type="text/javascript"><!--
+const STATIC_ROOT='{%conf "STATIC_URL"%}';
+const DEBUG='{%conf "DEBUG" defval="False"%}'.toLowerCase()=='true';
 String.prototype.limit=function( length, replacement='...' ){
    if(this.length<=length)return this;
    return this.substring(0, length)+replacement;

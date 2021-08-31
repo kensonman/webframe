@@ -1018,3 +1018,68 @@ class EnhancedDjangoJSONEncoder(DjangoJSONEncoder):
       if isinstance(obj, uuid.UUID):
          return str(obj)
       return super().default(obj)
+
+class MenuItem(OrderableValueObject, AliveObject):
+   class Meta(object):
+      verbose_name          = _('webframe.models.MenuItem')
+      verbose_name_plural   = _('webframe.models.MenuItems')
+
+   def __getImageLocation__(self, filename):
+      filename=os.path.basename(filename)
+      return 'menuitems/{0}'.format(filename)
+
+   AUTH_BOTH               = 0
+   AUTH_AUTHENTICATED      = 1
+   AUTH_NOT_AUTHENTICATED  = 2
+   AUTHS                   =  (
+      (AUTH_BOTH, _('webframe.models.MenuItem.auth.both')),
+      (AUTH_AUTHENTICATED, _('webframe.models.MenuItem.auth.authenticated')),
+      (AUTH_NOT_AUTHENTICATED, _('webframe.models.MenuItem.auth.notAuthenticated')),
+   )
+
+   auth                    = models.IntegerField(choices=AUTHS, default=AUTH_BOTH, verbose_name=_('webframe.models.MenuItem.auth'), help_text=_('webframe.models.MenuItem.auth.helptext'))
+   name                    = models.CharField(max_length=256, default='MainMenu', verbose_name=_('webframe.models.MenuItem.name'), help_text=_('webframe.models.MenuItem.name.helptext'))
+   user                    = models.ForeignKey(get_user_model(), blank=True, null=True, verbose_name=_('webframe.models.MenuItem.user'), help_text=_('webframe.models.MenuItem.user.helptext'), on_delete=models.CASCADE)
+   parent                  = models.ForeignKey('self', blank=True, null=True, verbose_name=_('webframe.models.MenuItem.parent'), help_text=_('webframe.models.MenuItem.parent.helptext'), on_delete=models.CASCADE)
+
+   icon                    = models.CharField(blank=True, null=True, max_length=128, verbose_name=_('webframe.models.MenuItem.icon'), help_text=_('webframe.models.MenuItem.icon.help')) #The icon base on FrontAwesome
+   label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('webframe.models.MenuItem.label'), help_text=_('webframe.models.MenuItem.label.helptext'))
+   image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('webframe.models.MenuItem.image'), help_text=_('webframe.models.MenuItem.image.helptext'))
+   props                   = models.JSONField(blank=True, null=True, default={'title':None,'target':None,'class':None,'style':None}, verbose_name=_('webframe.models.MenuItem.props'), help_text=_('webframe.models.MenuItem.props.help')) #HTML properties
+   tmpl                    = models.TextField(max_length=2048, 
+      default='<li class="nav-item {class}" id="{id}"><a class="nav-link" target="{target}" href="{href}" title="{title}"><i class="fas {icon}"></i> {label}</a><ul class="nav">{childs}</ul></li>', 
+      verbose_name=_('webframe.models.MenuItem.tmpl'), 
+      help_text=_('webframe.models.MenuItem.tmpl.helptext')
+   )
+
+   def __str__(self):
+      return '{0}:{1}@{2}'.format(
+         _('webframe.models.MenuItem'),
+         self.name,
+         self.user if self.user else 'Anonymous',
+      )
+
+   @property
+   def childs(self):
+      return  MenuItem.objects.filter(parent=self).order_by('sequence', 'name')
+
+   @property
+   def html(self):
+      d=dict()
+      if self.props: d=d|self.props
+      d['id']=self.id
+      d['name']=self.name
+      d['user']=self.user
+      d['username']=self.user.username if self.user else None
+      d['parent']=self.parent
+      d['icon']=self.icon
+      d['label']=self.label
+      d['image']=self.image
+      d['effDate']=self.effDate
+      d['expDate']=self.expDate
+      d['enabled']=self.enabled
+      d['sequence']=self.sequence
+      d['childs']=' '.join([c.html for c in self.childs])
+      rst=self.tmpl.format(**d)
+      logger.info(rst)
+      return rst

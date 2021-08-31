@@ -8,48 +8,35 @@ from django.db.models.query import QuerySet
 from django.core.paginator import Paginator, Page
 from rest_framework import serializers
 from rest_framework.pagination import PageNumberPagination
-from webframe.models import Preference
+from webframe.models import Preference, MenuItem
 import logging
 
 logger=logging.getLogger('webframe.serializers')
 
-class ValueObjectSerializer(serializers.Serializer):
-   id             =serializers.UUIDField()
-   lmd            =serializers.DateTimeField()
-   lmb            =serializers.CharField(source='lmb.username', allow_null=True)
-   cd             =serializers.DateTimeField()
-   cb             =serializers.CharField(source='cb.username', allow_null=True)
+class PreferenceSerializer(serializers.ModelSerializer):
+   class Meta(object):
+      model       = Preference
+      fields      = ['id', 
+         'name', 'value', 'owner', 'parent', 'tipe', 'encrypted', 'helptext',  'regex', 'lang', 'filecontent',
+         'sequence', 
+         'cb', 'cd', 'lmb', 'lmd',
+      ]
 
-class AliveObjectSerializer(serializers.Serializer):
-   effDate        =serializers.DateTimeField()
-   expDate        =serializers.DateTimeField(allow_null=True)
-   enabled        =serializers.BooleanField()
+class RecursiveField(serializers.Serializer):
+   def to_representation(self, value):
+      serializer = self.parent.parent.__class__(value, context=self.context)
+      return serializer.data
 
-class AliveValueObjectSerializer(ValueObjectSerializer):
-   effDate        =serializers.DateTimeField()
-   expDate        =serializers.DateTimeField(allow_null=True)
-   enabled        =serializers.BooleanField()
+class MenuItemSerializer(serializers.ModelSerializer):
+   class Meta(object):
+      model       = MenuItem 
+      fields      = ['id', 
+         'auth', 'name', 'user', 'username', 'parent', 'icon', 'label', 'image', 'props', 'tmpl', 
+         'cb', 'cd', 'lmb', 'lmd', 'childs',
+      ]
 
-class OrderableValueObjectSerializer(ValueObjectSerializer):
-   sequence       =serializers.FloatField()
-
-class OrderableAliveValueObjectSerializer(ValueObjectSerializer):
-   effDate        =serializers.DateTimeField()
-   expDate        =serializers.DateTimeField(allow_null=True)
-   enabled        =serializers.BooleanField()
-   sequence       =serializers.FloatField()
-
-class PreferenceSerializer(OrderableValueObjectSerializer):
-   name           =serializers.CharField()
-   value          =serializers.CharField(allow_null=True)
-   owner          =serializers.CharField(source='owner.username', allow_null=True)
-   parent         =serializers.UUIDField(allow_null=True)
-   tipe           =serializers.IntegerField()
-   encrypted      =serializers.BooleanField()
-   helptext       =serializers.CharField(allow_null=True)
-   regex          =serializers.CharField()
-   lang           =serializers.CharField(allow_null=True)
-   filecontent    =serializers.FileField(allow_null=True)
+   username       = serializers.SlugRelatedField(many=False, read_only=True, slug_field='username', source='user')
+   childs         = RecursiveField(many=True)
 
 class APIResult(object):
    '''

@@ -13,12 +13,16 @@ from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django.views import View
-from django_tables2 import RequestConfig
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext
 from django.urls import reverse
+from django_tables2 import RequestConfig
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
 from .decorators import is_enabled
 from .functions import getBool, isUUID, LogMessage as lm
 from .models import *
+from .serializers import APIResult, MenuItemSerializer
 from .tables import *
 import hashlib, logging
 
@@ -371,3 +375,15 @@ def prefsDoc(req):
    params['TYPES']=Preference.TYPES
    params['now']=getTime('now')
    return render(req, 'webframe/prefsDoc.html', params)
+
+class HeaderView(APIView):
+   def get_queryset(self):
+      return MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_NOT_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH))
+      
+   def get(self, req, format=None):
+      if req.user.is_authenticated:
+         qs=MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH)).filter(models.Q(user=req.user)|models.Q(user__isnull=True))
+      else:
+         qs=MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_NOT_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH))
+      qs=qs.filter(parent__isnull=True).order_by('sequence')
+      return Response(MenuItemSerializer(self.get_queryset(), many=True).data)

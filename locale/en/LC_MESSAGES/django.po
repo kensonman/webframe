@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-15 17:02+0800\n"
+"POT-Creation-Date: 2021-08-27 19:07+0800\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -15,35 +15,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:22
+#: admin.py:23
 msgid "webframe.models.Preference.childParentFilter"
 msgstr "Parent/Child"
 
-#: admin.py:27
+#: admin.py:28
 msgid "webframe.models.Preference.childParentFilter.parent"
 msgstr "Is Parent"
 
-#: admin.py:28
+#: admin.py:29
 msgid "webframe.models.Preference.childParentFilter.child"
 msgstr "Is Child"
 
-#: admin.py:50
+#: admin.py:51
 msgid "webframe.models.Preference.expand"
 msgstr "Expand"
 
-#: admin.py:72 models.py:600 templates/webframe/preference.html:138
+#: admin.py:73 models.py:600 templates/webframe/preference.html:138
 #: templates/webframe/preference.html:139
 #: templates/webframe/prefsDoc-each.html:51
 msgid "webframe.models.Preference.value"
 msgstr "Value"
 
-#: admin.py:78 models.py:614 templates/webframe/preference.html:125
+#: admin.py:79 models.py:614 templates/webframe/preference.html:125
 #: templates/webframe/preference.html:126
 #: templates/webframe/prefsDoc-each.html:31
 msgid "webframe.models.Preference.parent"
 msgstr "Parent"
 
-#: admin.py:82 models.py:624 templates/webframe/prefsDoc-each.html:41
+#: admin.py:83 models.py:624 templates/webframe/prefsDoc-each.html:41
 msgid "webframe.models.Preference.helptext"
 msgstr "Help?"
 
@@ -391,6 +391,98 @@ msgstr "Profiles"
 #: models.py:1002
 msgid "webframe.models.Profile.helptext"
 msgstr "The profile settings"
+
+#: models.py:1024 models.py:1057
+msgid "webframe.models.MenuItem"
+msgstr "Menu Item"
+
+#: models.py:1025
+msgid "webframe.models.MenuItems"
+msgstr "Menu Items"
+
+#: models.py:1035
+msgid "webframe.models.MenuItem.auth.both"
+msgstr "Both"
+
+#: models.py:1036
+msgid "webframe.models.MenuItem.auth.authenticated"
+msgstr "Only Authenticated User"
+
+#: models.py:1037
+msgid "webframe.models.MenuItem.auth.notAuthenticated"
+msgstr "Only Un-authenticated User"
+
+#: models.py:1040
+msgid "webframe.models.MenuItem.auth"
+msgstr "Authentication Status"
+
+#: models.py:1040
+msgid "webframe.models.MenuItem.auth.helptext"
+msgstr "Describe this menu-item required authenticated status"
+
+#: models.py:1041
+msgid "webframe.models.MenuItem.name"
+msgstr "Name"
+
+#: models.py:1041
+msgid "webframe.models.MenuItem.name.helptext"
+msgstr "Default is \"MainMenu\"; Used to declare the menu"
+
+#: models.py:1042
+msgid "webframe.models.MenuItem.user"
+msgstr "Owner"
+
+#: models.py:1042
+msgid "webframe.models.MenuItem.user.helptext"
+msgstr "The menu owner, None for anonymous"
+
+#: models.py:1043
+msgid "webframe.models.MenuItem.parent"
+msgstr "Parent"
+
+#: models.py:1043
+msgid "webframe.models.MenuItem.parent.helptext"
+msgstr "The parent of this menu-item"
+
+#: models.py:1045
+msgid "webframe.models.MenuItem.icon"
+msgstr "Icon"
+
+#: models.py:1045
+msgid "webframe.models.MenuItem.icon.help"
+msgstr "The icon of this menu-item; FrontAwesome name,  e.g: fa-cogs"
+
+#: models.py:1046
+msgid "webframe.models.MenuItem.label"
+msgstr "Label"
+
+#: models.py:1046
+msgid "webframe.models.MenuItem.label.helptext"
+msgstr "The label of the menu-item"
+
+#: models.py:1047
+msgid "webframe.models.MenuItem.image"
+msgstr "Image"
+
+#: models.py:1047
+msgid "webframe.models.MenuItem.image.helptext"
+msgstr "Image of the  menu-item"
+
+#: models.py:1048
+msgid "webframe.models.MenuItem.props"
+msgstr "Properties"
+
+#: models.py:1048
+msgid "webframe.models.MenuItem.props.help"
+msgstr "The HTML properties will be applied to menu-item"
+
+#: models.py:1051
+msgid "webframe.models.MenuItem.tmpl"
+msgstr "Template"
+
+#: models.py:1052
+msgid "webframe.models.MenuItem.tmpl.helptext"
+msgstr "The template to constructs the menu-item"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
@@ -742,25 +834,28 @@ msgstr "Save User"
 msgid "User.actions.new"
 msgstr "New User"
 
-#: views.py:29
+#: views.py:33
 msgid "django.contrib.auth.backends.ModelBackend"
 msgstr "Standard Username and Password"
 
-#: views.py:30
+#: views.py:34
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP/Active Directory"
 
-#: views.py:92
+#: views.py:96
 msgid "Invalid username or password"
 msgstr "Invalid username or password"
 
-#: views.py:159
+#: views.py:163
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:327
+#: views.py:331
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
+
+#~ msgid "webframe.models.MenuItem.attrs.help"
+#~ msgstr "The attributes for internal usage"
 
 #~ msgid "webframe.models.Preference.TYPE.FILE"
 #~ msgstr "File Content"
