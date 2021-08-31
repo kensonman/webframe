@@ -377,8 +377,8 @@ def prefsDoc(req):
    return render(req, 'webframe/prefsDoc.html', params)
 
 class HeaderView(APIView):
-   def get_queryset(self):
-      return MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_NOT_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH))
+   authentication_classes = [authentication.TokenAuthentication]
+   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
       
    def get(self, req, format=None):
       if req.user.is_authenticated:
@@ -386,4 +386,5 @@ class HeaderView(APIView):
       else:
          qs=MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_NOT_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH))
       qs=qs.filter(parent__isnull=True).order_by('sequence')
-      return Response(MenuItemSerializer(self.get_queryset(), many=True).data)
+      logger.debug(qs.query)
+      return Response(MenuItemSerializer(qs, many=True).data)
