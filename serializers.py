@@ -3,6 +3,7 @@
 # Author:   Kenson Man <kenson@kensonidv.hk>
 # Date:     2021-08-15 12:32
 # Desc:     Provide the basic model serialization for webframe
+from django.contrib.auth.models import User, Group
 from django.db.models import Model
 from django.db.models.query import QuerySet
 from django.core.paginator import Paginator, Page
@@ -31,12 +32,19 @@ class MenuItemSerializer(serializers.ModelSerializer):
    class Meta(object):
       model       = MenuItem 
       fields      = ['id', 
-         'auth', 'name', 'user', 'username', 'parent', 'icon', 'label', 'image', 'props', 'tmpl', 
+         'auth', 'name', 'user', 'username', 'parent', 'icon', 'label', 'image', 'props', 'onclick', 'mousein', 'mouseout',
          'cb', 'cd', 'lmb', 'lmd', 'childs',
       ]
 
    username       = serializers.SlugRelatedField(many=False, read_only=True, slug_field='username', source='user')
    childs         = RecursiveField(many=True)
+
+class UserSerializer(serializers.ModelSerializer):
+   class Meta(object):
+      model       = User
+      fields      = ['id',
+         'username', 'first_name', 'last_name', 'email', 
+      ]
 
 class APIResult(object):
    '''

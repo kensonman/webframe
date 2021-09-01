@@ -32,6 +32,7 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 <link rel="stylesheet" href="{%static 'css/webframe/bootstrap-treeview.min.css'%}"/>
 
 <script type="text/javascript" src="https://unpkg.com/http-vue-loader"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
 {%comment "EndSyncLineNumber"%}{%endcomment%}
 <link rel="stylesheet" href="{%static 'css/webframe/messages.css'%}"/>
 <link rel="stylesheet" href="{%static 'css/webframe/basic.css'%}"/>
@@ -52,6 +53,7 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 <script type="text/javascript"><!--
 const STATIC_ROOT='{%conf "STATIC_URL"%}';
 const DEBUG='{%conf "DEBUG" defval="False"%}'.toLowerCase()=='true';
+var   USER=null; axios.get('{%url "webframe:whoami"%}').then(rep=>{console.debug(rep.data); USER=rep.data; window.localStorage.setItem('USER', JSON.stringify(rep.data)); });
 String.prototype.limit=function( length, replacement='...' ){
    if(this.length<=length)return this;
    return this.substring(0, length)+replacement;

@@ -22,7 +22,7 @@ from rest_framework import authentication, permissions
 from .decorators import is_enabled
 from .functions import getBool, isUUID, LogMessage as lm
 from .models import *
-from .serializers import APIResult, MenuItemSerializer
+from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
 import hashlib, logging
 
@@ -376,15 +376,43 @@ def prefsDoc(req):
    params['now']=getTime('now')
    return render(req, 'webframe/prefsDoc.html', params)
 
+def help_menuitem(req):
+   params=dict()
+   return render(req, 'webframe/menuitem.html', params)
+
+@login_required
+@permission_required('webframe.add_menuitem')
+def help_create_menuitem(req):
+   if req.method=='POST':
+      root=MenuItem(name='/', label=_('appName'))
+      root.save()
+      lm=MenuItem(name='/Left', parent=root)
+      lm.save()
+      rm=MenuItem(name='/Right', parent=root, props={'class': 'navbar-right'})
+      rm.save()
+      return redirect('admin:webframe_menuitem_changelist')
+   return HttpResponseForbidden()
+
+class WhoAmIView(APIView):
+   authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+   
+   def get(self, req, format=None):
+      return Response(UserSerializer(req.user).data)
+
 class HeaderView(APIView):
-   authentication_classes = [authentication.TokenAuthentication]
+   authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
       
    def get(self, req, format=None):
+      logger.warn(req.method)
       if req.user.is_authenticated:
          qs=MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH)).filter(models.Q(user=req.user)|models.Q(user__isnull=True))
       else:
          qs=MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_NOT_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH))
       qs=qs.filter(parent__isnull=True).order_by('sequence')
-      logger.debug(qs.query)
-      return Response(MenuItemSerializer(qs, many=True).data)
+      if len(qs)>0:
+         return Response(MenuItemSerializer(qs[0]).data)
+      else:
+         rst=MenuItem(name='Default NavBar', label=_('appName'), props={'href': reverse('webframe:help-menuitem')})
+         return Response(MenuItemSerializer(rst).data)
