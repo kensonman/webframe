@@ -1,0 +1,20 @@
+{%extends TMPL_BASE%}{%load i18n%}
+
+{%block title%}Help - {%trans 'appName'%}{%endblock%}
+
+{%block content%}
+<div class="jumbotron jumbotron-subject">
+   <h1>No MenuItem created for this app</h1>
+
+   <hr/>
+
+   <p>Your didn't provide the MenuItem. Please create it at <a href="{%url 'admin:webframe_menuitem_add'%}">admin-tools</a>.</p>
+
+   <form action="{%url 'webframe:help-create-menuitem'%}" method="POST">
+      {%csrf_token%}
+
+      <p>If you would like me to create a sample for your, just click the belows button:<br/><button class="btn btn-warning" type="submit">Create Sample MenuItem</button></p>
+      
+   </form>
+</div>
+{%endblock%}

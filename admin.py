@@ -106,13 +106,13 @@ class NumberingAdmin(admin.ModelAdmin):
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-   fields=('id', 'user', 'parent', 'sequence', 'auth', 'name', 'label', 'icon', 'effDate', 'expDate', 'tmpl', 'props', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   fields=('id', 'user', 'parent', 'sequence', 'auth', 'name', 'label', 'icon', 'image', 'effDate', 'expDate', 'onclick', 'mousein', 'mouseout', 'props', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
    formfield_overrides = {
       models.JSONField: {'widget': JSONEditorWidget},
    }
 
-   list_display=('id', 'user', 'parent', 'sequence', 'name', 'label', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('name', 'user', 'parent', 'sequence', 'label', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
    list_filter=('enabled', )
    readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
-   ordering=('user', 'parent', 'sequence', 'name')
-   search_fields=('user__username', 'label', 'parent__label', 'name')
+   ordering=('user', '-parent', 'sequence', 'name')
+   search_fields=('id', 'parent__id', 'user__username', 'label', 'parent__label', 'name')

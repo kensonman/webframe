@@ -388,8 +388,14 @@ def help_create_menuitem(req):
       root.save()
       lm=MenuItem(name='/Left', parent=root)
       lm.save()
+      lroot=MenuItem(name='/Left/Root', label='Goto Root', parent=lm)
+      lroot.save()
       rm=MenuItem(name='/Right', parent=root, props={'class': 'navbar-right'})
       rm.save()
+      hi=MenuItem(name='/Right/Hi', parent=rm, label='Hi, {{username}}')
+      hi.save()
+      logout=MenuItem(name='/Right/Hi/Logout', parent=hi, label='Logout', props={'href': reverse('webframe:logout')})
+      logout.save()
       return redirect('admin:webframe_menuitem_changelist')
    return HttpResponseForbidden()
 
@@ -414,5 +420,9 @@ class HeaderView(APIView):
       if len(qs)>0:
          return Response(MenuItemSerializer(qs[0]).data)
       else:
-         rst=MenuItem(name='Default NavBar', label=_('appName'), props={'href': reverse('webframe:help-menuitem')})
+         rst=MenuItem(name='Default NavBar', label=_('appName'))
+         lhs=MenuItem(parent=rst)
+         hlp=MenuItem(parent=lhs, label='MenuItem Help', props={'href': reverse('webframe:help-menuitem')})
+         lhs.childs=[hlp,]
+         rst.childs=[lhs,]
          return Response(MenuItemSerializer(rst).data)

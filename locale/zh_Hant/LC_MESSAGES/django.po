@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 19:07+0800\n"
+"POT-Creation-Date: 2021-09-01 22:55+0800\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -393,7 +393,7 @@ msgstr "帳戶"
 msgid "webframe.models.Profile.helptext"
 msgstr "這個帳戶的說明"
 
-#: models.py:1024 models.py:1057
+#: models.py:1024 models.py:1070
 msgid "webframe.models.MenuItem"
 msgstr "菜單"
 
@@ -401,89 +401,105 @@ msgstr "菜單"
 msgid "webframe.models.MenuItems"
 msgstr "菜單"
 
-#: models.py:1035
+#: models.py:1038
 msgid "webframe.models.MenuItem.auth.both"
 msgstr "兩者皆可"
 
-#: models.py:1036
+#: models.py:1039
 msgid "webframe.models.MenuItem.auth.authenticated"
 msgstr "只有已登入的使用者"
 
-#: models.py:1037
+#: models.py:1040
 msgid "webframe.models.MenuItem.auth.notAuthenticated"
 msgstr "只有未登入的使用者"
 
-#: models.py:1040
+#: models.py:1043
 msgid "webframe.models.MenuItem.auth"
 msgstr "登入狀態"
 
-#: models.py:1040
+#: models.py:1043
 msgid "webframe.models.MenuItem.auth.helptext"
 msgstr "這個菜單是否需要以登入的使用者"
 
-#: models.py:1041
+#: models.py:1044
 msgid "webframe.models.MenuItem.name"
 msgstr "名稱"
 
-#: models.py:1041
+#: models.py:1044
 msgid "webframe.models.MenuItem.name.helptext"
 msgstr "預設為 MainMenu， 用於設定該菜單的使用情景"
 
-#: models.py:1042
+#: models.py:1045
 msgid "webframe.models.MenuItem.user"
 msgstr "擁有者"
 
-#: models.py:1042
+#: models.py:1045
 msgid "webframe.models.MenuItem.user.helptext"
 msgstr "擁有者"
 
-#: models.py:1043
+#: models.py:1046
 msgid "webframe.models.MenuItem.parent"
 msgstr "上層菜單"
 
-#: models.py:1043
+#: models.py:1046
 msgid "webframe.models.MenuItem.parent.helptext"
 msgstr "上層菜單的 ID"
 
-#: models.py:1045
+#: models.py:1048
 msgid "webframe.models.MenuItem.icon"
 msgstr "圖示"
 
-#: models.py:1045
+#: models.py:1048
 msgid "webframe.models.MenuItem.icon.help"
 msgstr "FrontAwesome 的圖示名稱, 例如: fa-gos"
 
-#: models.py:1046
+#: models.py:1049
 msgid "webframe.models.MenuItem.label"
 msgstr "顯示文字"
 
-#: models.py:1046
+#: models.py:1049
 msgid "webframe.models.MenuItem.label.helptext"
 msgstr "顯示文字"
 
-#: models.py:1047
+#: models.py:1050
 msgid "webframe.models.MenuItem.image"
 msgstr "顯示圖片"
 
-#: models.py:1047
+#: models.py:1050
 msgid "webframe.models.MenuItem.image.helptext"
 msgstr "顯示圖片"
 
-#: models.py:1048
+#: models.py:1051
 msgid "webframe.models.MenuItem.props"
 msgstr "屬性"
 
-#: models.py:1048
+#: models.py:1051
 msgid "webframe.models.MenuItem.props.help"
 msgstr "將會附加於 MenuItem"
 
-#: models.py:1051
-msgid "webframe.models.MenuItem.tmpl"
-msgstr "模版"
+#: models.py:1054
+msgid "webframe.models.MenuItem.onclick"
+msgstr "On Click"
 
-#: models.py:1052
-msgid "webframe.models.MenuItem.tmpl.helptext"
-msgstr "用以建構輸出格式"
+#: models.py:1055
+msgid "webframe.models.MenuItem.onclick.helptext"
+msgstr "當使用者點選時執行的腳本"
+
+#: models.py:1059
+msgid "webframe.models.MenuItem.mousein"
+msgstr "Mouse In"
+
+#: models.py:1060
+msgid "webframe.models.MenuItem.mousein.helptext"
+msgstr "當使用者滑鼠進入時報行的腳本"
+
+#: models.py:1064
+msgid "webframe.models.MenuItem.mouseout"
+msgstr "Mouse Out"
+
+#: models.py:1065
+msgid "webframe.models.MenuItem.mouseout.helptext"
+msgstr "當使用者滑鼠離開時報行的腳本"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
@@ -518,11 +534,11 @@ msgstr "版本"
 msgid "render-date"
 msgstr "輸出日期"
 
-#: templates/webframe/framework.html:16
+#: templates/webframe/framework.html:17
 msgid "Javascript is required"
 msgstr "無法正常顯示網頁"
 
-#: templates/webframe/framework.html:17
+#: templates/webframe/framework.html:18
 msgid ""
 "The javascript must be enabled in this site to have the best browsing "
 "experience."
@@ -530,44 +546,13 @@ msgstr ""
 "這個網頁使用了 Javascript 技術, 所以你必需打開瀏灠器的 Javascript 功能以使網"
 "頁能正確顯示."
 
-#: templates/webframe/framework.html:18
+#: templates/webframe/framework.html:19
 msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
 msgstr ""
 "按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</a> "
 "查看如何打開 JavaScript 支援."
-
-#: templates/webframe/header.html:40
-msgid "admin-tools"
-msgstr ""
-
-#: templates/webframe/header.html:41 templates/webframe/user.html:3
-#: templates/webframe/user.html:23 templates/webframe/users.html:3
-#: templates/webframe/users.html:29
-msgid "users"
-msgstr "使用者"
-
-#: templates/webframe/header.html:45 templates/webframe/header.html:55
-#, python-format
-msgid "Hi, %(username)s"
-msgstr "你好，%(username)s"
-
-#: templates/webframe/header.html:49
-msgid "impersonate-stop"
-msgstr "停止扮演"
-
-#: templates/webframe/header.html:52
-msgid "preferences"
-msgstr "個人設定"
-
-#: templates/webframe/header.html:53
-msgid "logout"
-msgstr "登出"
-
-#: templates/webframe/header.html:57 templates/webframe/login.html:78
-msgid "login"
-msgstr "登入"
 
 #: templates/webframe/login.html:3 templates/webframe/login.html:25
 msgid "Login Required"
@@ -614,6 +599,10 @@ msgstr "用戶名稱"
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
+
+#: templates/webframe/login.html:78
+msgid "login"
+msgstr "登入"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -786,6 +775,11 @@ msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 msgid "User.new"
 msgstr "新的用戶"
 
+#: templates/webframe/user.html:3 templates/webframe/user.html:23
+#: templates/webframe/users.html:3 templates/webframe/users.html:29
+msgid "users"
+msgstr "使用者"
+
 #: templates/webframe/user.html:28
 msgid "id"
 msgstr "ID"
@@ -857,6 +851,25 @@ msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消
 #: views.py:331
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
+
+#~ msgid "webframe.models.MenuItem.tmpl"
+#~ msgstr "模版"
+
+#~ msgid "webframe.models.MenuItem.tmpl.helptext"
+#~ msgstr "用以建構輸出格式"
+
+#, python-format
+#~ msgid "Hi, %(username)s"
+#~ msgstr "你好，%(username)s"
+
+#~ msgid "impersonate-stop"
+#~ msgstr "停止扮演"
+
+#~ msgid "preferences"
+#~ msgstr "個人設定"
+
+#~ msgid "logout"
+#~ msgstr "登出"
 
 #~ msgid "webframe.models.MenuItem.attrs.help"
 #~ msgstr "內部使用屬性"
