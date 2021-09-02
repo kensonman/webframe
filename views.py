@@ -412,11 +412,11 @@ class HeaderView(APIView):
       
    def get(self, req, format=None):
       logger.warn(req.method)
+      qs=MenuItem.objects.filter(parent__isnull=True)
       if req.user.is_authenticated:
-         qs=MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH)).filter(models.Q(user=req.user)|models.Q(user__isnull=True))
+         qs=qs.filter(models.Q(user__isnull=True)|models.Q(user=req.user)).order_by('-user')
       else:
-         qs=MenuItem.objects.filter(models.Q(auth=MenuItem.AUTH_NOT_AUTHENTICATED)|models.Q(auth=MenuItem.AUTH_BOTH))
-      qs=qs.filter(parent__isnull=True).order_by('sequence')
+         qs=qs.filter(user__isnull=True).order_by('-user')
       if len(qs)>0:
          return Response(MenuItemSerializer(qs[0]).data)
       else:

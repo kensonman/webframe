@@ -32,7 +32,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
    class Meta(object):
       model       = MenuItem 
       fields      = ['id', 
-         'auth', 'name', 'user', 'username', 'parent', 'icon', 'label', 'image', 'props', 'onclick', 'mousein', 'mouseout',
+         'name', 'user', 'username', 'parent', 'icon', 'label', 'image', 'props', 'onclick', 'mousein', 'mouseout',
          'cb', 'cd', 'lmb', 'lmd', 'childs',
       ]
 

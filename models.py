@@ -1031,16 +1031,6 @@ class MenuItem(OrderableValueObject, AliveObject):
       filename=os.path.basename(filename)
       return 'menuitems/{0}'.format(filename)
 
-   AUTH_BOTH               = 0
-   AUTH_AUTHENTICATED      = 1
-   AUTH_NOT_AUTHENTICATED  = 2
-   AUTHS                   =  (
-      (AUTH_BOTH, _('webframe.models.MenuItem.auth.both')),
-      (AUTH_AUTHENTICATED, _('webframe.models.MenuItem.auth.authenticated')),
-      (AUTH_NOT_AUTHENTICATED, _('webframe.models.MenuItem.auth.notAuthenticated')),
-   )
-
-   auth                    = models.IntegerField(choices=AUTHS, default=AUTH_BOTH, verbose_name=_('webframe.models.MenuItem.auth'), help_text=_('webframe.models.MenuItem.auth.helptext'))
    name                    = models.CharField(max_length=256, default='/', verbose_name=_('webframe.models.MenuItem.name'), help_text=_('webframe.models.MenuItem.name.helptext'))
    user                    = models.ForeignKey(get_user_model(), blank=True, null=True, verbose_name=_('webframe.models.MenuItem.user'), help_text=_('webframe.models.MenuItem.user.helptext'), on_delete=models.CASCADE)
    parent                  = models.ForeignKey('self', blank=True, null=True, verbose_name=_('webframe.models.MenuItem.parent'), help_text=_('webframe.models.MenuItem.parent.helptext'), on_delete=models.CASCADE)
@@ -1074,7 +1064,10 @@ class MenuItem(OrderableValueObject, AliveObject):
 
    @property
    def childs(self):
-      return self._childs if hasattr(self, '_childs')  else MenuItem.objects.filter(parent=self).order_by('sequence', 'name')
+      if hasattr(self, '_childs'): #for sometime, the default menuitem when no menuitem provided, user will setup the in-memory menuitem
+         return getattr(self, '_childs')
+
+      return MenuItem.objects.filter(parent=self).order_by('sequence', 'name')
    @childs.setter
    def childs(self, val):
       setattr(self, '_childs', val)
@@ -1085,23 +1078,22 @@ class MenuItem(OrderableValueObject, AliveObject):
       '''
       return MenuItem.objects.filter(parent=self.parent).order_by('sequence', 'name')
 
-   @property
-   def html(self):
-      d=dict()
-      if self.props: d=d|self.props
-      d['id']=self.id
-      d['name']=self.name
-      d['user']=self.user
-      d['username']=self.user.username if self.user else None
-      d['parent']=self.parent
-      d['icon']=self.icon
-      d['label']=self.label
-      d['image']=self.image
-      d['effDate']=self.effDate
-      d['expDate']=self.expDate
-      d['enabled']=self.enabled
-      d['sequence']=self.sequence
-      d['childs']=' '.join([c.html for c in self.childs])
-      rst=self.tmpl.format(**d)
-      logger.info(rst)
-      return rst
+   def clone4(self, user, **kwargs):
+      '''
+      Clone the current menuitem for specified user.
+
+      Usage:
+         user=User.objects.get(id=1) #The target user
+         mi=MenuItem.objects.filter(parent__isnull=True).order_by('-user')[0] #The target root menu-item
+         target=mi.clone4(user) #The target has been saved into database
+         print('The new id of menuitem is {0}'.format(target.id))
+      '''
+      target=MenuItem(name=self.name, user=user, parent=kwargs.get('parent', None), icon=self.icon, label=self.label, image=self.image, props=self.props, onclick=self.onclick, mousein=self.mousein, mouseout=self.mouseout)
+      target.save()
+      childs=[]
+      for c in self.childs:
+         kw=dict(kwargs)
+         kw['parent']=target
+         childs.append(c.clone4(user, **kw))
+      target.childs=c
+      return target

@@ -9,8 +9,8 @@
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/languages/json.min.js"></script>
 <style type="text/css">
-   .block-code{ }
-   pre.block-code label{ display:block; border:1px solid lightgray; margin:0px; margin-top:1rem;}
+   .block-code{ border: 1px solid lightgray;}
+   pre.block-code label{ display:block; margin:0rem 1rem;}
 </style>
 <script type="text/javascript"><!--
 $(document).ready(function(){
@@ -30,10 +30,47 @@ $(document).ready(function(){
       <li>
          <p>Override the Default Header, the header can be refer to <a href="https://getbootstrap.com/docs/4.6/components/navbar/" target="_blank">Bootstrap Navbar</a>, by cloneing the sample and the configuration:
             <pre class="block-code"><label>BASH</label><code class="language-bash">
-               cp webframe/templates/webframe/header-sample.html myapp/templates/myapp/header.html
+cp webframe/templates/webframe/header-sample.html myapp/templates/myapp/header.html
             </code></pre>
-            <pre class="block-code"><label> Python - settings.py</label><code class="language-python">
-               TMPL_HEADER='myapp/header.html'
+            <pre class="block-code"><label>Python - settings.py</label><code class="language-python">
+TMPL_HEADER='myapp/header.html'
+            </code></pre>
+            <pre class="block-code"><label>HTML - myapp/templates/myapp/header.html</label><code class="language-html">
+<script type="text/javascript"><nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav></script>
             </code></pre>
          </p>
       </li>

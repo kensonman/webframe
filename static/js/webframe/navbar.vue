@@ -1,21 +1,24 @@
 <template>
 <div v-if="loading"><span class="name debug">@{{name}}</span> Loading: {{url}}... <i class="fas fa-spinner fa-pulse"></i></div>
-<nav class="navbar navbar-expand-lg navbar-light bg-light webframe-navbar" v-else>
-   <a class="navbar-brand" :href="data.props.href?data.props.href:'/'" :id="id+'-brand'" @click.prevent="onclick">
-      <i v-if="data.icon" :class="'fas '+data.icon"></i>
-      <label :for="id">{{data.label}}</label>
-      <img v-if="data.image" :src="data.image"/>
-   </a>
+<div v-else>
+   <div v-if="error">{{ error }}</div>
+   <nav class="navbar navbar-expand-lg navbar-light bg-light webframe-navbar" v-else>
+      <a class="navbar-brand" :href="data.props.href?data.props.href:'/'" :id="id+'-brand'" @click.prevent="onclick">
+         <i v-if="data.icon" :class="'fas '+data.icon"></i>
+         <label :for="id">{{data.label}}</label>
+         <img v-if="data.image" :src="data.image"/>
+      </a>
 
-   <button class="navbar-toggler" type="button" data-toggle="collapse" :data-target="'#'+id" :aria-controls="id" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-   </button>
-   <div class="collapse navbar-collapse" :id="id">
-      <ul :class="'navbar-nav mr-auto'+(items.props.class?items.props.class:'')" v-for="items in data.childs" :key="items.id" :id="items.id">
-         <li v-for="item in items.childs" :key="item.id" :class="'nav-item'"><navitem :menuitem="item"></navitem></li>
-      </ul>
-   </div>
-</nav>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" :data-target="'#'+id" :aria-controls="id" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" :id="id">
+         <ul :class="'navbar-nav mr-auto'+(items.props.class?items.props.class:'')" v-for="items in data.childs" :key="items.id" :id="items.id">
+            <li v-for="item in items.childs" :key="item.id" :class="'nav-item'"><navitem :menuitem="item"></navitem></li>
+         </ul>
+      </div>
+   </nav>
+</div>
 </template>
 
 <script>
@@ -36,23 +39,36 @@ module.exports={
          ,loading:true
          ,id: uuidv4()
          ,data:null
+         ,error:null
       }; 
    }
    ,mounted: function(){
       let vm=this;
       console.log('Loading the navbar-items from '+vm.url+'...');
-      axios.get(vm.url).then(rep=>{
-         console.debug(rep);
-         if(rep.status==200){
-            vm.data=rep.data;
-            vm.name=vm.data.name;
-            vm.id=vm.data.id;
-            vm.loading=false; 
-            console.debug('loaded navbar');
-         }else{
-            console.debug('Loading '+rep.status+' error');
-         }
-      });
+      axios
+         .get(vm.url)
+            .then(rep=>{
+               console.debug(rep);
+               if(rep.status==200){
+                  vm.data=rep.data;
+                  vm.name=vm.data.name;
+                  vm.id=vm.data.id;
+                  vm.loading=false; 
+                  console.debug('loaded navbar');
+               }else{
+                  console.debug('Loading '+rep.status+' error');
+               }
+            })
+            .catch(err=>{
+               console.warn('Error when getting menuitem');
+               msg=err.response.data.replaceAll('\n', ' '); //Replace newline char into space for regex
+               msg=msg.match(/<title>.*<\/title>/g)[0]; //Grep the title
+               msg=msg.replace(/(<([^>]+)>)/gi, ''); //Remove the tag
+               console.warn(msg);
+               vm.error=msg;
+               vm.loading=false;
+            })
+      ;
    }
    ,methods: {
       getItems: function(){ return this.items; }
