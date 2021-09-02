@@ -44,17 +44,15 @@ module.exports={
    }
    ,mounted: function(){
       let vm=this;
-      console.log('Loading the navbar-items from '+vm.url+'...');
+      console.debug('Loading the navbar-items from '+vm.url+'...');
       axios
          .get(vm.url)
             .then(rep=>{
-               console.debug(rep);
                if(rep.status==200){
                   vm.data=rep.data;
                   vm.name=vm.data.name;
                   vm.id=vm.data.id;
                   vm.loading=false; 
-                  console.debug('loaded navbar');
                }else{
                   console.debug('Loading '+rep.status+' error');
                }
