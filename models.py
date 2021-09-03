@@ -1038,7 +1038,7 @@ class MenuItem(OrderableValueObject, AliveObject):
    icon                    = models.CharField(blank=True, null=True, max_length=128, verbose_name=_('webframe.models.MenuItem.icon'), help_text=_('webframe.models.MenuItem.icon.help')) #The icon base on FrontAwesome
    label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('webframe.models.MenuItem.label'), help_text=_('webframe.models.MenuItem.label.helptext'))
    image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('webframe.models.MenuItem.image'), help_text=_('webframe.models.MenuItem.image.helptext'))
-   props                   = models.JSONField(blank=True, null=True, default={'title':None,'target':None,'class':None,'style':None}, verbose_name=_('webframe.models.MenuItem.props'), help_text=_('webframe.models.MenuItem.props.help')) #HTML properties
+   props                   = models.JSONField(blank=True, null=True, default=lambda: {'title':None,'target':None,'class':None,'style':None}, verbose_name=_('webframe.models.MenuItem.props'), help_text=_('webframe.models.MenuItem.props.help')) #HTML properties
    onclick                 = models.TextField(max_length=2048, 
       default='window.location.href=this.data.props.href?this.data.props.href:"#";', 
       verbose_name=_('webframe.models.MenuItem.onclick'), 
