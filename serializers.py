@@ -60,7 +60,10 @@ class APIResult(object):
       return Response(APIResult(data, target=Model.__class__.__name__, query={}, request=req))
    '''
    def __init__(self, *args, **kwargs):
-      if 'msg' in kwargs: 
+      if 'result' in kwargs:
+         self.result=kwargs['result']
+         self.detail=kwargs.get('detail', None)
+      elif 'msg' in kwargs: 
          self.msg=kwargs['msg']
          if 'error' in kwargs: self.error=kwargs['error']
          if 'detail' in kwargs: self.detail=kwargs['detail']
@@ -106,7 +109,11 @@ class APIResult(object):
 
    @property
    def data(self):
-      if hasattr(self, 'msg'):
+      if hasattr(self, 'result') and hasattr(self, 'detail'):
+         rst={'result': self.result}
+         if hasattr(self, 'detail'): rst['detail']=self.detail
+         return rst
+      elif hasattr(self, 'msg'):
          rst={ 'msg': self.msg, }
          if hasattr(self, 'error'): rst['error']=self.error
          if hasattr(self, 'detail'): rst['detail']=self.detail
