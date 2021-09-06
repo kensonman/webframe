@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-01 22:55+0800\n"
+"POT-Creation-Date: 2021-09-06 19:12+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -393,7 +393,7 @@ msgstr "帳戶"
 msgid "webframe.models.Profile.helptext"
 msgstr "這個帳戶的說明"
 
-#: models.py:1024 models.py:1070
+#: models.py:1024 models.py:1060
 msgid "webframe.models.MenuItem"
 msgstr "菜單"
 
@@ -401,103 +401,83 @@ msgstr "菜單"
 msgid "webframe.models.MenuItems"
 msgstr "菜單"
 
-#: models.py:1038
-msgid "webframe.models.MenuItem.auth.both"
-msgstr "兩者皆可"
-
-#: models.py:1039
-msgid "webframe.models.MenuItem.auth.authenticated"
-msgstr "只有已登入的使用者"
-
-#: models.py:1040
-msgid "webframe.models.MenuItem.auth.notAuthenticated"
-msgstr "只有未登入的使用者"
-
-#: models.py:1043
-msgid "webframe.models.MenuItem.auth"
-msgstr "登入狀態"
-
-#: models.py:1043
-msgid "webframe.models.MenuItem.auth.helptext"
-msgstr "這個菜單是否需要以登入的使用者"
-
-#: models.py:1044
+#: models.py:1034
 msgid "webframe.models.MenuItem.name"
 msgstr "名稱"
 
-#: models.py:1044
+#: models.py:1034
 msgid "webframe.models.MenuItem.name.helptext"
 msgstr "預設為 MainMenu， 用於設定該菜單的使用情景"
 
-#: models.py:1045
+#: models.py:1035
 msgid "webframe.models.MenuItem.user"
 msgstr "擁有者"
 
-#: models.py:1045
+#: models.py:1035
 msgid "webframe.models.MenuItem.user.helptext"
 msgstr "擁有者"
 
-#: models.py:1046
+#: models.py:1036
 msgid "webframe.models.MenuItem.parent"
 msgstr "上層菜單"
 
-#: models.py:1046
+#: models.py:1036
 msgid "webframe.models.MenuItem.parent.helptext"
 msgstr "上層菜單的 ID"
 
-#: models.py:1048
+#: models.py:1038
 msgid "webframe.models.MenuItem.icon"
 msgstr "圖示"
 
-#: models.py:1048
+#: models.py:1038
 msgid "webframe.models.MenuItem.icon.help"
 msgstr "FrontAwesome 的圖示名稱, 例如: fa-gos"
 
-#: models.py:1049
+#: models.py:1039
 msgid "webframe.models.MenuItem.label"
 msgstr "顯示文字"
 
-#: models.py:1049
+#: models.py:1039
 msgid "webframe.models.MenuItem.label.helptext"
 msgstr "顯示文字"
 
-#: models.py:1050
+#: models.py:1040
 msgid "webframe.models.MenuItem.image"
 msgstr "顯示圖片"
 
-#: models.py:1050
+#: models.py:1040
 msgid "webframe.models.MenuItem.image.helptext"
 msgstr "顯示圖片"
 
-#: models.py:1051
+#: models.py:1041
 msgid "webframe.models.MenuItem.props"
 msgstr "屬性"
 
-#: models.py:1051
+#: models.py:1041
 msgid "webframe.models.MenuItem.props.help"
 msgstr "將會附加於 MenuItem"
 
-#: models.py:1054
+#: models.py:1044
 msgid "webframe.models.MenuItem.onclick"
 msgstr "On Click"
 
-#: models.py:1055
+#: models.py:1045
 msgid "webframe.models.MenuItem.onclick.helptext"
 msgstr "當使用者點選時執行的腳本"
 
-#: models.py:1059
+#: models.py:1049
 msgid "webframe.models.MenuItem.mousein"
 msgstr "Mouse In"
 
-#: models.py:1060
+#: models.py:1050
 msgid "webframe.models.MenuItem.mousein.helptext"
 msgstr "當使用者滑鼠進入時報行的腳本"
 
-#: models.py:1064
+#: models.py:1054
 msgid "webframe.models.MenuItem.mouseout"
 msgstr "Mouse Out"
 
-#: models.py:1065
+#: models.py:1055
 msgid "webframe.models.MenuItem.mouseout.helptext"
 msgstr "當使用者滑鼠離開時報行的腳本"
 
@@ -506,7 +486,9 @@ msgstr "當使用者滑鼠離開時報行的腳本"
 msgid "errorpage.503.title"
 msgstr "系統維護中"
 
-#: templates/webframe/errorpages/503.html:3 templates/webframe/meta.html:3
+#: templates/webframe/errorpages/503.html:3
+#: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
+#: templates/webframe/meta.html:3 views.py:390 views.py:427
 msgid "appName"
 msgstr ""
 
@@ -554,6 +536,38 @@ msgstr ""
 "按 <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">這裏</a> "
 "查看如何打開 JavaScript 支援."
 
+#: templates/webframe/header-sample.html:7
+msgid "health.views.Dashboard"
+msgstr ""
+
+#: templates/webframe/header-sample.html:8
+msgid "health.models.Categories"
+msgstr ""
+
+#: templates/webframe/header-sample.html:21 templates/webframe/user.html:3
+#: templates/webframe/user.html:23 templates/webframe/users.html:3
+#: templates/webframe/users.html:29
+msgid "users"
+msgstr "使用者"
+
+#: templates/webframe/header-sample.html:24
+#: templates/webframe/header-sample.html:30
+#, python-format
+msgid "Hi, %(username)s"
+msgstr "你好，%(username)s"
+
+#: templates/webframe/header-sample.html:27
+msgid "preferences"
+msgstr "個人設定"
+
+#: templates/webframe/header-sample.html:28
+msgid "logout"
+msgstr "登出"
+
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:78
+msgid "login"
+msgstr "登入"
+
 #: templates/webframe/login.html:3 templates/webframe/login.html:25
 msgid "Login Required"
 msgstr "請先登入"
@@ -599,10 +613,6 @@ msgstr "用戶名稱"
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
-
-#: templates/webframe/login.html:78
-msgid "login"
-msgstr "登入"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -775,11 +785,6 @@ msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 msgid "User.new"
 msgstr "新的用戶"
 
-#: templates/webframe/user.html:3 templates/webframe/user.html:23
-#: templates/webframe/users.html:3 templates/webframe/users.html:29
-msgid "users"
-msgstr "使用者"
-
 #: templates/webframe/user.html:28
 msgid "id"
 msgstr "ID"
@@ -840,17 +845,45 @@ msgstr "標準 Username 和 Password"
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP 或 Active Directory 登入"
 
-#: views.py:96
+#: views.py:35
+msgid "nextPage"
+msgstr "下一頁 <i class=\"fas fa-angle-double-right\"></i>"
+
+#: views.py:36
+#, python-format
+msgid "thisPage:%(page)s"
+msgstr "此頁: %(page)s"
+
+#: views.py:37
+msgid "prevPage"
+msgstr "<i class=\"fas fa-angle-double-left\"></i> 下一頁"
+
+#: views.py:99
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:163
+#: views.py:166
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:331
+#: views.py:334
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
+
+#~ msgid "webframe.models.MenuItem.auth.both"
+#~ msgstr "兩者皆可"
+
+#~ msgid "webframe.models.MenuItem.auth.authenticated"
+#~ msgstr "只有已登入的使用者"
+
+#~ msgid "webframe.models.MenuItem.auth.notAuthenticated"
+#~ msgstr "只有未登入的使用者"
+
+#~ msgid "webframe.models.MenuItem.auth"
+#~ msgstr "登入狀態"
+
+#~ msgid "webframe.models.MenuItem.auth.helptext"
+#~ msgstr "這個菜單是否需要以登入的使用者"
 
 #~ msgid "webframe.models.MenuItem.tmpl"
 #~ msgstr "模版"
@@ -858,18 +891,8 @@ msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！
 #~ msgid "webframe.models.MenuItem.tmpl.helptext"
 #~ msgstr "用以建構輸出格式"
 
-#, python-format
-#~ msgid "Hi, %(username)s"
-#~ msgstr "你好，%(username)s"
-
 #~ msgid "impersonate-stop"
 #~ msgstr "停止扮演"
-
-#~ msgid "preferences"
-#~ msgstr "個人設定"
-
-#~ msgid "logout"
-#~ msgstr "登出"
 
 #~ msgid "webframe.models.MenuItem.attrs.help"
 #~ msgstr "內部使用屬性"

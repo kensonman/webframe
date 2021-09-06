@@ -85,7 +85,9 @@ class APIResult(object):
                self.result=self.result.get_page(1)
          elif isinstance(self.result, list) or isinstance(self.result, tuple) or isinstance(self.result, QuerySet):
             pageSize=Preference.objects.pref('page_size', user=user, defval=20)
+            logger.warning(req)
             pageSize=req.get(kwargs.get('pageSizeParam', 'page_size'), pageSize)
+            logger.warning('PageSize: {0}'.format(pageSize))
             self.result=Paginator(self.result, pageSize)
             self.result=self.result.get_page(int(req.get(kwargs.get('pageParam', 'page'), 1)))
 
@@ -96,12 +98,20 @@ class APIResult(object):
             self.meta['page']=self.result.number
             self.meta['size']=self.result.paginator.per_page
             self.meta['pages']=[p for p in self.result.paginator.page_range]
+            self.meta['hasNext']=self.result.number < len(self.result.paginator.page_range)
+            self.meta['hasPrev']=self.result.number>1
+            self.meta['nextPage']=self.result.number+1 if self.meta['hasNext'] else self.result.number
+            self.meta['prevPage']=self.result.number-1 if self.meta['hasPrev'] else self.result.number
          else:
             self.meta['count']=0
             self.meta['total']=0
             self.meta['page']=1
             self.meta['size']=0
             self.meta['pages']=list()
+            self.meta['hasNext']=False
+            self.meta['hasPrev']=False
+            self.meta['nextPage']=1
+            self.meta['prevPage']=1
          if target is not None: self.meta['target']=target.__name__
          self.result=self.result.object_list
          if 'serializer' in kwargs:

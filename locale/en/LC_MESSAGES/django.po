@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-01 22:55+0800\n"
+"POT-Creation-Date: 2021-09-06 19:12+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -392,7 +392,7 @@ msgstr "Profiles"
 msgid "webframe.models.Profile.helptext"
 msgstr "The profile settings"
 
-#: models.py:1024 models.py:1070
+#: models.py:1024 models.py:1060
 msgid "webframe.models.MenuItem"
 msgstr "Menu Item"
 
@@ -400,103 +400,83 @@ msgstr "Menu Item"
 msgid "webframe.models.MenuItems"
 msgstr "Menu Items"
 
-#: models.py:1038
-msgid "webframe.models.MenuItem.auth.both"
-msgstr "Both"
-
-#: models.py:1039
-msgid "webframe.models.MenuItem.auth.authenticated"
-msgstr "Only Authenticated User"
-
-#: models.py:1040
-msgid "webframe.models.MenuItem.auth.notAuthenticated"
-msgstr "Only Un-authenticated User"
-
-#: models.py:1043
-msgid "webframe.models.MenuItem.auth"
-msgstr "Authentication Status"
-
-#: models.py:1043
-msgid "webframe.models.MenuItem.auth.helptext"
-msgstr "Describe this menu-item required authenticated status"
-
-#: models.py:1044
+#: models.py:1034
 msgid "webframe.models.MenuItem.name"
 msgstr "Name"
 
-#: models.py:1044
+#: models.py:1034
 msgid "webframe.models.MenuItem.name.helptext"
 msgstr "Default is \"MainMenu\"; Used to declare the menu"
 
-#: models.py:1045
+#: models.py:1035
 msgid "webframe.models.MenuItem.user"
 msgstr "Owner"
 
-#: models.py:1045
+#: models.py:1035
 msgid "webframe.models.MenuItem.user.helptext"
 msgstr "The menu owner, None for anonymous"
 
-#: models.py:1046
+#: models.py:1036
 msgid "webframe.models.MenuItem.parent"
 msgstr "Parent"
 
-#: models.py:1046
+#: models.py:1036
 msgid "webframe.models.MenuItem.parent.helptext"
 msgstr "The parent of this menu-item"
 
-#: models.py:1048
+#: models.py:1038
 msgid "webframe.models.MenuItem.icon"
 msgstr "Icon"
 
-#: models.py:1048
+#: models.py:1038
 msgid "webframe.models.MenuItem.icon.help"
 msgstr "The icon of this menu-item; FrontAwesome name,  e.g: fa-cogs"
 
-#: models.py:1049
+#: models.py:1039
 msgid "webframe.models.MenuItem.label"
 msgstr "Label"
 
-#: models.py:1049
+#: models.py:1039
 msgid "webframe.models.MenuItem.label.helptext"
 msgstr "The label of the menu-item"
 
-#: models.py:1050
+#: models.py:1040
 msgid "webframe.models.MenuItem.image"
 msgstr "Image"
 
-#: models.py:1050
+#: models.py:1040
 msgid "webframe.models.MenuItem.image.helptext"
 msgstr "Image of the  menu-item"
 
-#: models.py:1051
+#: models.py:1041
 msgid "webframe.models.MenuItem.props"
 msgstr "Properties"
 
-#: models.py:1051
+#: models.py:1041
 msgid "webframe.models.MenuItem.props.help"
 msgstr "The HTML properties will be applied to menu-item"
 
-#: models.py:1054
+#: models.py:1044
 msgid "webframe.models.MenuItem.onclick"
 msgstr "OnClick scripts"
 
-#: models.py:1055
+#: models.py:1045
 msgid "webframe.models.MenuItem.onclick.helptext"
 msgstr "The scripts that will executed when user clicked"
 
-#: models.py:1059
+#: models.py:1049
 msgid "webframe.models.MenuItem.mousein"
 msgstr "Mouse In"
 
-#: models.py:1060
+#: models.py:1050
 msgid "webframe.models.MenuItem.mousein.helptext"
 msgstr "The scripts that will executed when user mouse-in"
 
-#: models.py:1064
+#: models.py:1054
 msgid "webframe.models.MenuItem.mouseout"
 msgstr "Mouse Out"
 
-#: models.py:1065
+#: models.py:1055
 msgid "webframe.models.MenuItem.mouseout.helptext"
 msgstr "The scripts that will executed when user mouse-out"
 
@@ -505,7 +485,9 @@ msgstr "The scripts that will executed when user mouse-out"
 msgid "errorpage.503.title"
 msgstr "Service Currently Unavailable"
 
-#: templates/webframe/errorpages/503.html:3 templates/webframe/meta.html:3
+#: templates/webframe/errorpages/503.html:3
+#: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
+#: templates/webframe/meta.html:3 views.py:390 views.py:427
 msgid "appName"
 msgstr ""
 
@@ -550,6 +532,38 @@ msgid ""
 "Click <a href=\"http://www.enable-javascript.com/\" target=\"_blank\">here</"
 "a> to see how to enable the javascript in your browser."
 msgstr ""
+
+#: templates/webframe/header-sample.html:7
+msgid "health.views.Dashboard"
+msgstr ""
+
+#: templates/webframe/header-sample.html:8
+msgid "health.models.Categories"
+msgstr ""
+
+#: templates/webframe/header-sample.html:21 templates/webframe/user.html:3
+#: templates/webframe/user.html:23 templates/webframe/users.html:3
+#: templates/webframe/users.html:29
+msgid "users"
+msgstr "Users"
+
+#: templates/webframe/header-sample.html:24
+#: templates/webframe/header-sample.html:30
+#, python-format
+msgid "Hi, %(username)s"
+msgstr "Hi, %(username)s"
+
+#: templates/webframe/header-sample.html:27
+msgid "preferences"
+msgstr "Preference"
+
+#: templates/webframe/header-sample.html:28
+msgid "logout"
+msgstr "Logout"
+
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:78
+msgid "login"
+msgstr "Login"
 
 #: templates/webframe/login.html:3 templates/webframe/login.html:25
 msgid "Login Required"
@@ -596,10 +610,6 @@ msgstr "Username"
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "Password"
-
-#: templates/webframe/login.html:78
-msgid "login"
-msgstr "Login"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -771,11 +781,6 @@ msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 msgid "User.new"
 msgstr "Add User"
 
-#: templates/webframe/user.html:3 templates/webframe/user.html:23
-#: templates/webframe/users.html:3 templates/webframe/users.html:29
-msgid "users"
-msgstr "Users"
-
 #: templates/webframe/user.html:28
 msgid "id"
 msgstr "ID"
@@ -836,17 +841,45 @@ msgstr "Standard Username and Password"
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP/Active Directory"
 
-#: views.py:96
+#: views.py:35
+msgid "nextPage"
+msgstr "Next <i class=\"fas fa-angle-double-right\"></i>"
+
+#: views.py:36
+#, python-format
+msgid "thisPage:%(page)s"
+msgstr "Page: %(page)s"
+
+#: views.py:37
+msgid "prevPage"
+msgstr "<i class=\"fas fa-angle-double-left\"></i> Prev"
+
+#: views.py:99
 msgid "Invalid username or password"
 msgstr "Invalid username or password"
 
-#: views.py:163
+#: views.py:166
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:331
+#: views.py:334
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
+
+#~ msgid "webframe.models.MenuItem.auth.both"
+#~ msgstr "Both"
+
+#~ msgid "webframe.models.MenuItem.auth.authenticated"
+#~ msgstr "Only Authenticated User"
+
+#~ msgid "webframe.models.MenuItem.auth.notAuthenticated"
+#~ msgstr "Only Un-authenticated User"
+
+#~ msgid "webframe.models.MenuItem.auth"
+#~ msgstr "Authentication Status"
+
+#~ msgid "webframe.models.MenuItem.auth.helptext"
+#~ msgstr "Describe this menu-item required authenticated status"
 
 #~ msgid "webframe.models.MenuItem.tmpl"
 #~ msgstr "Template"
@@ -857,18 +890,8 @@ msgstr "Are you user to delete this preference? This action can not be un-do."
 #~ msgid "admin-tools"
 #~ msgstr "Admin-Tools"
 
-#, python-format
-#~ msgid "Hi, %(username)s"
-#~ msgstr "Hi, %(username)s"
-
 #~ msgid "impersonate-stop"
 #~ msgstr "Stop impersonating"
-
-#~ msgid "preferences"
-#~ msgstr "Preference"
-
-#~ msgid "logout"
-#~ msgstr "Logout"
 
 #~ msgid "webframe.models.MenuItem.attrs.help"
 #~ msgstr "The attributes for internal usage"

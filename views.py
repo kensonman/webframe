@@ -32,6 +32,9 @@ logger=logging.getLogger('webframe.views')
 #Make sure the translation
 _('django.contrib.auth.backends.ModelBackend')
 _('django_auth_ldap.backend.LDAPBackend')
+_('nextPage')
+_('thisPage:%(page)s')
+_('prevPage')
 
 class Login( View ):
    def __loadDefault__(self, req):

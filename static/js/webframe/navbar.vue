@@ -72,7 +72,6 @@ module.exports={
       getItems: function(){ return this.items; }
       ,onclick: function(evt){
          console.debug('onclick@navbar');
-         console.debug(this.data.onclick);
          eval(this.data.onclick);
       }
       ,mousein: function(evt){ if(this.data.mousein && this.data.mousein.length>0) eval(this.data.mousein); }
