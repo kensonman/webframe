@@ -417,10 +417,11 @@ class HeaderView(APIView):
          qs=qs.filter(models.Q(user__isnull=True)|models.Q(user=req.user)).order_by('-user')
       else:
          qs=qs.filter(user__isnull=True).order_by('-user')
+      qs=MenuItem.filter(qs, req.user)
       if len(qs)>0:
          return Response(MenuItemSerializer(qs[0]).data)
       else:
-         rst=MenuItem(name='Default NavBar', label=_('appName'))
+         rst=MenuItem(name='Generated NavBar', label=_('appName'))
          lhs=MenuItem(parent=rst)
          hlp=MenuItem(parent=lhs, label='MenuItem Help', props={'href': reverse('webframe:help-menuitem')})
          lhs.childs=[hlp,]

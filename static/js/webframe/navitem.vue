@@ -1,8 +1,8 @@
 <template>
-<span v-if="data.childs.length>0" class="webframe-navitem">
+<span v-if="data.childs.length>0" class="webframe-navitem" :id="data.id">
    <a class="nav-link dropdown-toggle" href="#" :id="data.id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i v-if="data.icon" :class="'fas '+data.icon"></i> 
-      <span v-if="data.label">{{ data.label }}</span>
+      <span v-if="data.label">{{ data.label|fmt }}</span>
       <img v-if="data.image" :src="data.image"/>
    </a>
    <div class="dropdown-menu" :arial-labelledby="data.id">
@@ -12,10 +12,10 @@
       </span>
    </div>
 </span>
-<span v-else class="webframe-navitem">
+<span v-else class="webframe-navitem" :id="data.id">
    <a :class="data.props.class?data.props.class:'nav-link'" :href="data.props.href?data.props.href:'#'" :target="data.props.target?data.props.target:'_self'" @click.prevent="onclick" @mouseenter="mousein" @mouseleave="mouseout">
       <i v-if="data.icon" :class="'fas '+data.icon"></i> 
-      <span v-if="data.label">{{ data.label }}</span>
+      <span v-if="data.label">{{ data.label|fmt }}</span>
       <img v-if="data.image" :src="data.image"/>
    </a>
 </span>
@@ -38,7 +38,7 @@ module.exports={
             eval(this.data.onclick);
          }
       }
-      ,mousein: function(evt){ if(this.data.mousein && this.data.mousein.length>0) eval(this.data.mousein); else this.$parent.mousein(evt); }
+      ,mousein:  function(evt){ if(this.data.mousein && this.data.mousein.length>0) eval(this.data.mousein); else this.$parent.mousein(evt); }
       ,mouseout: function(evt){ if(this.data.mouseout && this.data.mouseout.length>0) eval(this.data.mouseout); else this.$parent.mouseout(evt); }
    }
    ,filters: {

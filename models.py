@@ -1066,11 +1066,47 @@ class MenuItem(OrderableValueObject, AliveObject):
    def childs(self):
       if hasattr(self, '_childs'): #for sometime, the default menuitem when no menuitem provided, user will setup the in-memory menuitem
          return getattr(self, '_childs')
-
       return MenuItem.objects.filter(parent=self).order_by('sequence', 'name')
    @childs.setter
    def childs(self, val):
       setattr(self, '_childs', val)
+
+   @staticmethod
+   def filter(qs, user, **kwargs):
+      rst=list()
+      for item in qs:
+         approved=True
+         #Checking specified permissions
+         if 'permissions' in item.props and len(item.props['permissions'])>0:
+            approved=approved and user.has_perm(item.props['permissions'])
+
+         #Checking if superuser required
+         if item.props.get('is_superuser', False):
+            approved=approved and user.is_superuser
+
+         #Checking if staff required
+         if item.props.get('is_staff', False):
+            approved=approved and user.is_staff
+
+         #Checking if anonymous required
+         if item.props.get('is_anonymous', False):
+            approved=approved and not user.is_authenticated
+
+         #Checking if authenticated required
+         if item.props.get('is_authenticated', False):
+            approved=approved and user.is_authenticated
+
+         #Checking for custom authentication script
+         if item.props.get('authenization', None):
+            try:
+               params={'user':user, 'this':item, 'date':Date()}
+               exec(item.props['authentication'], params)
+               approved=approved and params.get('result', False)
+            except:
+               approved=False
+         if approved: rst.append(item)
+         item.childs=MenuItem.filter(item.childs, user)
+      return rst
 
    def __get_ordered_list__(self):
       '''
