@@ -152,21 +152,21 @@ class ValueObject(models.Model, Dictable):
 
    class Meta(object):
      abstract      = True
-     verbose_name      = _('webframe.models.ValueObject')
-     verbose_name_plural = _('webframe.models.ValueObjects')
+     verbose_name      = _('ValueObject')
+     verbose_name_plural = _('ValueObjects')
      # view_* permission becomes the default permissions Django 3.0
 
    id              = models.UUIDField(
      primary_key=True,
      default=uuid.uuid4,
      editable=False,
-     verbose_name=_('webframe.models.ValueObject.id'),
-     help_text=_('webframe.models.ValueObject.id.helptext'),
+     verbose_name=_('ValueObject.id'),
+     help_text=_('ValueObject.id.helptext'),
    )
    lmd             = models.DateTimeField(
      auto_now=True,
-     verbose_name=_('webframe.models.ValueObject.lmd'),
-     help_text=_('webframe.models.ValueObject.lmd.helptext'),
+     verbose_name=_('ValueObject.lmd'),
+     help_text=_('ValueObject.lmd.helptext'),
    )
    lmb             = models.ForeignKey(
      settings.AUTH_USER_MODEL,
@@ -175,13 +175,13 @@ class ValueObject(models.Model, Dictable):
      blank=True,
      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
      related_name='%(class)s_lmb',
-     verbose_name=_('webframe.models.ValueObject.lmb'),
-     help_text=_('webframe.models.ValueObject.lmb.helptext'),
+     verbose_name=_('ValueObject.lmb'),
+     help_text=_('ValueObject.lmb.helptext'),
    )
    cd              = models.DateTimeField(
      auto_now_add=True,
-     verbose_name=_('webframe.models.ValueObject.cd'),
-     help_text=_('webframe.models.ValueObject.cd.helptext'),
+     verbose_name=_('ValueObject.cd'),
+     help_text=_('ValueObject.cd.helptext'),
    )
    cb              = models.ForeignKey(
      settings.AUTH_USER_MODEL,
@@ -190,8 +190,8 @@ class ValueObject(models.Model, Dictable):
      blank=True,
      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
      related_name='%(class)s_cb',
-     verbose_name=_('webframe.models.ValueObject.cb'),
-     help_text=_('webframe.models.ValueObject.cb.helptext'),
+     verbose_name=_('ValueObject.cb'),
+     help_text=_('ValueObject.cb.helptext'),
    )
 
    def __init__(self, *args, **kwargs):
@@ -299,8 +299,8 @@ class AliveObjectManager(models.Manager):
 class AliveObject(models.Model, Dictable):
    class Meta(object):
       abstract         = True
-      verbose_name      = _('webframe.models.AliveObject')
-      verbose_name_plural = _('webframe.models.AliveObjects')
+      verbose_name      = _('AliveObject')
+      verbose_name_plural = _('AliveObjects')
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
@@ -310,19 +310,19 @@ class AliveObject(models.Model, Dictable):
    
    effDate             = models.DateTimeField(
                      default=tz.now,
-                     verbose_name=_('webframe.models.AliveObject.effDate'),
-                     help_text=_('webframe.models.AliveObject.effDate.helptext'),
+                     verbose_name=_('AliveObject.effDate'),
+                     help_text=_('AliveObject.effDate.helptext'),
                   )
    expDate             = models.DateTimeField(
                      null=True,
                      blank=True,
-                     verbose_name=_('webframe.models.AliveObject.expDate'),
-                     help_text=_('webframe.models.AliveObject.expDate.helptext'),
+                     verbose_name=_('AliveObject.expDate'),
+                     help_text=_('AliveObject.expDate.helptext'),
                   )
    enabled             = models.BooleanField(
                      default=True,
-                     verbose_name=_('webframe.models.AliveObject.enabled'),
-                     help_text=_('webframe.models.AliveObject.enabled.helptext'),
+                     verbose_name=_('AliveObject.enabled'),
+                     help_text=_('AliveObject.enabled.helptext'),
                   )
    objects             = AliveObjectManager()
 
@@ -372,7 +372,7 @@ class AliveObject(models.Model, Dictable):
 # The abstract value=object that provide the sequence field and related ordering features
 class OrderableValueObject(ValueObject):
    DISABLED_REORDER = 'DISABLED_REORDER'
-   sequence      = models.FloatField(default=sys.maxsize,verbose_name=_('webframe.models.OrderableValueObject.sequence'))
+   sequence      = models.FloatField(default=sys.maxsize,verbose_name=_('OrderableValueObject.sequence'))
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
@@ -575,56 +575,56 @@ class AbstractPreference(OrderableValueObject):
    TYPE_JSON           = 13
    TYPE_FILEPATH       = 14
    TYPES               = (
-      (TYPE_NONE, _('webframe.models.Preference.TYPE.NONE')),
-      (TYPE_INT, _('webframe.models.Preference.TYPE.INT')),
-      (TYPE_DECIMAL, _('webframe.models.Preference.TYPE.DECIMAL')),
-      (TYPE_BOOLEAN, _('webframe.models.Preference.TYPE.BOOLEAN')),
-      (TYPE_TEXT, _('webframe.models.Preference.TYPE.TEXT')),
-      (TYPE_RICHTEXT, _('webframe.models.Preference.TYPE.RICHTEXT')),
-      (TYPE_URL, _('webframe.models.Preference.TYPE.URL')),
-      (TYPE_EMAIL, _('webframe.models.Preference.TYPE.EMAIL')),
-      (TYPE_DATE, _('webframe.models.Preference.TYPE.DATE')),
-      (TYPE_TIME, _('webframe.models.Preference.TYPE.TIME')),
-      (TYPE_DATETIME, _('webframe.models.Preference.TYPE.DATETIME')),
-      (TYPE_UUIDS, _('webframe.models.Preference.TYPE.UUIDS')),
-      (TYPE_LIST, _('webframe.models.Preference.TYPE.LIST')),
-      (TYPE_JSON, _('webframe.models.Preference.TYPE.JSON')),
-      (TYPE_FILEPATH, _('webframe.models.Preference.TYPE.FILEPATH')),
+      (TYPE_NONE, _('Preference.TYPE.NONE')),
+      (TYPE_INT, _('Preference.TYPE.INT')),
+      (TYPE_DECIMAL, _('Preference.TYPE.DECIMAL')),
+      (TYPE_BOOLEAN, _('Preference.TYPE.BOOLEAN')),
+      (TYPE_TEXT, _('Preference.TYPE.TEXT')),
+      (TYPE_RICHTEXT, _('Preference.TYPE.RICHTEXT')),
+      (TYPE_URL, _('Preference.TYPE.URL')),
+      (TYPE_EMAIL, _('Preference.TYPE.EMAIL')),
+      (TYPE_DATE, _('Preference.TYPE.DATE')),
+      (TYPE_TIME, _('Preference.TYPE.TIME')),
+      (TYPE_DATETIME, _('Preference.TYPE.DATETIME')),
+      (TYPE_UUIDS, _('Preference.TYPE.UUIDS')),
+      (TYPE_LIST, _('Preference.TYPE.LIST')),
+      (TYPE_JSON, _('Preference.TYPE.JSON')),
+      (TYPE_FILEPATH, _('Preference.TYPE.FILEPATH')),
    )
 
    def get_filecontent_location(self, filename):
       filename=os.path.basename(str(filename))
       return 'prefs/{0}/{1}'.format(self.id, filename)
 
-   name                = models.CharField(max_length=100,verbose_name=_('webframe.models.Preference.name'),help_text=_('webframe.models.Preference.name.helptext'))
-   _value              = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('webframe.models.Preference.value'),help_text=_('webframe.models.Preference.value.helptext'))
+   name                = models.CharField(max_length=100,verbose_name=_('Preference.name'),help_text=_('Preference.name.helptext'))
+   _value              = models.TextField(max_length=4096,null=True,blank=True,verbose_name=_('Preference.value'),help_text=_('Preference.value.helptext'))
    owner               = models.ForeignKey(
      settings.AUTH_USER_MODEL,null=True,
      blank=True,
      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
      related_name='preference_owner',
-     verbose_name=_('Pwebframe.models.reference.owner'),
-     help_text=_('webframe.models.Preference.owner.helptext'),
+     verbose_name=_('Preference.owner'),
+     help_text=_('Preference.owner.helptext'),
    )
    parent              = models.ForeignKey(
      'self',
      null=True,
      blank=True,
      on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
-     verbose_name=_('webframe.models.Preference.parent'),
-     help_text=_('webframe.models.Preference.parent.helptext'),
+     verbose_name=_('Preference.parent'),
+     help_text=_('Preference.parent.helptext'),
    )
    sequence            = models.FloatField(
      default=sys.maxsize,
-     verbose_name=_('webframe.models.Preference.sequence'),
-     help_text=_('webframe.models.Preference.sequence.helptext'),
+     verbose_name=_('Preference.sequence'),
+     help_text=_('Preference.sequence.helptext'),
    )
-   _tipe               = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('webframe.models.Preference.tipe'), help_text=_('webframe.models.Preference.tipe.helptext'))
-   encrypted           = models.BooleanField(default=False, verbose_name=_('webframe.models.Preference.encrypted'), help_text=_('webframe.models.Preference.encrypted.helptxt'))
-   helptext            = models.TextField(max_length=8192, null=True, blank=True, verbose_name=_('webframe.models.Preference.helptext'), help_text=_('webframe.models.Preference.helptext.helptext'))
-   regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('webframe.models.Preference.regex'), help_text=_('webframe.models.Preference.regex.helptext'))
-   lang                = models.CharField(max_length=20, null=True, blank=True, verbose_name=_('webframe.models.Preference.lang'), help_text=_('webframe.models.Preference.lang.helptext'))
-   filecontent         = models.FileField(max_length=1024, null=True, blank=True, upload_to=get_filecontent_location, verbose_name=_('webframe.models.Preference.filecontent'), help_text=_('webframe.models.Preference.filecontent.helptext'))
+   _tipe               = models.IntegerField(choices=TYPES, default=TYPE_TEXT, verbose_name=_('Preference.tipe'), help_text=_('Preference.tipe.helptext'))
+   encrypted           = models.BooleanField(default=False, verbose_name=_('Preference.encrypted'), help_text=_('Preference.encrypted.helptxt'))
+   helptext            = models.TextField(max_length=8192, null=True, blank=True, verbose_name=_('Preference.helptext'), help_text=_('Preference.helptext.helptext'))
+   regex               = models.CharField(max_length=1024, default='^.*$', verbose_name=_('Preference.regex'), help_text=_('Preference.regex.helptext'))
+   lang                = models.CharField(max_length=20, null=True, blank=True, verbose_name=_('Preference.lang'), help_text=_('Preference.lang.helptext'))
+   filecontent         = models.FileField(max_length=1024, null=True, blank=True, upload_to=get_filecontent_location, verbose_name=_('Preference.filecontent'), help_text=_('Preference.filecontent.helptext'))
    objects             = PrefManager()
 
    def __init__(self, *args, **kwargs):
@@ -906,8 +906,8 @@ def cleanFilepath(sender, **kwargs):
 @deprecated(deprecated_in="2020-10-01", details="Use Celery-Result instead")
 class AsyncManipulationObject(models.Model):
    class Meta(object):
-     verbose_name         = _('webframe.models.AsyncManipulationObject')
-     verbose_name_plural    = _('webframe.models.AsyncManipulationObjects')
+     verbose_name         = _('AsyncManipulationObject')
+     verbose_name_plural    = _('AsyncManipulationObjects')
      abstract      = True
 
    task_id               = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('AsyncManipulationObject.task_id'))
@@ -924,17 +924,17 @@ class AsyncManipulationObject(models.Model):
 
 class Numbering(ValueObject, AliveObject):
    class Meta(object):
-      verbose_name          = _('webframe.models.Numbering')
-      verbose_name_plural   = _('webframe.models.Numberings')
+      verbose_name          = _('Numbering')
+      verbose_name_plural   = _('Numberings')
       permissions           = [
          ('exec_numbering', 'Can execute the number'),
       ]
 
-   name                    = models.CharField(max_length=100, verbose_name=_('webframe.models.Numbering.name'), help_text=_('webframe.models.Numbering.name.helptxt'), unique=True) 
-   pattern                 = models.CharField(max_length=100, default='{next}', verbose_name=_('webframe.models.Numbering.pattern'), help_text=_('webframe.models.Numbering.pattern.helptxt'))
-   next_val                = models.IntegerField(default=0, verbose_name=_('webframe.models.Numbering.next_val'), help_text=_('webframe.models.Numbering.next_val.helptxt'))
-   step_val                = models.IntegerField(default=1, verbose_name=_('webframe.models.Numbering.step_val'), help_text=_('webframe.models.Numbering.step_val.helptxt'))
-   desc                    = models.CharField(max_length=1024, null=True, blank=True, verbose_name=_('webframe.models.Numbering.desc'), help_text=_('webframe.models.Numbering.desc.helptext'))
+   name                    = models.CharField(max_length=100, verbose_name=_('Numbering.name'), help_text=_('Numbering.name.helptxt'), unique=True) 
+   pattern                 = models.CharField(max_length=100, default='{next}', verbose_name=_('Numbering.pattern'), help_text=_('Numbering.pattern.helptxt'))
+   next_val                = models.IntegerField(default=0, verbose_name=_('Numbering.next_val'), help_text=_('Numbering.next_val.helptxt'))
+   step_val                = models.IntegerField(default=1, verbose_name=_('Numbering.step_val'), help_text=_('Numbering.step_val.helptxt'))
+   desc                    = models.CharField(max_length=1024, null=True, blank=True, verbose_name=_('Numbering.desc'), help_text=_('Numbering.desc.helptext'))
 
    def __init__(self, *args, **kwargs):
       super().__init__(*args, **kwargs)
@@ -945,8 +945,8 @@ class Numbering(ValueObject, AliveObject):
 
    def __str__(self):
       if self.lmd is None:
-         return _('webframe.models.Numbering.new')
-      return _('webframe.models.Numbering[{name}::{next_val}]').format(name=self.name, next_val=self.next_val)
+         return _('Numbering.new')
+      return _('Numbering[{name}::{next_val}]').format(name=self.name, next_val=self.next_val)
 
    def expDict(self):
       rst=super().expDict()
@@ -996,10 +996,10 @@ class Numbering(ValueObject, AliveObject):
 
 class Profile(ValueObject, AliveObject):
    class Meta(object):
-      verbose_name          = _('webframe.models.Profile')
-      verbose_name_plural   = _('webframe.models.Profiles')
+      verbose_name          = _('Profile')
+      verbose_name_plural   = _('Profiles')
 
-   user                    = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, verbose_name=_('webframe.models.Profile'), help_text=_('webframe.models.Profile.helptext'))
+   user                    = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, verbose_name=_('Profile'), help_text=_('Profile.helptext'))
 
    @property
    def preferences(self):
@@ -1021,8 +1021,8 @@ class EnhancedDjangoJSONEncoder(DjangoJSONEncoder):
 
 class MenuItem(OrderableValueObject, AliveObject):
    class Meta(object):
-      verbose_name          = _('webframe.models.MenuItem')
-      verbose_name_plural   = _('webframe.models.MenuItems')
+      verbose_name          = _('MenuItem')
+      verbose_name_plural   = _('MenuItems')
       unique_together       = [
          ['parent', 'user', 'name']
       ]
@@ -1031,33 +1031,33 @@ class MenuItem(OrderableValueObject, AliveObject):
       filename=os.path.basename(filename)
       return 'menuitems/{0}'.format(filename)
 
-   name                    = models.CharField(max_length=256, default='/', verbose_name=_('webframe.models.MenuItem.name'), help_text=_('webframe.models.MenuItem.name.helptext'))
-   user                    = models.ForeignKey(get_user_model(), blank=True, null=True, verbose_name=_('webframe.models.MenuItem.user'), help_text=_('webframe.models.MenuItem.user.helptext'), on_delete=models.CASCADE)
-   parent                  = models.ForeignKey('self', blank=True, null=True, verbose_name=_('webframe.models.MenuItem.parent'), help_text=_('webframe.models.MenuItem.parent.helptext'), on_delete=models.CASCADE)
+   name                    = models.CharField(max_length=256, default='/', verbose_name=_('MenuItem.name'), help_text=_('MenuItem.name.helptext'))
+   user                    = models.ForeignKey(get_user_model(), blank=True, null=True, verbose_name=_('MenuItem.user'), help_text=_('MenuItem.user.helptext'), on_delete=models.CASCADE)
+   parent                  = models.ForeignKey('self', blank=True, null=True, verbose_name=_('MenuItem.parent'), help_text=_('MenuItem.parent.helptext'), on_delete=models.CASCADE)
 
-   icon                    = models.CharField(blank=True, null=True, max_length=128, verbose_name=_('webframe.models.MenuItem.icon'), help_text=_('webframe.models.MenuItem.icon.help')) #The icon base on FrontAwesome
-   label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('webframe.models.MenuItem.label'), help_text=_('webframe.models.MenuItem.label.helptext'))
-   image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('webframe.models.MenuItem.image'), help_text=_('webframe.models.MenuItem.image.helptext'))
-   props                   = models.JSONField(blank=True, null=True, default=lambda: {'title':None,'target':None,'class':None,'style':None}, verbose_name=_('webframe.models.MenuItem.props'), help_text=_('webframe.models.MenuItem.props.help')) #HTML properties
+   icon                    = models.CharField(blank=True, null=True, max_length=128, verbose_name=_('MenuItem.icon'), help_text=_('MenuItem.icon.help')) #The icon base on FrontAwesome
+   label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('MenuItem.label'), help_text=_('MenuItem.label.helptext'))
+   image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('MenuItem.image'), help_text=_('MenuItem.image.helptext'))
+   props                   = models.JSONField(blank=True, null=True, default=lambda: {'title':None,'target':None,'class':None,'style':None}, verbose_name=_('MenuItem.props'), help_text=_('MenuItem.props.help')) #HTML properties
    onclick                 = models.TextField(max_length=2048, 
       default='window.location.href=this.data.props.href?this.data.props.href:"#";', 
-      verbose_name=_('webframe.models.MenuItem.onclick'), 
-      help_text=_('webframe.models.MenuItem.onclick.helptext')
+      verbose_name=_('MenuItem.onclick'), 
+      help_text=_('MenuItem.onclick.helptext')
    )
    mousein                 = models.TextField(max_length=1024, 
       blank=True, null=True,
-      verbose_name=_('webframe.models.MenuItem.mousein'), 
-      help_text=_('webframe.models.MenuItem.mousein.helptext')
+      verbose_name=_('MenuItem.mousein'), 
+      help_text=_('MenuItem.mousein.helptext')
    )
    mouseout                 = models.TextField(max_length=1024, 
       blank=True, null=True,
-      verbose_name=_('webframe.models.MenuItem.mouseout'), 
-      help_text=_('webframe.models.MenuItem.mouseout.helptext')
+      verbose_name=_('MenuItem.mouseout'), 
+      help_text=_('MenuItem.mouseout.helptext')
    )
 
    def __str__(self):
       return '{0}:{1}@{2}'.format(
-         _('webframe.models.MenuItem'),
+         _('MenuItem'),
          self.name,
          self.user if self.user else 'Anonymous',
       )
