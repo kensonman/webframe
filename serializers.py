@@ -102,6 +102,7 @@ class APIResult(object):
             self.meta['hasPrev']=self.result.number>1
             self.meta['nextPage']=self.result.number+1 if self.meta['hasNext'] else self.result.number
             self.meta['prevPage']=self.result.number-1 if self.meta['hasPrev'] else self.result.number
+            self.meta['maxPage']=len(self.result.paginator.page_range)+1
          else:
             self.meta['count']=0
             self.meta['total']=0
@@ -112,6 +113,7 @@ class APIResult(object):
             self.meta['hasPrev']=False
             self.meta['nextPage']=1
             self.meta['prevPage']=1
+            self.meta['maxPage']=1
          if target is not None: self.meta['target']=target.__name__
          self.result=self.result.object_list
          if 'serializer' in kwargs:
