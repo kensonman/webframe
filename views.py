@@ -13,7 +13,7 @@ from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django.views import View
-from django.utils.translation import ugettext_lazy as _, ugettext as gettext
+from django.utils.translation import ugettext_lazy as _, ugettext as gettext, activate
 from django.urls import reverse
 from django_tables2 import RequestConfig
 from rest_framework.views import APIView
@@ -387,18 +387,26 @@ def help_menuitem(req):
 @permission_required('webframe.add_menuitem')
 def help_create_menuitem(req):
    if req.method=='POST':
-      root=MenuItem(name='/', label=_('appName'))
+      root=MenuItem(name='/', label=_('appName'), props={'href': 'index'})
       root.save()
-      lm=MenuItem(name='/Left', parent=root)
+      lm=MenuItem(name='/L', parent=root)
       lm.save()
-      lroot=MenuItem(name='/Left/Root', label='Goto Root', parent=lm)
+      lroot=MenuItem(name='/L/Root', label='Goto Root', parent=lm, props={'href': 'index'})
       lroot.save()
-      rm=MenuItem(name='/Right', parent=root, props={'class': 'navbar-right'})
+      rm=MenuItem(name='/R', parent=root, props={'class': 'navbar-right'})
       rm.save()
-      hi=MenuItem(name='/Right/Hi', parent=rm, label='Hi, {{username}}')
+      lang=MenuItem(name='/R/locale', parent=rm, icon='fa-globe')
+      lang.save()
+      hi=MenuItem(name='/R/Hi', parent=rm, label='Hi, {username}')
       hi.save()
-      logout=MenuItem(name='/Right/Hi/Logout', parent=hi, label='Logout', props={'href': reverse('webframe:logout')})
+      logout=MenuItem(name='/R/Hi/Logout', parent=hi, label='Logout', props={'href': reverse('webframe:logout')})
       logout.save()
+      activate('en')
+      en=MenuItem(name='/R/locale/en', parent=lang, label=_('english'), props={'href':reverse('index')})
+      en.save()
+      activate('zh-hant')
+      zht=MenuItem(name='/R/locale/zht', parent=lang, label=_('zh-hant'), props={'href':reverse('index')})
+      zht.save()
       return redirect('admin:webframe_menuitem_changelist')
    return HttpResponseForbidden()
 

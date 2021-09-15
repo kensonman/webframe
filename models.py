@@ -1104,6 +1104,13 @@ class MenuItem(OrderableValueObject, AliveObject):
                approved=approved and params.get('result', False)
             except:
                approved=False
+
+         # reverse the url if "href" exists in props
+         if 'href' in item.props and not item.props['href'].startswith('/'): 
+            try:
+               item.props['href']=reverse(item.props['href'])
+            except:
+               pass
          if approved: rst.append(item)
          item.childs=MenuItem.filter(item.childs, user)
       return rst

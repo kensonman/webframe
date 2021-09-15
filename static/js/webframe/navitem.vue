@@ -2,7 +2,7 @@
 <span v-if="data.childs.length>0" class="webframe-navitem" :id="data.id">
    <a class="nav-link dropdown-toggle" href="#" :id="data.id" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i v-if="data.icon" :class="'fas '+data.icon"></i> 
-      <span v-if="data.label">{{ data.label|trans }}</span>
+      <span v-if="data.label">{{ trans(data.label) }}</span>
       <img v-if="data.image" :src="data.image"/>
    </a>
    <div class="dropdown-menu" :arial-labelledby="data.id">
@@ -13,9 +13,9 @@
    </div>
 </span>
 <span v-else class="webframe-navitem" :id="data.id">
-   <a :class="data.props.class?data.props.class:'nav-link'" :href="data.props.href?data.props.href:'#'" :target="data.props.target?data.props.target:'_self'" @click.prevent="onclick" @mouseenter="mousein" @mouseleave="mouseout">
+   <a :class="data.props.class?data.props.class:'nav-link'" :href="data.props.href?trans(data.props.href):'#'" :target="data.props.target?data.props.target:'_self'" @click.prevent="onclick" @mouseenter="mousein" @mouseleave="mouseout">
       <i v-if="data.icon" :class="'fas '+data.icon"></i> 
-      <span v-if="data.label">{{ data.label|trans }}</span>
+      <span v-if="data.label">{{ trans(data.label) }}</span>
       <img v-if="data.image" :src="data.image"/>
    </a>
 </span>
@@ -40,9 +40,7 @@ module.exports={
       }
       ,mousein:  function(evt){ if(this.data.mousein && this.data.mousein.length>0) eval(this.data.mousein); else this.$parent.mousein(evt); }
       ,mouseout: function(evt){ if(this.data.mouseout && this.data.mouseout.length>0) eval(this.data.mouseout); else this.$parent.mouseout(evt); }
-   }
-   ,filters: {
-      trans: function(value){
+      ,trans: function(value){
          if(!value)return '';
          let user=JSON.parse(window.localStorage.getItem('USER'));
          let val=value;
@@ -50,6 +48,7 @@ module.exports={
          val=val.replace(/{\s*first_name\s*}/g, user.first_name);
          val=val.replace(/{\s*last_name\s*}/g, user.last_name);
          val=val.replace(/{\s*email\s*}/g, user.email);
+         val=val.replace(/{\s*url\s*}/g, window.location.pathname.substr(1)+window.location.search);
          return val
       }
    }
