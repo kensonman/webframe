@@ -14,11 +14,11 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404 as getObj
 from django.utils import timezone as tz
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ngettext, get_language, ugettext_lazy as _
 from json import JSONEncoder
 from pathlib import Path
 from shutil import copyfile
-from .CurrentUserMiddleware import get_current_user
+from .CurrentUserMiddleware import get_current_user, get_current_request
 from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX, LogMessage as lm, cache
 import math, uuid, logging, json, pytz, re, sys, os
 
@@ -1038,7 +1038,7 @@ class MenuItem(OrderableValueObject, AliveObject):
    icon                    = models.CharField(blank=True, null=True, max_length=128, verbose_name=_('MenuItem.icon'), help_text=_('MenuItem.icon.help')) #The icon base on FrontAwesome
    label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('MenuItem.label'), help_text=_('MenuItem.label.helptext'))
    image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('MenuItem.image'), help_text=_('MenuItem.image.helptext'))
-   props                   = models.JSONField(blank=True, null=True, default=lambda: {'title':None,'target':None,'class':None,'style':None}, verbose_name=_('MenuItem.props'), help_text=_('MenuItem.props.help')) #HTML properties
+   props                   = models.JSONField(blank=True, null=True, default=dict({'title':None,'target':None,'class':None,'style':None}), verbose_name=_('MenuItem.props'), help_text=_('MenuItem.props.help')) #HTML properties
    onclick                 = models.TextField(max_length=2048, 
       default='window.location.href=this.data.props.href?this.data.props.href:"#";', 
       verbose_name=_('MenuItem.onclick'), 
@@ -1133,3 +1133,40 @@ class MenuItem(OrderableValueObject, AliveObject):
          childs.append(c.clone4(user, **kw))
       target.childs=c
       return target
+
+   #2021-09-15 08:30+0100
+   # Kenson Man <kenson.idv.hk@gmail.com>
+   @property
+   def translated_label(self):
+      req=get_current_request()
+      try:
+         trans=Translation.objects.filter(key=self.label).filter(models.Q(locale=None)|models.Q(locale=(get_language()))).order_by('locale')
+         if len(trans)<1: raise Translation.DoesNotExist
+         trans=trans[0]
+         return trans.gettext(1, **self.props)
+      except Translation.DoesNotExist:
+         return self.label
+
+class Translation(ValueObject):
+   class Meta(object):
+      verbose_name         = _('Translation')
+      verbose_name_plural  = _('Translations')
+      unique_together      = [
+         ('key', 'locale')
+      ]
+
+   LOCALES                 = (
+      ('en', _('english'))
+      ,('zh-hant', _('zh-hant'))
+      ,('zh-hans', _('zh-hans'))
+   )
+
+   key                     = models.CharField(max_length=2048, verbose_name=_('Translation.key'), help_text=_('Translation.key.helptext'))
+   locale                  = models.CharField(max_length=100, choices=LOCALES, default='en', verbose_name=_('Translation.locale'), help_text=_('Translation.locale.helptext'))
+   msg                     = models.TextField(max_length=4096, blank=True, null=True, verbose_name=_('Translation.msg'), help_text=_('Translation.msg.helptext'))
+   pmsg                    = models.TextField(max_length=4096, blank=True, null=True, verbose_name=_('Translation.pmsg'), help_text=_('Translation.pmsg.helptext'))
+
+   def gettext(self, cnt=1, **kwargs):
+      msg=self.msg if self.msg else self.key
+      pmsg=self.pmsg if self.pmsg else msg
+      return ngettext(msg, pmsg, cnt).format(**kwargs)

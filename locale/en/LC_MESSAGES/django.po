@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-07 08:14+0000\n"
+"POT-Creation-Date: 2021-09-15 08:08+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -381,6 +381,7 @@ msgid "Numbering.new"
 msgstr "New Numbering"
 
 #: models.py:949
+#, python-brace-format
 msgid "Numbering[{name}::{next_val}]"
 msgstr "Numbering[{name}::{next_val}]"
 
@@ -484,10 +485,68 @@ msgstr "Mouse Out"
 msgid "MenuItem.mouseout.helptext"
 msgstr "The scripts that will executed when user mouse-out"
 
+#: models.py:1150
+msgid "Translation"
+msgstr "Translation"
+
+#: models.py:1151
+msgid "Translations"
+msgstr "Translations"
+
+#: models.py:1157
+msgid "english"
+msgstr "English"
+
+#: models.py:1158
+msgid "zh-hant"
+msgstr "繁體中文"
+
+#: models.py:1159
+msgid "zh-hans"
+msgstr "简体中文"
+
+#: models.py:1162
+msgid "Translation.key"
+msgstr "Key"
+
+#: models.py:1162
+msgid "Translation.key.helptext"
+msgstr "The key of the translation. Used to sort out the translation"
+
+#: models.py:1163
+msgid "Translation.locale"
+msgstr "Locale"
+
+#: models.py:1163
+msgid "Translation.locale.helptext"
+msgstr "The language local code. Refer to <a href=\"https://docs.djangoproject.com/en/3.2/ref/settings/#language-code\" target=\"_blank\">LANGUAGE_CODE</a> for details."
+
+#: models.py:1164
+msgid "Translation.msg"
+msgstr "Message"
+
+#: models.py:1164
+msgid "Translation.msg.helptext"
+msgstr "The message body."
+
+#: models.py:1165
+msgid "Translation.pmsg"
+msgstr "Plural Message"
+
+#: models.py:1165
+msgid "Translation.pmsg.helptext"
+msgstr "The message body when Plural"
+
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
 msgid "errorpage.503.title"
 msgstr "Service Currently Unavailable"
+
+#: templates/webframe/errorpages/503.html:3
+#: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
+#: templates/webframe/meta.html:3 views.py:390 views.py:427
+msgid "appName"
+msgstr ""
 
 #: templates/webframe/errorpages/503.html:8
 msgid "errorpage.503.description"

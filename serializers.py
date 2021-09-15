@@ -32,11 +32,13 @@ class MenuItemSerializer(serializers.ModelSerializer):
    class Meta(object):
       model       = MenuItem 
       fields      = ['id', 
-         'name', 'user', 'username', 'parent', 'icon', 'label', 'image', 'props', 'onclick', 'mousein', 'mouseout',
+         'name', 'user', 'username', 'parent', 'icon', 'raw_label', 'label', 'image', 'props', 'onclick', 'mousein', 'mouseout',
          'cb', 'cd', 'lmb', 'lmd', 'childs',
       ]
 
    username       = serializers.SlugRelatedField(many=False, read_only=True, slug_field='username', source='user')
+   raw_label      = serializers.CharField(source='label')
+   label          = serializers.CharField(source='translated_label')
    childs         = RecursiveField(many=True)
 
 class UserSerializer(serializers.ModelSerializer):

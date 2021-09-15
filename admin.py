@@ -116,3 +116,12 @@ class MenuItemAdmin(admin.ModelAdmin):
    readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
    ordering=('user', '-parent', 'sequence', 'name')
    search_fields=('id', 'parent__id', 'user__username', 'label', 'parent__label', 'name')
+
+@admin.register(Translation)
+class Translate(admin.ModelAdmin):
+   fields=('id', 'key', 'locale', 'msg', 'pmsg', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'key', 'locale', 'msg', 'pmsg', 'lmb', 'lmd')
+   lsit_filter=('locale',)
+   readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
+   ordering=('key', 'locale')
+   search_fields=('key', 'locale')

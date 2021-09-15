@@ -5,7 +5,7 @@
    <nav class="navbar navbar-expand-lg navbar-light bg-light webframe-navbar" v-else>
       <a class="navbar-brand" :href="data.props.href?data.props.href:'/'" :id="id+'-brand'" @click.prevent="onclick">
          <i v-if="data.icon" :class="'fas '+data.icon"></i>
-         <label :for="id">{{data.label}}</label>
+         <label :for="id">{{data.label|trans}}</label>
          <img v-if="data.image" :src="data.image"/>
       </a>
 
@@ -76,6 +76,18 @@ module.exports={
       }
       ,mousein: function(evt){ if(this.data.mousein && this.data.mousein.length>0) eval(this.data.mousein); }
       ,mouseout: function(evt){ if(this.data.mouseout && this.data.mouseout.length>0) eval(this.data.mouseout); }
+   }
+   ,filters: {
+      trans: function(value){
+         if(!value)return '';
+         let user=JSON.parse(window.localStorage.getItem('USER'));
+         let val=value;
+         val=val.replace(/{\s*username\s*}/g, user.username);
+         val=val.replace(/{\s*first_name\s*}/g, user.first_name);
+         val=val.replace(/{\s*last_name\s*}/g, user.last_name);
+         val=val.replace(/{\s*email\s*}/g, user.email);
+         return val
+      }
    }
    ,components:{
       'navitem': httpVueLoader(STATIC_ROOT+'js/webframe/navitem.vue')

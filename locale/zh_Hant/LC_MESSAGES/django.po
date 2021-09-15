@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-07 08:14+0000\n"
+"POT-Creation-Date: 2021-09-15 08:08+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -382,6 +382,7 @@ msgid "Numbering.new"
 msgstr "新的序列號碼"
 
 #: models.py:949
+#, python-brace-format
 msgid "Numbering[{name}::{next_val}]"
 msgstr "序列號碼[{name}::{next_val}]"
 
@@ -485,10 +486,68 @@ msgstr "Mouse Out"
 msgid "MenuItem.mouseout.helptext"
 msgstr "當使用者滑鼠離開時報行的腳本"
 
+#: models.py:1150
+msgid "Translation"
+msgstr "翻釋"
+
+#: models.py:1151
+msgid "Translations"
+msgstr "翻釋"
+
+#: models.py:1157
+msgid "english"
+msgstr "English"
+
+#: models.py:1158
+msgid "zh-hant"
+msgstr "繁體中文"
+
+#: models.py:1159
+msgid "zh-hans"
+msgstr "简体中文"
+
+#: models.py:1162
+msgid "Translation.key"
+msgstr "索引"
+
+#: models.py:1162
+msgid "Translation.key.helptext"
+msgstr "用於程式找到所需的翻釋"
+
+#: models.py:1163
+msgid "Translation.locale"
+msgstr "語言"
+
+#: models.py:1163
+msgid "Translation.locale.helptext"
+msgstr "這個翻釋的所屬語言"
+
+#: models.py:1164
+msgid "Translation.msg"
+msgstr "文字"
+
+#: models.py:1164
+msgid "Translation.msg.helptext"
+msgstr "文字翻釋"
+
+#: models.py:1165
+msgid "Translation.pmsg"
+msgstr "眾數文字"
+
+#: models.py:1165
+msgid "Translation.pmsg.helptext"
+msgstr "眾數文字翻釋"
+
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
 msgid "errorpage.503.title"
 msgstr "系統維護中"
+
+#: templates/webframe/errorpages/503.html:3
+#: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
+#: templates/webframe/meta.html:3 views.py:390 views.py:427
+msgid "appName"
+msgstr ""
 
 #: templates/webframe/errorpages/503.html:8
 msgid "errorpage.503.description"
