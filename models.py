@@ -1027,6 +1027,8 @@ class MenuItem(OrderableValueObject, AliveObject):
          ['parent', 'user', 'name']
       ]
 
+   DEFAULT_PROPS=dict({'title':None,'target':None,'class':None,'style':None})
+
    def __getImageLocation__(self, filename):
       filename=os.path.basename(filename)
       return 'menuitems/{0}'.format(filename)
@@ -1038,7 +1040,7 @@ class MenuItem(OrderableValueObject, AliveObject):
    icon                    = models.CharField(blank=True, null=True, max_length=128, verbose_name=_('MenuItem.icon'), help_text=_('MenuItem.icon.help')) #The icon base on FrontAwesome
    label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('MenuItem.label'), help_text=_('MenuItem.label.helptext'))
    image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('MenuItem.image'), help_text=_('MenuItem.image.helptext'))
-   props                   = models.JSONField(blank=True, null=True, default=dict({'title':None,'target':None,'class':None,'style':None}), verbose_name=_('MenuItem.props'), help_text=_('MenuItem.props.help')) #HTML properties
+   props                   = models.JSONField(blank=True, null=True, default=DEFAULT_PROPS , verbose_name=_('MenuItem.props'), help_text=_('MenuItem.props.help')) #HTML properties
    onclick                 = models.TextField(max_length=2048, 
       default='window.location.href=this.data.props.href?this.data.props.href:"#";', 
       verbose_name=_('MenuItem.onclick'), 

@@ -435,6 +435,9 @@ class HeaderView(APIView):
          rst=MenuItem(name='Generated NavBar', label=_('appName'))
          lhs=MenuItem(parent=rst)
          hlp=MenuItem(parent=lhs, label='MenuItem Help', props={'href': reverse('webframe:help-menuitem')})
-         lhs.childs=[hlp,]
+         lhs.childs=[hlp, ]
+         if req.user.is_staff or req.user.is_superuser: 
+            adm=MenuItem(parent=lhs, label='Admin Tools', icon='fa-cogs', props={'href': reverse('admin:index')})
+            lhs.childs.append(adm)
          rst.childs=[lhs,]
          return Response(MenuItemSerializer(rst).data)
