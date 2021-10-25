@@ -217,7 +217,7 @@ msgstr "File Resource"
 
 #: models.py:599
 msgid "Preference.name"
-msgstr "New Preference"
+msgstr "Preference Name"
 
 #: models.py:599
 msgid "Preference.name.helptext"
@@ -225,7 +225,7 @@ msgstr "The name of the preference"
 
 #: models.py:600
 msgid "Preference.value"
-msgstr "New Preference"
+msgstr "Preference Value"
 
 #: models.py:600
 msgid "Preference.value.helptext"
@@ -233,7 +233,7 @@ msgstr "The value of the perference"
 
 #: models.py:606
 msgid "Preference.owner"
-msgstr "New Preference"
+msgstr "Owner"
 
 #: models.py:607
 msgid "Preference.owner.helptext"
@@ -241,7 +241,7 @@ msgstr "The owner of the perference"
 
 #: models.py:614
 msgid "Preference.parent"
-msgstr "New Preference"
+msgstr "Parent"
 
 #: models.py:615
 msgid "Preference.parent.helptext"
@@ -249,7 +249,7 @@ msgstr "The parent preference; Used for lookup"
 
 #: models.py:619
 msgid "Preference.sequence"
-msgstr "New Preference"
+msgstr "Sequence"
 
 #: models.py:620
 msgid "Preference.sequence.helptext"
@@ -257,7 +257,7 @@ msgstr "The sequence of the perference; Used for lookup"
 
 #: models.py:622
 msgid "Preference.tipe"
-msgstr "New Preference"
+msgstr "Type"
 
 #: models.py:622
 msgid "Preference.tipe.helptext"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: models.py:623
 msgid "Preference.encrypted"
-msgstr "New Preference"
+msgstr "Encrypted"
 
 #: models.py:623
 msgid "Preference.encrypted.helptxt"
@@ -275,7 +275,7 @@ msgstr "The field should be encrypted b4 save"
 
 #: models.py:624
 msgid "Preference.helptext"
-msgstr "New Preference"
+msgstr "Preferences/Settings stored in datagbase"
 
 #: models.py:624
 msgid "Preference.helptext.helptext"
@@ -283,7 +283,7 @@ msgstr "The help for user admin"
 
 #: models.py:625
 msgid "Preference.regex"
-msgstr "New Preference"
+msgstr "Regex Pattern"
 
 #: models.py:625
 msgid "Preference.regex.helptext"
@@ -291,7 +291,7 @@ msgstr "This cannot be updated thru admin-tools."
 
 #: models.py:626
 msgid "Preference.lang"
-msgstr "New Preference"
+msgstr "Language"
 
 #: models.py:626
 msgid "Preference.lang.helptext"
