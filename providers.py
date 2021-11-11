@@ -49,14 +49,16 @@ def template_injection(req):
     lang=getattr(settings, 'LANGUAGE_CODE', 'zh-hant')
     langs=getattr(settings, 'LANGS', ((lang, _(lang)), ))
     RST={
-        'TMPL_BLANK': getattr(settings, 'TMPL_BLANK', 'webframe/blank.html'),
         'TMPL_BASE': getattr(settings, 'TMPL_BASE', 'webframe/base.html'),
-        'TMPL_HEADER': getattr(settings, 'TMPL_HEADER', 'webframe/header.html'),
+        'TMPL_BLANK': getattr(settings, 'TMPL_BLANK', 'webframe/blank.html'),
         'TMPL_FOOTER': getattr(settings, 'TMPL_FOOTER', 'webframe/footer.html'),
-        'TMPL_SCRIPTS': getattr(settings, 'TMPL_SCRIPTS', 'webframe/scripts.html'),
+        'TMPL_HEADER': getattr(settings, 'TMPL_HEADER', 'webframe/header.html'),
         'TMPL_LOADING': getattr(settings, 'TMPL_SCRIPTS', 'webframe/loading.html'),
         'TMPL_META': getattr(settings, 'TMPL_META', 'webframe/meta.html'),
+        'TMPL_MESSAGES': getattr(settings, 'TMPL_MESSAGES', 'webframe/messages.html'),
         'TMPL_PAGINATION': getattr(settings, 'TMPL_PAGINATION', 'webframe/pagination.html'),
+        'TMPL_RESETPASSWORD': getattr(settings, 'TMPL_RESETPASSWORD', 'webframe/resetPassword.html'),
+        'TMPL_SCRIPTS': getattr(settings, 'TMPL_SCRIPTS', 'webframe/scripts.html'),
         'TMPL_STYLE': getattr(settings, 'TMPL_STYLE', None),
         'URL_LOGIN': getattr(settings, 'URL_LOGIN', '/login/'),
         'URL_LOGOUT': getattr(settings, 'URL_LOGOUT', '/logout/'),
