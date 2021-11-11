@@ -519,6 +519,7 @@ class ResetPasswordView(View):
          sender=Preference.objects.pref('EMAIL_FROM', defval='info@kenson.idv.hk')
          tmpl=tmpl.format(user=user, absolute_url=getAbsoluteUrl(req), token=reset.key, url=reverse('webframe:resetPassword'))
          sendEmail.delay(sender=sender, subject=subj, recipients=user.email, content=tmpl)
+         email='{0}***{1}'.format(user.email[0:3], user.email[-7:])
          messages.info(req, _('The reset password instruction has been email to %(email)s. Please follow the instruction to reset your password')%{'email': user.email} )
       return redirect('webframe:resetPassword')
 

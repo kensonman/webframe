@@ -1,3 +1,4 @@
-webframe v2.11.0 - 2021-11-11 18:12 +0000
+webframe v2.11.1 - 2021-11-11 18:12 +0000
 
 Add the default ResetPassword mechanism
+- with email address encrypted when display the confirm message;
