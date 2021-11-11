@@ -10,7 +10,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db import models, transaction
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404 as getObj
 from django.utils import timezone as tz
@@ -20,7 +20,7 @@ from pathlib import Path
 from shutil import copyfile
 from .CurrentUserMiddleware import get_current_user, get_current_request
 from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX, LogMessage as lm, cache
-import math, uuid, logging, json, pytz, re, sys, os
+import math, uuid, logging, json, pytz, re, sys, os, ipaddress, hashlib
 
 logger=logging.getLogger('webframe.models')
 
@@ -1177,3 +1177,35 @@ class Translation(ValueObject):
       msg=self.msg if self.msg else self.key
       pmsg=self.pmsg if self.pmsg else msg
       return ngettext(msg, pmsg, cnt).format(**kwargs)
+
+class ResetPassword(ValueObject, AliveObject):
+   class Meta(object):
+      verbose_name         = _('ResetPassword')
+      verbose_name_plural  = _('ResetPasswords')
+      unique_together      = [
+         ('key', 'user')
+      ]
+
+   key                     = models.CharField(max_length=100, default='WillBeGeneratedAutomatically', verbose_name=_('ResetPassword.key'), help_text=_('ResetPassword.key.helptext'))
+   user                    = models.ForeignKey(
+     settings.AUTH_USER_MODEL,null=True,
+     on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
+     related_name='resetPassword_user',
+     verbose_name=_('ResetPassword.user'),
+     help_text=_('ResetPassword.user.helptext'),
+   )
+   request_by              = models.CharField(max_length=50, verbose_name=_('ResetPasssword.request_by'), help_text=_('ResetPassword.request_by.helptext'))
+   complete_by             = models.CharField(null=True, blank=True, max_length=50, verbose_name=_('ResetPasssword.complete_by'), help_text=_('ResetPassword.complete_by.helptext'))
+   complete_date           = models.DateTimeField(null=True, blank=True, verbose_name=_('ResetPassword.complete_date'), help_text=_('ResetPassword.complete_date.helptext'))
+
+@receiver(pre_save, sender=ResetPassword)
+def presave_resetpasswd(sender, **kwargs):
+   p=kwargs['instance']
+   if p.isNew:
+      m=hashlib.sha256()
+      m.update(p.user.username.encode('ascii'))
+      m.update(datetime.now().strftime('%Y%m%d%H%M%S.%f').encode('ascii'))
+      p.key=m.hexdigest()
+      if not p.expDate: p.expDate=getTime(p.effDate, offset=getattr(settings, 'RESET_PASSWORD_DEFAULT_EXPDATE', '+1d'))
+      p.cd=datetime.now()
+      p.lmd=datetime.now()

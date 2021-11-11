@@ -8,6 +8,7 @@ from ajax_select.admin import AjaxSelectAdmin
 from ajax_select.fields import AutoCompleteSelectField
 from django import forms
 from django.contrib import admin
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.safestring import mark_safe
 from django.urls import reverse
@@ -38,6 +39,52 @@ class PreferenceChildParentFilter(admin.SimpleListFilter):
          return q.filter(id__in=Preference.objects.filter(parent__isnull=False).values('parent__id'))
       else:
          return q.filter(parent__isnull=False)
+
+class AliveObjectEffectiveFilter(admin.SimpleListFilter):
+   title=_('webframe.models.AliveObject.effectiveFilter')
+   parameter_name='aliveObj_eff_filter'
+
+   def lookups(self, req, modelAdmin):
+      rst=[
+         ('enabled', _('webframe.models.AliveObject.effectiveFilter.enabled')),
+         ('disabled', _('webframe.models.AliveObject.effectiveFilter.disabled')),
+         ('effective', _('webframe.models.AliveObject.effectiveFilter.effective')),
+         ('coming', _('webframe.models.AliveObject.effectiveFilter.coming')),
+         ('comingTmr', _('webframe.models.AliveObject.effectiveFilter.comingTmr')),
+         ('comingNextWeek', _('webframe.models.AliveObject.effectiveFilter.comingNextWeek')),
+         ('comingNextMonth', _('webframe.models.AliveObject.effectiveFilter.comingNextMonth')),
+         ('comingNext3Months', _('webframe.models.AliveObject.effectiveFilter.comingNext3Months')),
+         ('expired', _('webframe.models.AliveObject.effectiveFilter.expired')),
+      ]
+      return rst
+
+   def queryset(self, req, q):
+      now=datetime.now()
+      value=self.value()
+      if value=='enabled':
+         return q.filter(enabled=True)
+      elif value=='disabled':
+         return q.filter(enabled=False)
+      elif value=='effective':
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='coming':
+         return q.filter(enabled=True, effDate__gt=now)
+      elif value=='comingTmr':
+         now=getTime(now, offset='+1d')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='comingNextWeek':
+         now=getTime(now, offset='+7d')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='comingNextMonth':
+         now=getTime(now, offset='+1m')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='comingNext3Monts':
+         now=getTime(now, offset='+3m')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='expired':
+         now=getTime(now, offset='+1d')
+         return q.filter(enabled=True, expDate__lte=now)
+      return q
 
 class PreferenceInline(admin.TabularInline):
    model    = Preference 
@@ -118,10 +165,19 @@ class MenuItemAdmin(admin.ModelAdmin):
    search_fields=('id', 'parent__id', 'user__username', 'label', 'parent__label', 'name')
 
 @admin.register(Translation)
-class Translate(admin.ModelAdmin):
+class TranslateAdmin(admin.ModelAdmin):
    fields=('id', 'key', 'locale', 'msg', 'pmsg', 'cb', 'cd', 'lmb', 'lmd')
    list_display=('id', 'key', 'locale', 'msg', 'pmsg', 'lmb', 'lmd')
-   lsit_filter=('locale',)
+   list_filter=('locale',)
    readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
    ordering=('key', 'locale')
    search_fields=('key', 'locale')
+
+@admin.register(ResetPassword)
+class ResetPasswordAdmin(admin.ModelAdmin):
+   fields=('id', 'user', 'key', 'effDate', 'expDate', 'enabled', 'request_by', 'complete_date', 'complete_by', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'user', 'effDate', 'expDate', 'complete_date', 'request_by', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_filter=(AliveObjectEffectiveFilter, )
+   readonly_fields=('id',  'key', 'complete_by', 'complete_date', 'request_by', 'cb', 'cd', 'lmb', 'lmd')
+   ordering=('user', '-effDate', 'expDate',)
+   search_fields=('user__username', )

@@ -144,7 +144,7 @@ def offsetTime( val, expression ):
          elif unit=='y':
             rst.rst.replace(year=value)
          else:
-            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+            raise SyntaxError('Unknow offset-unit: {0}; f=microsecond, S=second, M=minute, H=hour, d=day, W=week, m=month, y=year;'.format(unit))
       elif (op=='+' or op=='-'): 
          if op=='-': value=value*-1
          if unit=='f':
@@ -164,7 +164,7 @@ def offsetTime( val, expression ):
          elif unit=='y':
             rst=rst+relativedelta(years=value)
          else:
-            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+            raise SyntaxError('Unknow offset-unit: {0}; f=microsecond, S=second, M=minute, H=hour, d=day, W=week, m=month, y=year;'.format(unit))
       else:
          raise SyntaxError('Offset Operator only support +, - and =')
    return rst
