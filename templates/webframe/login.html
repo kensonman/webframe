@@ -73,6 +73,7 @@ $(document).ready(function(){
                      <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
                   </div>
                   <div class="pnl-btns">
+                     {%if TMPL_RESET_PASSWORD%}<a href="{%url 'webframe:resetPassword'%}" target='_self'>{%trans 'resetPassword'%}</a>{%endif%}
                      <button class="btn btn-success" type="submit">{%trans 'login'%}</button>
                   </div>
                </section>{%endblock%}

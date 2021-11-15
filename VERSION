@@ -1,4 +1,12 @@
-webframe v2.11.1 - 2021-11-11 18:12 +0000
+webframe v2.11.2 - 2021-11-11 18:12 +0000
 
+v2.11.2
+----
+Add the reset-password link in login page.
+- Add the reset-password lnk in login page;
+- Change the template name from "TMPL_RESETPASSWORD" to "TMPL_RESET_PASSWORD";
+
+v2.11.1
+----
 Add the default ResetPassword mechanism
 - with email address encrypted when display the confirm message;

@@ -57,7 +57,7 @@ def template_injection(req):
         'TMPL_META': getattr(settings, 'TMPL_META', 'webframe/meta.html'),
         'TMPL_MESSAGES': getattr(settings, 'TMPL_MESSAGES', 'webframe/messages.html'),
         'TMPL_PAGINATION': getattr(settings, 'TMPL_PAGINATION', 'webframe/pagination.html'),
-        'TMPL_RESETPASSWORD': getattr(settings, 'TMPL_RESETPASSWORD', 'webframe/resetPassword.html'),
+        'TMPL_RESET_PASSWORD': getattr(settings, 'TMPL_RESET_PASSWORD', 'webframe/resetPassword.html'),
         'TMPL_SCRIPTS': getattr(settings, 'TMPL_SCRIPTS', 'webframe/scripts.html'),
         'TMPL_STYLE': getattr(settings, 'TMPL_STYLE', None),
         'URL_LOGIN': getattr(settings, 'URL_LOGIN', '/login/'),
