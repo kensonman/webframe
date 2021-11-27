@@ -103,12 +103,15 @@ class Login( View ):
 
       try:
          u=authenticate(req, username=username, password=password)
-         try:
-            if u.profile:
-               if not u.profile.alive:
-                  raise Error(lm('User[{0}] is expired! {1}~{2}', u.id, u.profile.effDate, u.profile.expDate))
-         except User.profile.RelatedObjectDoesNotExist:
-            logger.debug(lm('User<{0}> does not have the related profile, ignore the effective checking!', u.username))
+         if not u: raise AttributeError
+         if not hasattr(u, 'profile'): raise TypeError
+         if u.profile:
+            if not u.profile.alive:
+               raise Error(lm('User[{0}] is expired! {1}~{2}', u.id, u.profile.effDate, u.profile.expDate))
+      except AttributeError:
+         logger.debug(lm('User<{0}> cannot be found, or the password is incorrect.', username))
+      except (User.profile.RelatedObjectDoesNotExist, TypeError):
+         logger.debug(lm('User<{0}> does not have the related profile, ignore the effective checking!', username))
       except:
          logger.debug('Failed to login', exc_info=True)
          u=None

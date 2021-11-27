@@ -57,7 +57,7 @@ class AuthenticationBackend(ModelBackend):
                now=datetime.utcnow().replace(tzinfo=utc)
                try:
                   prof=Profile.objects.get(user=user)
-                  if not pref.alive:
+                  if not prof.alive:
                      logger.debug('User<{0}> is not effective! {{effDate: {1}, expDate: {2}, now: {3}}}'.format(user.username, prof.effDate, prof.expDate, now))
                      messages.info(req, _('Your account is not effective'))
                      user=None
