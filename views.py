@@ -435,7 +435,7 @@ def help_create_menuitem(req):
 
 class WhoAmIView(APIView):
    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
-   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+   permission_classes = [permissions.IsAuthenticated]
    
    def get(self, req, format=None):
       return Response(UserSerializer(req.user).data)
