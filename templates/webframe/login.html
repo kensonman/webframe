@@ -32,16 +32,16 @@ $(document).ready(function(){
                <div class="pnl-socialAuth">
                   {%block loginMethods%}
                   {%if socialLogin_facebook%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'facebook'%}"><img src="{%static 'img/login-facebook.png'%}" alt="{%trans 'login-facebook'%}"/></a>
+                     <a href="{%url 'social:begin' 'facebook'%}"><img src="{%static 'img/webframe/login-facebook.png'%}" alt="{%trans 'login-facebook'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_twitter%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/login-twitter.png'%}" alt="{%trans 'login-twitter'%}"/></a>
+                     <a href="{%url 'social:begin' 'twitter'%}"><img src="{%static 'img/webframe/login-twitter.png'%}" alt="{%trans 'login-twitter'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_github%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/login-github.png'%}" alt="{%trans 'login-github'%}"/></a>
+                     <a href="{%url 'social:begin' 'github'%}"><img src="{%static 'img/webframe/login-github.png'%}" alt="{%trans 'login-github'%}"/></a>
                   </div>{%endif%}
                   {%if socialLogin_google%}<div class="btn-login">
-                     <a href="{%url 'social:begin' 'google-oauth2'%}"><img src="{%static 'img/login-google.png'%}" alt="{%trans 'login-google'%}"/></a>
+                     <a href="{%url 'social:begin' 'google-oauth2'%}"><img src="{%static 'img/webframe/login-google.png'%}" alt="{%trans 'login-google'%}"/></a>
                   </div>{%endif%}
                   {%endblock%}
                </div>
@@ -50,9 +50,7 @@ $(document).ready(function(){
                {%endblock%}
 
                <input type="hidden" name="next" value="{{next|default:'/'}}"/>
-               {%block messages%}{%if messages%}<div><ul class="ul-messages">{%for msg in messages%}
-                   <li class="animated flash"><span class="alert alert-{{msg.tags|default:''}}">{{msg}}</span></li>
-               {%endfor%}</ul></div>{%endif%}{%endblock%}
+               {%include TMPL_MESSAGES|default:'webframe/messages.html'%}
                
                {%block authenticationBackendsBlock%}<div class="field form-group">
                   <label for="backendsFld">{%trans 'Authentication Backends'%}</label>
@@ -75,6 +73,7 @@ $(document).ready(function(){
                      <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
                   </div>
                   <div class="pnl-btns">
+                     {%if TMPL_RESET_PASSWORD%}<a href="{%url 'webframe:resetPassword'%}" target='_self'>{%trans 'resetPassword'%}</a>{%endif%}
                      <button class="btn btn-success" type="submit">{%trans 'login'%}</button>
                   </div>
                </section>{%endblock%}

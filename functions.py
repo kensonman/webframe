@@ -144,7 +144,7 @@ def offsetTime( val, expression ):
          elif unit=='y':
             rst.rst.replace(year=value)
          else:
-            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+            raise SyntaxError('Unknow offset-unit: {0}; f=microsecond, S=second, M=minute, H=hour, d=day, W=week, m=month, y=year;'.format(unit))
       elif (op=='+' or op=='-'): 
          if op=='-': value=value*-1
          if unit=='f':
@@ -164,7 +164,7 @@ def offsetTime( val, expression ):
          elif unit=='y':
             rst=rst+relativedelta(years=value)
          else:
-            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+            raise SyntaxError('Unknow offset-unit: {0}; f=microsecond, S=second, M=minute, H=hour, d=day, W=week, m=month, y=year;'.format(unit))
       else:
          raise SyntaxError('Offset Operator only support +, - and =')
    return rst
@@ -450,4 +450,40 @@ def cache(key, defval, **kwargs):
       timeout=int(kwargs.get('timeout', 30))
       rst=defval(kwargs) if hasattr(defval, '__call__') else defval
       cache.set(key, rst, timeout)
+   return rst
+
+def getRange(value, **kwargs): #convert=lambda v:str(v)):
+   '''
+   Parse the string into a range (a tuple with minimum-value, maximum-value);
+   Param:
+      - value  - The string repersentative
+      - convert- A callable converter
+      - min    - The default minimum value
+      - max    - The default maximum value
+   Usage: 
+      - getRange('0:5', convert=lambda v:int(v))            - Returns (0, 5)
+      - getRange('5', convert=lambda v:int(v))              - Returns (5, 5)
+      - getRange('0:', convert=lambda v:int(v))             - Returns (0, None)
+      - getRange('0:', convert=lambda v:int(v), max=300)    - Returns (0, 300)
+      - getRange('0:5', convert=lambda v:int(v), max=300)   - Returns (0, 5)
+      - getRange('0:5', convert=lambda v:int(v), max=4)     - Returns (0, 5)
+      - getRange(':5', convert=lambda v:int(v))             - Returns (None, 5)
+      - getRange(':5', convert=lambda v:int(v), min=-1)     - Returns (-1, 5)
+      - getRange('0:5', convert=lambda v:int(v), min=-1)   - Returns (0, 5)
+      - getRange('0:5', convert=lambda v:int(v), min=-2)     - Returns (0, 5)
+   '''
+   convert=kwargs.get('convert', lambda v: str(v))
+   minv=kwargs.get('min', None)
+   maxv=kwargs.get('max', None)
+   try:
+      pos=value.index(':')
+   except ValueError:
+      pos=-1
+   if pos<0:   # exact value
+      rst=(convert(value), convert(value))
+   if pos==0: # only minimize boundary
+      rst=(minv, convert(value[1:]))
+   if pos==len(value)-1: #only maximize boundary
+      rst=(convert(value[:-1]), maxv)
+   rst=(convert(value[0:pos]), convert(value[pos+1:]))
    return rst

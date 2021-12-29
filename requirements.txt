@@ -13,6 +13,9 @@ django-ajax-selects
 django-summernote
 django-ajax-selects
 django-maintenance-mode
+djangorestframework
+markdown
+django-json-widget
 
 #Optional
 django-impersonate

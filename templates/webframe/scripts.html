@@ -29,16 +29,17 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 
 
 
-<link rel="stylesheet" href="{%static 'css/bootstrap-treeview.min.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/bootstrap-treeview.min.css'%}"/>
 
-
+<script type="text/javascript" src="https://unpkg.com/http-vue-loader"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
 
 {%comment "EndSyncLineNumber"%}{%endcomment%}
-<link rel="stylesheet" href="{%static 'css/messages.css'%}"/>
-<link rel="stylesheet" href="{%static 'css/basic.css'%}"/>
-<link rel="stylesheet" href="{%static 'css/bootstrap4-switches.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/messages.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/basic.css'%}"/>
+<link rel="stylesheet" href="{%static 'css/webframe/bootstrap4-switches.css'%}"/>
 {%block themes%}
-   {%static 'css/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
+   {%static 'css/webframe/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
 	<link rel="stylesheet" href="{{THEME}}?"/> <!-- File changing frequencely, force to reload -->
 	<style type="text/css">
    /*Pref:STYLES*/
@@ -51,6 +52,10 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 
 <!-- Loading the jQuery before everything -->
 <script type="text/javascript"><!--
+const STATIC_ROOT='{%conf "STATIC_URL"%}';
+const DEBUG='{%conf "DEBUG" defval="False"%}'.toLowerCase()=='true';
+const USERNAME='{{request.user.username}}';
+var   USER=null; axios.get('{%url "webframe:whoami"%}').then(rep=>{USER=rep.data; window.localStorage.setItem('USER', JSON.stringify(rep.data)); });
 String.prototype.limit=function( length, replacement='...' ){
    if(this.length<=length)return this;
    return this.substring(0, length)+replacement;

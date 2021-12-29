@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from django.contrib.auth.models import User, AnonymousUser
 from django.utils.functional import SimpleLazyObject
 from django.utils.safestring import SafeString
@@ -54,7 +55,7 @@ def pref(context, prefName, **kwargs):
             pref=SafeString(pref)
       return pref
    except Preference.DoesNotExist:
-      return "{Pref<%s> Not Found}"
+      return "{Pref<%s> Not Found}"%prefName
    
 @register.filter
 def boolean(value):
@@ -63,3 +64,20 @@ def boolean(value):
    '''
    if not value: return False
    return value in TRUE_VALUES
+
+@register.simple_tag(takes_context=True)
+def conf(context, confName, **kwargs):
+   '''
+   Retrieve the settings information.
+
+   Usage:
+      1. Import the template-tag by: {%load pref%}
+      2.  Access the settings with parameter(s): {%conf 'DEBUG' as DebugInSettings%};
+   '''
+   defval=kwargs.get('defval', '{{conf[{0}] not found}}'.format(confName))
+   try:
+      if not hasattr(settings, confName):  raise ValueError('hasattr(settings, \"{0}\") not found.')
+      return getattr(settings, confName, defval)
+   except ValueError as ex:
+      logger.debug(ex)
+      return defval

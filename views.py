@@ -3,6 +3,7 @@
 # Author: Kenson Man
 # Date: 2017-05-11 11:53
 # Desc: The webframe default views.
+from datetime import datetime
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
@@ -13,12 +14,19 @@ from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django.views import View
-from django_tables2 import RequestConfig
-from django.utils.translation import ugettext_lazy as _, ugettext as gettext
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.translation import ugettext_lazy as _, ugettext as gettext, activate
 from django.urls import reverse
+from django_tables2 import RequestConfig
+from rest_framework import authentication, permissions
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .tasks import sendEmail
 from .decorators import is_enabled
-from .functions import getBool, isUUID, LogMessage as lm
+from .functions import getBool, isUUID, LogMessage as lm, getClientIP, getTime
 from .models import *
+from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
 import hashlib, logging
 
@@ -28,6 +36,25 @@ logger=logging.getLogger('webframe.views')
 #Make sure the translation
 _('django.contrib.auth.backends.ModelBackend')
 _('django_auth_ldap.backend.LDAPBackend')
+_('nextPage')
+_('thisPage:%(page)s')
+_('prevPage')
+
+def getAbsoluteUrl(req):
+   url=getattr(settings, 'ABSOLUTE_PATH', req.build_absolute_uri('/')[:-1])
+   try:
+      if not url:
+         host=req.build_absolute_uri()
+         host=host[0:host.index('/', 9)]
+         url=host
+      elif url.index('%s')>=0:
+         host=req.build_absolute_uri()
+         host=host[0:host.index('/', 9)]
+         url=url%host
+   except ValueError:
+      ''' url.index('%s') will raise the ValueError if string not found '''
+      pass
+   return url
 
 class Login( View ):
    def __loadDefault__(self, req):
@@ -76,12 +103,15 @@ class Login( View ):
 
       try:
          u=authenticate(req, username=username, password=password)
-         try:
-            if u.profile:
-               if not u.profile.alive:
-                  raise Error(lm('User[{0}] is expired! {1}~{2}', u.id, u.profile.effDate, u.profile.expDate))
-         except User.profile.RelatedObjectDoesNotExist:
-            logger.debug(lm('User<{0}> does not have the related profile, ignore the effective checking!', u.username))
+         if not u: raise AttributeError
+         if not hasattr(u, 'profile'): raise TypeError
+         if u.profile:
+            if not u.profile.alive:
+               raise Error(lm('User[{0}] is expired! {1}~{2}', u.id, u.profile.effDate, u.profile.expDate))
+      except AttributeError:
+         logger.debug(lm('User<{0}> cannot be found, or the password is incorrect.', username))
+      except (User.profile.RelatedObjectDoesNotExist, TypeError):
+         logger.debug(lm('User<{0}> does not have the related profile, ignore the effective checking!', username))
       except:
          logger.debug('Failed to login', exc_info=True)
          u=None
@@ -371,3 +401,158 @@ def prefsDoc(req):
    params['TYPES']=Preference.TYPES
    params['now']=getTime('now')
    return render(req, 'webframe/prefsDoc.html', params)
+
+def help_menuitem(req):
+   params=dict()
+   return render(req, 'webframe/menuitem.html', params)
+
+@login_required
+@permission_required('webframe.add_menuitem')
+def help_create_menuitem(req):
+   if req.method=='POST':
+      root=MenuItem(name='/', label=_('appName'), props={'href': 'index'})
+      root.save()
+      lm=MenuItem(name='/L', parent=root)
+      lm.save()
+      lroot=MenuItem(name='/L/Root', label='Goto Root', parent=lm, props={'href': 'index'})
+      lroot.save()
+      rm=MenuItem(name='/R', parent=root, props={'class': 'navbar-right'})
+      rm.save()
+      lang=MenuItem(name='/R/locale', parent=rm, icon='fa-globe')
+      lang.save()
+      hi=MenuItem(name='/R/Hi', parent=rm, label='Hi, {username}')
+      hi.save()
+      logout=MenuItem(name='/R/Hi/Logout', parent=hi, label='Logout', props={'href': reverse('webframe:logout')})
+      logout.save()
+      activate('en')
+      en=MenuItem(name='/R/locale/en', parent=lang, label=_('english'), props={'href':reverse('index')})
+      en.save()
+      activate('zh-hant')
+      zht=MenuItem(name='/R/locale/zht', parent=lang, label=_('zh-hant'), props={'href':reverse('index')})
+      zht.save()
+      return redirect('admin:webframe_menuitem_changelist')
+   return HttpResponseForbidden()
+
+class WhoAmIView(APIView):
+   authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+   permission_classes = [permissions.IsAuthenticated]
+   
+   def get(self, req, format=None):
+      return Response(UserSerializer(req.user).data)
+
+class HeaderView(APIView):
+   authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+      
+   def get(self, req, format=None):
+      logger.warn(req.method)
+      qs=MenuItem.objects.filter(parent__isnull=True)
+      if req.user.is_authenticated:
+         qs=qs.filter(models.Q(user__isnull=True)|models.Q(user=req.user)).order_by('-user')
+      else:
+         qs=qs.filter(user__isnull=True).order_by('-user')
+      qs=MenuItem.filter(qs, req.user)
+      if len(qs)>0:
+         return Response(MenuItemSerializer(qs[0]).data)
+      else:
+         rst=MenuItem(name='Generated NavBar', label=_('appName'))
+         lhs=MenuItem(parent=rst)
+         hlp=MenuItem(parent=lhs, label='MenuItem Help', props={'href': reverse('webframe:help-menuitem')})
+         lhs.childs=[hlp,]
+         rst.childs=[lhs,]
+         return Response(MenuItemSerializer(rst).data)
+
+class ResetPasswordView(View):
+   def get(self, req):
+      params=dict()
+      params['passwordReseted']=req.session.pop('reset-password', False)
+      try:
+         token=ResetPassword.objects.get(key=req.GET.get('token', None))
+         if str(token.user.id)!=req.GET.get('uid'): raise get_user_model().DoesNotExist
+         if token.isDead(): raise IndexError
+         params['token']=token
+      except ResetPassword.DoesNotExist:
+         if 'token' in req.GET: messages.info(req, _('ResetPassword.tokenNotFound'))
+      except get_user_model().DoesNotExist:
+         messages.info(req, _('ResetPassword.userNotFound'))
+      except IndexError:
+         messages.info(req, _('ResetPassword.notEffective'))
+      except:
+         logger.exception('Unexpected error')
+      return render(req, getattr(settings, 'TMPL_RESET_PASSWORD', 'webframe/resetPassword.html'), params)
+
+   def post(self, req):
+      if 'token' in req.POST:
+         return self._step2(req)
+      else:
+         return self._step1(req)
+
+   def _step1(self, req):
+      # Initializes
+      params=dict()
+      username=req.POST.get('username')
+      User=get_user_model()
+      user=None
+      ipAddr=getClientIP(req)
+
+      # Getting target user
+      try:
+         user=User.objects.get(username=username)
+      except User.DoesNotExist:
+         try:
+            user=User.objects.get(email=username)
+         except User.DoesNotExist:
+            messages.warning(req, _('Cannot found the user: %(username)')%{'username':username})
+            return redirect('webframe:resetPassword')
+
+      # Security check: repeating reset
+      requested=ResetPassword.objects.filter(request_by=ipAddr, cd__gte=getTime(datetime.now(), offset='-1H')).count()
+      logger.warning(lm('ResetPassword: There have {count} time(s) requested within 1 hour', count=requested))
+      if requested >= 5:
+         messages.warning(req, _('Too many times to reset password'))
+         return redirect('webframe:resetPassword')
+
+      # Sending reset email
+      with transaction.atomic():
+         ResetPassword.objects.filter(user=user, enabled=True).update(enabled=False) #Invalid previous token
+         reset=ResetPassword(user=user, request_by=ipAddr)
+         reset.save()
+         tmpl=Preference.objects.pref('TMPL_RESET_PASSWORD', defval='<p>Dear {user.first_name} {user.last_name},</p><p>Please click the link to reset your password: <a href="{absolute_url}{url}?uid={user.id}&token={token}" target="_blank">{absolute_url}{url}?uid={user.id}&token={token}</a>.</p>')
+         subj=Preference.objects.pref('TMPL_RESET_PASSWORD_SUBJECT', defval=_('resetPassword'))
+         sender=Preference.objects.pref('EMAIL_FROM', defval='info@kenson.idv.hk')
+         tmpl=tmpl.format(user=user, absolute_url=getAbsoluteUrl(req), token=reset.key, url=reverse('webframe:resetPassword'))
+         sendEmail.delay(sender=sender, subject=subj, recipients=user.email, content=tmpl)
+         email='{0}***{1}'.format(user.email[0:3], user.email[-7:])
+         messages.info(req, _('The reset password instruction has been email to %(email)s. Please follow the instruction to reset your password')%{'email': user.email} )
+      return redirect('webframe:resetPassword')
+
+   def _step2(self, req):
+      params=dict()
+      try:
+         token=getObj(ResetPassword, key=req.POST.get('token', None))
+         if str(token.user.id)!=req.GET.get('uid'): raise get_user_model().DoesNotExist
+         if token.isDead(): raise IndexError
+         passwd=req.POST.get('password', datetime.now())
+         again=req.POST.get('passwordAgain', 'Abc123$%^')
+         if passwd!=again: raise ValueError
+         with transaction.atomic():
+            token.user.set_password(passwd)
+            token.user.save()
+            token.complete_date=datetime.now()
+            token.complete_by=getClientIP(req)
+            token.enabled=False
+            token.save()
+            messages.info(req, _('The password has been updated successfully.'))
+            tmpl=Preference.objects.pref('TMPL_RESETED_PASSWORD', defval='<p>Dear {user.first_name} {user.last_name},</p>i<p>Your password has been updated successfully.</p>')
+            subj=Preference.objects.pref('TMPL_RESET_PASSWORD_SUBJECT', defval=_('resetPassword'))
+            sender=Preference.objects.pref('EMAIL_FROM', defval='info@kenson.idv.hk')
+            tmpl=tmpl.format(user=token.user, absolute_url=getAbsoluteUrl(req), token=token.key, url=reverse('webframe:resetPassword'))
+            sendEmail.delay(sender=sender, subject=subj, recipients=token.user.email, content=tmpl)
+            req.session['reset-password']=True
+      except ResetPassword.DoesNotExist:
+         messages.info(req, _('ResetPassword.tokenNotFound'))
+      except get_user_model().DoesNotExist:
+         messages.info(req, _('ResetPassword.userNotFound'))
+      except IndexError:
+         messages.info(req, _('ResetPassword.notEffective'))
+      return redirect('webframe:resetPassword')

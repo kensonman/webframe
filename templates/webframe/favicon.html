@@ -1,0 +1,6 @@
+{%load static pref%}
+<!-- Setup the FavIcon in preference with "FAVICON" -->
+{%static 'img/webframe/favicon.png' as staticFavIcon%}
+{%conf 'FAVICON' defval=staticFavIcon as tmplFavIcon%}
+{%pref 'FAVICON' defval=tmplFavIcon as defFavIcon%}
+<link rel="icon" type="image/png" href="{{defFavIcon}}"/>
