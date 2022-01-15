@@ -181,3 +181,21 @@ class ResetPasswordAdmin(admin.ModelAdmin):
    readonly_fields=('id',  'key', 'complete_by', 'complete_date', 'request_by', 'cb', 'cd', 'lmb', 'lmd')
    ordering=('user', '-effDate', 'expDate',)
    search_fields=('user__username', )
+
+@admin.register(TokenDetail)
+class TokenDetailAdmin(admin.ModelAdmin):
+   fields=('id', 'user', 'name', 'token', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'thisuser', 'name', 'thistoken', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_filter=(AliveObjectEffectiveFilter, )
+   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd')
+   ordering=('token__user', '-effDate', 'expDate',)
+
+   def thisuser(self, obj):
+      return obj.token.user
+   thisuser.short_description=_('TokenDetail.user')
+   thisuser.admin_order_field='token'
+
+   def thistoken(self, obj):
+      return obj.token.key
+   thistoken.short_description=_('TokenDetail.token')
+   thistoken.admin_order_field='token'

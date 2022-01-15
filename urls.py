@@ -10,6 +10,7 @@ urlpatterns=[
    re_path(r'^login/?$', views.Login.as_view(), name='login'),
    re_path(r'^logout/?$', views.logout, name='logout'),
    re_path(r'^resetPassword/?$', views.ResetPasswordView.as_view(), name='resetPassword'),
+   re_path(r'^obtainToken/?$', views.RegisterView.as_view(), name='obtainToken'),
 
    re_path(r'^users/?$', views.users, name='users'),
    re_path(r'^users/(?P<user>[^/]*)/?$', views.user, name='user'),

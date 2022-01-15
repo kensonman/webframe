@@ -9,19 +9,22 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
-from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django.views import View
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import ugettext_lazy as _, ugettext as gettext, activate
 from django.urls import reverse
 from django_tables2 import RequestConfig
 from rest_framework import authentication, permissions
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from webframe.functions import encrypt
 from .tasks import sendEmail
 from .decorators import is_enabled
 from .functions import getBool, isUUID, LogMessage as lm, getClientIP, getTime
@@ -82,10 +85,8 @@ class Login( View ):
       params=self.__loadDefault__(req)
       return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
-   def post(self, req):
+   def login(self, req, username, password):
       params=self.__loadDefault__(req)
-      username=req.POST['username']
-      password=req.POST['password']
 
       User=get_user_model()
       if User.objects.exclude(username=getattr(settings, 'ANONYMOUS_USER_NAME', 'AnonymousUser')).count()<1:
@@ -115,6 +116,13 @@ class Login( View ):
       except:
          logger.debug('Failed to login', exc_info=True)
          u=None
+      return u
+
+   def post(self, req):
+      params=self.__loadDefault__(req)
+      username=req.POST['username']
+      password=req.POST['password']
+      u=self.login(req, username, password)
       if u:
          auth_login(req, u)
          nextUrl=params.get('next', reverse('index'))
@@ -123,13 +131,16 @@ class Login( View ):
       params['username']=username
       return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
+   def delete(self, req):
+      auth_logout(req)
+      next=req.POST.get('next', req.GET.get('next', '/'))
+      return redirect(next)
+
 def logout(req):
    '''
    Logout the session.
    '''
-   auth_logout(req)
-   next=req.POST.get('next', req.GET.get('next', '/'))
-   return redirect(next)
+   return Login().delete(req)
 
 @login_required
 def users(req):
@@ -556,3 +567,35 @@ class ResetPasswordView(View):
       except IndexError:
          messages.info(req, _('ResetPassword.notEffective'))
       return redirect('webframe:resetPassword')
+
+@method_decorator(csrf_exempt, name='dispatch')
+class RegisterView(View):
+   ''' Login the user and register the AuthToken '''
+
+   def post(self, req):
+      username=req.POST.get('username', None)
+      password=req.POST.get('password', None)
+      deviceName=req.POST.get('deviceName', None)
+      try:
+         if not username: raise ValueError('username is None')
+         if not password: raise ValueError('password is None')
+         if not deviceName: raise ValueError('deviceName is None')
+         user=Login().login(req, username, password)
+         if not user: raise PermissionDenied()
+         logger.info('Got the loging: %s'%user.username)
+      except PermissionDenied:
+         raise
+      except:
+         logger.debug('', exc_info=True)
+         user=None
+         raise PermissionDenied()
+      
+      token, created=Token.objects.get_or_create(user=user)
+      try:
+         tokenDetail=TokenDetail.objects.get(token=token)
+         if not tokenDetail: raise TokenDetail.DoesNotExist
+      except TokenDetail.DoesNotExist:
+         tokenDetail=TokenDetail(token=token, name=deviceName)
+         tokenDetail.save()
+      logger.warning({'token': token.key, 'status': 'created' if created else 'retrieved', 'deviceName': deviceName})
+      return JsonResponse({'token': token.key, 'status': 'created' if created else 'retrieved'})

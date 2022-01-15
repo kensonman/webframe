@@ -17,6 +17,7 @@ from django.utils import timezone as tz
 from django.utils.translation import ngettext, get_language, ugettext_lazy as _
 from json import JSONEncoder
 from pathlib import Path
+from rest_framework.authtoken.models import Token
 from shutil import copyfile
 from .CurrentUserMiddleware import get_current_user, get_current_request
 from .functions import getBool, getClass, getTime, FMT_DATE, FMT_TIME, FMT_DATETIME, isUUID, TRUE_VALUES, getSecretKey, encrypt, decrypt, ENCRYPTED_PREFIX, LogMessage as lm, cache
@@ -1007,6 +1008,7 @@ class Profile(ValueObject, AliveObject):
 
 @receiver(post_save, sender=get_user_model())
 def postsave_user(sender, **kwargs):
+   ''' Catch the postsave signal on user-model, make sure the Profile is available '''
    if kwargs['created']:
       p=Profile(user=kwargs['instance'])
       p.effDate=getTime('now')
@@ -1209,3 +1211,11 @@ def presave_resetpasswd(sender, **kwargs):
       if not p.expDate: p.expDate=getTime(p.effDate, offset=getattr(settings, 'RESET_PASSWORD_DEFAULT_EXPDATE', '+1d'))
       p.cd=datetime.now()
       p.lmd=datetime.now()
+
+class TokenDetail(ValueObject, AliveObject):
+   class Meta(object):
+      verbose_name         = _('TokenDetail')
+      verbose_name_plural  = _('TokenDetails')
+   
+   token                   = models.OneToOneField(Token, on_delete=models.CASCADE, related_name='details')
+   name                    = models.CharField(max_length=100, verbose_name=_('TokenDetail.name'), help_text=_('TokenDetail.name.helptext'))
