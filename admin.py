@@ -184,10 +184,10 @@ class ResetPasswordAdmin(admin.ModelAdmin):
 
 @admin.register(TokenDetail)
 class TokenDetailAdmin(admin.ModelAdmin):
-   fields=('id', 'user', 'name', 'token', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   fields=('id', 'thisuser', 'name', 'token', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
    list_display=('id', 'thisuser', 'name', 'thistoken', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
    list_filter=(AliveObjectEffectiveFilter, )
-   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd')
+   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'thisuser', 'thistoken', 'token')
    ordering=('token__user', '-effDate', 'expDate',)
 
    def thisuser(self, obj):
@@ -199,3 +199,6 @@ class TokenDetailAdmin(admin.ModelAdmin):
       return obj.token.key
    thistoken.short_description=_('TokenDetail.token')
    thistoken.admin_order_field='token'
+
+   def has_add_permission(self, req, obj=None):
+      return False

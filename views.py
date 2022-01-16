@@ -24,14 +24,13 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from webframe.functions import encrypt
 from .tasks import sendEmail
 from .decorators import is_enabled
 from .functions import getBool, isUUID, LogMessage as lm, getClientIP, getTime
 from .models import *
 from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
-import hashlib, logging
+import hashlib, logging, json
 
 CONFIG_KEY='ConfigKey'
 logger=logging.getLogger('webframe.views')
@@ -573,9 +572,14 @@ class RegisterView(View):
    ''' Login the user and register the AuthToken '''
 
    def post(self, req):
-      username=req.POST.get('username', None)
-      password=req.POST.get('password', None)
-      deviceName=req.POST.get('deviceName', None)
+      logger.warning('Content-Type: %s'%req.headers.get('Content-Type'))
+      if req.headers.get('Content-Type', 'application/x-www-form-urlencoded')=='application/json':
+         params=json.loads(req.body)
+      else:
+         params=req.POST
+      username=params.get('username', None)
+      password=params.get('password', None)
+      deviceName=params.get('deviceName', None)
       try:
          if not username: raise ValueError('username is None')
          if not password: raise ValueError('password is None')
@@ -590,12 +594,18 @@ class RegisterView(View):
          user=None
          raise PermissionDenied()
       
-      token, created=Token.objects.get_or_create(user=user)
       try:
+         token=Token.objects.get(user=user)
+         created=False
          tokenDetail=TokenDetail.objects.get(token=token)
          if not tokenDetail: raise TokenDetail.DoesNotExist
+      except Token.DoesNotExist:
+         token=Token.objects.create(user=user)
+         created=True
+         tokenDetail=TokenDetail(token=token, name=deviceName)
+         tokenDetail.save()
       except TokenDetail.DoesNotExist:
          tokenDetail=TokenDetail(token=token, name=deviceName)
          tokenDetail.save()
-      logger.warning({'token': token.key, 'status': 'created' if created else 'retrieved', 'deviceName': deviceName})
-      return JsonResponse({'token': token.key, 'status': 'created' if created else 'retrieved'})
+      logger.debug({'token': token.key, 'status': 'created' if created else 'retrieved', 'deviceName': deviceName})
+      return JsonResponse({'token': 'ENC:{0}'.format(token.key[::-1]), 'status': 'created' if created else 'retrieved'})

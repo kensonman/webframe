@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-11 18:01+0000\n"
+"POT-Creation-Date: 2022-01-16 13:23+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -87,6 +87,14 @@ msgstr "Parent"
 msgid "webframe.models.Preference.helptext"
 msgstr "Help?"
 
+#: admin.py:195
+msgid "TokenDetail.user"
+msgstr "User"
+
+#: admin.py:200
+msgid "TokenDetail.token"
+msgstr "Token"
+
 #: authentications.py:62
 msgid "Your account is not effective"
 msgstr "Your account is not effective"
@@ -99,537 +107,553 @@ msgstr "Your account is not configured correctly"
 msgid "invalid username or password"
 msgstr "Invalid username or password"
 
-#: models.py:30
+#: models.py:31
 msgid "null"
 msgstr "<i class=\"fas fa-code\"></i>"
 
-#: models.py:32
+#: models.py:33
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
-#: models.py:33
+#: models.py:34
 msgid "English"
 msgstr "English"
 
-#: models.py:155
+#: models.py:156
 msgid "ValueObject"
 msgstr "Value Object"
 
-#: models.py:156
+#: models.py:157
 msgid "ValueObjects"
 msgstr "Value Objects"
 
-#: models.py:163
+#: models.py:164
 msgid "ValueObject.id"
 msgstr "ID"
 
-#: models.py:164
+#: models.py:165
 msgid "ValueObject.id.helptext"
-msgstr "The id of the value-object"
+msgstr "The id of this value-object"
 
-#: models.py:168
+#: models.py:169
 msgid "ValueObject.lmd"
 msgstr "Last Modify Date"
 
-#: models.py:169
+#: models.py:170
 msgid "ValueObject.lmd.helptext"
-msgstr "The last modify date of the value-object"
+msgstr "The last modify date of this value-object"
 
-#: models.py:178
+#: models.py:179
 msgid "ValueObject.lmb"
 msgstr "Last Modify By"
 
-#: models.py:179
+#: models.py:180
 msgid "ValueObject.lmb.helptext"
-msgstr "The person that modified the value-object last time"
+msgstr "The person that modified this value-object last time"
 
-#: models.py:183
+#: models.py:184
 msgid "ValueObject.cd"
 msgstr "Create Date"
 
-#: models.py:184
+#: models.py:185
 msgid "ValueObject.cd.helptext"
-msgstr "The creation date of the value-object"
+msgstr "The creation date of this value-object"
 
-#: models.py:193
+#: models.py:194
 msgid "ValueObject.cb"
 msgstr "Created By"
 
-#: models.py:194
+#: models.py:195
 msgid "ValueObject.cb.helptext"
 msgstr "The person that create this value-object"
 
-#: models.py:302
+#: models.py:303
 msgid "AliveObject"
 msgstr "Alive Object"
 
-#: models.py:303
+#: models.py:304
 msgid "AliveObjects"
 msgstr "Alive Objects"
 
-#: models.py:313
+#: models.py:314
 msgid "AliveObject.effDate"
 msgstr "Effective Date"
 
-#: models.py:314
+#: models.py:315
 msgid "AliveObject.effDate.helptext"
 msgstr "The date(Included) to start the life-cycle of the object"
 
-#: models.py:319
+#: models.py:320
 msgid "AliveObject.expDate"
 msgstr "Expiry Date"
 
-#: models.py:320
+#: models.py:321
 msgid "AliveObject.expDate.helptext"
 msgstr "The date(Excluded) to end the life-cycle of the object"
 
-#: models.py:324
+#: models.py:325
 msgid "AliveObject.enabled"
 msgstr "Enabled"
 
-#: models.py:325
+#: models.py:326
 msgid "AliveObject.enabled.helptext"
 msgstr "The enabling status of the object"
 
-#: models.py:375
+#: models.py:376
 msgid "OrderableValueObject.sequence"
 msgstr "Ordering"
 
-#: models.py:578
+#: models.py:579
 msgid "Preference.TYPE.NONE"
 msgstr "None (Must be empty)"
 
-#: models.py:579
+#: models.py:580
 msgid "Preference.TYPE.INT"
 msgstr "Integer"
 
-#: models.py:580
+#: models.py:581
 msgid "Preference.TYPE.DECIMAL"
 msgstr "Decimal"
 
-#: models.py:581
+#: models.py:582
 msgid "Preference.TYPE.BOOLEAN"
 msgstr "Boolean"
 
-#: models.py:582
+#: models.py:583
 msgid "Preference.TYPE.TEXT"
 msgstr "Text"
 
-#: models.py:583
+#: models.py:584
 msgid "Preference.TYPE.RICHTEXT"
 msgstr "Rich Text (HTML)"
 
-#: models.py:584
+#: models.py:585
 msgid "Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:585
+#: models.py:586
 msgid "Preference.TYPE.EMAIL"
 msgstr "Email"
 
-#: models.py:586
+#: models.py:587
 msgid "Preference.TYPE.DATE"
 msgstr "Date"
 
-#: models.py:587
+#: models.py:588
 msgid "Preference.TYPE.TIME"
 msgstr "Time"
 
-#: models.py:588
+#: models.py:589
 msgid "Preference.TYPE.DATETIME"
 msgstr "Date Time"
 
-#: models.py:589
+#: models.py:590
 msgid "Preference.TYPE.UUIDS"
 msgstr "Comma delimited UUIDs"
 
-#: models.py:590
+#: models.py:591
 msgid "Preference.TYPE.LIST"
 msgstr "Comma, Semicolon or | delimited strigns"
 
-#: models.py:591
+#: models.py:592
 msgid "Preference.TYPE.JSON"
 msgstr "JSON object"
 
-#: models.py:592
+#: models.py:593
 msgid "Preference.TYPE.FILEPATH"
 msgstr "File Resource"
 
-#: models.py:599
+#: models.py:600
 msgid "Preference.name"
 msgstr "Preference Name"
 
-#: models.py:599
+#: models.py:600
 msgid "Preference.name.helptext"
 msgstr "The name of the preference"
 
-#: models.py:600
+#: models.py:601
 msgid "Preference.value"
 msgstr "Preference Value"
 
-#: models.py:600
+#: models.py:601
 msgid "Preference.value.helptext"
 msgstr "The value of the perference"
 
-#: models.py:606
+#: models.py:607
 msgid "Preference.owner"
 msgstr "Owner"
 
-#: models.py:607
+#: models.py:608
 msgid "Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:614
+#: models.py:615
 msgid "Preference.parent"
 msgstr "Parent"
 
-#: models.py:615
+#: models.py:616
 msgid "Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:619
+#: models.py:620
 msgid "Preference.sequence"
 msgstr "Sequence"
 
-#: models.py:620
+#: models.py:621
 msgid "Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:622
+#: models.py:623
 msgid "Preference.tipe"
 msgstr "Type"
 
-#: models.py:622
+#: models.py:623
 msgid "Preference.tipe.helptext"
 msgstr ""
 "The type of the preference value. If File Content provided, it will "
 "<strong>always be</strong> File Resource"
 
-#: models.py:623
+#: models.py:624
 msgid "Preference.encrypted"
 msgstr "Encrypted"
 
-#: models.py:623
+#: models.py:624
 msgid "Preference.encrypted.helptxt"
 msgstr "The field should be encrypted b4 save"
 
-#: models.py:624
+#: models.py:625
 msgid "Preference.helptext"
 msgstr "Preferences/Settings stored in datagbase"
 
-#: models.py:624
+#: models.py:625
 msgid "Preference.helptext.helptext"
 msgstr "The help for user admin"
 
-#: models.py:625
+#: models.py:626
 msgid "Preference.regex"
 msgstr "Regex Pattern"
 
-#: models.py:625
+#: models.py:626
 msgid "Preference.regex.helptext"
 msgstr "This cannot be updated thru admin-tools."
 
-#: models.py:626
+#: models.py:627
 msgid "Preference.lang"
 msgstr "Language"
 
-#: models.py:626
+#: models.py:627
 msgid "Preference.lang.helptext"
 msgstr ""
 "The <a href=\"https://en.wikipedia.org/wiki/"
 "Language_localisation#Language_tags_and_codes\">language code</a> of this "
 "preference. Empty will set the fallback value."
 
-#: models.py:627
+#: models.py:628
 msgid "Preference.filecontent"
 msgstr "Uploaded Content"
 
-#: models.py:627
+#: models.py:628
 msgid "Preference.filecontent.helptext"
 msgstr "The uploaded content. If provided, the value will be overrided."
 
-#: models.py:909
+#: models.py:910
 msgid "AsyncManipulationObject"
 msgstr "Async Task#"
 
-#: models.py:910
+#: models.py:911
 msgid "AsyncManipulationObjects"
 msgstr "Async Task#"
 
-#: models.py:913
+#: models.py:914
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:917
+#: models.py:918
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:922
+#: models.py:923
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
 
-#: models.py:927
+#: models.py:928
 msgid "Numbering"
 msgstr "Numbering"
 
-#: models.py:928
+#: models.py:929
 msgid "Numberings"
 msgstr "Numberings"
 
-#: models.py:933
+#: models.py:934
 msgid "Numbering.name"
 msgstr "Name"
 
-#: models.py:933
+#: models.py:934
 msgid "Numbering.name.helptxt"
 msgstr "The name of the Numbering"
 
-#: models.py:934
+#: models.py:935
 msgid "Numbering.pattern"
 msgstr "Pattern"
 
-#: models.py:934
+#: models.py:935
 msgid "Numbering.pattern.helptxt"
 msgstr "The pattern to generate the number. now, next can be the variable"
 
-#: models.py:935
+#: models.py:936
 msgid "Numbering.next_val"
 msgstr "Next Value"
 
-#: models.py:935
+#: models.py:936
 msgid "Numbering.next_val.helptxt"
 msgstr "The next number that will be generated"
 
-#: models.py:936
+#: models.py:937
 msgid "Numbering.step_val"
 msgstr "Step Value"
 
-#: models.py:936
+#: models.py:937
 msgid "Numbering.step_val.helptxt"
 msgstr "After generation, the step value will be added"
 
-#: models.py:937
+#: models.py:938
 msgid "Numbering.desc"
 msgstr "Desc"
 
-#: models.py:937
+#: models.py:938
 msgid "Numbering.desc.helptext"
 msgstr "The description of the Numbering"
 
-#: models.py:948
+#: models.py:949
 msgid "Numbering.new"
 msgstr "New Numbering"
 
-#: models.py:949
+#: models.py:950
 #, python-brace-format
 msgid "Numbering[{name}::{next_val}]"
 msgstr "Numbering[{name}::{next_val}]"
 
-#: models.py:999 models.py:1002
+#: models.py:1000 models.py:1003
 msgid "Profile"
 msgstr "Profile"
 
-#: models.py:1000
+#: models.py:1001
 msgid "Profiles"
 msgstr "Profiles"
 
-#: models.py:1002
+#: models.py:1003
 msgid "Profile.helptext"
 msgstr "The profile settings"
 
-#: models.py:1024 models.py:1060
+#: models.py:1026 models.py:1062
 msgid "MenuItem"
 msgstr "Menu Item"
 
-#: models.py:1025
+#: models.py:1027
 msgid "MenuItems"
 msgstr "Menu Items"
 
-#: models.py:1034
+#: models.py:1036
 msgid "MenuItem.name"
 msgstr "Name"
 
-#: models.py:1034
+#: models.py:1036
 msgid "MenuItem.name.helptext"
 msgstr "Default is \"MainMenu\"; Used to declare the menu"
 
-#: models.py:1035
+#: models.py:1037
 msgid "MenuItem.user"
 msgstr "Owner"
 
-#: models.py:1035
+#: models.py:1037
 msgid "MenuItem.user.helptext"
 msgstr "The menu owner, None for anonymous"
 
-#: models.py:1036
+#: models.py:1038
 msgid "MenuItem.parent"
 msgstr "Parent"
 
-#: models.py:1036
+#: models.py:1038
 msgid "MenuItem.parent.helptext"
 msgstr "The parent of this menu-item"
 
-#: models.py:1038
+#: models.py:1040
 msgid "MenuItem.icon"
 msgstr "Icon"
 
-#: models.py:1038
+#: models.py:1040
 msgid "MenuItem.icon.help"
 msgstr "The icon of this menu-item; FrontAwesome name,  e.g: fa-cogs"
 
-#: models.py:1039
+#: models.py:1041
 msgid "MenuItem.label"
 msgstr "Label"
 
-#: models.py:1039
+#: models.py:1041
 msgid "MenuItem.label.helptext"
 msgstr "The label of the menu-item"
 
-#: models.py:1040
+#: models.py:1042
 msgid "MenuItem.image"
 msgstr "Image"
 
-#: models.py:1040
+#: models.py:1042
 msgid "MenuItem.image.helptext"
 msgstr "Image of the  menu-item"
 
-#: models.py:1041
+#: models.py:1043
 msgid "MenuItem.props"
 msgstr "Properties"
 
-#: models.py:1041
+#: models.py:1043
 msgid "MenuItem.props.help"
 msgstr "The HTML properties will be applied to menu-item"
 
-#: models.py:1044
+#: models.py:1046
 msgid "MenuItem.onclick"
 msgstr "OnClick scripts"
 
-#: models.py:1045
+#: models.py:1047
 msgid "MenuItem.onclick.helptext"
 msgstr "The scripts that will executed when user clicked"
 
-#: models.py:1049
+#: models.py:1051
 msgid "MenuItem.mousein"
 msgstr "Mouse In"
 
-#: models.py:1050
+#: models.py:1052
 msgid "MenuItem.mousein.helptext"
 msgstr "The scripts that will executed when user mouse-in"
 
-#: models.py:1054
+#: models.py:1056
 msgid "MenuItem.mouseout"
 msgstr "Mouse Out"
 
-#: models.py:1055
+#: models.py:1057
 msgid "MenuItem.mouseout.helptext"
 msgstr "The scripts that will executed when user mouse-out"
 
-#: models.py:1159
+#: models.py:1161
 msgid "Translation"
 msgstr "Translation"
 
-#: models.py:1160
+#: models.py:1162
 msgid "Translations"
 msgstr "Translations"
 
-#: models.py:1166 views.py:425
+#: models.py:1168 views.py:439
 msgid "english"
 msgstr "English"
 
-#: models.py:1167 views.py:428
+#: models.py:1169 views.py:442
 msgid "zh-hant"
 msgstr "繁體中文"
 
-#: models.py:1168
+#: models.py:1170
 msgid "zh-hans"
 msgstr "简体中文"
 
-#: models.py:1171
+#: models.py:1173
 msgid "Translation.key"
 msgstr "Key"
 
-#: models.py:1171
+#: models.py:1173
 msgid "Translation.key.helptext"
 msgstr "The key of the translation. Used to sort out the translation"
 
-#: models.py:1172
+#: models.py:1174
 msgid "Translation.locale"
 msgstr "Locale"
 
-#: models.py:1172
+#: models.py:1174
 msgid "Translation.locale.helptext"
 msgstr ""
 "The language local code. Refer to <a href=\"https://docs.djangoproject.com/"
 "en/3.2/ref/settings/#language-code\" target=\"_blank\">LANGUAGE_CODE</a> for "
 "details."
 
-#: models.py:1173
+#: models.py:1175
 msgid "Translation.msg"
 msgstr "Message"
 
-#: models.py:1173
+#: models.py:1175
 msgid "Translation.msg.helptext"
 msgstr "The message body."
 
-#: models.py:1174
+#: models.py:1176
 msgid "Translation.pmsg"
 msgstr "Plural Message"
 
-#: models.py:1174
+#: models.py:1176
 msgid "Translation.pmsg.helptext"
 msgstr "The message body when Plural"
 
-#: models.py:1183 templates/webframe/resetPassword.html:28
+#: models.py:1185 templates/webframe/resetPassword.html:28
 msgid "ResetPassword"
 msgstr "Reset Password"
 
-#: models.py:1184
+#: models.py:1186
 msgid "ResetPasswords"
 msgstr "Reset Passwords"
 
-#: models.py:1189
+#: models.py:1191
 msgid "ResetPassword.key"
 msgstr "KEY"
 
-#: models.py:1189
+#: models.py:1191
 msgid "ResetPassword.key.helptext"
 msgstr ""
 "The key of this reset-password. It will be generated automatically save "
 "create."
 
-#: models.py:1194
+#: models.py:1196
 msgid "ResetPassword.user"
 msgstr "User"
 
-#: models.py:1195
+#: models.py:1197
 msgid "ResetPassword.user.helptext"
 msgstr "The target user."
 
-#: models.py:1197
+#: models.py:1199
 msgid "ResetPasssword.request_by"
 msgstr "Requested By"
 
-#: models.py:1197
+#: models.py:1199
 msgid "ResetPassword.request_by.helptext"
 msgstr "The IP Address of client who created this reset token."
 
-#: models.py:1198
+#: models.py:1200
 msgid "ResetPasssword.complete_by"
 msgstr "Complete By"
 
-#: models.py:1198
+#: models.py:1200
 msgid "ResetPassword.complete_by.helptext"
 msgstr ""
 "The IP Address of client who used this reset token to reset his/her password."
 
-#: models.py:1199
+#: models.py:1201
 msgid "ResetPassword.complete_date"
 msgstr "Complete Date"
 
-#: models.py:1199
+#: models.py:1201
 msgid "ResetPassword.complete_date.helptext"
 msgstr "The date of reseting password"
+
+#: models.py:1217
+msgid "TokenDetail"
+msgstr "Token Detail"
+
+#: models.py:1218
+msgid "TokenDetails"
+msgstr "Token Details"
+
+#: models.py:1221
+msgid "TokenDetail.name"
+msgstr "Token/Device Name"
+
+#: models.py:1221
+msgid "TokenDetail.name.helptext"
+msgstr "The name of the token/device."
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
@@ -638,7 +662,7 @@ msgstr "Service Currently Unavailable"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:410 views.py:455
+#: templates/webframe/meta.html:3 views.py:424 views.py:469
 msgid "appName"
 msgstr ""
 
@@ -716,7 +740,7 @@ msgstr "Preference"
 msgid "logout"
 msgstr "Logout"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:76
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:77
 msgid "login"
 msgstr "Login"
 
@@ -767,6 +791,11 @@ msgstr "Username"
 #: templates/webframe/user.html:37
 msgid "password"
 msgstr "Password"
+
+#: templates/webframe/login.html:76 templates/webframe/resetPassword.html:3
+#: templates/webframe/resetPassword.html:10 views.py:532 views.py:558
+msgid "resetPassword"
+msgstr "Reset Password"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -937,11 +966,6 @@ msgstr "The regex validation rule"
 msgid "prefDoc.title"
 msgstr "Preference Setup Reference"
 
-#: templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:518 views.py:543
-msgid "resetPassword"
-msgstr "Reset Password"
-
 #: templates/webframe/resetPassword.html:20
 msgid "email"
 msgstr ""
@@ -1026,66 +1050,66 @@ msgstr "Save User"
 msgid "User.actions.new"
 msgstr "New User"
 
-#: views.py:37
+#: views.py:40
 msgid "django.contrib.auth.backends.ModelBackend"
 msgstr "Standard Username and Password"
 
-#: views.py:38
+#: views.py:41
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP/Active Directory"
 
-#: views.py:39
+#: views.py:42
 msgid "nextPage"
 msgstr "Next <i class=\"fas fa-angle-double-right\"></i>"
 
-#: views.py:40
+#: views.py:43
 #, python-format
 msgid "thisPage:%(page)s"
 msgstr "Page: %(page)s"
 
-#: views.py:41
+#: views.py:44
 msgid "prevPage"
 msgstr "<i class=\"fas fa-angle-double-left\"></i> Prev"
 
-#: views.py:119
+#: views.py:130
 msgid "Invalid username or password"
 msgstr "Invalid username or password"
 
-#: views.py:186
+#: views.py:200
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:354
+#: views.py:368
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
 
-#: views.py:472 views.py:549
+#: views.py:486 views.py:564
 msgid "ResetPassword.tokenNotFound"
 msgstr "Token not found"
 
-#: views.py:474 views.py:551
+#: views.py:488 views.py:566
 msgid "ResetPassword.userNotFound"
 msgstr "User not found"
 
-#: views.py:476 views.py:553
+#: views.py:490 views.py:568
 msgid "ResetPassword.notEffective"
 msgstr "Token expired"
 
-#: views.py:502
+#: views.py:516
 msgid "Cannot found the user: %(username)"
 msgstr "Cannot found the user: %(username)"
 
-#: views.py:509
+#: views.py:523
 msgid "Too many times to reset password"
 msgstr "Too many times to reset password. Please try again after an hour."
 
-#: views.py:522
+#: views.py:537
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:541
+#: views.py:556
 msgid "The password has been updated successfully."
 msgstr ""

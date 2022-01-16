@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-11 18:01+0000\n"
+"POT-Creation-Date: 2022-01-16 13:23+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -87,6 +87,14 @@ msgstr "歸類"
 msgid "webframe.models.Preference.helptext"
 msgstr "這個設定的說明"
 
+#: admin.py:195
+msgid "TokenDetail.user"
+msgstr "使用者"
+
+#: admin.py:200
+msgid "TokenDetail.token"
+msgstr "Token"
+
 #: authentications.py:62
 msgid "Your account is not effective"
 msgstr "你的帳戶未生效"
@@ -99,532 +107,548 @@ msgstr "你的帳戶並未設定正確，請與系統管理員聯絡"
 msgid "invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: models.py:30
+#: models.py:31
 msgid "null"
 msgstr "<i class=\"fas fa-code\"></i>"
 
-#: models.py:32
+#: models.py:33
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
-#: models.py:33
+#: models.py:34
 msgid "English"
 msgstr "English"
 
-#: models.py:155
+#: models.py:156
 msgid "ValueObject"
 msgstr "Value Object"
 
-#: models.py:156
+#: models.py:157
 msgid "ValueObjects"
 msgstr "Value Objects"
 
-#: models.py:163
+#: models.py:164
 msgid "ValueObject.id"
 msgstr "ID"
 
-#: models.py:164
+#: models.py:165
 msgid "ValueObject.id.helptext"
 msgstr "用作系統識別。使用 UUID 格式。"
 
-#: models.py:168
+#: models.py:169
 msgid "ValueObject.lmd"
 msgstr "最後修改日期"
 
-#: models.py:169
+#: models.py:170
 msgid "ValueObject.lmd.helptext"
 msgstr ""
 "這項資料的最修改日期。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:178
+#: models.py:179
 msgid "ValueObject.lmb"
 msgstr "最後修改人"
 
-#: models.py:179
+#: models.py:180
 msgid "ValueObject.lmb.helptext"
 msgstr "這項資料的最修改人。由系統自動設定，不能由使用者修改，就算修改都沒效。"
 
-#: models.py:183
+#: models.py:184
 msgid "ValueObject.cd"
 msgstr "建立日期"
 
-#: models.py:184
+#: models.py:185
 msgid "ValueObject.cd.helptext"
 msgstr "這項資料的建立日期。"
 
-#: models.py:193
+#: models.py:194
 msgid "ValueObject.cb"
 msgstr "建立人"
 
-#: models.py:194
+#: models.py:195
 msgid "ValueObject.cb.helptext"
 msgstr "這項資料的建立人。"
 
-#: models.py:302
+#: models.py:303
 msgid "AliveObject"
 msgstr "生命週期物件"
 
-#: models.py:303
+#: models.py:304
 msgid "AliveObjects"
 msgstr "生命週期物件"
 
-#: models.py:313
+#: models.py:314
 msgid "AliveObject.effDate"
 msgstr "有效日期"
 
-#: models.py:314
+#: models.py:315
 msgid "AliveObject.effDate.helptext"
 msgstr "這項資料的有效日期"
 
-#: models.py:319
+#: models.py:320
 msgid "AliveObject.expDate"
 msgstr "失效日期"
 
-#: models.py:320
+#: models.py:321
 msgid "AliveObject.expDate.helptext"
 msgstr "這項資料的失效日期"
 
-#: models.py:324
+#: models.py:325
 msgid "AliveObject.enabled"
 msgstr "啟用"
 
-#: models.py:325
+#: models.py:326
 msgid "AliveObject.enabled.helptext"
 msgstr "這項資料是否啟用"
 
-#: models.py:375
+#: models.py:376
 msgid "OrderableValueObject.sequence"
 msgstr "排序"
 
-#: models.py:578
+#: models.py:579
 msgid "Preference.TYPE.NONE"
 msgstr "必需為空值"
 
-#: models.py:579
+#: models.py:580
 msgid "Preference.TYPE.INT"
 msgstr "整數"
 
-#: models.py:580
+#: models.py:581
 msgid "Preference.TYPE.DECIMAL"
 msgstr "常數 (可以處理小數)"
 
-#: models.py:581
+#: models.py:582
 msgid "Preference.TYPE.BOOLEAN"
 msgstr "真假值"
 
-#: models.py:582
+#: models.py:583
 msgid "Preference.TYPE.TEXT"
 msgstr "純文字"
 
-#: models.py:583
+#: models.py:584
 msgid "Preference.TYPE.RICHTEXT"
 msgstr "可格式化文字 (HTML)"
 
-#: models.py:584
+#: models.py:585
 msgid "Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:585
+#: models.py:586
 msgid "Preference.TYPE.EMAIL"
 msgstr "電郵地址"
 
-#: models.py:586
+#: models.py:587
 msgid "Preference.TYPE.DATE"
 msgstr "日期"
 
-#: models.py:587
+#: models.py:588
 msgid "Preference.TYPE.TIME"
 msgstr "時間"
 
-#: models.py:588
+#: models.py:589
 msgid "Preference.TYPE.DATETIME"
 msgstr "日期時間"
 
-#: models.py:589
+#: models.py:590
 msgid "Preference.TYPE.UUIDS"
 msgstr "豆號分隔的 UUIDs"
 
-#: models.py:590
+#: models.py:591
 msgid "Preference.TYPE.LIST"
 msgstr "豆號、分號或｜分隔的字串"
 
-#: models.py:591
+#: models.py:592
 msgid "Preference.TYPE.JSON"
 msgstr "JSON 物件"
 
-#: models.py:592
+#: models.py:593
 msgid "Preference.TYPE.FILEPATH"
 msgstr "檔案地址"
 
-#: models.py:599
+#: models.py:600
 msgid "Preference.name"
 msgstr "新的設定"
 
-#: models.py:599
+#: models.py:600
 msgid "Preference.name.helptext"
 msgstr "這個設定的的名稱。"
 
-#: models.py:600
+#: models.py:601
 msgid "Preference.value"
 msgstr "新的設定"
 
-#: models.py:600
+#: models.py:601
 msgid "Preference.value.helptext"
 msgstr "這個設定的值。請參考系說明"
 
-#: models.py:606
+#: models.py:607
 msgid "Preference.owner"
 msgstr "新的設定"
 
-#: models.py:607
+#: models.py:608
 msgid "Preference.owner.helptext"
 msgstr ""
 "這個設定的擁有人，這個設定只對擁有人有效。這果沒有設定，即這個設定會套用到整"
 "個系統。"
 
-#: models.py:614
+#: models.py:615
 msgid "Preference.parent"
 msgstr "新的設定"
 
-#: models.py:615
+#: models.py:616
 msgid "Preference.parent.helptext"
 msgstr "這個設定屬於那一個歸類。"
 
-#: models.py:619
+#: models.py:620
 msgid "Preference.sequence"
 msgstr "新的設定"
 
-#: models.py:620
+#: models.py:621
 msgid "Preference.sequence.helptext"
 msgstr "這個設定的排序（這對有歸類的設有效）"
 
-#: models.py:622
+#: models.py:623
 msgid "Preference.tipe"
 msgstr "新的設定"
 
-#: models.py:622
+#: models.py:623
 msgid "Preference.tipe.helptext"
 msgstr "設定值的類列。如果有設定 上載內容，這個設為永遠為: 檔案地址"
 
-#: models.py:623
+#: models.py:624
 msgid "Preference.encrypted"
 msgstr "新的設定"
 
-#: models.py:623
+#: models.py:624
 msgid "Preference.encrypted.helptxt"
 msgstr "這個設定是否需要在儲存時加密？"
 
-#: models.py:624
+#: models.py:625
 msgid "Preference.helptext"
 msgstr "新的設定"
 
-#: models.py:624
+#: models.py:625
 msgid "Preference.helptext.helptext"
 msgstr "這個設定的說明文字"
 
-#: models.py:625
+#: models.py:626
 msgid "Preference.regex"
 msgstr "新的設定"
 
-#: models.py:625
+#: models.py:626
 msgid "Preference.regex.helptext"
 msgstr "用於驗證輸入，這不能於 Admin-Tools 更改."
 
-#: models.py:626
+#: models.py:627
 msgid "Preference.lang"
 msgstr "新的設定"
 
-#: models.py:626
+#: models.py:627
 msgid "Preference.lang.helptext"
 msgstr ""
 "這個設定的<a href=\"https://en.wikipedia.org/wiki/"
 "Language_localisation#Language_tags_and_codes\">語言</a>，空白為預設值"
 "(Fallback)"
 
-#: models.py:627
+#: models.py:628
 msgid "Preference.filecontent"
 msgstr "上載內容"
 
-#: models.py:627
+#: models.py:628
 msgid "Preference.filecontent.helptext"
 msgstr "上載的檔案內容。如果設定這個橺位，設定值橺位將會被無視。"
 
-#: models.py:909
+#: models.py:910
 msgid "AsyncManipulationObject"
 msgstr "異步程序#"
 
-#: models.py:910
+#: models.py:911
 msgid "AsyncManipulationObjects"
 msgstr "異步程序#"
 
-#: models.py:913
+#: models.py:914
 msgid "AsyncManipulationObject.task_id"
 msgstr "異步程序#"
 
-#: models.py:917
+#: models.py:918
 msgid "AsyncManipulationObject.is_processing"
 msgstr "異步程序進行中⋯⋯"
 
-#: models.py:922
+#: models.py:923
 msgid "AsyncManipulationObject.is_ready"
 msgstr "異步程序已準備就緒"
 
-#: models.py:927
+#: models.py:928
 msgid "Numbering"
 msgstr "自動序數"
 
-#: models.py:928
+#: models.py:929
 msgid "Numberings"
 msgstr "自動序數"
 
-#: models.py:933
+#: models.py:934
 msgid "Numbering.name"
 msgstr "序列號碼名稱"
 
-#: models.py:933
+#: models.py:934
 msgid "Numbering.name.helptxt"
 msgstr "這個序列號碼的的名稱。"
 
-#: models.py:934
+#: models.py:935
 msgid "Numbering.pattern"
 msgstr "樣式."
 
-#: models.py:934
+#: models.py:935
 msgid "Numbering.pattern.helptxt"
 msgstr "你可以用 now, next 和 user 等變數"
 
-#: models.py:935
+#: models.py:936
 msgid "Numbering.next_val"
 msgstr "下一個值"
 
-#: models.py:935
+#: models.py:936
 msgid "Numbering.next_val.helptxt"
 msgstr "下次產生號碼時的 next 變數"
 
-#: models.py:936
+#: models.py:937
 msgid "Numbering.step_val"
 msgstr "每次增加值"
 
-#: models.py:936
+#: models.py:937
 msgid "Numbering.step_val.helptxt"
 msgstr "每次產生號嗎後，「下一個值」所需要增加的值"
 
-#: models.py:937
+#: models.py:938
 msgid "Numbering.desc"
 msgstr "說明"
 
-#: models.py:937
+#: models.py:938
 msgid "Numbering.desc.helptext"
 msgstr "序例號碼的說明文字"
 
-#: models.py:948
+#: models.py:949
 msgid "Numbering.new"
 msgstr "新的序列號碼"
 
-#: models.py:949
+#: models.py:950
 #, python-brace-format
 msgid "Numbering[{name}::{next_val}]"
 msgstr "序列號碼[{name}::{next_val}]"
 
-#: models.py:999 models.py:1002
+#: models.py:1000 models.py:1003
 msgid "Profile"
 msgstr "設定帳戶"
 
-#: models.py:1000
+#: models.py:1001
 msgid "Profiles"
 msgstr "設定帳戶"
 
-#: models.py:1002
+#: models.py:1003
 msgid "Profile.helptext"
 msgstr "這個帳戶的說明"
 
-#: models.py:1024 models.py:1060
+#: models.py:1026 models.py:1062
 msgid "MenuItem"
 msgstr "菜單"
 
-#: models.py:1025
+#: models.py:1027
 msgid "MenuItems"
 msgstr "菜單"
 
-#: models.py:1034
+#: models.py:1036
 msgid "MenuItem.name"
 msgstr "名稱"
 
-#: models.py:1034
+#: models.py:1036
 msgid "MenuItem.name.helptext"
 msgstr "預設為 MainMenu， 用於設定該菜單的使用情景"
 
-#: models.py:1035
+#: models.py:1037
 msgid "MenuItem.user"
 msgstr "擁有者"
 
-#: models.py:1035
+#: models.py:1037
 msgid "MenuItem.user.helptext"
 msgstr "擁有者"
 
-#: models.py:1036
+#: models.py:1038
 msgid "MenuItem.parent"
 msgstr "上層菜單"
 
-#: models.py:1036
+#: models.py:1038
 msgid "MenuItem.parent.helptext"
 msgstr "上層菜單的 ID"
 
-#: models.py:1038
+#: models.py:1040
 msgid "MenuItem.icon"
 msgstr "圖示"
 
-#: models.py:1038
+#: models.py:1040
 msgid "MenuItem.icon.help"
 msgstr "FrontAwesome 的圖示名稱, 例如: fa-gos"
 
-#: models.py:1039
+#: models.py:1041
 msgid "MenuItem.label"
 msgstr "顯示文字"
 
-#: models.py:1039
+#: models.py:1041
 msgid "MenuItem.label.helptext"
 msgstr "顯示文字"
 
-#: models.py:1040
+#: models.py:1042
 msgid "MenuItem.image"
 msgstr "顯示圖片"
 
-#: models.py:1040
+#: models.py:1042
 msgid "MenuItem.image.helptext"
 msgstr "顯示圖片"
 
-#: models.py:1041
+#: models.py:1043
 msgid "MenuItem.props"
 msgstr "屬性"
 
-#: models.py:1041
+#: models.py:1043
 msgid "MenuItem.props.help"
 msgstr "將會附加於 MenuItem"
 
-#: models.py:1044
+#: models.py:1046
 msgid "MenuItem.onclick"
 msgstr "On Click"
 
-#: models.py:1045
+#: models.py:1047
 msgid "MenuItem.onclick.helptext"
 msgstr "當使用者點選時執行的腳本"
 
-#: models.py:1049
+#: models.py:1051
 msgid "MenuItem.mousein"
 msgstr "Mouse In"
 
-#: models.py:1050
+#: models.py:1052
 msgid "MenuItem.mousein.helptext"
 msgstr "當使用者滑鼠進入時報行的腳本"
 
-#: models.py:1054
+#: models.py:1056
 msgid "MenuItem.mouseout"
 msgstr "Mouse Out"
 
-#: models.py:1055
+#: models.py:1057
 msgid "MenuItem.mouseout.helptext"
 msgstr "當使用者滑鼠離開時報行的腳本"
 
-#: models.py:1159
+#: models.py:1161
 msgid "Translation"
 msgstr "翻釋"
 
-#: models.py:1160
+#: models.py:1162
 msgid "Translations"
 msgstr "翻釋"
 
-#: models.py:1166 views.py:425
+#: models.py:1168 views.py:439
 msgid "english"
 msgstr "English"
 
-#: models.py:1167 views.py:428
+#: models.py:1169 views.py:442
 msgid "zh-hant"
 msgstr "繁體中文"
 
-#: models.py:1168
+#: models.py:1170
 msgid "zh-hans"
 msgstr "简体中文"
 
-#: models.py:1171
+#: models.py:1173
 msgid "Translation.key"
 msgstr "索引"
 
-#: models.py:1171
+#: models.py:1173
 msgid "Translation.key.helptext"
 msgstr "用於程式找到所需的翻釋"
 
-#: models.py:1172
+#: models.py:1174
 msgid "Translation.locale"
 msgstr "語言"
 
-#: models.py:1172
+#: models.py:1174
 msgid "Translation.locale.helptext"
 msgstr "這個翻釋的所屬語言"
 
-#: models.py:1173
+#: models.py:1175
 msgid "Translation.msg"
 msgstr "文字"
 
-#: models.py:1173
+#: models.py:1175
 msgid "Translation.msg.helptext"
 msgstr "文字翻釋"
 
-#: models.py:1174
+#: models.py:1176
 msgid "Translation.pmsg"
 msgstr "眾數文字"
 
-#: models.py:1174
+#: models.py:1176
 msgid "Translation.pmsg.helptext"
 msgstr "眾數文字翻釋"
 
-#: models.py:1183 templates/webframe/resetPassword.html:28
+#: models.py:1185 templates/webframe/resetPassword.html:28
 msgid "ResetPassword"
 msgstr "重設密碼"
 
-#: models.py:1184
+#: models.py:1186
 msgid "ResetPasswords"
 msgstr "重設密碼"
 
-#: models.py:1189
+#: models.py:1191
 msgid "ResetPassword.key"
 msgstr "KEY"
 
-#: models.py:1189
+#: models.py:1191
 msgid "ResetPassword.key.helptext"
 msgstr "由系統自動產生的重設密碼"
 
-#: models.py:1194
+#: models.py:1196
 msgid "ResetPassword.user"
 msgstr "所屬的使用者"
 
-#: models.py:1195
+#: models.py:1197
 msgid "ResetPassword.user.helptext"
 msgstr "擁有者"
 
-#: models.py:1197
+#: models.py:1199
 msgid "ResetPasssword.request_by"
 msgstr "重設密碼者"
 
-#: models.py:1197
+#: models.py:1199
 msgid "ResetPassword.request_by.helptext"
 msgstr "要求重設密碼者的 IP 地址"
 
-#: models.py:1198
+#: models.py:1200
 msgid "ResetPasssword.complete_by"
 msgstr "完成者"
 
-#: models.py:1198
+#: models.py:1200
 msgid "ResetPassword.complete_by.helptext"
 msgstr "完成重設密碼者的 IP 地址"
 
-#: models.py:1199
+#: models.py:1201
 msgid "ResetPassword.complete_date"
 msgstr "完成日期"
 
-#: models.py:1199
+#: models.py:1201
 msgid "ResetPassword.complete_date.helptext"
 msgstr "完成重設密碼的日期"
+
+#: models.py:1217
+msgid "TokenDetail"
+msgstr "Token Detail"
+
+#: models.py:1218
+msgid "TokenDetails"
+msgstr "Token Details"
+
+#: models.py:1221
+msgid "TokenDetail.name"
+msgstr "Token/裝置名稱"
+
+#: models.py:1221
+msgid "TokenDetail.name.helptext"
+msgstr "使用這個 Token 登入的裝置名稱"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
@@ -633,7 +657,7 @@ msgstr "系統維護中"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:410 views.py:455
+#: templates/webframe/meta.html:3 views.py:424 views.py:469
 msgid "appName"
 msgstr ""
 
@@ -709,7 +733,7 @@ msgstr "個人設定"
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:76
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:77
 msgid "login"
 msgstr "登入"
 
@@ -760,6 +784,11 @@ msgstr "用戶名稱"
 #: templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
+
+#: templates/webframe/login.html:76 templates/webframe/resetPassword.html:3
+#: templates/webframe/resetPassword.html:10 views.py:532 views.py:558
+msgid "resetPassword"
+msgstr "重設密碼"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -931,11 +960,6 @@ msgstr "正則表達式"
 msgid "prefDoc.title"
 msgstr "設定說明"
 
-#: templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:518 views.py:543
-msgid "resetPassword"
-msgstr "重設密碼"
-
 #: templates/webframe/resetPassword.html:20
 msgid "email"
 msgstr ""
@@ -1020,66 +1044,66 @@ msgstr "存儲使用者"
 msgid "User.actions.new"
 msgstr "新增使用者"
 
-#: views.py:37
+#: views.py:40
 msgid "django.contrib.auth.backends.ModelBackend"
 msgstr "標準 Username 和 Password"
 
-#: views.py:38
+#: views.py:41
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP 或 Active Directory 登入"
 
-#: views.py:39
+#: views.py:42
 msgid "nextPage"
 msgstr "下一頁 <i class=\"fas fa-angle-double-right\"></i>"
 
-#: views.py:40
+#: views.py:43
 #, python-format
 msgid "thisPage:%(page)s"
 msgstr "此頁: %(page)s"
 
-#: views.py:41
+#: views.py:44
 msgid "prevPage"
 msgstr "<i class=\"fas fa-angle-double-left\"></i> 下一頁"
 
-#: views.py:119
+#: views.py:130
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:186
+#: views.py:200
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:354
+#: views.py:368
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
 
-#: views.py:472 views.py:549
+#: views.py:486 views.py:564
 msgid "ResetPassword.tokenNotFound"
 msgstr "找到到有效的 Token"
 
-#: views.py:474 views.py:551
+#: views.py:488 views.py:566
 msgid "ResetPassword.userNotFound"
 msgstr "找不到使用者"
 
-#: views.py:476 views.py:553
+#: views.py:490 views.py:568
 msgid "ResetPassword.notEffective"
 msgstr "不是有效的 Token"
 
-#: views.py:502
+#: views.py:516
 msgid "Cannot found the user: %(username)"
 msgstr "找不到這個使用者: %(username)"
 
-#: views.py:509
+#: views.py:523
 msgid "Too many times to reset password"
 msgstr "嘗試太多次了。請於一小時後再試。"
 
-#: views.py:522
+#: views.py:537
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:541
+#: views.py:556
 msgid "The password has been updated successfully."
 msgstr ""
