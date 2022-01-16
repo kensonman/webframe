@@ -573,7 +573,7 @@ class RegisterView(View):
 
    def post(self, req):
       logger.warning('Content-Type: %s'%req.headers.get('Content-Type'))
-      if req.headers.get('Content-Type', 'application/x-www-form-urlencoded')=='application/json':
+      if req.headers.get('Content-Type', 'application/x-www-form-urlencoded').startswith('application/json'):
          params=json.loads(req.body)
       else:
          params=req.POST
