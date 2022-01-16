@@ -607,5 +607,5 @@ class RegisterView(View):
       except TokenDetail.DoesNotExist:
          tokenDetail=TokenDetail(token=token, name=deviceName)
          tokenDetail.save()
-      logger.debug({'token': token.key, 'status': 'created' if created else 'retrieved', 'deviceName': deviceName})
-      return JsonResponse({'token': 'ENC:{0}'.format(token.key[::-1]), 'status': 'created' if created else 'retrieved'})
+      logger.debug({'token': token.key, 'status': 'created' if created else 'retrieved', 'deviceName': deviceName, 'username':user.username})
+      return JsonResponse({'token': 'ENC:{0}'.format(token.key[::-1]), 'status': 'created' if created else 'retrieved', 'username':user.username})
