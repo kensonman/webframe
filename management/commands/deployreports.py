@@ -27,10 +27,10 @@ class Command(BaseCommand):
       parser.add_argument('--host', dest='rpthost', type=str, help='The hostname of the report server; Default: http://rpthost:8080', default='http://rpthost:8080')
       parser.add_argument('--admin', dest='adminuser', type=str, help='The admin username of the report server; Default: jasperadmin', default='jasperadmin')
       parser.add_argument('--pass', dest='adminpass', type=str, help='The admin password of the report server; Default: jasperadmin', default='jasperadmin')
-      parser.add_argument('--prefix', dest='prefix', type=str, help='The prefix of installed reports URI; Default: /webframe', default='/webframe/')
+      parser.add_argument('--prefix', dest='prefix', type=str, help='The prefix of installed reports URI; It should be starting and ending with a slash \'/\'; Default: /webframe/', default='/webframe/')
       parser.add_argument('--reports', dest='reports', type=str, help='The path of the target report(s); Default: ./rpt/MyReports/*xml', default='./rpt/MyReports/*.jrxml')
       parser.add_argument('--dbconn', dest='dbconn', type=str, help='Specify the database connection for each imported report; Default: ./rpt/MyReports/DBConn.xml', default='./rpt/MyReports/DBConn.xml')
-      parser.add_argument('--role', dest='role', type=str, help='The role to access the webframe report repository', default='webframe')
+      parser.add_argument('--role', dest='role', type=str, help='The role to access the report repository', default='webframe')
 
    def jasperserver(self, url, **kwargs):
       ''' Communicate/Query the JasperServer '''

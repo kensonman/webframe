@@ -3,6 +3,6 @@
 	<div class="footer copyright">{%blocktrans with year=now|pydate:'%Y'%}{{year}}&copy; All copyright reservied.{%endblocktrans%}</div>
 	<div class="footer version">
 		<div class="version"><label>{%trans 'version'%}:</label> {{VERSION|default:'beta-v0.1'}}</div>
-		<div class="date"><label>{%trans 'render-date'%}:</label> {{now|pydate:'%Y-%m-%d %H:%M:%S.%f'}}</div>
+		<div class="date"><label>{%trans 'render-date'%}:</label> {{now|pydate:'%Y-%m-%d %H:%M:%S.%f'}} <span class="timezone">{{now|pydate:'%e'}}</span></div>
 	</div>
 </div>

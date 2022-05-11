@@ -1,3 +1,16 @@
-webframe v2.10.0 - 2021-07-12 15:22 +0100
+webframe v2.11.3 - 2021-12-13 15:36
 
-Support the filecontent in Preference. And also the django-maintenance-mode
+v2.11.3
+----
+Reset the WhoAmI permission
+
+v2.11.2
+----
+Add the reset-password link in login page.
+- Add the reset-password lnk in login page;
+- Change the template name from "TMPL_RESETPASSWORD" to "TMPL_RESET_PASSWORD";
+
+v2.11.1
+----
+Add the default ResetPassword mechanism
+- with email address encrypted when display the confirm message;

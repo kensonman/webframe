@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from django.utils import timezone
 from netaddr import IPAddress, IPNetwork
 from pytz import timezone as tz
-import os, logging, calendar, uuid
+import os, logging, calendar, uuid, base64
 
 logger=logging.getLogger('webframe.functions')
 FMT_DATE=getattr(settings, 'FMT_DATE', '%Y-%m-%d')
@@ -144,7 +144,7 @@ def offsetTime( val, expression ):
          elif unit=='y':
             rst.rst.replace(year=value)
          else:
-            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+            raise SyntaxError('Unknow offset-unit: {0}; f=microsecond, S=second, M=minute, H=hour, d=day, W=week, m=month, y=year;'.format(unit))
       elif (op=='+' or op=='-'): 
          if op=='-': value=value*-1
          if unit=='f':
@@ -164,7 +164,7 @@ def offsetTime( val, expression ):
          elif unit=='y':
             rst=rst+relativedelta(years=value)
          else:
-            raise SyntaxError('Unknow office-unit: {0}'.format(unit))
+            raise SyntaxError('Unknow offset-unit: {0}; f=microsecond, S=second, M=minute, H=hour, d=day, W=week, m=month, y=year;'.format(unit))
       else:
          raise SyntaxError('Offset Operator only support +, - and =')
    return rst
@@ -399,40 +399,95 @@ def convertDateformat(pydateformat, format='javascript'):
 def getJSDateformat(pydateformat, format='javascript'):
    return convertDateformat(pydateformat, format)
 
+def getSecretKeyFromPassword(password):
+   ''' 
+   Generate the secret-key from a password.
+
+   According to [this article](https://stackoverflow.com/questions/42568262/how-to-encrypt-text-with-a-password-in-python)::password_to_key(str)
+   '''
+   from Crypto.Hash import SHA256
+   return SHA256.new(password.encode('utf-8')).digest()
+
+def getRandomPassword(length=None):
+   '''
+   Generate a random password with specified length. If the length doesn't specified, the settings.SECRET_KEY_LENGTH will be used (default is 128).
+   '''
+   import random, string
+   if not length: length=int(getattr(settings, 'SECRET_KEY_LENGTH', 128))
+   pwd=list()
+   for i in range(length):
+      pwd.append(random.choice(string.ascii_letters))
+   pwd=''.join(pwd)
+   return pwd
+
 def getSecretKey(keyfile=None):
-   from cryptography.fernet import Fernet
-   import os
-   
+   '''
+   Loading the keyfile. If the keyfile is not exists, generate a new one with random password (the length can be defined by settings.SECRET_KEY_LENGTH).
+   '''
    if not keyfile:
       keyfile=getattr(settings, 'SECRET_KEY_FILE', 'secret.key')
       if not os.path.isabs(keyfile): keyfile=os.path.join(os.path.dirname(__file__), keyfile)
 
    if os.path.isfile(keyfile):
-      #Loading the key
       return open(keyfile, 'rb').read().decode('utf-8')
-   else:
-      #Generate the key
-      key=Fernet.generate_key()
-      with open(keyfile, 'wb') as f:
-         f.write(key)
-      os.chmod(keyfile, 0o600)
-      logger.warning('Generated the secret-key at {0}. Please ***BACKUP*** and keep it carefully!'.format(keyfile))
-      return key
 
-def encrypt( data, secretKey=None ):
-   data=str(data)
-   if not secretKey: secretKey=getSecretKey()
+   pwd=getRandomPassword()
+   with open(keyfile, 'wb') as f:
+      f.write(getSecretKeyFromPassword(pwd))
+   os.chmod(keyfile, 0o600)
+   logger.warning('Generated the secret-key at {0}. Please ***BACKUP*** and keep it carefully!'.format(keyfile))
+   return getSecretKeyFromPassword(pwd)
 
-   from cryptography.fernet import Fernet
-   return '{0}{1}'.format(ENCRYPTED_PREFIX, Fernet(secretKey).encrypt(data.encode('utf-8')).decode('utf-8'))
+def encrypt( source, password=None ):
+   '''
+   Encrypt the data according to [this article](https://stackoverflow.com/questions/42568262/how-to-encrypt-text-with-a-password-in-python).
 
-def decrypt( data, secretKey=None ):
-   data=str(data)
-   if data.startswith(ENCRYPTED_PREFIX): data=data[len(ENCRYPTED_PREFIX):]
-   if not secretKey: secretKey=getSecretKey()
+   @param source     The data to be encrypted;
+   @param password   The password for encryption;
+   '''
+   import base64
+   from Crypto.Cipher import AES
+   from Crypto.Hash import SHA256
+   from Crypto import Random
+   source=str(source).encode('utf-8')
+   if not password: password=getSecretKey()
+   if isinstance(password, str): password=getSecretKeyFromPassword(password)
 
-   from cryptography.fernet import Fernet
-   return Fernet(secretKey).decrypt(data.encode('utf-8')).decode('utf-8')
+   key = SHA256.new(password).digest()  # use SHA-256 over our key to get a proper-sized AES key
+   IV = Random.new().read(AES.block_size)  # generate IV
+   encryptor = AES.new(key, AES.MODE_CBC, IV)
+   padding = AES.block_size - len(source) % AES.block_size  # calculate needed padding
+   source += bytes([padding]) * padding  # Python 2.x: source += chr(padding) * padding
+   data = IV + encryptor.encrypt(source)  # store the IV at the beginning and encrypt
+   return '{0}{1}'.format(ENCRYPTED_PREFIX, base64.b64encode(data).decode('utf-8'))
+
+def decrypt( source, password=None ):
+   '''
+   Encrypt the data according to [this article](https://stackoverflow.com/questions/42568262/how-to-encrypt-text-with-a-password-in-python).
+
+   @param source     The data to be decrypted;
+   @param password   The password for encryption;
+   '''
+   import base64
+   from Crypto.Cipher import AES
+   from Crypto.Hash import SHA256
+   from Crypto import Random
+   source=str(source)
+   logger.warning({'source': source, 'password': password})
+   if not password: password=getSecretKey()
+   if isinstance(password, str): password=getSecretKeyFromPassword(password)
+   if source.startswith(ENCRYPTED_PREFIX): source=source[len(ENCRYPTED_PREFIX):]
+   source=base64.b64decode(source.encode('utf-8'))
+   
+   key = SHA256.new(password).digest()  # use SHA-256 over our key to get a proper-sized AES key
+   IV = source[:AES.block_size]  # extract the IV from the beginning
+   decryptor = AES.new(key, AES.MODE_CBC, IV)
+   data = decryptor.decrypt(source[AES.block_size:])  # decrypt
+   padding = data[-1]  # pick the padding value from the end; Python 2.x: ord(data[-1])
+   if data[-padding:] != bytes([padding]) * padding:  # Python 2.x: chr(padding) * padding
+      raise ValueError("Cannot decrypt the data, may be due to invalid source or password provided.")
+   data=data[:-padding].decode('utf-8')  # remove the padding
+   return data
 
 #According to [Python Logging Codebook](https://docs.python.org/3/howto/logging-cookbook.html#formatting-styles)
 class LogMessage(object):

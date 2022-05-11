@@ -50,9 +50,7 @@ $(document).ready(function(){
                {%endblock%}
 
                <input type="hidden" name="next" value="{{next|default:'/'}}"/>
-               {%block messages%}{%if messages%}<div><ul class="ul-messages">{%for msg in messages%}
-                   <li class="animated flash"><span class="alert alert-{{msg.tags|default:''}}">{{msg}}</span></li>
-               {%endfor%}</ul></div>{%endif%}{%endblock%}
+               {%include TMPL_MESSAGES|default:'webframe/messages.html'%}
                
                {%block authenticationBackendsBlock%}<div class="field form-group">
                   <label for="backendsFld">{%trans 'Authentication Backends'%}</label>
@@ -75,6 +73,7 @@ $(document).ready(function(){
                      <input type="password" name="password" id="passwordFld" class="form-control" placeholder="{%trans 'password'%}" required="required"/>
                   </div>
                   <div class="pnl-btns">
+                     {%if TMPL_RESET_PASSWORD%}<a href="{%url 'webframe:resetPassword'%}" target='_self'>{%trans 'resetPassword'%}</a>{%endif%}
                      <button class="btn btn-success" type="submit">{%trans 'login'%}</button>
                   </div>
                </section>{%endblock%}

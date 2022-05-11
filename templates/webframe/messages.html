@@ -1,0 +1,4 @@
+{%comment%}The message block{%endcomment%}
+{%block messages%}{%if messages%}<div><ul class="ul-messages">{%for msg in messages%}
+    <li class="animated flash message alert alert-{{msg.tags|default:''}}"><span>{{msg|safe}}</span></li>
+{%endfor%}</ul></div>{%endif%}{%endblock%}
