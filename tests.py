@@ -54,6 +54,8 @@ class HeaderApiTest(TestCase):
       try:
          rep.content.decode('ascii').index(reverse('admin:index'))
          self.fail('Found the admin-url')
+      except:
+         pass
 
 class FunctionsTestCase(TestCase):
    def __init__(self, *args, **kwargs):
