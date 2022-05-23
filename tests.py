@@ -30,7 +30,7 @@ class HeaderApiTest(TestCase):
       url=reverse('webframe:headers')
       client=Client()
       logger.info('Running index url without authentication: {0}...'.format(url))
-      rep=client.get(url)
+      rep=client.get(url, follow=True)
       logger.debug('response code: {0}'.format(rep.status_code))
       self.assertTrue(200 <= rep.status_code < 300)
       self.assertEquals(rep.json()['name'], 'Generated NavBar')
@@ -38,7 +38,7 @@ class HeaderApiTest(TestCase):
       user=self.super
       client=Client(HTTP_AUTHORIZATION='Token {0}'.format(user.token))
       logger.info('Running index url with authentication({1}): {0}...'.format(url, user.username))
-      rep=client.get(url)
+      rep=client.get(url, follow=True)
       logger.debug('response code: {0}'.format(rep.status_code))
       self.assertTrue(200 <= rep.status_code < 300)
       self.assertEquals(rep.json()['name'], 'Generated NavBar')
@@ -47,7 +47,7 @@ class HeaderApiTest(TestCase):
       user=self.normal
       client=Client(HTTP_AUTHORIZATION='Token {0}'.format(user.token))
       logger.info('Running index url with authentication({1}): {0}...'.format(url, user.username))
-      rep=client.get(url)
+      rep=client.get(url, follow=True)
       logger.debug('response code: {0}'.format(rep.status_code))
       self.assertTrue(200 <= rep.status_code < 300)
       self.assertEquals(rep.json()['name'], 'Generated NavBar')
