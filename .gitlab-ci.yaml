@@ -54,9 +54,9 @@ testing:
    rules:
       - !reference [.on-versioning-branch, rules]
    variables:
-      - CI_BUILDS_DIR: /src/webframe
-      - DBMS: django.db.backends.sqlite3
-      - DBNAME: /tmp/testing.db
+      CI_BUILDS_DIR: /src/webframe
+      DBMS: django.db.backends.sqlite3
+      DBNAME: /tmp/testing.db
    before_script:
       - > 
          cd /src/webframe
@@ -81,7 +81,7 @@ building:
    stage: build
    dependencies:
       - prepare
-      - test
+      - testing
    variables:
       VERSION: value-from-prepare
    rules:
