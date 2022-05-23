@@ -1,0 +1,145 @@
+# The file is used as a template for GitLab-CI building template.
+# It defined the basic step to getting start, e.g.: Versioning
+stages:
+   - pre
+   - test
+   - build
+   - release
+   - post
+
+# Default Variables here
+variables:
+   GIT_STRATEGY: "fetch"
+   GIT_SUBMODULE_STRATEGY: "recursive"
+
+# Default Job Specification
+default:
+   image: "python:3-alpine"
+
+.on-versioning-branch:
+   rules:
+      - if: '$CI_COMMIT_BRANCH == ""'
+        when: never
+      - if: '$VERSION != "" && $CI_COMMIT_BRANCH =~ "^([0-9]+\.){0,3}([0-9]+[\+\-]){0,2}x$"'
+        when: on_success
+# Prepare the versioning
+prepare:
+   stage: pre
+   image: "kensonman/versioning:1.0.4"
+   script:
+      - >
+         echo "Preparing the CI/CD environment: `pwd`..."
+         && git config --global --add safe.directory `pwd`
+         && echo "   > Detecting the versioning pattern: `version.py getVersionPattern`"
+         && echo "   > Getting the last version..."
+         && echo "     > Last version artifact url: `version.py getLastVersionArtifactUrl`"
+         && export VERSION=`version.py getLastVersion`
+         && echo "     > Last version: ${VERSION}"
+         && export VERSION=`version.py getNextVersion`
+         && echo "   > Next version: ${VERSION}"
+         && echo "   > Exporting..."
+         && echo "VERSION=${VERSION}" > VERSION.env
+         && echo "${VERSION}" > VERSION
+   artifacts:
+      reports:
+         # Put the version into env for sharing the variable between job
+         dotenv: VERSION.env
+      paths:
+         # Put the VERSION as an artifact for futer development
+         - VERSION
+
+# Teting the binary/output which builded by "building" job.
+testing:
+   stage: test
+   rules:
+      - !reference [.on-versioning-branch, rules]
+   variables:
+      - CI_BUILDS_DIR: /src/webframe
+      - DBMS: django.db.backends.sqlite3
+      - DBNAME: /tmp/testing.db
+   before_script:
+      - > 
+         cd /src/webframe
+         && ./dependencies.sh
+         && cd ..
+         && django-admin startproject testproj
+         && mv testproj proj
+         && mv proj/* .
+         && rmdir proj
+         && echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py
+         && echo "from django.urls import path, re_path, include" >> testproj/urls.py
+         && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
+   script:
+      - >
+         echo "Testing..."
+         && cd ..
+         && ./manage.py test
+
+
+# Building the binary/output according to the string. It may be the docker image
+building:
+   stage: build
+   dependencies:
+      - prepare
+      - test
+   variables:
+      VERSION: value-from-prepare
+   rules:
+      - !reference [.on-versioning-branch, rules]
+   before_script:
+      - > 
+         cd /src/webframe
+         && ./dependencies.sh
+         && cd ..
+         && django-admin startproject testproj
+         && mv testproj proj
+         && mv proj/* .
+         && rmdir proj
+         && echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py
+         && echo "from django.urls import path, re_path, include" >> testproj/urls.py
+         && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
+   script:
+      - >
+         echo "Building..."
+         && ../manage.py compilemessages
+         && cd ..
+         && ./manage.py collectstatic
+   artifacts:
+      paths:
+         - locale/
+
+
+# Releasing the binary/output. Usually push the docker image into the registry
+releasing:
+   image: registry.gitlab.com/gitlab-org/release-cli:latest
+   stage: release
+   dependencies:
+      - prepare
+      - building
+   variables:
+      VERSION: value-from-prepare 
+      DOCKERIZED_VERSION: value-from-prepare
+      #Don't pull the source code
+      GIT_STRATEGY: none
+   rules:
+      - !reference [.on-versioning-branch, rules]
+   script: 
+      - > 
+         echo "Creating release: $VERSION..."
+   release:
+      name: "Release - $VERSION"
+      description: "$CI_COMMIT_REF_NAME - $CI_COMMIT_MESSAGE"
+      tag_name: "$VERSION"
+      ref: '$CI_COMMIT_REF_NAME'
+
+# Cleaning the CI/CD
+clean:
+   stage: post
+   rules:
+      - !reference [.on-versioning-branch, rules]
+   variables:
+      #Don't pull the source code
+      GIT_STRATEGY: none
+   script:
+      - >
+         echo "Cleaning up..."
