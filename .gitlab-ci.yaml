@@ -58,8 +58,11 @@ testing:
    before_script:
       - > 
          echo "B4 script on `pwd`..."
-         && cd /src/webframe
+         && cd src
          && ./dependencies.sh
+   script:
+      - >
+         echo "Testing on `pwd`..."
          && cd ..
          && django-admin startproject testproj
          && mv testproj proj
@@ -68,10 +71,6 @@ testing:
          && echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py
          && echo "from django.urls import path, re_path, include" >> testproj/urls.py
          && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
-   script:
-      - >
-         echo "Testing on `pwd`..."
-         && cd ..
          && ls -lF
          && ./manage.py test
 
