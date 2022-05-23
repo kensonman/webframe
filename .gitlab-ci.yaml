@@ -72,6 +72,7 @@ testing:
       - >
          echo "Testing on `pwd`..."
          && cd ..
+         && ls -lF
          && ./manage.py test
 
 
