@@ -58,7 +58,6 @@ testing:
    before_script:
       - > 
          echo "B4 script on `pwd`..."
-         && cd src
          && ./dependencies.sh
    script:
       - >
