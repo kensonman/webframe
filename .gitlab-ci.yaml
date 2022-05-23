@@ -51,8 +51,6 @@ prepare:
 # Teting the binary/output which builded by "building" job.
 testing:
    stage: test
-   rules:
-      - !reference [.on-versioning-branch, rules]
    variables:
       CI_BUILDS_DIR: /src/webframe
       DBMS: django.db.backends.sqlite3
