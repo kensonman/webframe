@@ -70,7 +70,6 @@ testing:
          && echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py
          && echo "from django.urls import path, re_path, include" >> testproj/urls.py
          && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
-         && ls -lF
          && ./manage.py test
 
 
