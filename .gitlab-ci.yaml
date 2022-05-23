@@ -57,7 +57,8 @@ testing:
       DBNAME: /tmp/testing.db
    before_script:
       - > 
-         cd /src/webframe
+         echo "B4 script on `pwd`..."
+         && cd /src/webframe
          && ./dependencies.sh
          && cd ..
          && django-admin startproject testproj
@@ -69,7 +70,7 @@ testing:
          && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
    script:
       - >
-         echo "Testing..."
+         echo "Testing on `pwd`..."
          && cd ..
          && ./manage.py test
 
@@ -86,7 +87,8 @@ building:
       - !reference [.on-versioning-branch, rules]
    before_script:
       - > 
-         cd /src/webframe
+         echo "B4 script on `pwd`..."
+         && cd /src/webframe
          && ./dependencies.sh
          && cd ..
          && django-admin startproject testproj
@@ -98,7 +100,7 @@ building:
          && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
    script:
       - >
-         echo "Building..."
+         echo "Building on `pwd`..."
          && ../manage.py compilemessages
          && cd ..
          && ./manage.py collectstatic
