@@ -422,6 +422,7 @@ class PrefManager(models.Manager):
      @kwargs['returnValue']  Default True;  The boolean value indicate the method return the preference's value instead of preference instance.
      @kwargs['returnQuery']  Default False; The boolean value indicate the method return the query instead of others; [for debug];
      @kwargs['parent']       The filter of parent preference of result instance
+     @kwargs['tipe']         The tipe when defval. It will let the value auto parse to expected data-type
      @kwargs['value']        The filter of preference value; the below operators can be used:
                                  == The equals operator.             e.g.: "==Abc" will find all preference's value equals to "Abc"
                                  != The not equals operator.         e.g.: "!=Abc" will find all preference's value not equals to "Abc"
@@ -515,7 +516,7 @@ class PrefManager(models.Manager):
                     break
            if not found: rst=rst[0]
         else:
-           rst=Preference(name=name, _value=defval)
+           rst=Preference(name=name, _value=defval, tipe=kwargs.get('tipe', AbstractPreference.TEXT))
         if getBool(kwargs.get('returnValue', 'True')):
            return rst.value
         return rst
