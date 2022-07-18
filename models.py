@@ -516,7 +516,7 @@ class PrefManager(models.Manager):
                     break
            if not found: rst=rst[0]
         else:
-           rst=Preference(name=name, _value=defval, tipe=kwargs.get('tipe', AbstractPreference.TEXT))
+           rst=Preference(name=name, _value=defval, tipe=kwargs.get('tipe', AbstractPreference.TYPE_TEXT))
         if getBool(kwargs.get('returnValue', 'True')):
            return rst.value
         return rst
