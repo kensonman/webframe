@@ -9,10 +9,15 @@ from django.db.models.query import QuerySet
 from django.core.paginator import Paginator, Page
 from rest_framework import serializers
 from rest_framework.pagination import PageNumberPagination
-from webframe.models import Preference, MenuItem
+from webframe.models import Preference, MenuItem, ValueObject
 import logging
 
 logger=logging.getLogger('webframe.serializers')
+
+class ValueObjectSerializer(serializers.ModelSerializer):
+   class Meta(object):
+      model       = ValueObject
+      fields      = ['id', 'cb', 'cd', 'lmb', 'lmd', ]
 
 class PreferenceSerializer(serializers.ModelSerializer):
    class Meta(object):
