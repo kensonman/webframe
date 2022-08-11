@@ -440,3 +440,12 @@ Preference Encryption
 The preference support the encryption and decryption since v2.2.
 
 The key for encryption and decryption key can be setup by PREFERENCE_SECRET environment variable or AbstractPreference.secret right beside the models.py
+
+WebAuthn Support
+----
+
+1. Install the webauthn
+```bash
+pip install webauthn
+```
+

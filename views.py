@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model, logout as auth_logout, login as 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
 from django.db import transaction
-from django.http import HttpResponseForbidden, QueryDict, Http404, JsonResponse
+from django.http import HttpResponseForbidden, QueryDict, Http404, HttpResponse, JsonResponse
 from django.middleware.csrf import get_token as getCSRF
 from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django.views import View
@@ -24,7 +24,7 @@ from .functions import getBool, isUUID, LogMessage as lm
 from .models import *
 from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
-import hashlib, logging
+import hashlib, logging, json, base64, sys
 
 CONFIG_KEY='ConfigKey'
 logger=logging.getLogger('webframe.views')
@@ -99,6 +99,73 @@ class Login( View ):
       if getattr(settings, 'WF_DEFAULT_LOGIN_WARNINGS', True): messages.warning(req, gettext('Invalid username or password'))
       params['username']=username
       return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
+
+class WebAuthnRegistration( View ):
+   def get(self, req):
+      params=dict()
+      if req.headers.get('Accept')=='application/json':
+         from webauthn import generate_registration_options, options_to_json
+         username=req.GET.get('username')
+         opts=generate_registration_options(
+              rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
+            , rp_name=getattr(settings, 'WEBAUTHN_RP_NAME', 'webframe')
+            , user_id=username
+            , user_display_name=username
+            , user_name=username)
+         req.session['webauthn-challenge']=base64.b64encode(opts.challenge).decode('utf-8')
+         rst=options_to_json(opts)
+         rep=HttpResponse()
+         rep.headers['Content-Type']='application/json'
+         rep.write(rst)
+         return rep
+      return render(req, getattr(settings, 'TMPL_WEBAUTHN_REGISTRATION', 'webframe/webauthn-registration.html'), params)
+
+   def post(self, req):
+      from webauthn import verify_registration_response, base64url_to_bytes, options_to_json
+      from webauthn.helpers.structs import RegistrationCredential
+      rep=HttpResponse()
+      rep.headers['Content-Type']='application/json'
+      result=dict()
+      try:
+         data=req.body.decode('utf-8')
+         cred=RegistrationCredential.parse_raw(data)
+         challenge=base64.b64decode(req.session['webauthn-challenge'])
+         origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
+         vr=verify_registration_response(credential=cred, expected_challenge=challenge, expected_origin="https://{0}".format(origin), expected_rp_id=origin, require_user_verification=True)
+         logger.debug('VerifiedRegistrationResponse: {0}'.format(options_to_json(vr)))
+         result['verified']=True
+      except:
+         result['verified']=False
+         result['error']=sys.exc_info()[0]
+         result['message']=sys.exc_info()[1]
+      finally:
+         rep.write(json.dumps(result))
+      return rep
+
+class WebAuthnAuthentication( View ):
+   def get(self, req):
+      params=dict()
+      rep=HttpResponse()
+      if req.headers.get('Accept')=='application/json':
+         rep.headers['Content-Type']='application/json'
+         from webauthn import generate_authentication_options, options_to_json
+         from webauthn.helpers.structs import UserVerificationRequirement
+
+         options = generate_authentication_options(
+              rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
+            , user_verification=UserVerificationRequirement.REQUIRED
+         )
+         return rep
+      rep.status_code=405
+      rep.write('Unsupported Content-Type: {0}'.format(req.headers.get('Accept', 'text/html')))
+      return rep
+
+   def post(self, req):
+      rep=HttpResponse()
+      rep.headers['Content-Type']='application/json'
+      result=dict()
+      return rep
+      
 
 def logout(req):
    '''

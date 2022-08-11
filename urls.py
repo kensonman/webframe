@@ -26,5 +26,8 @@ urlpatterns=[
    re_path(r'headers/?$', views.HeaderView.as_view(), name='headers'),
    re_path(r'whoami/?$', views.WhoAmIView.as_view(), name='whoami'),
 
+   re_path(r'webauthn/register/?$', views.WebAuthnRegistration.as_view(), name='webauthn-registration'),
+   re_path(r'webauthn/authenticate/?$', views.WebAuthnAuthentication.as_view(), name='webauthn-authentication'),
+
    re_path('jsi18n/', JavaScriptCatalog.as_view(domain='django', packages=['webframe',]), name='js'),
 ] 

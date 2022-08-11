@@ -1,0 +1,112 @@
+{%extends 'webframe/base.html'%}{%load i18n static pref%}
+
+{%block title%}{%trans 'login-webauthn-registration'%}{%endblock%}
+
+{%block scripts%}{{block.super}}
+<style type="text/css">
+.btn-login{ min-width: 200px; min-height: 40px; display:inline-block;}
+.seperator{ border-bottom: 1px solid black; text-align: center; margin-bottom:20px;}
+.seperator span{ position:relative; top:1rem; background-color:white; padding:10px;}
+ul.ul-messages{ list-style:none; padding:0rem; }
+ul.ul-messages li{list-style:none;}
+</style>
+<script type="text/javascript"><!--
+$(document).ready(function(){
+   $('input[name=username]').focus().select();
+});
+//--></script>
+{%endblock%}
+
+{%block body%}
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-md-6 offset-md-3 col-12">
+         <form method="POST" id="registerFrm" class="card card-danger" action="{%url 'webframe:webauthn-registration'%}">
+            <div class="card-header bg-danger">{%trans 'login-webauthn-registration'%}</div>
+            <div class="card-body">
+               {%csrf_token%}
+               
+               {%block login-title%}{%trans 'login-webauthn-registration' as title%}{{title|default:''|safe}}{%endblock%}
+
+               <input type="hidden" name="next" value="{{next|default:'/'}}"/>
+
+               <div><ul class="ul-messages" id="msgPnl">{%block messages%}{%if messages%}{%for msg in messages%}
+                   <li class="animated flash"><span class="alert alert-{{msg.tags|default:''}}">{{msg}}</span></li>
+               {%endfor%}{%endif%}{%endblock%}</ul></div>
+               
+               {%block loginFlds-blk%}<section name="loginFlds">
+                  <div class="field form-group">
+                     <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
+                     <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
+                  </div>
+                  <div class="pnl-btns">
+                     <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'register'%}</button>
+                  </div>
+               </section>{%endblock%}
+
+               {%block resetPwd-blk%}{%endblock%}
+
+               {%block registration-blk%}{%endblock%}
+            </div>
+         </form>
+
+         <div class="pnl-footer">{%block login_footer%}{%endblock%}
+      </div>
+	</div>
+	
+</div>
+{%block footer%}{%include TMPL_FOOTER%}{%endblock%}
+{%endblock%}
+
+{%block loading-blk%}<script type="text/javascript"><!--
+var credential;
+var b64=(ab)=>btoa(String.fromCharCode.apply(null, new Uint8Array(ab)));
+const { startRegistration } = SimpleWebAuthnBrowser;
+function showMsg(msg, empty=true){
+   if(empty)
+      document.querySelector('#msgPnl').replaceChildren();
+   let elem=document.createElement('li');
+   elem.classList.add('animated');
+   elem.classList.add('flash');
+   elem.innerText=msg;
+   document.querySelector('#msgPnl').appendChild(elem);
+}
+$(document).ready(function(){
+   $('#registerFrm').submit(function(evt){
+      evt.preventDefault();
+      let data={};
+      data['username']=$(this).find('input[name=username]').val();
+      console.debug('Getting the challenge and related information from server...');
+      showMsg('Getting the challenge and related information from server...');
+      axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
+         .then(rep=>{
+            console.debug('Got server generated Authentication Options, authenticating...');
+            let opts=rep.data;
+            startRegistration(opts).then(cred=>{
+               console.debug('Got authentication credential, verifying...', JSON.stringify(cred));
+               showMsg('Got authentication credential, verifying...', false);
+               axios.post($('#registerFrm').attr('action'), JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
+                  console.debug('Got server verification result', rep.data);
+                  let data=rep.data;
+                  if(data.verified){
+                     showMsg('Registration successful, the page will be redirected soon...', false);
+                     window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
+                  }else{
+                     console.warn(data.error);
+                     console.info(data.message);
+                     showMsg(`Registration failure: ${data.error}`);
+                  }
+               })
+            });
+         })
+         .catch(err=>{
+            if(err.name==='InvalidStateError')
+               showMsg('Error: Authenticator was probably already registered by user', false);
+            else
+               showMsg(err, false);
+         }); //Log the error when getting AuthOptions
+      return false;
+   });
+   $('#registerBtn').removeAttr('disabled');
+});
+//--></script>{%endblock%}

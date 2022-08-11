@@ -1179,3 +1179,20 @@ class Translation(ValueObject):
       msg=self.msg if self.msg else self.key
       pmsg=self.pmsg if self.pmsg else msg
       return ngettext(msg, pmsg, cnt).format(**kwargs)
+
+class WebAuthnPubkey(ValueObject):
+   class Meta(object):
+      verbose_name         = _('WebAuthnPubkey')
+      verbose_name_plural  = _('WebAuthnPubkeies')
+
+   id                      = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.id'), help_text=_('WebAuthnPubkey.id.helptext'), primary_key=True)
+   pubkey                  = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.pubkey'), help_text=_('WebAuthnPubkey.pubkey.helptext'), unique=True)
+   tipe                    = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.tipe'), help_text=_('WebAuthnPubkey.tipe.helptext'))
+   owner                   = models.ForeignKey(
+     settings.AUTH_USER_MODEL,
+     null=False,
+     on_delete=models.CASCADE, #Since Django 2.0, the on_delete field is required.
+     related_name='WebAuthnPubkey_owner',
+     verbose_name=_('WebAuthnPubkey.owner'),
+     help_text=_('WebAuthnPubkey.owner.helptext'),
+   )
