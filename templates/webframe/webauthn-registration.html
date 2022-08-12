@@ -39,6 +39,10 @@ $(document).ready(function(){
                      <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
                      <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
                   </div>
+                  <div class="field form-group">
+                     <label for="displayNameFld" class="desktop-only">{%trans 'displayName'%}</label>
+                     <input type="text" name="displayName" id="displayNameFld" class="form-control" autocomplete="displayName" value="{{displayName|default:''}}" placeholder="{%trans 'displayName'%}"/>
+                  </div>
                   <div class="pnl-btns">
                      <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'register'%}</button>
                   </div>
@@ -58,52 +62,6 @@ $(document).ready(function(){
 {%block footer%}{%include TMPL_FOOTER%}{%endblock%}
 {%endblock%}
 
-{%block loading-blk%}<script type="text/javascript"><!--
-var credential;
-var b64=(ab)=>btoa(String.fromCharCode.apply(null, new Uint8Array(ab)));
-const { startRegistration } = SimpleWebAuthnBrowser;
-function showMsg(msg, empty=false, details=null){
-   console.info(msg);
-   if(details!=null)console.debug(details);
-   if(empty)
-      document.querySelector('#msgPnl').replaceChildren();
-   let elem=document.createElement('li');
-   elem.classList.add('animated');
-   elem.classList.add('flash');
-   elem.innerText=msg;
-   document.querySelector('#msgPnl').appendChild(elem);
-}
-$(document).ready(function(){
-   $('#registerFrm').submit(function(evt){
-      evt.preventDefault();
-      let data={};
-      data['username']=$(this).find('input[name=username]').val();
-      showMsg('Getting the challenge and related information from server...', true);
-      axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
-         .then(rep=>{
-            showMsg('Got server generated Authentication Options, authenticating...');
-            let opts=rep.data;
-            startRegistration(opts).then(cred=>{
-               showMsg('Got authentication credential, verifying...', false, cred);
-               axios.post($('#registerFrm').attr('action'), JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
-                  showMsg('Got server verification result', false, rep.data)
-                  let data=rep.data;
-                  if(data.verified){
-                     showMsg('Registration successful, the page will be redirected soon...');
-                     //window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
-                  }else
-                     showMsg(`Registration failure: ${data.error}`, false, data.message);
-               })
-            });
-         })
-         .catch(err=>{
-            if(err.name==='InvalidStateError')
-               showMsg('Error: Authenticator was probably already registered by user', false, err);
-            else
-               showMsg(err, false, err);
-         }); //Log the error when getting AuthOptions
-      return false;
-   });
-   $('#registerBtn').removeAttr('disabled');
-});
-//--></script>{%endblock%}
+{%block loading-blk%}
+<script type="text/javascript" src="{%static 'js/webframe/webauthn-registration.js'%}"></script>
+{%endblock%}

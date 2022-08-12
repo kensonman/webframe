@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.db import transaction
 from django.http import HttpResponseForbidden, QueryDict, Http404, HttpResponse, JsonResponse
 from django.middleware.csrf import get_token as getCSRF
@@ -29,7 +29,6 @@ import hashlib, logging, json, sys
 
 CONFIG_KEY='ConfigKey'
 SESSION_WEBAUTHN_CHALLENGE='webauthn-challenge'
-SESSION_WEBAUTHN_USERNAME='webauthn-username'
 logger=logging.getLogger('webframe.views')
 
 #Make sure the translation
@@ -110,14 +109,14 @@ class WebAuthnRegistration( View ):
       if req.headers.get('Accept')=='application/json':
          from webauthn import generate_registration_options, options_to_json
          username=req.GET.get('username')
+         displayName=req.GET.get('displayName', username)
          opts=generate_registration_options(
               rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
             , rp_name=getattr(settings, 'WEBAUTHN_RP_NAME', 'webframe')
             , user_id=username
-            , user_display_name=username
+            , user_display_name=displayName
             , user_name=username)
          req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8') #Due to opts.challenge is bytes array which is not serializable
-         req.session[SESSION_WEBAUTHN_USERNAME]=username
          rst=options_to_json(opts)
          rep=HttpResponse()
          rep.headers['Content-Type']='application/json'
@@ -139,31 +138,52 @@ class WebAuthnRegistration( View ):
       result=dict()
       try:
          data=req.body.decode('utf-8')
+         logger.info(data)
          cred=RegistrationCredential.parse_raw(data)
+         jcred=json.loads(data)
          challenge=b64dec(req.session[SESSION_WEBAUTHN_CHALLENGE]) #Due to 
          origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
          vr=verify_registration_response(credential=cred, expected_challenge=challenge, expected_origin="https://{0}".format(origin), expected_rp_id=origin, require_user_verification=True)
          vr=json.loads(options_to_json(vr))
          logger.debug('VerifiedRegistrationResponse: {0}'.format(vr))
-         u, created=User.objects.get_or_create(username=req.session[SESSION_WEBAUTHN_USERNAME])
-         u.save()
+         u, created=User.objects.get_or_create(username=jcred['username'])
+         if created: 
+            logger.info('The new user account was created: {0}'.format(u.username))
+            if hasattr(settings, 'WEBAUTHN_INIT_USER_GROUPS'):
+               for gp in getattr(settings, 'WEBAUTHN_INIT_USER_GROUPS'):
+                  logger.info('Adding user[{0}] to group[{1}]...'.format(u.username, gp))
+                  try:
+                     u.groups.add(Group.objects.get(name=gp))
+                  except Group.DoesNotExist:
+                     logger.warning('Cannot found the group: {0}'.format(gp))
+            if hasattr(settings, 'WEBAUTHN_INIT_USER_PERMISSIONS'):
+               for perm in getattr(settings, 'WEBAUTHN_INIT_USER_PERMISSIONS'):
+                  logger.info('Granting permission[{0}] to user:{1}...'.format(perm, u.username))
+                  try:
+                     u.user_permissions.add(Permission.objects.get(codename=perm))
+                  except Permission.DoesNotExist:
+                     logger.warning('Cannot found the permission: {0}'.format(perm))
          try:
-            t=WebAuthnPubkey.objects.get(id=vr['credentialId'])
+            t=WebAuthnPubkey.objects.get(owner=u, id=vr['credentialId'])
          except WebAuthnPubkey.DoesNotExist:
+            logger.debug('Created new pubkey for user:{0} -- {1}'.format(u.username, vr['credentialPublicKey']))
             t=WebAuthnPubkey(id=vr['credentialId'])
          t.owner=u
          t.pubkey=vr['credentialPublicKey']
          t.tipe=vr['credentialDeviceType']
          t.signCount=vr['signCount']
+         t.displayName=jcred['displayName']
          t.save()
          result['verified']=True
          result['credentalId']=t.id
       except:
          result['verified']=False
-         logger.debug('Unexpected error', exc_info=True)
+         err=sys.exc_info()[1]
+         result['error']=str(err.__class__.__name__)
+         result['message']=err.args[0]
+         logger.warning('Unexpected error', exc_info=True)
       finally:
          if SESSION_WEBAUTHN_CHALLENGE in req.session: del req.session[SESSION_WEBAUTHN_CHALLENGE]
-         if SESSION_WEBAUTHN_USERNAME in req.session: del req.session[SESSION_WEBAUTHN_USERNAME]
          rep.write(json.dumps(result))
       return rep
 
@@ -173,17 +193,21 @@ class WebAuthnAuthentication( View ):
       rep=HttpResponse()
       if req.headers.get('Accept')=='application/json':
          rep.headers['Content-Type']='application/json'
-         from webauthn import generate_authentication_options, options_to_json
-         from webauthn.helpers.structs import UserVerificationRequirement
+         from webauthn import generate_authentication_options, options_to_json, base64url_to_bytes as b64bytes
+         from webauthn.helpers.structs import UserVerificationRequirement, PublicKeyCredentialDescriptor
          allowedCredentials=None
          if 'username' in req.GET:
+            allowedCredentials=list()
             u=User.objects.filter(username=req.GET['username'])
-            if len(u)>0:
-               allowedCredentials=list(WebAuthnPubkey.objects.filter(owner=u[0]).values('id'))
-               allowedCredentials=[{'id': c['id'], 'type':'public-key'} for c in allowedCredentials]
-               logger.info(allowedCredentials)
+            if len(u)==1:
+               for pubkey in WebAuthnPubkey.objects.filter(owner=u[0]):
+                  logger.debug('Allowed Credential: {0}'.format(pubkey.id))
+                  allowedCredentials.append(PublicKeyCredentialDescriptor(id=b64bytes(pubkey.id)))
+            else:
+               raise RuntimeError('Cannot found the exatcly user: {0}'.format(req.GET['username']))
          opts = generate_authentication_options(
               rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
+            , allow_credentials=allowedCredentials
             , user_verification=UserVerificationRequirement.REQUIRED
          )
          req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8')
@@ -206,7 +230,6 @@ class WebAuthnAuthentication( View ):
          pubkey=WebAuthnPubkey.objects.get(id=json.loads(req.body.decode('utf-8'))['id'])
          origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
          if not origin.startswith('http'): origin='https://{0}'.format(origin)
-         logger.debug('origin: {0}'.format(origin))
          verification = verify_authentication_response(
             credential=AuthenticationCredential.parse_raw(req.body),
             expected_challenge=challenge,
@@ -216,16 +239,19 @@ class WebAuthnAuthentication( View ):
             credential_current_sign_count=pubkey.signCount,
             require_user_verification=True,
          )
-         logger.info('Verificated!!!')
+         logger.debug('Verificated!!!')
+         auth_login(req, pubkey.owner)
+         logger.debug('Saved the login into session!')
          result['verified']=True
+      except WebAuthnPubkey.DoesNotExist:
+         result['verified']=False
+         result['error']='credential not found'
+         result['message']='The specified credential not found, please register before login'
       except Exception as err:
          result['verified']=False
-         result['error']=sys.exc_info()[0]
-         result['message']=sys.exc_info()[1]
          logger.debug('Unexpected error', exc_info=True)
       finally:
          if SESSION_WEBAUTHN_CHALLENGE in req.session: del req.session[SESSION_WEBAUTHN_CHALLENGE]
-         if SESSION_WEBAUTHN_USERNAME in req.session: del req.session[SESSION_WEBAUTHN_USERNAME]
          rep.write(json.dumps(result))
       return rep
       
