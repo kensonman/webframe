@@ -7,8 +7,8 @@
 .btn-login{ min-width: 200px; min-height: 40px; display:inline-block;}
 .seperator{ border-bottom: 1px solid black; text-align: center; margin-bottom:20px;}
 .seperator span{ position:relative; top:1rem; background-color:white; padding:10px;}
-ul.ul-messages{ list-style:none; padding:0rem; }
-ul.ul-messages li{list-style:none;}
+ul.ul-messages{ }
+ul.ul-messages li{}
 </style>
 <script type="text/javascript"><!--
 $(document).ready(function(){
@@ -37,7 +37,7 @@ $(document).ready(function(){
                {%block loginFlds-blk%}<section name="loginFlds">
                   <div class="field form-group">
                      <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
-                     <input type="text" name="username" id="usernameFld" class="form-control" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
+                     <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
                   </div>
                   <div class="pnl-btns">
                      <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'register'%}</button>
@@ -62,7 +62,9 @@ $(document).ready(function(){
 var credential;
 var b64=(ab)=>btoa(String.fromCharCode.apply(null, new Uint8Array(ab)));
 const { startRegistration } = SimpleWebAuthnBrowser;
-function showMsg(msg, empty=true){
+function showMsg(msg, empty=false, details=null){
+   console.info(msg);
+   if(details!=null)console.debug(details);
    if(empty)
       document.querySelector('#msgPnl').replaceChildren();
    let elem=document.createElement('li');
@@ -76,34 +78,29 @@ $(document).ready(function(){
       evt.preventDefault();
       let data={};
       data['username']=$(this).find('input[name=username]').val();
-      console.debug('Getting the challenge and related information from server...');
-      showMsg('Getting the challenge and related information from server...');
+      showMsg('Getting the challenge and related information from server...', true);
       axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
          .then(rep=>{
-            console.debug('Got server generated Authentication Options, authenticating...');
+            showMsg('Got server generated Authentication Options, authenticating...');
             let opts=rep.data;
             startRegistration(opts).then(cred=>{
-               console.debug('Got authentication credential, verifying...', JSON.stringify(cred));
-               showMsg('Got authentication credential, verifying...', false);
+               showMsg('Got authentication credential, verifying...', false, cred);
                axios.post($('#registerFrm').attr('action'), JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
-                  console.debug('Got server verification result', rep.data);
+                  showMsg('Got server verification result', false, rep.data)
                   let data=rep.data;
                   if(data.verified){
-                     showMsg('Registration successful, the page will be redirected soon...', false);
-                     window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
-                  }else{
-                     console.warn(data.error);
-                     console.info(data.message);
-                     showMsg(`Registration failure: ${data.error}`);
-                  }
+                     showMsg('Registration successful, the page will be redirected soon...');
+                     //window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
+                  }else
+                     showMsg(`Registration failure: ${data.error}`, false, data.message);
                })
             });
          })
          .catch(err=>{
             if(err.name==='InvalidStateError')
-               showMsg('Error: Authenticator was probably already registered by user', false);
+               showMsg('Error: Authenticator was probably already registered by user', false, err);
             else
-               showMsg(err, false);
+               showMsg(err, false, err);
          }); //Log the error when getting AuthOptions
       return false;
    });

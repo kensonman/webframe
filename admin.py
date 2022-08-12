@@ -118,10 +118,27 @@ class MenuItemAdmin(admin.ModelAdmin):
    search_fields=('id', 'parent__id', 'user__username', 'label', 'parent__label', 'name')
 
 @admin.register(Translation)
-class Translate(admin.ModelAdmin):
+class TranslateAdmin(admin.ModelAdmin):
    fields=('id', 'key', 'locale', 'msg', 'pmsg', 'cb', 'cd', 'lmb', 'lmd')
    list_display=('id', 'key', 'locale', 'msg', 'pmsg', 'lmb', 'lmd')
-   lsit_filter=('locale',)
+   list_filter=('locale',)
    readonly_fields=('id',  'cb', 'cd', 'lmb', 'lmd')
    ordering=('key', 'locale')
    search_fields=('key', 'locale')
+
+@admin.register(WebAuthnPubkey)
+class WebAuthnPubkeyAdmin(admin.ModelAdmin):
+   fields=('id', 'pubkey', 'tipe', 'owner', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'owner__username', 'owner__fullname', 'tipe', 'lmb', 'lmd')
+   lsit_filter=('owner__username',)
+   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'pubkey', 'tipe', 'owner')
+   ordering=('owner', )
+   search_fields=('key', 'locale')
+
+   def owner__username(self, obj):
+      return obj.owner.username
+   owner__username.short_description=_('webframe.models.WebAuthnPubkey.owner__username')
+
+   def owner__fullname(self, obj):
+      return obj.owner.get_full_name()
+   owner__fullname.short_description=_('webframe.models.WebAuthnPubkey.owner__fullname')

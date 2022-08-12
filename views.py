@@ -3,6 +3,7 @@
 # Author: Kenson Man
 # Date: 2017-05-11 11:53
 # Desc: The webframe default views.
+from base64 import b64encode as b64enc, b64decode as b64dec
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
@@ -24,9 +25,11 @@ from .functions import getBool, isUUID, LogMessage as lm
 from .models import *
 from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
-import hashlib, logging, json, base64, sys
+import hashlib, logging, json, sys
 
 CONFIG_KEY='ConfigKey'
+SESSION_WEBAUTHN_CHALLENGE='webauthn-challenge'
+SESSION_WEBAUTHN_USERNAME='webauthn-username'
 logger=logging.getLogger('webframe.views')
 
 #Make sure the translation
@@ -60,6 +63,7 @@ class Login( View ):
    def get(self, req):
       'Return the login form'
       params=self.__loadDefault__(req)
+      params['allow_registration']=getattr(settings, 'WEBAUTHN_ALLOW_REGISTRATION', False)
       return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
 
    def post(self, req):
@@ -112,14 +116,21 @@ class WebAuthnRegistration( View ):
             , user_id=username
             , user_display_name=username
             , user_name=username)
-         req.session['webauthn-challenge']=base64.b64encode(opts.challenge).decode('utf-8')
+         req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8') #Due to opts.challenge is bytes array which is not serializable
+         req.session[SESSION_WEBAUTHN_USERNAME]=username
          rst=options_to_json(opts)
          rep=HttpResponse()
          rep.headers['Content-Type']='application/json'
          rep.write(rst)
          return rep
-      return render(req, getattr(settings, 'TMPL_WEBAUTHN_REGISTRATION', 'webframe/webauthn-registration.html'), params)
+      if getattr(settings, 'WEBAUTHN_ALLOW_REGISTRATION', False):
+         return render(req, getattr(settings, 'TMPL_WEBAUTHN_REGISTRATION', 'webframe/webauthn-registration.html'), params)
+      logger.warning('The configuration is not accept the registration. Use "WEBAUTHN_ALLOW_REGISTRATION=True" in settings.py to turn on')
+      rep=HttpResponse(status=406)
+      rep.write('SERVER IS NOT ACCEPT REGISTRATION')
+      return rep
 
+   @transaction.atomic
    def post(self, req):
       from webauthn import verify_registration_response, base64url_to_bytes, options_to_json
       from webauthn.helpers.structs import RegistrationCredential
@@ -129,16 +140,30 @@ class WebAuthnRegistration( View ):
       try:
          data=req.body.decode('utf-8')
          cred=RegistrationCredential.parse_raw(data)
-         challenge=base64.b64decode(req.session['webauthn-challenge'])
+         challenge=b64dec(req.session[SESSION_WEBAUTHN_CHALLENGE]) #Due to 
          origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
          vr=verify_registration_response(credential=cred, expected_challenge=challenge, expected_origin="https://{0}".format(origin), expected_rp_id=origin, require_user_verification=True)
-         logger.debug('VerifiedRegistrationResponse: {0}'.format(options_to_json(vr)))
+         vr=json.loads(options_to_json(vr))
+         logger.debug('VerifiedRegistrationResponse: {0}'.format(vr))
+         u, created=User.objects.get_or_create(username=req.session[SESSION_WEBAUTHN_USERNAME])
+         u.save()
+         try:
+            t=WebAuthnPubkey.objects.get(id=vr['credentialId'])
+         except WebAuthnPubkey.DoesNotExist:
+            t=WebAuthnPubkey(id=vr['credentialId'])
+         t.owner=u
+         t.pubkey=vr['credentialPublicKey']
+         t.tipe=vr['credentialDeviceType']
+         t.signCount=vr['signCount']
+         t.save()
          result['verified']=True
+         result['credentalId']=t.id
       except:
          result['verified']=False
-         result['error']=sys.exc_info()[0]
-         result['message']=sys.exc_info()[1]
+         logger.debug('Unexpected error', exc_info=True)
       finally:
+         if SESSION_WEBAUTHN_CHALLENGE in req.session: del req.session[SESSION_WEBAUTHN_CHALLENGE]
+         if SESSION_WEBAUTHN_USERNAME in req.session: del req.session[SESSION_WEBAUTHN_USERNAME]
          rep.write(json.dumps(result))
       return rep
 
@@ -150,20 +175,58 @@ class WebAuthnAuthentication( View ):
          rep.headers['Content-Type']='application/json'
          from webauthn import generate_authentication_options, options_to_json
          from webauthn.helpers.structs import UserVerificationRequirement
-
-         options = generate_authentication_options(
+         allowedCredentials=None
+         if 'username' in req.GET:
+            u=User.objects.filter(username=req.GET['username'])
+            if len(u)>0:
+               allowedCredentials=list(WebAuthnPubkey.objects.filter(owner=u[0]).values('id'))
+               allowedCredentials=[{'id': c['id'], 'type':'public-key'} for c in allowedCredentials]
+               logger.info(allowedCredentials)
+         opts = generate_authentication_options(
               rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
             , user_verification=UserVerificationRequirement.REQUIRED
          )
+         req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8')
+         rep.write(options_to_json(opts))
          return rep
       rep.status_code=405
       rep.write('Unsupported Content-Type: {0}'.format(req.headers.get('Accept', 'text/html')))
       return rep
 
+   @transaction.atomic
    def post(self, req):
       rep=HttpResponse()
       rep.headers['Content-Type']='application/json'
       result=dict()
+      try:
+         from webauthn import verify_authentication_response, options_to_json, base64url_to_bytes as b64bytes
+         from webauthn.helpers.structs import AuthenticationCredential
+         logger.debug(req.body)
+         challenge=b64dec(req.session[SESSION_WEBAUTHN_CHALLENGE])
+         pubkey=WebAuthnPubkey.objects.get(id=json.loads(req.body.decode('utf-8'))['id'])
+         origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
+         if not origin.startswith('http'): origin='https://{0}'.format(origin)
+         logger.debug('origin: {0}'.format(origin))
+         verification = verify_authentication_response(
+            credential=AuthenticationCredential.parse_raw(req.body),
+            expected_challenge=challenge,
+            expected_rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk'),
+            expected_origin=origin,
+            credential_public_key=b64bytes(pubkey.pubkey),
+            credential_current_sign_count=pubkey.signCount,
+            require_user_verification=True,
+         )
+         logger.info('Verificated!!!')
+         result['verified']=True
+      except Exception as err:
+         result['verified']=False
+         result['error']=sys.exc_info()[0]
+         result['message']=sys.exc_info()[1]
+         logger.debug('Unexpected error', exc_info=True)
+      finally:
+         if SESSION_WEBAUTHN_CHALLENGE in req.session: del req.session[SESSION_WEBAUTHN_CHALLENGE]
+         if SESSION_WEBAUTHN_USERNAME in req.session: del req.session[SESSION_WEBAUTHN_USERNAME]
+         rep.write(json.dumps(result))
       return rep
       
 

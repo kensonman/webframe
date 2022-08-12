@@ -1188,6 +1188,7 @@ class WebAuthnPubkey(ValueObject):
    id                      = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.id'), help_text=_('WebAuthnPubkey.id.helptext'), primary_key=True)
    pubkey                  = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.pubkey'), help_text=_('WebAuthnPubkey.pubkey.helptext'), unique=True)
    tipe                    = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.tipe'), help_text=_('WebAuthnPubkey.tipe.helptext'))
+   signCount               = models.IntegerField(verbose_name=_('WebAuthnPubkey.signCount'), help_text=_('WebAuthnPubkey.signCount.helptext'))
    owner                   = models.ForeignKey(
      settings.AUTH_USER_MODEL,
      null=False,
