@@ -1,3 +1,4 @@
+var regOpts=null;
 var b64=(ab)=>btoa(String.fromCharCode.apply(null, new Uint8Array(ab)));
 const { startRegistration } = SimpleWebAuthnBrowser;
 const DEFAULT_DEVICE_NAME=`${navigator.appCodeName}(${navigator.appVersion.split(' ')[0]})-${navigator.platform}`;
@@ -24,6 +25,23 @@ function toggleFrm(enabled=true){
          .find('#registerBtn').attr('disabled', 'disabled').end()
       ;
 }
+function register( opts ){
+   startRegistration(opts).then(cred=>{
+      cred.username=$('#registerFrm').find('input[name=username]').val();
+      cred.displayName=$('#registerFrm').find('input[name=displayName]').val();
+      showMsg(gettext('Got authentication credential, verifying...'), false, cred);
+      axios.post($('#registerFrm').attr('action'), JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
+         let data=rep.data;
+         showMsg(gettext('Got server verification result'), false, data)
+         if(data.verified){
+            showMsg(gettext('Registration successful, the page will be redirected soon...'));
+            window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
+         }else{
+            showMsg(gettext('Registration failure'));
+            toggleFrm(true);
+         }
+      }).catch(err=>{throw err});
+}
 $(document).ready(function(){
    $('input[name=username]').focus().select();
    $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
@@ -35,35 +53,25 @@ $(document).ready(function(){
          $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
       data['username']=$(this).find('input[name=username]').val();
       data['displayName']=$(this).find('input[name=displayName]').val();
-      showMsg(gettext('Getting the challenge and related information from server...'), true);
-      axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
-         .then(rep=>{
-            showMsg(gettext('Got server generated Authentication Options, authenticating...'));
-            let opts=rep.data;
-            startRegistration(opts).then(cred=>{
-               cred.username=$('#registerFrm').find('input[name=username]').val();
-               cred.displayName=$('#registerFrm').find('input[name=displayName]').val();
-               showMsg(gettext('Got authentication credential, verifying...'), false, cred);
-               axios.post($('#registerFrm').attr('action'), JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
-                  let data=rep.data;
-                  showMsg(gettext('Got server verification result'), false, data)
-                  if(data.verified){
-                     showMsg(gettext('Registration successful, the page will be redirected soon...'));
-                     window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
-                  }else{
-                     showMsg(gettext('Registration failure'));
-                     toggleFrm(true);
-                  }
-               }).catch(err=>{throw err});
-            });
-         })
-         .catch(err=>{
-            toggleFrm(true);
-            if(err.name==='InvalidStateError')
-               showMsg(gettext('Error: Authenticator was probably already registered by user'), false, err);
-            else
-               showMsg(err, false, err);
-         }); //Log the error when getting AuthOptions
+      if(regOpts==null){
+         showMsg(gettext('Getting the challenge and related information from server...'), true);
+         axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
+            .then(rep=>{
+               showMsg(gettext('Got server generated Authentication Options, authenticating...'));
+               regOpts=rep.data;
+               if(regOpts.passwordRequired){
+                  $('#field-password').removeAttr('d-none');
+                  toggleFrm(true);
+               }else register(regOpts);
+            })
+            .catch(err=>{
+               toggleFrm(true);
+               if(err.name==='InvalidStateError')
+                  showMsg(gettext('Error: Authenticator was probably already registered by user'), false, err);
+               else
+                  showMsg(err, false, err);
+            }); //Log the error when getting AuthOptions
+      }else register(regOpts);
       return false;
    });
    $('#registerBtn').removeAttr('disabled');

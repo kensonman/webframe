@@ -50,6 +50,10 @@ ul.ul-messages li{}
                      <label for="displayNameFld" class="desktop-only">{%trans 'displayName'%}</label>
                      <input type="text" name="displayName" id="displayNameFld" class="form-control" autocomplete="displayName" value="{{displayName|default:''}}" placeholder="{%trans 'displayName'%}"/>
                   </div>
+                  <div class="field form-group d-none" id="field-password">
+                     <label for="current-passwordFld" class="desktop-only">{%trans 'password'%}</label>
+                     <input type="password" name="current-password" id="current-passwordFld" class="form-control" autocomplete="current-password" placeholder="{%trans 'password'%}" required="#current-passwordFld:visible"/>
+                  </div>
                   <div class="pnl-btns">
                      <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'registration'%}</button>
                   </div>

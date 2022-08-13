@@ -117,6 +117,8 @@ class WebAuthnRegistration( View ):
             , user_display_name=displayName
             , user_name=username)
          req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8') #Due to opts.challenge is bytes array which is not serializable
+         u=get_user_model().objects.filter(username=username)
+         rst['passwordRequired']=len(u)>0
          rst=options_to_json(opts)
          rep=HttpResponse()
          rep.headers['Content-Type']='application/json'
@@ -141,12 +143,20 @@ class WebAuthnRegistration( View ):
          logger.info(data)
          cred=RegistrationCredential.parse_raw(data)
          jcred=json.loads(data)
+
+         if len(get_user_model().objects.filter(username=jcred.username))>0: #If the user already exists
+            assert jcred['username']
+            assert jcred['password']
+            u=authenticate(req, username=jcred['username'], password=jcred['password'])
+            if u==None:
+               raise PermissionError('InvalidStateError', 'Invalid username or password')
+
          challenge=b64dec(req.session[SESSION_WEBAUTHN_CHALLENGE]) #Due to 
          origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
          vr=verify_registration_response(credential=cred, expected_challenge=challenge, expected_origin="https://{0}".format(origin), expected_rp_id=origin, require_user_verification=True)
          vr=json.loads(options_to_json(vr))
          logger.debug('VerifiedRegistrationResponse: {0}'.format(vr))
-         u, created=User.objects.get_or_create(username=jcred['username'])
+         u, created=get_user_model().objects.get_or_create(username=jcred['username'])
          if created: 
             logger.info('The new user account was created: {0}'.format(u.username))
             if hasattr(settings, 'WEBAUTHN_INIT_USER_GROUPS'):
