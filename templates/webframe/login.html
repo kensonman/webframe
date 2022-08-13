@@ -15,6 +15,15 @@ ul.ul-messages li{}
 {%block loading-blk%}
 <script type="text/javascript"><!--
 const authenticationUrl='{%url "webframe:webauthn-authentication"%}';
+/* Translation - make sure the translation is ready for javascript*/
+/* 
+ * {%trans 'Loading authentication options from server...'%}
+ * {%trans 'Got authentication options, authenticating...'%}
+ * {%trans 'Authenticated, verification in progress.'%}
+ * {%trans 'Got server verification result'%}
+ * {%trans 'Authentication successful, the page will be redirected soon...'%}
+ * {%blocktrans with error='{error}'%}Authentication failure: {{error}}{%endblocktrans%}
+ */
 </script>
 
 <script type="text/javascript" src="{%static 'js/webframe/webauthn-authentication.js'%}"></script>

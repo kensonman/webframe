@@ -11,9 +11,16 @@ ul.ul-messages{ }
 ul.ul-messages li{}
 </style>
 <script type="text/javascript"><!--
-$(document).ready(function(){
-   $('input[name=username]').focus().select();
-});
+/* Translation - make sure the translation is ready for javascript*/
+/* 
+ * {%trans 'Getting the challenge and related information from server...'%}
+ * {%trans 'Got server generated Authentication Options, authenticating...'%}
+ * {%trans 'Got authentication credential, verifing...'%}
+ * {%trans 'Got server verification result'%}
+ * {%trans 'Registration successful, the page will be redirected soon...'%}
+ * {%trans 'Registration failure'%}
+ * {%trans 'Error: Authenticator was probably already registered by user'%}
+ */
 //--></script>
 {%endblock%}
 
@@ -44,7 +51,7 @@ $(document).ready(function(){
                      <input type="text" name="displayName" id="displayNameFld" class="form-control" autocomplete="displayName" value="{{displayName|default:''}}" placeholder="{%trans 'displayName'%}"/>
                   </div>
                   <div class="pnl-btns">
-                     <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'register'%}</button>
+                     <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'registration'%}</button>
                   </div>
                </section>{%endblock%}
 

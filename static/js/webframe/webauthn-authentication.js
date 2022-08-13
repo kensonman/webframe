@@ -16,23 +16,23 @@ $(document).ready(function(){
       .on('submit', function(evt){
          evt.preventDefault();
          if($(this).valid()){
-            showMsg('Loading authentication options from server...');
+            showMsg(gettext('Loading authentication options from server...'));
             let data={'username': $('input[name=username]').val()};
             $('input[name=username]').attr('disabled', 'disabled');
             axios.get(authenticationUrl, {'params':data, 'headers':{'Accept': 'application/json'}})
                .then(rep=>{
-                  showMsg('Got authentication options, authenticating...', false, rep.data);
+                  showMsg(gettext('Got authentication options, authenticating...'), false, rep.data);
                   if(rep.data.allowCredentials.length>-1){
                      startAuthentication(rep.data).then(cred=>{
-                        showMsg('Authenticated, verification in progress...', false, cred);
+                        showMsg(gettext('Authenticated, verification in progress...'), false, cred);
                         axios.post(authenticationUrl, JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
-                           showMsg('Got server verification result', false, rep.data);
+                           showMsg(gettext('Got server verification result'), false, rep.data);
                            let data=rep.data;
                            if(data.verified){
-                              showMsg('Registration successful, the page will be redirected soon...');
+                              showMsg(gettext('Authentication successful, the page will be redirected soon...'));
                               window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
                            }else
-                              showMsg(`Registration failure: ${data.error}`, false, data.message);
+                              showMsg(interpolate(gettext('Authentication failure: %(error)s'), {'error': data.error}, true), false, data.message);
                         });
                      });
                   }else{

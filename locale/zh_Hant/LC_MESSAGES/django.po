@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 13:29+0000\n"
+"POT-Creation-Date: 2022-08-13 06:54+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -46,6 +46,14 @@ msgstr "歸類"
 #: admin.py:83 templates/webframe/prefsDoc-each.html:41
 msgid "webframe.models.Preference.helptext"
 msgstr "這個設定的說明"
+
+#: admin.py:140
+msgid "webframe.models.WebAuthnPubkey.owner__username"
+msgstr "使用者名稱"
+
+#: admin.py:144
+msgid "webframe.models.WebAuthnPubkey.owner__fullname"
+msgstr "使用者顯示名稱"
 
 #: authentications.py:41
 msgid "Your account is not effective"
@@ -494,11 +502,11 @@ msgstr "翻釋"
 msgid "Translations"
 msgstr "翻釋"
 
-#: models.py:1168 views.py:428
+#: models.py:1168 views.py:561
 msgid "english"
 msgstr "English"
 
-#: models.py:1169 views.py:431
+#: models.py:1169 views.py:564
 msgid "zh-hant"
 msgstr "繁體中文"
 
@@ -538,6 +546,62 @@ msgstr "眾數文字"
 msgid "Translation.pmsg.helptext"
 msgstr "眾數文字翻釋"
 
+#: models.py:1185
+msgid "WebAuthnPubkey"
+msgstr "登入公鑰"
+
+#: models.py:1186
+msgid "WebAuthnPubkeies"
+msgstr "登入公鑰"
+
+#: models.py:1188
+msgid "WebAuthnPubkey.id"
+msgstr "ID"
+
+#: models.py:1188
+msgid "WebAuthnPubkey.id.helptext"
+msgstr "用作系統識別"
+
+#: models.py:1189
+msgid "WebAuthnPubkey.displayName"
+msgstr "裝置名稱"
+
+#: models.py:1189
+msgid "WebAuthnPubkey.displayName.helptext"
+msgstr "公／私鑰對的名稱，用於該使用者識別"
+
+#: models.py:1190
+msgid "WebAuthnPubkey.pubkey"
+msgstr "公鑰"
+
+#: models.py:1190
+msgid "WebAuthnPubkey.pubkey.helptext"
+msgstr "公鑰 in base64"
+
+#: models.py:1191
+msgid "WebAuthnPubkey.tipe"
+msgstr "類別"
+
+#: models.py:1191
+msgid "WebAuthnPubkey.tipe.helptext"
+msgstr "通常為 public-key"
+
+#: models.py:1192
+msgid "WebAuthnPubkey.signCount"
+msgstr "SignCount"
+
+#: models.py:1192
+msgid "WebAuthnPubkey.signCount.helptext"
+msgstr "跟據 WebAuthn API Guide"
+
+#: models.py:1198
+msgid "WebAuthnPubkey.owner"
+msgstr "擁有者"
+
+#: models.py:1199
+msgid "WebAuthnPubkey.owner.helptext"
+msgstr "持有這對公／私鑰的使用者"
+
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
 msgid "errorpage.503.title"
@@ -545,7 +609,7 @@ msgstr "系統維護中"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:413 views.py:458
+#: templates/webframe/meta.html:3 views.py:546 views.py:591
 msgid "appName"
 msgstr ""
 
@@ -621,58 +685,83 @@ msgstr "個人設定"
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:78
-#: templates/webframe/webauthn-registration.html:51
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:96
 msgid "login"
 msgstr "登入"
 
-#: templates/webframe/login.html:3 templates/webframe/login.html:25
+#: templates/webframe/login.html:3 templates/webframe/login.html:38
 msgid "Login Required"
 msgstr "請先登入"
 
-#: templates/webframe/login.html:29
-msgid "login-title"
-msgstr "登入"
+#: templates/webframe/login.html:20
+msgid "Loading authentication options from server..."
+msgstr "正在從伺服器取得登入資訊..."
 
-#: templates/webframe/login.html:35
+#: templates/webframe/login.html:21
+msgid "Got authentication options, authenticating..."
+msgstr "已取得登入資訊，正在驗證..."
+
+#: templates/webframe/login.html:22
+msgid "Authenticated, verification in progress."
+msgstr "已驗證，正在上傳結果到伺服器..."
+
+#: templates/webframe/login.html:23
+#: templates/webframe/webauthn-registration.html:19
+msgid "Got server verification result"
+msgstr "已取得伺服器回覆"
+
+#: templates/webframe/login.html:24
+msgid "Authentication successful, the page will be redirected soon..."
+msgstr "登入成功，正在跳到下一步頁面..."
+
+#: templates/webframe/login.html:25
+msgid "Authentication failure: %(error)s"
+msgstr "登入錯誤: %(error)s"
+
+#: templates/webframe/login.html:46
 msgid "login-facebook"
 msgstr "Facebook 登入"
 
-#: templates/webframe/login.html:38
+#: templates/webframe/login.html:49
 msgid "login-twitter"
 msgstr "Twitter 登入"
 
-#: templates/webframe/login.html:41
+#: templates/webframe/login.html:52
 msgid "login-github"
 msgstr "GitHub 登入"
 
-#: templates/webframe/login.html:44
+#: templates/webframe/login.html:55
 msgid "login-google"
 msgstr "Google 登入"
 
-#: templates/webframe/login.html:49
+#: templates/webframe/login.html:60
 msgid "OR"
 msgstr "使用者登入"
 
-#: templates/webframe/login.html:58
+#: templates/webframe/login.html:70
 msgid "Authentication Backends"
 msgstr "可使用登入方法"
 
-#: templates/webframe/login.html:66
+#: templates/webframe/login.html:78
 msgid "IPAddr"
 msgstr "IP 地址"
 
-#: templates/webframe/login.html:70 templates/webframe/login.html:71
+#: templates/webframe/login.html:82 templates/webframe/login.html:84
 #: templates/webframe/user.html:32 templates/webframe/user.html:33
-#: templates/webframe/webauthn-registration.html:39
-#: templates/webframe/webauthn-registration.html:40
+#: templates/webframe/webauthn-registration.html:46
+#: templates/webframe/webauthn-registration.html:47
 msgid "username"
 msgstr "用戶名稱"
 
-#: templates/webframe/login.html:74 templates/webframe/login.html:75
+#: templates/webframe/login.html:91 templates/webframe/login.html:92
 #: templates/webframe/user.html:36 templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
+
+#: templates/webframe/login.html:95
+#: templates/webframe/webauthn-registration.html:54
+msgid "registration"
+msgstr "登記"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -921,53 +1010,81 @@ msgid "User.actions.new"
 msgstr "新增使用者"
 
 #: templates/webframe/webauthn-registration.html:3
-#: templates/webframe/webauthn-registration.html:25
-#: templates/webframe/webauthn-registration.html:29
+#: templates/webframe/webauthn-registration.html:32
+#: templates/webframe/webauthn-registration.html:36
 msgid "login-webauthn-registration"
 msgstr "登記"
 
-#: templates/webframe/webauthn-registration.html:43
-#: templates/webframe/webauthn-registration.html:44
-msgid "email"
-msgstr "電郵地址"
+#: templates/webframe/webauthn-registration.html:16
+msgid "Getting the challenge and related information from server..."
+msgstr "正在從伺服器取得登入資訊..."
 
-#: templates/webframe/webauthn-registration.html:47
-#: templates/webframe/webauthn-registration.html:48
-msgid "fullname"
-msgstr "顯示名稱"
+#: templates/webframe/webauthn-registration.html:17
+msgid "Got server generated Authentication Options, authenticating..."
+msgstr "已取得登入資訊，正在驗證和生成公/私密鑰..."
 
-#: views.py:33
+#: templates/webframe/webauthn-registration.html:18
+msgid "Got authentication credential, verifing..."
+msgstr "已驗證，正傳送公鑰到伺服器作進一步驗證和儲存..."
+
+#: templates/webframe/webauthn-registration.html:20
+msgid "Registration successful, the page will be redirected soon..."
+msgstr "登記成功，正在跳到下一步頁面..."
+
+#: templates/webframe/webauthn-registration.html:21
+msgid "Registration failure"
+msgstr "登記"
+
+#: templates/webframe/webauthn-registration.html:22
+msgid "Error: Authenticator was probably already registered by user"
+msgstr "證記錯誤，可能這使用者已登記..."
+
+#: templates/webframe/webauthn-registration.html:50
+#: templates/webframe/webauthn-registration.html:51
+msgid "displayName"
+msgstr "裝置名稱"
+
+#: views.py:35
 msgid "django.contrib.auth.backends.ModelBackend"
 msgstr "標準 Username 和 Password"
 
-#: views.py:34
+#: views.py:36
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP 或 Active Directory 登入"
 
-#: views.py:35
+#: views.py:37
 msgid "nextPage"
 msgstr "下一頁 <i class=\"fas fa-angle-double-right\"></i>"
 
-#: views.py:36
+#: views.py:38
 #, python-format
 msgid "thisPage:%(page)s"
 msgstr "此頁: %(page)s"
 
-#: views.py:37
+#: views.py:39
 msgid "prevPage"
 msgstr "<i class=\"fas fa-angle-double-left\"></i> 下一頁"
 
-#: views.py:99
+#: views.py:102
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:189
+#: views.py:322
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:357
+#: views.py:490
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
+
+#~ msgid "login-title"
+#~ msgstr "登入"
+
+#~ msgid "email"
+#~ msgstr "電郵地址"
+
+#~ msgid "fullname"
+#~ msgstr "顯示名稱"
 
 #~ msgid "webframe.models.ValueObject"
 #~ msgstr "ValueObject"

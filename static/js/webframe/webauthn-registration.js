@@ -25,6 +25,7 @@ function toggleFrm(enabled=true){
       ;
 }
 $(document).ready(function(){
+   $('input[name=username]').focus().select();
    $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
    $('#registerFrm').submit(function(evt){
       evt.preventDefault();
@@ -34,23 +35,23 @@ $(document).ready(function(){
          $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
       data['username']=$(this).find('input[name=username]').val();
       data['displayName']=$(this).find('input[name=displayName]').val();
-      showMsg('Getting the challenge and related information from server...', true);
+      showMsg(gettext('Getting the challenge and related information from server...'), true);
       axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
          .then(rep=>{
-            showMsg('Got server generated Authentication Options, authenticating...');
+            showMsg(gettext('Got server generated Authentication Options, authenticating...'));
             let opts=rep.data;
             startRegistration(opts).then(cred=>{
                cred.username=$('#registerFrm').find('input[name=username]').val();
                cred.displayName=$('#registerFrm').find('input[name=displayName]').val();
-               showMsg('Got authentication credential, verifying...', false, cred);
+               showMsg(gettext('Got authentication credential, verifying...'), false, cred);
                axios.post($('#registerFrm').attr('action'), JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
                   let data=rep.data;
-                  showMsg('Got server verification result', false, data)
+                  showMsg(gettext('Got server verification result'), false, data)
                   if(data.verified){
-                     showMsg('Registration successful, the page will be redirected soon...');
+                     showMsg(gettext('Registration successful, the page will be redirected soon...'));
                      window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
                   }else{
-                     showMsg(`Registration failure`);
+                     showMsg(gettext('Registration failure'));
                      toggleFrm(true);
                   }
                }).catch(err=>{throw err});
@@ -59,7 +60,7 @@ $(document).ready(function(){
          .catch(err=>{
             toggleFrm(true);
             if(err.name==='InvalidStateError')
-               showMsg('Error: Authenticator was probably already registered by user', false, err);
+               showMsg(gettext('Error: Authenticator was probably already registered by user'), false, err);
             else
                showMsg(err, false, err);
          }); //Log the error when getting AuthOptions
