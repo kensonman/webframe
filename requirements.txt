@@ -8,7 +8,7 @@ deprecation
 django_tables2
 python-dateutil
 pytimeparse
-cryptography
+pycryptodome
 django-ajax-selects
 django-summernote
 django-ajax-selects

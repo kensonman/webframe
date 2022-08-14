@@ -56,7 +56,16 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 const STATIC_ROOT='{%conf "STATIC_URL"%}';
 const DEBUG='{%conf "DEBUG" defval="False"%}'.toLowerCase()=='true';
 const USERNAME='{{request.user.username}}';
-var   USER=null; axios.get('{%url "webframe:whoami"%}').then(rep=>{USER=rep.data; window.localStorage.setItem('USER', JSON.stringify(rep.data)); });
+var   USER=null; 
+axios.get('{%url "webframe:whoami"%}')
+   .then(rep=>{ USER=rep.data; window.localStorage.setItem('USER', JSON.stringify(rep.data)); })
+   .catch(err=>{ 
+      USER=null;
+      window.localStorage.setItem('USER', null);
+      console.warn('Cannot get the session user from server');
+      console.debug(err);
+   })
+;
 String.prototype.limit=function( length, replacement='...' ){
    if(this.length<=length)return this;
    return this.substring(0, length)+replacement;

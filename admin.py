@@ -8,6 +8,7 @@ from ajax_select.admin import AjaxSelectAdmin
 from ajax_select.fields import AutoCompleteSelectField
 from django import forms
 from django.contrib import admin
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.safestring import mark_safe
 from django.urls import reverse
@@ -38,6 +39,52 @@ class PreferenceChildParentFilter(admin.SimpleListFilter):
          return q.filter(id__in=Preference.objects.filter(parent__isnull=False).values('parent__id'))
       else:
          return q.filter(parent__isnull=False)
+
+class AliveObjectEffectiveFilter(admin.SimpleListFilter):
+   title=_('webframe.models.AliveObject.effectiveFilter')
+   parameter_name='aliveObj_eff_filter'
+
+   def lookups(self, req, modelAdmin):
+      rst=[
+         ('enabled', _('webframe.models.AliveObject.effectiveFilter.enabled')),
+         ('disabled', _('webframe.models.AliveObject.effectiveFilter.disabled')),
+         ('effective', _('webframe.models.AliveObject.effectiveFilter.effective')),
+         ('coming', _('webframe.models.AliveObject.effectiveFilter.coming')),
+         ('comingTmr', _('webframe.models.AliveObject.effectiveFilter.comingTmr')),
+         ('comingNextWeek', _('webframe.models.AliveObject.effectiveFilter.comingNextWeek')),
+         ('comingNextMonth', _('webframe.models.AliveObject.effectiveFilter.comingNextMonth')),
+         ('comingNext3Months', _('webframe.models.AliveObject.effectiveFilter.comingNext3Months')),
+         ('expired', _('webframe.models.AliveObject.effectiveFilter.expired')),
+      ]
+      return rst
+
+   def queryset(self, req, q):
+      now=datetime.now()
+      value=self.value()
+      if value=='enabled':
+         return q.filter(enabled=True)
+      elif value=='disabled':
+         return q.filter(enabled=False)
+      elif value=='effective':
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='coming':
+         return q.filter(enabled=True, effDate__gt=now)
+      elif value=='comingTmr':
+         now=getTime(now, offset='+1d')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='comingNextWeek':
+         now=getTime(now, offset='+7d')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='comingNextMonth':
+         now=getTime(now, offset='+1m')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='comingNext3Monts':
+         now=getTime(now, offset='+3m')
+         return q.filter(enabled=True, effDate__lte=now).filter(Q(expDate__isNull=True)|Q(expDate__gt=now))
+      elif value=='expired':
+         now=getTime(now, offset='+1d')
+         return q.filter(enabled=True, expDate__lte=now)
+      return q
 
 class PreferenceInline(admin.TabularInline):
    model    = Preference 
@@ -142,3 +189,33 @@ class WebAuthnPubkeyAdmin(admin.ModelAdmin):
    def owner__fullname(self, obj):
       return obj.owner.get_full_name()
    owner__fullname.short_description=_('webframe.models.WebAuthnPubkey.owner__fullname')
+
+@admin.register(ResetPassword)
+class ResetPasswordAdmin(admin.ModelAdmin):
+   fields=('id', 'user', 'key', 'effDate', 'expDate', 'enabled', 'request_by', 'complete_date', 'complete_by', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'user', 'effDate', 'expDate', 'complete_date', 'request_by', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_filter=(AliveObjectEffectiveFilter, )
+   readonly_fields=('id',  'key', 'complete_by', 'complete_date', 'request_by', 'cb', 'cd', 'lmb', 'lmd')
+   ordering=('user', '-effDate', 'expDate',)
+   search_fields=('user__username', )
+
+@admin.register(TokenDetail)
+class TokenDetailAdmin(admin.ModelAdmin):
+   fields=('id', 'thisuser', 'name', 'token', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'thisuser', 'name', 'thistoken', 'effDate', 'expDate', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   list_filter=(AliveObjectEffectiveFilter, )
+   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'thisuser', 'thistoken', 'token')
+   ordering=('token__user', '-effDate', 'expDate',)
+
+   def thisuser(self, obj):
+      return obj.token.user
+   thisuser.short_description=_('TokenDetail.user')
+   thisuser.admin_order_field='token'
+
+   def thistoken(self, obj):
+      return obj.token.key
+   thistoken.short_description=_('TokenDetail.token')
+   thistoken.admin_order_field='token'
+
+   def has_add_permission(self, req, obj=None):
+      return False

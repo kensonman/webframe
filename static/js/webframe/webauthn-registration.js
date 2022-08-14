@@ -41,6 +41,7 @@ function register( opts ){
             toggleFrm(true);
          }
       }).catch(err=>{throw err});
+   });
 }
 $(document).ready(function(){
    $('input[name=username]').focus().select();
