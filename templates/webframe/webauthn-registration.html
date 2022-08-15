@@ -15,11 +15,12 @@ ul.ul-messages li{}
 /* 
  * {%trans 'Getting the challenge and related information from server...'%}
  * {%trans 'Got server generated Authentication Options, authenticating...'%}
- * {%trans 'Got authentication credential, verifing...'%}
+ * {%trans 'Got authentication credential, verifying...'%}
  * {%trans 'Got server verification result'%}
  * {%trans 'Registration successful, the page will be redirected soon...'%}
  * {%trans 'Registration failure'%}
  * {%trans 'Error: Authenticator was probably already registered by user'%}
+ * {%blocktrans with loginUrl='/webframe/login'%}The user is already registered. Please select another one or <a href="%(loginUrl)s" target="_self">Login</a> to register the new public key'{%endblocktrans%}
  */
 //--></script>
 {%endblock%}
@@ -44,15 +45,11 @@ ul.ul-messages li{}
                {%block loginFlds-blk%}<section name="loginFlds">
                   <div class="field form-group">
                      <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
-                     <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
+                     <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:user.username}}" placeholder="{%trans 'username'%}" required="required" {%if user and user.is_authenticated%}disabled="disabled"{%endif%}/>
                   </div>
                   <div class="field form-group">
                      <label for="displayNameFld" class="desktop-only">{%trans 'displayName'%}</label>
                      <input type="text" name="displayName" id="displayNameFld" class="form-control" autocomplete="displayName" value="{{displayName|default:''}}" placeholder="{%trans 'displayName'%}"/>
-                  </div>
-                  <div class="field form-group d-none" id="field-password">
-                     <label for="current-passwordFld" class="desktop-only">{%trans 'password'%}</label>
-                     <input type="password" name="current-password" id="current-passwordFld" class="form-control" autocomplete="current-password" placeholder="{%trans 'password'%}" required="#current-passwordFld:visible"/>
                   </div>
                   <div class="pnl-btns">
                      <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'registration'%}</button>
@@ -74,5 +71,8 @@ ul.ul-messages li{}
 {%endblock%}
 
 {%block loading-blk%}
+<script type="text/javascript"><!--
+const URL_LOGIN='{%url "webframe:login"%}';
+//--></script>
 <script type="text/javascript" src="{%static 'js/webframe/webauthn-registration.js'%}"></script>
 {%endblock%}

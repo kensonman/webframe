@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-14 10:31+0000\n"
+"POT-Creation-Date: 2022-08-15 09:38+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -550,11 +550,11 @@ msgstr "翻釋"
 msgid "Translations"
 msgstr "翻釋"
 
-#: models.py:1170 views.py:604
+#: models.py:1170 views.py:605
 msgid "english"
 msgstr "English"
 
-#: models.py:1171 views.py:607
+#: models.py:1171 views.py:608
 msgid "zh-hant"
 msgstr "繁體中文"
 
@@ -721,7 +721,7 @@ msgstr "系統維護中"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:589 views.py:634
+#: templates/webframe/meta.html:3 views.py:590 views.py:635
 msgid "appName"
 msgstr ""
 
@@ -862,28 +862,26 @@ msgstr "IP 地址"
 #: templates/webframe/login.html:80 templates/webframe/login.html:82
 #: templates/webframe/resetPassword.html:24 templates/webframe/user.html:32
 #: templates/webframe/user.html:33
-#: templates/webframe/webauthn-registration.html:46
 #: templates/webframe/webauthn-registration.html:47
+#: templates/webframe/webauthn-registration.html:48
 msgid "username"
 msgstr "用戶名稱"
 
 #: templates/webframe/login.html:89 templates/webframe/login.html:90
 #: templates/webframe/resetPassword.html:21 templates/webframe/user.html:36
 #: templates/webframe/user.html:37
-#: templates/webframe/webauthn-registration.html:54
-#: templates/webframe/webauthn-registration.html:55
 msgid "password"
 msgstr "密碼"
 
-#: templates/webframe/login.html:93
-#: templates/webframe/webauthn-registration.html:58
-msgid "registration"
-msgstr "登記"
-
-#: templates/webframe/login.html:94 templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:700 views.py:726
+#: templates/webframe/login.html:93 templates/webframe/resetPassword.html:3
+#: templates/webframe/resetPassword.html:10 views.py:701 views.py:727
 msgid "resetPassword"
 msgstr "重設密碼"
+
+#: templates/webframe/login.html:94
+#: templates/webframe/webauthn-registration.html:55
+msgid "registration"
+msgstr "登記"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -1140,8 +1138,8 @@ msgid "User.actions.new"
 msgstr "新增使用者"
 
 #: templates/webframe/webauthn-registration.html:3
-#: templates/webframe/webauthn-registration.html:32
-#: templates/webframe/webauthn-registration.html:36
+#: templates/webframe/webauthn-registration.html:33
+#: templates/webframe/webauthn-registration.html:37
 msgid "login-webauthn-registration"
 msgstr "登記"
 
@@ -1154,7 +1152,9 @@ msgid "Got server generated Authentication Options, authenticating..."
 msgstr "已取得登入資訊，正在驗證和生成公/私密鑰..."
 
 #: templates/webframe/webauthn-registration.html:18
-msgid "Got authentication credential, verifing..."
+#, fuzzy
+#| msgid "Got authentication credential, verifing..."
+msgid "Got authentication credential, verifying..."
 msgstr "已驗證，正傳送公鑰到伺服器作進一步驗證和儲存..."
 
 #: templates/webframe/webauthn-registration.html:20
@@ -1169,8 +1169,21 @@ msgstr "登記"
 msgid "Error: Authenticator was probably already registered by user"
 msgstr "證記錯誤，可能這使用者已登記..."
 
-#: templates/webframe/webauthn-registration.html:50
+#: templates/webframe/webauthn-registration.html:23
+#, fuzzy, python-format
+#| msgid ""
+#| "The user is already registered. Please select another one or <a href="
+#| "\"%%(loginUrl)s\" target=\"_self\">Login</a> to register the new public "
+#| "key'"
+msgid ""
+"The user is already registered. Please select another one or <a href="
+"\"%%(loginUrl)s\" target=\"_self\">Login</a> to register the new public key'"
+msgstr ""
+"這個使用者名稱已被使用，請重新選取另一個名稱，或請先<a href=\"%(loginUrl)s\" "
+"target=\"_self\">登入</a>，再登記公/私鑰。"
+
 #: templates/webframe/webauthn-registration.html:51
+#: templates/webframe/webauthn-registration.html:52
 msgid "displayName"
 msgstr "裝置名稱"
 
@@ -1199,41 +1212,41 @@ msgstr "<i class=\"fas fa-angle-double-left\"></i> 下一頁"
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:365
+#: views.py:366
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:533
+#: views.py:534
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
 
-#: views.py:654 views.py:732
+#: views.py:655 views.py:733
 msgid "ResetPassword.tokenNotFound"
 msgstr "找到到有效的 Token"
 
-#: views.py:656 views.py:734
+#: views.py:657 views.py:735
 msgid "ResetPassword.userNotFound"
 msgstr "找不到使用者"
 
-#: views.py:658 views.py:736
+#: views.py:659 views.py:737
 msgid "ResetPassword.notEffective"
 msgstr "不是有效的 Token"
 
-#: views.py:684
+#: views.py:685
 msgid "Cannot found the user: %(username)"
 msgstr "找不到這個使用者: %(username)"
 
-#: views.py:691
+#: views.py:692
 msgid "Too many times to reset password"
 msgstr "嘗試太多次了。請於一小時後再試。"
 
-#: views.py:705
+#: views.py:706
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:724
+#: views.py:725
 msgid "The password has been updated successfully."
 msgstr ""

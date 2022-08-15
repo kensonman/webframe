@@ -90,8 +90,8 @@ const authenticationUrl='{%url "webframe:webauthn-authentication"%}';
                      <input type="password" name="current-password" id="current-passwordFld" class="form-control" autocomplete="current-password" placeholder="{%trans 'password'%}" required="required"/>
                   </div>
                   <div class="pnl-btns">
+                     {%if TMPL_RESET_PASSWORD%}<a class="btn btn-outline-secondary" href="{%url 'webframe:resetPassword'%}" target='_self'>{%trans 'resetPassword'%}</a>{%endif%}
                      {%if allow_registration%}<a class="btn btn-outline-info" href="{%url 'webframe:webauthn-registration'%}">{%trans 'registration'%}</a>{%endif%}
-                     {%if TMPL_RESET_PASSWORD%}<a href="{%url 'webframe:resetPassword'%}" target='_self'>{%trans 'resetPassword'%}</a>{%endif%}
                      <button class="btn btn-success" type="submit" id="loginBtn" disabled="disabled">{%trans 'login'%}</button>
                   </div>
                </section>{%endblock%}

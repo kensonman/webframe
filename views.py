@@ -154,11 +154,12 @@ class WebAuthnRegistration( View ):
             , user_name=username)
          req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8') #Due to opts.challenge is bytes array which is not serializable
          u=get_user_model().objects.filter(username=username)
-         rst['passwordRequired']=len(u)>0
          rst=options_to_json(opts)
+         rst=json.loads(rst)
+         rst['newUserExists']=len(u)>0 and req.user.username!=username
          rep=HttpResponse()
          rep.headers['Content-Type']='application/json'
-         rep.write(rst)
+         rep.write(json.dumps(rst))
          return rep
       if getattr(settings, 'WEBAUTHN_ALLOW_REGISTRATION', False):
          return render(req, getattr(settings, 'TMPL_WEBAUTHN_REGISTRATION', 'webframe/webauthn-registration.html'), params)
@@ -180,12 +181,9 @@ class WebAuthnRegistration( View ):
          cred=RegistrationCredential.parse_raw(data)
          jcred=json.loads(data)
 
-         if len(get_user_model().objects.filter(username=jcred.username))>0: #If the user already exists
-            assert jcred['username']
-            assert jcred['password']
-            u=authenticate(req, username=jcred['username'], password=jcred['password'])
-            if u==None:
-               raise PermissionError('InvalidStateError', 'Invalid username or password')
+         if len(get_user_model().objects.filter(username=jcred['username']))>0: #If the user already exists
+            assert jcred['username']==req.user.username
+            assert req.user.is_authenticated
 
          challenge=b64dec(req.session[SESSION_WEBAUTHN_CHALLENGE]) #Due to 
          origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')

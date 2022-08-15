@@ -11,6 +11,8 @@ urlpatterns=[
    re_path(r'^logout/?$', views.logout, name='logout'),
    re_path(r'^resetPassword/?$', views.ResetPasswordView.as_view(), name='resetPassword'),
    re_path(r'^obtainToken/?$', views.RegisterView.as_view(), name='obtainToken'),
+   re_path(r'^register/?$', views.WebAuthnRegistration.as_view(), name='webauthn-registration'),
+   re_path(r'^authenticate/?$', views.WebAuthnAuthentication.as_view(), name='webauthn-authentication'),
 
    re_path(r'^users/?$', views.users, name='users'),
    re_path(r'^users/(?P<user>[^/]*)/?$', views.user, name='user'),
@@ -27,9 +29,6 @@ urlpatterns=[
 
    re_path(r'headers/?$', views.HeaderView.as_view(), name='headers'),
    re_path(r'whoami/?$', views.WhoAmIView.as_view(), name='whoami'),
-
-   re_path(r'webauthn/register/?$', views.WebAuthnRegistration.as_view(), name='webauthn-registration'),
-   re_path(r'webauthn/authenticate/?$', views.WebAuthnAuthentication.as_view(), name='webauthn-authentication'),
 
    re_path('jsi18n/', JavaScriptCatalog.as_view(domain='django', packages=['webframe',]), name='js'),
 ] 
