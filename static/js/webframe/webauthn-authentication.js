@@ -11,47 +11,70 @@ function showMsg(msg, empty=true, detail=null){
    document.querySelector('#msgPnl').appendChild(elem);
 }
 
+function loginWithPubkey(evt){
+   evt.preventDefault();
+   $('input[name=username]').attr('readonly', 'readonly');
+   showMsg(gettext('Loading authentication options from server...'));
+   let data={'username': $('input[name=username]').val()};
+   axios.get(authenticationUrl, {'params':data, 'headers':{'Accept': 'application/json'}})
+      .then(rep=>{
+         showMsg(gettext('Got authentication options, authenticating...'), false, rep.data);
+         if(rep.data.allowCredentials.length>0){
+            startAuthentication(rep.data).then(cred=>{
+               showMsg(gettext('Authenticated, verification in progress...'), false, cred);
+               axios.post(authenticationUrl, JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
+                  showMsg(gettext('Got server verification result'), false, rep.data);
+                  let data=rep.data;
+                  if(data.verified){
+                     showMsg(gettext('Authentication successful, the page will be redirected soon...'));
+                     window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
+                  }else
+                     showMsg(interpolate(gettext('Authentication failure: %(error)s'), {'error': data.error}, true), false, data.message);
+               });
+            });
+         }else{
+            //Required to login with Password
+            $('#field-password').removeClass('d-none').addClass('animate_animated animate__slideInDown');
+            focus('input[name=current-password]');
+         }
+      });
+   return false;
+}
+
+function loginWithPassword(evt){
+   $('input[name=username]').attr('readonly', 'readonly');
+   $('input[name=current-password]').attr('readonly', 'readonly');
+   $('#loginFrm').attr('action', loginUrl); //Chaning the login url
+   $('input[name=csrfmiddlewaretoken]').val(Cookies.get('csrftoken'));
+   return true;
+}
+
+function focus(ele){
+   window.setTimeout($(ele).focus().select(), 500);
+}
+
 $(document).ready(function(){
    $('#loginFrm')
       .on('submit', function(evt){
-         evt.preventDefault();
          if($(this).valid()){
-            showMsg(gettext('Loading authentication options from server...'));
-            let data={'username': $('input[name=username]').val()};
-            $('input[name=username]').attr('disabled', 'disabled');
-            axios.get(authenticationUrl, {'params':data, 'headers':{'Accept': 'application/json'}})
-               .then(rep=>{
-                  showMsg(gettext('Got authentication options, authenticating...'), false, rep.data);
-                  if(rep.data.allowCredentials.length>-1){
-                     startAuthentication(rep.data).then(cred=>{
-                        showMsg(gettext('Authenticated, verification in progress...'), false, cred);
-                        axios.post(authenticationUrl, JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
-                           showMsg(gettext('Got server verification result'), false, rep.data);
-                           let data=rep.data;
-                           if(data.verified){
-                              showMsg(gettext('Authentication successful, the page will be redirected soon...'));
-                              window.setTimeout('window.location.href=document.querySelector("input[name=next]").value', 1000);
-                           }else
-                              showMsg(interpolate(gettext('Authentication failure: %(error)s'), {'error': data.error}, true), false, data.message);
-                        });
-                     });
-                  }else{
-                     $('#field-password').removeClass('d-none').addClass('animate_animated animate__slideInDown');
-                  }
-               });
+            if($('#field-password').is(':visible'))
+               return loginWithPassword(evt);
+            else
+               return loginWithPubkey(evt);
          }
       })
       .on('reset', function(evt){
-         $('input[name=username]').removeAttr('disabled');
-         $('#field-password').removeClass('animate_animated animate__slideInDown').addClass('d-none');
+         $('input[name=username]').removeAttr('readonly');
       })
       .validate({focusInvalid: false});
    $('input[name=username]')
       .on('keyup', function(evt){
          if(evt.charCode==13)
-            $(this).parents('form:first').submit();
-      })
-      .focus()
-      .select();
+            if($('#field-password').is(':visible'))
+               focus('input[name=current-password]');
+            else
+               $('#loginFrm').submit();
+      });
+   focus('input[name=username]');
    $('#loginBtn').removeAttr('disabled');
 });

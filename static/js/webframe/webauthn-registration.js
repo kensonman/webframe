@@ -16,14 +16,14 @@ function showMsg(msg, empty=false, details=null){
 function toggleFrm(enabled=true){
    if(enabled)
       $('#registerFrm')
-         .find('input,select,textarea').removeAttr('disabled').end()
-         .find('#registerBtn').removeAttr('disabled').end()
+         .find('input,select,textarea').removeAttr('readonly').end()
+         .find('#registerBtn').removeAttr('readonly').end()
       ;
-      if(USER)$('#registerFrm').find('input[name=username]').val(USER.username).attr('disabled');
+      if(USER)$('#registerFrm').find('input[name=username]').val(USER.username).attr('readonly');
    else
       $('#registerFrm')
-         .find('input,select,textarea').attr('disabled', 'disabled').end()
-         .find('#registerBtn').attr('disabled', 'disabled').end()
+         .find('input,select,textarea').attr('readonly', 'readonly').end()
+         .find('#registerBtn').attr('readonly', 'readonly').end()
       ;
 }
 function register( opts ){
@@ -48,46 +48,65 @@ function register( opts ){
       }).catch(err=>{throw err});
    });
 }
+
+function focus(ele){
+   window.setTimeout($(ele).focus().select(), 500);
+}
+
 $(document).ready(function(){
-   $('input[name=username]').focus().select();
+   focus('input[name=username]');
    $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
-   $('#registerFrm').submit(function(evt){
-      evt.preventDefault();
-      if(!$(this).valid())return;
-      toggleFrm(false);
-      let data={};
-      if($(this).find('input[name=displayName]').val()=='')
-         $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
-      data['username']=$(this).find('input[name=username]').val();
-      data['displayName']=$(this).find('input[name=displayName]').val();
-      showMsg(gettext('Getting the challenge and related information from server...'), true);
-      axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
-         .then(rep=>{
-            regOpts=rep.data;
-            showMsg(gettext('Got server generated Authentication Options, authenticating...'), false, regOpts);
-            if(regOpts.newUserExists){
-               showMsg(interpolate(gettext('The user is already registered. Please select another one or <a href="%(loginUrl)s" target="_self">Login</a> to register the new public key'), {'loginUrl': URL_LOGIN}, true), false);
+   $('#registerFrm')
+      .on('submit', function(evt){
+         evt.preventDefault();
+         if(!$(this).valid())return;
+         toggleFrm(false);
+         let data={};
+         if($(this).find('input[name=displayName]').val()=='')
+            $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
+         data['username']=$(this).find('input[name=username]').val();
+         data['displayName']=$(this).find('input[name=displayName]').val();
+         showMsg(gettext('Getting the challenge and related information from server...'), true);
+         axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
+            .then(rep=>{
+               regOpts=rep.data;
+               showMsg(gettext('Got server generated Authentication Options, authenticating...'), false, regOpts);
+               if(regOpts.newUserExists){
+                  showMsg(interpolate(gettext('The user is already registered. Please select another one or <a href="%(loginUrl)s" target="_self">Login</a> to register the new public key'), {'loginUrl': URL_LOGIN}, true), false);
+                  toggleFrm(true);
+                  return;
+               }
+               register(regOpts);
+            })
+            .catch(err=>{
                toggleFrm(true);
-               return;
-            }
-            register(regOpts);
-         })
-         .catch(err=>{
-            toggleFrm(true);
-            if(err.name==='InvalidStateError')
-               showMsg(gettext('Error: Authenticator was probably already registered by user'), false, err);
-            else
-               showMsg(err, false);
-         }); //Log the error when getting AuthOptions
-      return false;
-   }).validate({autoFocus: false});
+               if(err.name==='InvalidStateError')
+                  showMsg(gettext('Error: Authenticator was probably already registered by user'), false, err);
+               else
+                  showMsg(err, false);
+            }); //Log the error when getting AuthOptions
+         return false;
+      })
+      .on('reset', function(evt){
+         $('input[name=username],input[name=displayName]').removeAttr('readonly');
+         window.setTimeout("$('input[name=displayName]').val(DEFAULT_DEVICE_NAME)", 100);
+      })
+      .validate({autoFocus: false});
    $('#registerBtn').removeAttr('disabled');
    $('#resetBtn').on('click', function(evt){
       evt.preventDefault();
       $('#registerFrm')
-         .find('input,textarea,select').removeAttr('disabled').end()
+         .find('input,textarea,select').removeAttr('readonly').end()
          .find('input[name=displayName]').val(DEFAULT_DEVICE_NAME).end()
          .find('input[name=username]').val('').end()
       ;
+   });
+   $('input[name=username]').on('keyup', function(evt){
+      if(evt.keycode==13)
+         focus('input[name=displayName]');
+   });
+   $('input[name=displayName').on('keyup', function(evt){
+      if(evt.keycode==13)
+         $(this).parents('form:first').submit();
    });
 });

@@ -124,7 +124,7 @@ class Login( View ):
    def post(self, req):
       params=self.__loadDefault__(req)
       username=req.POST['username']
-      password=req.POST['password']
+      password=req.POST['current-password']
       u=self.login(req, username, password)
       if u:
          auth_login(req, u)
