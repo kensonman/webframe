@@ -596,6 +596,8 @@ def help_create_menuitem(req):
       lang.save()
       hi=MenuItem(name='/R/Hi', parent=rm, label='Hi, {username}')
       hi.save()
+      register=MenuItem(name='/R/Hi/register', parent=hi, label='register', props={'href': reverse('webframe:webauthn-register')})
+      register.save()
       logout=MenuItem(name='/R/Hi/Logout', parent=hi, label='Logout', props={'href': reverse('webframe:logout')})
       logout.save()
       activate('en')

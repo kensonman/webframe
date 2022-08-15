@@ -55,7 +55,7 @@ function focus(ele){
 
 $(document).ready(function(){
    focus('input[name=username]');
-   $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
+   $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME).attr('value', DEFAULT_DEVICE_NAME);
    $('#registerFrm')
       .on('submit', function(evt){
          evt.preventDefault();
