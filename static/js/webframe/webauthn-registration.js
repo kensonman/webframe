@@ -50,7 +50,7 @@ function register( opts ){
 }
 
 function focus(ele){
-   window.setTimeout($(ele).focus().select(), 500);
+   window.setTimeout(`$('${ele}').focus().select()`, 500);
 }
 
 $(document).ready(function(){

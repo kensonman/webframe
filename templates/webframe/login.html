@@ -82,6 +82,7 @@ const loginUrl='{%url "webframe:login"%}';
                      <div class="input-group">
                         <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
                         <div class="input-group-append">
+                           <button type="button" class="btn btn-outline-warning" title="{%trans 'thru password login'%}" id="loginWithPwdBtn"><i class="fas fa-key"></i></button>
                            <button type="reset" class="btn btn-outline-secondary"><i class="fas fa-undo"></i></button>
                         </div>
                      </div>
@@ -93,7 +94,7 @@ const loginUrl='{%url "webframe:login"%}';
                   <div class="pnl-btns">
                      {%if TMPL_RESET_PASSWORD%}<a class="btn btn-outline-secondary" href="{%url 'webframe:resetPassword'%}" target='_self'>{%trans 'resetPassword'%}</a>{%endif%}
                      {%if allow_registration%}<a class="btn btn-outline-info" href="{%url 'webframe:webauthn-registration'%}">{%trans 'registration'%}</a>{%endif%}
-                     <button class="btn btn-success" type="submit" id="loginBtn" disabled="disabled">{%trans 'login'%}</button>
+                     <button class="btn btn-success" type="submit" id="loginBtn" disabled="disabled"><i class="fas fa-passport"></i> {%trans 'login'%}</button>
                   </div>
                </section>{%endblock%}
 

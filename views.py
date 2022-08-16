@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as auth_logout, login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
@@ -157,6 +158,7 @@ class WebAuthnRegistration( View ):
          rst=options_to_json(opts)
          rst=json.loads(rst)
          rst['newUserExists']=len(u)>0 and req.user.username!=username
+         rst['passwordAvailable']=getattr(req.user, 'password', None)!=None
          rep=HttpResponse()
          rep.headers['Content-Type']='application/json'
          rep.write(json.dumps(rst))
@@ -284,6 +286,8 @@ class WebAuthnAuthentication( View ):
             require_user_verification=True,
          )
          logger.debug('Verificated!!!')
+         pubkey.lastSignin=datetime.now()
+         pubkey.save()
          auth_login(req, pubkey.owner)
          logger.debug('Saved the login into session!')
          result['verified']=True
@@ -299,6 +303,26 @@ class WebAuthnAuthentication( View ):
          rep.write(json.dumps(result))
       return rep
 
+class WebAuthnPubkeysView( LoginRequiredMixin, View ):
+   def get(self, req):
+      params=dict()
+      params['target']=WebAuthnPubkey.objects.filter(owner=req.user).order_by('cb')
+      params['target']=WebAuthnPubkeyTable(WebAuthnPubkey.objects.filter(owner=req.user))
+      rc=RequestConfig(req)
+      rc.configure(params['target'])
+      return render(req, getattr(settings, 'TMPL_PUBKEYS', 'webframe/pubkeys.html'), params)
+
+class WebAuthnPubkeyView( LoginRequiredMixin, View ):
+   @transaction.atomic
+   def delete(self, req, *args, **kwargs):
+      logger.warning('Deleteing WebAuthnPubkey: {0}'.format(kwargs['id']))
+      webpubkey=getObj(WebAuthnPubkey, id=kwargs['id'])
+      webpubkey.delete()
+      rep=HttpResponse()
+      rep.headers['Content-Type']='text/json'
+      rep.write(json.dumps({'result': True}))
+      return rep
+      
 def logout(req):
    '''
    Logout the session.

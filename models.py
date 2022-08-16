@@ -1193,6 +1193,7 @@ class WebAuthnPubkey(ValueObject):
    pubkey                  = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.pubkey'), help_text=_('WebAuthnPubkey.pubkey.helptext'), unique=True)
    tipe                    = models.CharField(max_length=1024, verbose_name=_('WebAuthnPubkey.tipe'), help_text=_('WebAuthnPubkey.tipe.helptext'))
    signCount               = models.IntegerField(verbose_name=_('WebAuthnPubkey.signCount'), help_text=_('WebAuthnPubkey.signCount.helptext'))
+   lastSignin              = models.DateTimeField(null=True,blank=True,verbose_name=_('WebAuthnPubkey.lastSignin'), help_text=_('WebAuthnPubkey.lastSignin'))
    owner                   = models.ForeignKey(
      settings.AUTH_USER_MODEL,
      null=False,

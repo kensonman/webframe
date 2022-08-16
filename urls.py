@@ -13,6 +13,8 @@ urlpatterns=[
    re_path(r'^obtainToken/?$', views.RegisterView.as_view(), name='obtainToken'),
    re_path(r'^register/?$', views.WebAuthnRegistration.as_view(), name='webauthn-registration'),
    re_path(r'^authenticate/?$', views.WebAuthnAuthentication.as_view(), name='webauthn-authentication'),
+   re_path(r'^pubkeys/?$', views.WebAuthnPubkeysView.as_view(), name='pubkeys'),
+   re_path(r'^pubkeys/(?P<id>[^/]+)/?$', views.WebAuthnPubkeyView.as_view(), name='pubkey'),
 
    re_path(r'^users/?$', views.users, name='users'),
    re_path(r'^users/(?P<user>[^/]*)/?$', views.user, name='user'),

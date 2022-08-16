@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-15 09:38+0000\n"
+"POT-Creation-Date: 2022-08-16 14:43+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -211,515 +211,524 @@ msgstr "The enabling status of the object"
 msgid "OrderableValueObject.sequence"
 msgstr "Ordering"
 
-#: models.py:579
+#: models.py:580
 msgid "Preference.TYPE.NONE"
 msgstr "None (Must be empty)"
 
-#: models.py:580
+#: models.py:581
 msgid "Preference.TYPE.INT"
 msgstr "Integer"
 
-#: models.py:581
+#: models.py:582
 msgid "Preference.TYPE.DECIMAL"
 msgstr "Decimal"
 
-#: models.py:582
+#: models.py:583
 msgid "Preference.TYPE.BOOLEAN"
 msgstr "Boolean"
 
-#: models.py:583
+#: models.py:584
 msgid "Preference.TYPE.TEXT"
 msgstr "Text"
 
-#: models.py:584
+#: models.py:585
 msgid "Preference.TYPE.RICHTEXT"
 msgstr "Rich Text (HTML)"
 
-#: models.py:585
+#: models.py:586
 msgid "Preference.TYPE.URL"
 msgstr "URL"
 
-#: models.py:586
+#: models.py:587
 msgid "Preference.TYPE.EMAIL"
 msgstr "Email"
 
-#: models.py:587
+#: models.py:588
 msgid "Preference.TYPE.DATE"
 msgstr "Date"
 
-#: models.py:588
+#: models.py:589
 msgid "Preference.TYPE.TIME"
 msgstr "Time"
 
-#: models.py:589
+#: models.py:590
 msgid "Preference.TYPE.DATETIME"
 msgstr "Date Time"
 
-#: models.py:590
+#: models.py:591
 msgid "Preference.TYPE.UUIDS"
 msgstr "Comma delimited UUIDs"
 
-#: models.py:591
+#: models.py:592
 msgid "Preference.TYPE.LIST"
 msgstr "Comma, Semicolon or | delimited strigns"
 
-#: models.py:592
+#: models.py:593
 msgid "Preference.TYPE.JSON"
 msgstr "JSON object"
 
-#: models.py:593
+#: models.py:594
 msgid "Preference.TYPE.FILEPATH"
 msgstr "File Resource"
 
-#: models.py:600
+#: models.py:601
 msgid "Preference.name"
 msgstr "Preference Name"
 
-#: models.py:600
+#: models.py:601
 msgid "Preference.name.helptext"
 msgstr "The name of the preference"
 
-#: models.py:601
+#: models.py:602
 msgid "Preference.value"
 msgstr "Preference Value"
 
-#: models.py:601
+#: models.py:602
 msgid "Preference.value.helptext"
 msgstr "The value of the perference"
 
-#: models.py:607
+#: models.py:608
 msgid "Preference.owner"
 msgstr "Owner"
 
-#: models.py:608
+#: models.py:609
 msgid "Preference.owner.helptext"
 msgstr "The owner of the perference"
 
-#: models.py:615
+#: models.py:616
 msgid "Preference.parent"
 msgstr "Parent"
 
-#: models.py:616
+#: models.py:617
 msgid "Preference.parent.helptext"
 msgstr "The parent preference; Used for lookup"
 
-#: models.py:620
+#: models.py:621
 msgid "Preference.sequence"
 msgstr "Sequence"
 
-#: models.py:621
+#: models.py:622
 msgid "Preference.sequence.helptext"
 msgstr "The sequence of the perference; Used for lookup"
 
-#: models.py:623
+#: models.py:624
 msgid "Preference.tipe"
 msgstr "Type"
 
-#: models.py:623
+#: models.py:624
 msgid "Preference.tipe.helptext"
 msgstr ""
 "The type of the preference value. If File Content provided, it will "
 "<strong>always be</strong> File Resource"
 
-#: models.py:624
+#: models.py:625
 msgid "Preference.encrypted"
 msgstr "Encrypted"
 
-#: models.py:624
+#: models.py:625
 msgid "Preference.encrypted.helptxt"
 msgstr "The field should be encrypted b4 save"
 
-#: models.py:625
+#: models.py:626
 msgid "Preference.helptext"
 msgstr "Preferences/Settings stored in datagbase"
 
-#: models.py:625
+#: models.py:626
 msgid "Preference.helptext.helptext"
 msgstr "The help for user admin"
 
-#: models.py:626
+#: models.py:627
 msgid "Preference.regex"
 msgstr "Regex Pattern"
 
-#: models.py:626
+#: models.py:627
 msgid "Preference.regex.helptext"
 msgstr "This cannot be updated thru admin-tools."
 
-#: models.py:627
+#: models.py:628
 msgid "Preference.lang"
 msgstr "Language"
 
-#: models.py:627
+#: models.py:628
 msgid "Preference.lang.helptext"
 msgstr ""
 "The <a href=\"https://en.wikipedia.org/wiki/"
 "Language_localisation#Language_tags_and_codes\">language code</a> of this "
 "preference. Empty will set the fallback value."
 
-#: models.py:628
+#: models.py:629
 msgid "Preference.filecontent"
 msgstr "Uploaded Content"
 
-#: models.py:628
+#: models.py:629
 msgid "Preference.filecontent.helptext"
 msgstr "The uploaded content. If provided, the value will be overrided."
 
-#: models.py:910
+#: models.py:911
 msgid "AsyncManipulationObject"
 msgstr "Async Task#"
 
-#: models.py:911
+#: models.py:912
 msgid "AsyncManipulationObjects"
 msgstr "Async Task#"
 
-#: models.py:914
+#: models.py:915
 msgid "AsyncManipulationObject.task_id"
 msgstr "Async Task#"
 
-#: models.py:918
+#: models.py:919
 msgid "AsyncManipulationObject.is_processing"
 msgstr "Async Task is under processing..."
 
-#: models.py:923
+#: models.py:924
 msgid "AsyncManipulationObject.is_ready"
 msgstr "Async Task is completed"
 
-#: models.py:928
+#: models.py:929
 msgid "Numbering"
 msgstr "Numbering"
 
-#: models.py:929
+#: models.py:930
 msgid "Numberings"
 msgstr "Numberings"
 
-#: models.py:934
+#: models.py:935
 msgid "Numbering.name"
 msgstr "Name"
 
-#: models.py:934
+#: models.py:935
 msgid "Numbering.name.helptxt"
 msgstr "The name of the Numbering"
 
-#: models.py:935
+#: models.py:936
 msgid "Numbering.pattern"
 msgstr "Pattern"
 
-#: models.py:935
+#: models.py:936
 msgid "Numbering.pattern.helptxt"
 msgstr "The pattern to generate the number. now, next can be the variable"
 
-#: models.py:936
+#: models.py:937
 msgid "Numbering.next_val"
 msgstr "Next Value"
 
-#: models.py:936
+#: models.py:937
 msgid "Numbering.next_val.helptxt"
 msgstr "The next number that will be generated"
 
-#: models.py:937
+#: models.py:938
 msgid "Numbering.step_val"
 msgstr "Step Value"
 
-#: models.py:937
+#: models.py:938
 msgid "Numbering.step_val.helptxt"
 msgstr "After generation, the step value will be added"
 
-#: models.py:938
+#: models.py:939
 msgid "Numbering.desc"
 msgstr "Desc"
 
-#: models.py:938
+#: models.py:939
 msgid "Numbering.desc.helptext"
 msgstr "The description of the Numbering"
 
-#: models.py:949
+#: models.py:950
 msgid "Numbering.new"
 msgstr "New Numbering"
 
-#: models.py:950
+#: models.py:951
 #, python-brace-format
 msgid "Numbering[{name}::{next_val}]"
 msgstr "Numbering[{name}::{next_val}]"
 
-#: models.py:1000 models.py:1003
+#: models.py:1001 models.py:1004
 msgid "Profile"
 msgstr "Profile"
 
-#: models.py:1001
+#: models.py:1002
 msgid "Profiles"
 msgstr "Profiles"
 
-#: models.py:1003
+#: models.py:1004
 msgid "Profile.helptext"
 msgstr "The profile settings"
 
-#: models.py:1026 models.py:1064
+#: models.py:1027 models.py:1065
 msgid "MenuItem"
 msgstr "Menu Item"
 
-#: models.py:1027
+#: models.py:1028
 msgid "MenuItems"
 msgstr "Menu Items"
 
-#: models.py:1038
+#: models.py:1039
 msgid "MenuItem.name"
 msgstr "Name"
 
-#: models.py:1038
+#: models.py:1039
 msgid "MenuItem.name.helptext"
 msgstr "Default is \"MainMenu\"; Used to declare the menu"
 
-#: models.py:1039
+#: models.py:1040
 msgid "MenuItem.user"
 msgstr "Owner"
 
-#: models.py:1039
+#: models.py:1040
 msgid "MenuItem.user.helptext"
 msgstr "The menu owner, None for anonymous"
 
-#: models.py:1040
+#: models.py:1041
 msgid "MenuItem.parent"
 msgstr "Parent"
 
-#: models.py:1040
+#: models.py:1041
 msgid "MenuItem.parent.helptext"
 msgstr "The parent of this menu-item"
 
-#: models.py:1042
+#: models.py:1043
 msgid "MenuItem.icon"
 msgstr "Icon"
 
-#: models.py:1042
+#: models.py:1043
 msgid "MenuItem.icon.help"
 msgstr "The icon of this menu-item; FrontAwesome name,  e.g: fa-cogs"
 
-#: models.py:1043
+#: models.py:1044
 msgid "MenuItem.label"
 msgstr "Label"
 
-#: models.py:1043
+#: models.py:1044
 msgid "MenuItem.label.helptext"
 msgstr "The label of the menu-item"
 
-#: models.py:1044
+#: models.py:1045
 msgid "MenuItem.image"
 msgstr "Image"
 
-#: models.py:1044
+#: models.py:1045
 msgid "MenuItem.image.helptext"
 msgstr "Image of the  menu-item"
 
-#: models.py:1045
+#: models.py:1046
 msgid "MenuItem.props"
 msgstr "Properties"
 
-#: models.py:1045
+#: models.py:1046
 msgid "MenuItem.props.help"
 msgstr "The HTML properties will be applied to menu-item"
 
-#: models.py:1048
+#: models.py:1049
 msgid "MenuItem.onclick"
 msgstr "OnClick scripts"
 
-#: models.py:1049
+#: models.py:1050
 msgid "MenuItem.onclick.helptext"
 msgstr "The scripts that will executed when user clicked"
 
-#: models.py:1053
+#: models.py:1054
 msgid "MenuItem.mousein"
 msgstr "Mouse In"
 
-#: models.py:1054
+#: models.py:1055
 msgid "MenuItem.mousein.helptext"
 msgstr "The scripts that will executed when user mouse-in"
 
-#: models.py:1058
+#: models.py:1059
 msgid "MenuItem.mouseout"
 msgstr "Mouse Out"
 
-#: models.py:1059
+#: models.py:1060
 msgid "MenuItem.mouseout.helptext"
 msgstr "The scripts that will executed when user mouse-out"
 
-#: models.py:1163
+#: models.py:1164
 msgid "Translation"
 msgstr "Translation"
 
-#: models.py:1164
+#: models.py:1165
 msgid "Translations"
 msgstr "Translations"
 
-#: models.py:1170 views.py:605
+#: models.py:1171 views.py:628
 msgid "english"
 msgstr "English"
 
-#: models.py:1171 views.py:608
+#: models.py:1172 views.py:631
 msgid "zh-hant"
 msgstr "繁體中文"
 
-#: models.py:1172
+#: models.py:1173
 msgid "zh-hans"
 msgstr "简体中文"
 
-#: models.py:1175
+#: models.py:1176
 msgid "Translation.key"
 msgstr "Key"
 
-#: models.py:1175
+#: models.py:1176
 msgid "Translation.key.helptext"
 msgstr "The key of the translation. Used to sort out the translation"
 
-#: models.py:1176
+#: models.py:1177
 msgid "Translation.locale"
 msgstr "Locale"
 
-#: models.py:1176
+#: models.py:1177
 msgid "Translation.locale.helptext"
 msgstr ""
 "The language local code. Refer to <a href=\"https://docs.djangoproject.com/"
 "en/3.2/ref/settings/#language-code\" target=\"_blank\">LANGUAGE_CODE</a> for "
 "details."
 
-#: models.py:1177
+#: models.py:1178
 msgid "Translation.msg"
 msgstr "Message"
 
-#: models.py:1177
+#: models.py:1178
 msgid "Translation.msg.helptext"
 msgstr "The message body."
 
-#: models.py:1178
+#: models.py:1179
 msgid "Translation.pmsg"
 msgstr "Plural Message"
 
-#: models.py:1178
+#: models.py:1179
 msgid "Translation.pmsg.helptext"
 msgstr "The message body when Plural"
 
-#: models.py:1187
+#: models.py:1188
 msgid "WebAuthnPubkey"
 msgstr "WebAuthn Public Key"
 
-#: models.py:1188
+#: models.py:1189 templates/webframe/pubkeys.html:3
+#: templates/webframe/pubkeys.html:45
 msgid "WebAuthnPubkeies"
 msgstr "WebAuthn Public Keys"
 
-#: models.py:1190
+#: models.py:1191
 msgid "WebAuthnPubkey.id"
 msgstr "ID"
 
-#: models.py:1190
+#: models.py:1191
 msgid "WebAuthnPubkey.id.helptext"
 msgstr ""
 "The id of the WebAuthn Public Key, it always equals to the credential's id "
 "generated by client."
 
-#: models.py:1191
+#: models.py:1192
 msgid "WebAuthnPubkey.displayName"
 msgstr "Device Name"
 
-#: models.py:1191
+#: models.py:1192
 msgid "WebAuthnPubkey.displayName.helptext"
 msgstr "The public key pair name"
 
-#: models.py:1192
+#: models.py:1193
 msgid "WebAuthnPubkey.pubkey"
 msgstr "Public Key"
 
-#: models.py:1192
+#: models.py:1193
 msgid "WebAuthnPubkey.pubkey.helptext"
 msgstr "The public key generated by client"
 
-#: models.py:1193
+#: models.py:1194
 msgid "WebAuthnPubkey.tipe"
 msgstr "Type"
 
-#: models.py:1193
+#: models.py:1194
 msgid "WebAuthnPubkey.tipe.helptext"
 msgstr "The type according to WebAuthn API"
 
-#: models.py:1194
+#: models.py:1195
 msgid "WebAuthnPubkey.signCount"
 msgstr "Sign Count"
 
-#: models.py:1194
+#: models.py:1195
 msgid "WebAuthnPubkey.signCount.helptext"
 msgstr "The sign-count accord to WebAuthn API"
 
-#: models.py:1200
+#: models.py:1196
+msgid "WebAuthnPubkey.lastSignin"
+msgstr "Last Sign-in date"
+
+#: models.py:1202
 msgid "WebAuthnPubkey.owner"
 msgstr "Owner"
 
-#: models.py:1201
+#: models.py:1203
 msgid "WebAuthnPubkey.owner.helptext"
 msgstr "The owner of the key pair"
 
-#: models.py:1206 templates/webframe/resetPassword.html:28
+#: models.py:1208 templates/webframe/resetPassword.html:28
 msgid "ResetPassword"
 msgstr "Reset Password"
 
-#: models.py:1207
+#: models.py:1209
 msgid "ResetPasswords"
 msgstr "Reset Passwords"
 
-#: models.py:1212
+#: models.py:1214
 msgid "ResetPassword.key"
 msgstr "KEY"
 
-#: models.py:1212
+#: models.py:1214
 msgid "ResetPassword.key.helptext"
 msgstr ""
 "The key of this reset-password. It will be generated automatically save "
 "create."
 
-#: models.py:1217
+#: models.py:1219
 msgid "ResetPassword.user"
 msgstr "User"
 
-#: models.py:1218
+#: models.py:1220
 msgid "ResetPassword.user.helptext"
 msgstr "The target user."
 
-#: models.py:1220
+#: models.py:1222
 msgid "ResetPasssword.request_by"
 msgstr "Requested By"
 
-#: models.py:1220
+#: models.py:1222
 msgid "ResetPassword.request_by.helptext"
 msgstr "The IP Address of client who created this reset token."
 
-#: models.py:1221
+#: models.py:1223
 msgid "ResetPasssword.complete_by"
 msgstr "Complete By"
 
-#: models.py:1221
+#: models.py:1223
 msgid "ResetPassword.complete_by.helptext"
 msgstr ""
 "The IP Address of client who used this reset token to reset his/her password."
 
-#: models.py:1222
+#: models.py:1224
 msgid "ResetPassword.complete_date"
 msgstr "Complete Date"
 
-#: models.py:1222
+#: models.py:1224
 msgid "ResetPassword.complete_date.helptext"
 msgstr "The date of reseting password"
 
-#: models.py:1238
+#: models.py:1240
 msgid "TokenDetail"
 msgstr "Token Detail"
 
-#: models.py:1239
+#: models.py:1241
 msgid "TokenDetails"
 msgstr "Token Details"
 
-#: models.py:1242
+#: models.py:1244
 msgid "TokenDetail.name"
 msgstr "Token/Device Name"
 
-#: models.py:1242
+#: models.py:1244
 msgid "TokenDetail.name.helptext"
 msgstr "The name of the token/device."
+
+#: tables.py:44
+msgid "actions"
+msgstr "Actions"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/errorpages/503.html:7
@@ -728,7 +737,7 @@ msgstr "Service Currently Unavailable"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:590 views.py:635
+#: templates/webframe/meta.html:3 views.py:611 views.py:658
 msgid "appName"
 msgstr ""
 
@@ -786,7 +795,8 @@ msgstr "Dashboard"
 msgid "health.models.Categories"
 msgstr "Categories"
 
-#: templates/webframe/header-sample.html:21 templates/webframe/user.html:3
+#: templates/webframe/header-sample.html:21 templates/webframe/pubkey.html:3
+#: templates/webframe/pubkey.html:23 templates/webframe/user.html:3
 #: templates/webframe/user.html:23 templates/webframe/users.html:3
 #: templates/webframe/users.html:29
 msgid "users"
@@ -806,69 +816,70 @@ msgstr "Preference"
 msgid "logout"
 msgstr "Logout"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:95
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:97
 msgid "login"
 msgstr "Login"
 
-#: templates/webframe/login.html:3 templates/webframe/login.html:38
+#: templates/webframe/login.html:3 templates/webframe/login.html:39
 msgid "Login Required"
 msgstr "Login Required"
 
-#: templates/webframe/login.html:20
+#: templates/webframe/login.html:21
 msgid "Loading authentication options from server..."
 msgstr ""
 
-#: templates/webframe/login.html:21
+#: templates/webframe/login.html:22
 msgid "Got authentication options, authenticating..."
 msgstr ""
 
-#: templates/webframe/login.html:22
+#: templates/webframe/login.html:23
 msgid "Authenticated, verification in progress."
 msgstr ""
 
-#: templates/webframe/login.html:23
+#: templates/webframe/login.html:24
 #: templates/webframe/webauthn-registration.html:19
 msgid "Got server verification result"
 msgstr ""
 
-#: templates/webframe/login.html:24
+#: templates/webframe/login.html:25
 msgid "Authentication successful, the page will be redirected soon..."
 msgstr ""
 
-#: templates/webframe/login.html:25
+#: templates/webframe/login.html:26
 #, python-format
 msgid "Authentication failure: %(error)s"
 msgstr "Authentication failure: %(error)s"
 
-#: templates/webframe/login.html:46
+#: templates/webframe/login.html:47
 msgid "login-facebook"
 msgstr "Login with Facebook"
 
-#: templates/webframe/login.html:49
+#: templates/webframe/login.html:50
 msgid "login-twitter"
 msgstr "Login with Twitter"
 
-#: templates/webframe/login.html:52
+#: templates/webframe/login.html:53
 msgid "login-github"
 msgstr "Login with GitHub"
 
-#: templates/webframe/login.html:55
+#: templates/webframe/login.html:56
 msgid "login-google"
 msgstr "Login with Google"
 
-#: templates/webframe/login.html:60
+#: templates/webframe/login.html:61
 msgid "OR"
 msgstr "OR"
 
-#: templates/webframe/login.html:68
+#: templates/webframe/login.html:69
 msgid "Authentication Backends"
 msgstr "Authentication Backends"
 
-#: templates/webframe/login.html:76
+#: templates/webframe/login.html:77
 msgid "IPAddr"
 msgstr "IPAddr"
 
-#: templates/webframe/login.html:80 templates/webframe/login.html:82
+#: templates/webframe/login.html:81 templates/webframe/login.html:83
+#: templates/webframe/pubkey.html:32 templates/webframe/pubkey.html:33
 #: templates/webframe/resetPassword.html:24 templates/webframe/user.html:32
 #: templates/webframe/user.html:33
 #: templates/webframe/webauthn-registration.html:47
@@ -876,19 +887,24 @@ msgstr "IPAddr"
 msgid "username"
 msgstr "Username"
 
-#: templates/webframe/login.html:89 templates/webframe/login.html:90
+#: templates/webframe/login.html:85
+msgid "thru password login"
+msgstr "Login thru password"
+
+#: templates/webframe/login.html:91 templates/webframe/login.html:92
+#: templates/webframe/pubkey.html:36 templates/webframe/pubkey.html:37
 #: templates/webframe/resetPassword.html:21 templates/webframe/user.html:36
 #: templates/webframe/user.html:37
 msgid "password"
 msgstr "Password"
 
-#: templates/webframe/login.html:93 templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:701 views.py:727
+#: templates/webframe/login.html:95 templates/webframe/resetPassword.html:3
+#: templates/webframe/resetPassword.html:10 views.py:724 views.py:750
 msgid "resetPassword"
 msgstr "Reset Password"
 
-#: templates/webframe/login.html:94
-#: templates/webframe/webauthn-registration.html:55
+#: templates/webframe/login.html:96
+#: templates/webframe/webauthn-registration.html:56
 msgid "registration"
 msgstr "Registration"
 
@@ -1016,19 +1032,22 @@ msgid "Preference.sections.pin"
 msgstr "PIN"
 
 #: templates/webframe/preferences.html:58
-#: templates/webframe/preferences.html:59 templates/webframe/user.html:49
+#: templates/webframe/preferences.html:59 templates/webframe/pubkey.html:49
+#: templates/webframe/pubkey.html:50 templates/webframe/user.html:49
 #: templates/webframe/user.html:50
 msgid "first name"
 msgstr "First Name"
 
 #: templates/webframe/preferences.html:62
-#: templates/webframe/preferences.html:63 templates/webframe/user.html:53
+#: templates/webframe/preferences.html:63 templates/webframe/pubkey.html:53
+#: templates/webframe/pubkey.html:54 templates/webframe/user.html:53
 #: templates/webframe/user.html:54
 msgid "last name"
 msgstr "Last Name"
 
 #: templates/webframe/preferences.html:66
-#: templates/webframe/preferences.html:67 templates/webframe/user.html:45
+#: templates/webframe/preferences.html:67 templates/webframe/pubkey.html:45
+#: templates/webframe/pubkey.html:46 templates/webframe/user.html:45
 #: templates/webframe/user.html:46
 msgid "email address"
 msgstr "Email Address"
@@ -1061,9 +1080,71 @@ msgstr "The regex validation rule"
 msgid "prefDoc.title"
 msgstr "Preference Setup Reference"
 
+#: templates/webframe/pubkey.html:3 templates/webframe/pubkey.html:23
+#: templates/webframe/user.html:3 templates/webframe/user.html:23
+msgid "User.new"
+msgstr "Add User"
+
+#: templates/webframe/pubkey.html:28 templates/webframe/user.html:28
+msgid "id"
+msgstr "ID"
+
+#: templates/webframe/pubkey.html:38 templates/webframe/user.html:38
+msgid "input to change password"
+msgstr "Input to change password or leave it blank to un-change"
+
+#: templates/webframe/pubkey.html:40 templates/webframe/pubkey.html:41
+#: templates/webframe/user.html:40 templates/webframe/user.html:41
+msgid "confirm password"
+msgstr "Reconfirm Password"
+
+#: templates/webframe/pubkey.html:42 templates/webframe/user.html:42
+msgid "reinput password to re-confirm"
+msgstr "Input the new password if you would like to change password"
+
+#: templates/webframe/pubkey.html:58 templates/webframe/user.html:58
+msgid "active"
+msgstr "Active"
+
+#: templates/webframe/pubkey.html:62 templates/webframe/user.html:62
+msgid "staff status"
+msgstr "Staff Status"
+
+#: templates/webframe/pubkey.html:66 templates/webframe/user.html:66
+msgid "superuser status"
+msgstr "Superuser Status"
+
+#: templates/webframe/pubkey.html:72 templates/webframe/user.html:72
+msgid "user.group"
+msgstr "User groups"
+
+#: templates/webframe/pubkey.html:89 templates/webframe/user.html:89
+msgid "impersonate-start"
+msgstr "Impersonate this user"
+
+#: templates/webframe/pubkey.html:90 templates/webframe/user.html:90
+msgid "Group Admin"
+msgstr "Manage the groups"
+
+#: templates/webframe/pubkey.html:92 templates/webframe/user.html:92
+msgid "User.actions.delete"
+msgstr "Delete User"
+
+#: templates/webframe/pubkey.html:93 templates/webframe/user.html:93
+msgid "User.actions.save"
+msgstr "Save User"
+
+#: templates/webframe/pubkeys.html:13
+msgid "WebAuthnPubkey.confirmDelete %(id)s"
+msgstr "Are you sure want to delete this public-key: %(id)s"
+
+#: templates/webframe/pubkeys.html:49 templates/webframe/users.html:33
+msgid "User.actions.new"
+msgstr "New User"
+
 #: templates/webframe/resetPassword.html:20
 msgid "email"
-msgstr ""
+msgstr "Email"
 
 #: templates/webframe/resetPassword.html:22
 msgid "password again"
@@ -1088,62 +1169,6 @@ msgstr "<i class=\"fas fa-angle-right\"></i>"
 #: templates/webframe/tables.html:10
 msgid "pagination.last"
 msgstr "<i class=\"fas fa-angle-double-right\"></i>"
-
-#: templates/webframe/user.html:3 templates/webframe/user.html:23
-msgid "User.new"
-msgstr "Add User"
-
-#: templates/webframe/user.html:28
-msgid "id"
-msgstr "ID"
-
-#: templates/webframe/user.html:38
-msgid "input to change password"
-msgstr "Input to change password or leave it blank to un-change"
-
-#: templates/webframe/user.html:40 templates/webframe/user.html:41
-msgid "confirm password"
-msgstr "Reconfirm Password"
-
-#: templates/webframe/user.html:42
-msgid "reinput password to re-confirm"
-msgstr "Input the new password if you would like to change password"
-
-#: templates/webframe/user.html:58
-msgid "active"
-msgstr "Active"
-
-#: templates/webframe/user.html:62
-msgid "staff status"
-msgstr "Staff Status"
-
-#: templates/webframe/user.html:66
-msgid "superuser status"
-msgstr "Superuser Status"
-
-#: templates/webframe/user.html:72
-msgid "user.group"
-msgstr "User groups"
-
-#: templates/webframe/user.html:89
-msgid "impersonate-start"
-msgstr "Impersonate this user"
-
-#: templates/webframe/user.html:90
-msgid "Group Admin"
-msgstr "Manage the groups"
-
-#: templates/webframe/user.html:92
-msgid "User.actions.delete"
-msgstr "Delete User"
-
-#: templates/webframe/user.html:93
-msgid "User.actions.save"
-msgstr "Save User"
-
-#: templates/webframe/users.html:33
-msgid "User.actions.new"
-msgstr "New User"
 
 #: templates/webframe/webauthn-registration.html:3
 #: templates/webframe/webauthn-registration.html:33
@@ -1187,66 +1212,66 @@ msgstr ""
 msgid "displayName"
 msgstr "Device Name"
 
-#: views.py:42
+#: views.py:43
 msgid "django.contrib.auth.backends.ModelBackend"
 msgstr "Standard Username and Password"
 
-#: views.py:43
+#: views.py:44
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP/Active Directory"
 
-#: views.py:44
+#: views.py:45
 msgid "nextPage"
 msgstr "Next <i class=\"fas fa-angle-double-right\"></i>"
 
-#: views.py:45
+#: views.py:46
 #, python-format
 msgid "thisPage:%(page)s"
 msgstr "Page: %(page)s"
 
-#: views.py:46
+#: views.py:47
 msgid "prevPage"
 msgstr "<i class=\"fas fa-angle-double-left\"></i> Prev"
 
-#: views.py:133
+#: views.py:134
 msgid "Invalid username or password"
 msgstr "Invalid username or password"
 
-#: views.py:366
+#: views.py:387
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:534
+#: views.py:555
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
 
-#: views.py:655 views.py:733
+#: views.py:678 views.py:756
 msgid "ResetPassword.tokenNotFound"
 msgstr "Token not found"
 
-#: views.py:657 views.py:735
+#: views.py:680 views.py:758
 msgid "ResetPassword.userNotFound"
 msgstr "User not found"
 
-#: views.py:659 views.py:737
+#: views.py:682 views.py:760
 msgid "ResetPassword.notEffective"
 msgstr "Token expired"
 
-#: views.py:685
+#: views.py:708
 msgid "Cannot found the user: %(username)"
 msgstr "Cannot found the user: %(username)"
 
-#: views.py:692
+#: views.py:715
 msgid "Too many times to reset password"
 msgstr "Too many times to reset password. Please try again after an hour."
 
-#: views.py:706
+#: views.py:729
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:725
+#: views.py:748
 msgid "The password has been updated successfully."
 msgstr ""
