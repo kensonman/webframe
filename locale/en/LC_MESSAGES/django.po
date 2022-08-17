@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-16 14:43+0000\n"
+"POT-Creation-Date: 2022-08-17 09:56+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -899,7 +899,7 @@ msgid "password"
 msgstr "Password"
 
 #: templates/webframe/login.html:95 templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:724 views.py:750
+#: templates/webframe/resetPassword.html:10 views.py:724 views.py:753
 msgid "resetPassword"
 msgstr "Reset Password"
 
@@ -1135,6 +1135,7 @@ msgid "User.actions.save"
 msgstr "Save User"
 
 #: templates/webframe/pubkeys.html:13
+#, python-format
 msgid "WebAuthnPubkey.confirmDelete %(id)s"
 msgstr "Are you sure want to delete this public-key: %(id)s"
 
@@ -1245,33 +1246,44 @@ msgstr "Are you user to delete this user? This action can not be un-do."
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
 
-#: views.py:678 views.py:756
+#: views.py:678 views.py:759
 msgid "ResetPassword.tokenNotFound"
 msgstr "Token not found"
 
-#: views.py:680 views.py:758
+#: views.py:680 views.py:761
 msgid "ResetPassword.userNotFound"
 msgstr "User not found"
 
-#: views.py:682 views.py:760
+#: views.py:682 views.py:763
 msgid "ResetPassword.notEffective"
 msgstr "Token expired"
 
 #: views.py:708
-msgid "Cannot found the user: %(username)"
-msgstr "Cannot found the user: %(username)"
+msgid "Cannot found the user: %(username)s"
+msgstr "Cannot found the user: %(username)s"
 
 #: views.py:715
 msgid "Too many times to reset password"
 msgstr "Too many times to reset password. Please try again after an hour."
 
-#: views.py:729
+#: views.py:730
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:748
-msgid "The password has been updated successfully."
+#: views.py:732
+#, python-format
+msgid ""
+"You didn't setup an email in the system. Please contact your system-"
+"administrator and let them known your username and the reference number: "
+"%(id)s"
 msgstr ""
+"You didn't setup an email in the system. Please contact your system-"
+"administrator and let them known <keyword>your username</keyword> and the reference number: "
+"<keyword>%(id)s</keyword>"
+
+#: views.py:751
+msgid "The password has been updated successfully."
+msgstr "The password has been updated successfully."

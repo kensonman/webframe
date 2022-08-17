@@ -197,7 +197,7 @@ class ResetPasswordAdmin(admin.ModelAdmin):
    list_filter=(AliveObjectEffectiveFilter, )
    readonly_fields=('id',  'key', 'complete_by', 'complete_date', 'request_by', 'cb', 'cd', 'lmb', 'lmd')
    ordering=('user', '-effDate', 'expDate',)
-   search_fields=('user__username', )
+   search_fields=('user__username', 'id')
 
 @admin.register(TokenDetail)
 class TokenDetailAdmin(admin.ModelAdmin):

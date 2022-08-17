@@ -40,15 +40,15 @@ def sendEmail( *args, **kwargs ):
       +--------------------+--------------------+--------------------+
    '''
    if 'subject' not in kwargs: raise ValueError('\"subject\" is required')
-   if 'sender' not in kwargs: raise ValueError('\"sender\" is required')
-   if 'content' not in kwargs: raise ValueError('\"content\" is required')
+   if not ('content' in kwargs or 'plain' in kwargs): raise ValueError('Either \"content\" or \"plain\" is required')
+   if not ('recipients' in kwargs or 'cc' in kwargs or 'bcc' in kwargs): raise ValueError('Either \"recipients\", \"cc\", or \"bcc\" is required')
 
    taskId=kwargs.get('task_id', 'this')
    logger=logging.getLogger('webframe.tasks.sendEmail')
    logger.debug('Sending email with params...{0}'.format(json.dumps(kwargs)))
    try:
       subject=kwargs.get('subject', 'NoSubject').format(**kwargs)
-      sender=kwargs.get('sender', 'kenson@kenson.idv.hk')
+      sender=kwargs.get('sender', getattr(settings, 'EMAIL_FROM', 'kenson.idv.hk@gmail.com'))
       split=lambda s: re.findall(r'[^,;\s]+', s) if isinstance(s, str) else s #The split method for spliting email addresses
       recipients=split(kwargs.get('recipients', ''))
       cc=split(kwargs.get('cc', ''))

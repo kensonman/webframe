@@ -705,7 +705,7 @@ class ResetPasswordView(View):
          try:
             user=User.objects.get(email=username)
          except User.DoesNotExist:
-            messages.warning(req, _('Cannot found the user: %(username)')%{'username':username})
+            messages.warning(req, _('Cannot found the user: %(username)s')%{'username':username})
             return redirect('webframe:resetPassword')
 
       # Security check: repeating reset
@@ -724,9 +724,12 @@ class ResetPasswordView(View):
          subj=Preference.objects.pref('TMPL_RESET_PASSWORD_SUBJECT', defval=_('resetPassword'))
          sender=Preference.objects.pref('EMAIL_FROM', defval='info@kenson.idv.hk')
          tmpl=tmpl.format(user=user, absolute_url=getAbsoluteUrl(req), token=reset.key, url=reverse('webframe:resetPassword'))
-         sendEmail.delay(sender=sender, subject=subj, recipients=user.email, content=tmpl)
-         email='{0}***{1}'.format(user.email[0:3], user.email[-7:])
-         messages.info(req, _('The reset password instruction has been email to %(email)s. Please follow the instruction to reset your password')%{'email': user.email} )
+         if user.email:
+            sendEmail.delay(sender=sender, subject=subj, recipients=user.email, content=tmpl)
+            email='{0}***{1}'.format(user.email[0:3], user.email[-7:])
+            messages.info(req, _('The reset password instruction has been email to %(email)s. Please follow the instruction to reset your password')%{'email': user.email} )
+         else:
+            messages.info(req, _('You didn\'t setup an email in the system. Please contact your system-administrator and let them known your username and the reference number: %(id)s')%{'id': reset.id.hex[0:8]})
       return redirect('webframe:resetPassword')
 
    def _step2(self, req):

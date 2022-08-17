@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-16 14:43+0000\n"
+"POT-Creation-Date: 2022-08-17 09:56+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -890,7 +890,7 @@ msgid "password"
 msgstr "密碼"
 
 #: templates/webframe/login.html:95 templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:724 views.py:750
+#: templates/webframe/resetPassword.html:10 views.py:724 views.py:753
 msgid "resetPassword"
 msgstr "重設密碼"
 
@@ -1127,6 +1127,7 @@ msgid "User.actions.save"
 msgstr "存儲使用者"
 
 #: templates/webframe/pubkeys.html:13
+#, python-format
 msgid "WebAuthnPubkey.confirmDelete %(id)s"
 msgstr "你確認刪除這個公鑰：%(id)s"
 
@@ -1238,33 +1239,41 @@ msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
 
-#: views.py:678 views.py:756
+#: views.py:678 views.py:759
 msgid "ResetPassword.tokenNotFound"
 msgstr "找到到有效的 Token"
 
-#: views.py:680 views.py:758
+#: views.py:680 views.py:761
 msgid "ResetPassword.userNotFound"
 msgstr "找不到使用者"
 
-#: views.py:682 views.py:760
+#: views.py:682 views.py:763
 msgid "ResetPassword.notEffective"
 msgstr "不是有效的 Token"
 
 #: views.py:708
-msgid "Cannot found the user: %(username)"
-msgstr "找不到這個使用者: %(username)"
+msgid "Cannot found the user: %(username)s"
+msgstr "找不到這個使用者: %(username)s"
 
 #: views.py:715
 msgid "Too many times to reset password"
 msgstr "嘗試太多次了。請於一小時後再試。"
 
-#: views.py:729
+#: views.py:730
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:748
+#: views.py:732
+#, python-format
+msgid ""
+"You didn't setup an email in the system. Please contact your system-"
+"administrator and let them known your username and the reference number: "
+"%(id)s"
+msgstr "你沒有設定/確認電郵地址。請你聯絡系統管理員，並告知他（們）你的<keyword>使用者名稱</keyword>和這個參考編號：<keyword>%(id)s</keyword>。"
+
+#: views.py:751
 msgid "The password has been updated successfully."
 msgstr ""
