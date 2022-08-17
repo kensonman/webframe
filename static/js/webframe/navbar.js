@@ -66,7 +66,7 @@
                let brandToggle=$('<button></button>').attr({
                      'type': 'button',
                      'data-toggle': 'collapse',
-                     'data-target': `#${data.id}`,
+                     'data-target': `[id='${data.id}']`,
                      'aria-controls': data.id,
                      'aria-expanded': false,
                      'aria-label': 'Toggle navigation',
