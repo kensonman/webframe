@@ -64,6 +64,24 @@ function focus(ele){
 }
 
 $(document).ready(function(){
+   switch(OSName()){
+      case 'Android':$('#os-icon').addClass('fa-android');break;
+      case 'Windows':$('#os-icon').addClass('fa-windows');break;
+      case 'iOS':
+      case 'MacOS':  $('#os-icon').addClass('fa-apple');  break;
+      case 'Linux':  $('#os-icon').addClass('fa-linux');  break;
+      case 'UNIX':   $('#os-icon').addClass('fa-osi');    break;
+      default:       $('#os-icon').removeClass('fab').addClass('fas fa-question-cicle'); break;
+   }
+   $('#platformBtn').on('click', function(evt){
+      if($('input[name=authenticator]').val()=='platform'){
+         $('input[name=authenticator]').val('cross-platform');
+         $(this).removeClass('btn-outline-info').addClass('btn-info');
+      }else{
+         $('input[name=authenticator]').val('platform');
+         $(this).removeClass('btn-info').addClass('btn-outline-info');
+      }
+   });
    $('#loginFrm')
       .on('submit', function(evt){
          if($(this).valid()){
@@ -90,6 +108,7 @@ $(document).ready(function(){
    $('#loginBtn').removeAttr('disabled');
    $('#loginWithPwdBtn').on('click', function(){
       $('#field-password').removeClass('d-none').addClass('animate_animated animate__slideInDown');
+      $('#platformBtn').hide();
       focus('input[name=current-password]');
    });
 });

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 14:03+0000\n"
+"POT-Creation-Date: 2022-08-22 15:44+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -549,11 +549,11 @@ msgstr "Translation"
 msgid "Translations"
 msgstr "Translations"
 
-#: models.py:1171 views.py:628
+#: models.py:1171 views.py:642
 msgid "english"
 msgstr "English"
 
-#: models.py:1172 views.py:631
+#: models.py:1172 views.py:645
 msgid "zh-hant"
 msgstr "繁體中文"
 
@@ -737,7 +737,7 @@ msgstr "Service Currently Unavailable"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:611 views.py:658
+#: templates/webframe/meta.html:3 views.py:625 views.py:672
 msgid "appName"
 msgstr ""
 
@@ -816,7 +816,7 @@ msgstr "Preference"
 msgid "logout"
 msgstr "Logout"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:97
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:99
 msgid "login"
 msgstr "Login"
 
@@ -887,23 +887,27 @@ msgstr "IPAddr"
 msgid "username"
 msgstr "Username"
 
-#: templates/webframe/login.html:85
+#: templates/webframe/login.html:86
+msgid "login thru platform"
+msgstr "Login with internal/external device"
+
+#: templates/webframe/login.html:87
 msgid "thru password login"
 msgstr "Login thru password"
 
-#: templates/webframe/login.html:91 templates/webframe/login.html:92
+#: templates/webframe/login.html:93 templates/webframe/login.html:94
 #: templates/webframe/pubkey.html:36 templates/webframe/pubkey.html:37
 #: templates/webframe/resetPassword.html:21 templates/webframe/user.html:36
 #: templates/webframe/user.html:37
 msgid "password"
 msgstr "Password"
 
-#: templates/webframe/login.html:95 templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:724 views.py:753
+#: templates/webframe/login.html:97 templates/webframe/resetPassword.html:3
+#: templates/webframe/resetPassword.html:10 views.py:738 views.py:767
 msgid "resetPassword"
 msgstr "Reset Password"
 
-#: templates/webframe/login.html:96
+#: templates/webframe/login.html:98
 #: templates/webframe/webauthn-registration.html:71
 msgid "registration"
 msgstr "Registration"
@@ -1255,43 +1259,43 @@ msgstr "<i class=\"fas fa-angle-double-left\"></i> Prev"
 msgid "Invalid username or password"
 msgstr "Invalid username or password"
 
-#: views.py:387
+#: views.py:401
 msgid "User.msg.confirmDelete"
 msgstr "Are you user to delete this user? This action can not be un-do."
 
-#: views.py:555
+#: views.py:569
 msgid "Preference.msg.confirmDelete"
 msgstr "Are you user to delete this preference? This action can not be un-do."
 
-#: views.py:678 views.py:759
+#: views.py:692 views.py:773
 msgid "ResetPassword.tokenNotFound"
 msgstr "Token not found"
 
-#: views.py:680 views.py:761
+#: views.py:694 views.py:775
 msgid "ResetPassword.userNotFound"
 msgstr "User not found"
 
-#: views.py:682 views.py:763
+#: views.py:696 views.py:777
 msgid "ResetPassword.notEffective"
 msgstr "Token expired"
 
-#: views.py:708
+#: views.py:722
 #, python-format
 msgid "Cannot found the user: %(username)s"
 msgstr "Cannot found the user: %(username)s"
 
-#: views.py:715
+#: views.py:729
 msgid "Too many times to reset password"
 msgstr "Too many times to reset password. Please try again after an hour."
 
-#: views.py:730
+#: views.py:744
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:732
+#: views.py:746
 #, python-format
 msgid ""
 "You didn't setup an email in the system. Please contact your system-"
@@ -1302,6 +1306,6 @@ msgstr ""
 "administrator and let them known <keyword>your username</keyword> and the "
 "reference number: <keyword>%(id)s</keyword>"
 
-#: views.py:751
+#: views.py:765
 msgid "The password has been updated successfully."
 msgstr "The password has been updated successfully."

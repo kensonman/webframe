@@ -248,8 +248,13 @@ class WebAuthnAuthentication( View ):
       if req.headers.get('Accept')=='application/json':
          rep.headers['Content-Type']='application/json'
          from webauthn import generate_authentication_options, options_to_json, base64url_to_bytes as b64bytes
-         from webauthn.helpers.structs import UserVerificationRequirement, PublicKeyCredentialDescriptor
+         from webauthn.helpers.structs import UserVerificationRequirement, PublicKeyCredentialDescriptor, AuthenticatorSelectionCriteria, AuthenticatorAttachment, ResidentKeyRequirement
          allowedCredentials=None
+         authenticator=req.GET.get('authenticator', '')
+         if authenticator and authenticator=='cross-platform':
+            authenticator=AuthenticatorSelectionCriteria(authenticator_attachment=AuthenticatorAttachment.CROSS_PLATFORM, resident_key=ResidentKeyRequirement.REQUIRED)
+         else:
+            authenticator=AuthenticatorSelectionCriteria(authenticator_attachment=AuthenticatorAttachment.PLATFORM, resident_key=ResidentKeyRequirement.REQUIRED)
          if 'username' in req.GET:
             allowedCredentials=list()
             u=User.objects.filter(username=req.GET['username'])
@@ -263,6 +268,7 @@ class WebAuthnAuthentication( View ):
               rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
             , allow_credentials=allowedCredentials
             , user_verification=UserVerificationRequirement.REQUIRED
+            , authenticator_selection=authenticator
          )
          req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8')
          rep.write(options_to_json(opts))

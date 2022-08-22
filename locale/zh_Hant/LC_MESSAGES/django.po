@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 14:03+0000\n"
+"POT-Creation-Date: 2022-08-22 15:44+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -550,11 +550,11 @@ msgstr "翻釋"
 msgid "Translations"
 msgstr "翻釋"
 
-#: models.py:1171 views.py:628
+#: models.py:1171 views.py:642
 msgid "english"
 msgstr "English"
 
-#: models.py:1172 views.py:631
+#: models.py:1172 views.py:645
 msgid "zh-hant"
 msgstr "繁體中文"
 
@@ -730,7 +730,7 @@ msgstr "系統維護中"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:611 views.py:658
+#: templates/webframe/meta.html:3 views.py:625 views.py:672
 msgid "appName"
 msgstr ""
 
@@ -807,7 +807,7 @@ msgstr "個人設定"
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:97
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:99
 msgid "login"
 msgstr "登入"
 
@@ -878,23 +878,27 @@ msgstr "IP 地址"
 msgid "username"
 msgstr "用戶名稱"
 
-#: templates/webframe/login.html:85
+#: templates/webframe/login.html:86
+msgid "login thru platform"
+msgstr "使用（內/外）部裝置進行"
+
+#: templates/webframe/login.html:87
 msgid "thru password login"
 msgstr "使用密碼登入"
 
-#: templates/webframe/login.html:91 templates/webframe/login.html:92
+#: templates/webframe/login.html:93 templates/webframe/login.html:94
 #: templates/webframe/pubkey.html:36 templates/webframe/pubkey.html:37
 #: templates/webframe/resetPassword.html:21 templates/webframe/user.html:36
 #: templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
 
-#: templates/webframe/login.html:95 templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:724 views.py:753
+#: templates/webframe/login.html:97 templates/webframe/resetPassword.html:3
+#: templates/webframe/resetPassword.html:10 views.py:738 views.py:767
 msgid "resetPassword"
 msgstr "重設密碼"
 
-#: templates/webframe/login.html:96
+#: templates/webframe/login.html:98
 #: templates/webframe/webauthn-registration.html:71
 msgid "registration"
 msgstr "登記"
@@ -1206,6 +1210,7 @@ msgid "authenticator.unspecified"
 msgstr "Unspecified"
 
 #: templates/webframe/webauthn-registration.html:54
+#, python-format
 msgid "authenticator:%(authenticator)s"
 msgstr "Authenticator: %(authenticator)s"
 
@@ -1247,43 +1252,43 @@ msgstr "<i class=\"fas fa-angle-double-left\"></i> 下一頁"
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:387
+#: views.py:401
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:555
+#: views.py:569
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
 
-#: views.py:678 views.py:759
+#: views.py:692 views.py:773
 msgid "ResetPassword.tokenNotFound"
 msgstr "找到到有效的 Token"
 
-#: views.py:680 views.py:761
+#: views.py:694 views.py:775
 msgid "ResetPassword.userNotFound"
 msgstr "找不到使用者"
 
-#: views.py:682 views.py:763
+#: views.py:696 views.py:777
 msgid "ResetPassword.notEffective"
 msgstr "不是有效的 Token"
 
-#: views.py:708
+#: views.py:722
 #, python-format
 msgid "Cannot found the user: %(username)s"
 msgstr "找不到這個使用者: %(username)s"
 
-#: views.py:715
+#: views.py:729
 msgid "Too many times to reset password"
 msgstr "嘗試太多次了。請於一小時後再試。"
 
-#: views.py:730
+#: views.py:744
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:732
+#: views.py:746
 #, python-format
 msgid ""
 "You didn't setup an email in the system. Please contact your system-"
@@ -1293,6 +1298,6 @@ msgstr ""
 "你沒有設定/確認電郵地址。請你聯絡系統管理員，並告知他（們）你的<keyword>使用"
 "者名稱</keyword>和這個參考編號：<keyword>%(id)s</keyword>。"
 
-#: views.py:751
+#: views.py:765
 msgid "The password has been updated successfully."
 msgstr ""

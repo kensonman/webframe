@@ -77,6 +77,26 @@ Array.prototype.remove = function() {
 };
 //END
 
+//2022-08-22 15:56 by Kenson: Add the function to retrieve the OSName
+const OSName=function(){
+   var  userAgent = navigator.userAgent || navigator.vendor || window.opera;
+   if(navigator.userAgent.match(/Android/i))
+      return "Android";
+   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)
+      return "iOS";
+   if (navigator.appVersion.indexOf("Win")!=-1)
+      return "Windows";
+   if (navigator.appVersion.indexOf("Mac")!=-1)
+      return "MacOS";
+   if (navigator.appVersion.indexOf("Linux")!=-1)
+      return "Linux";
+   if (navigator.appVersion.indexOf("X11")!=-1)
+      return "UNIX";
+   else
+      return "Unknown OS";
+}
+//END
+
 $(document).ready(function(){
    console.warn('{{VERSION|default:"beta or VERSION is not ready; Add webframe.providers.absolute_path into context_processors"}}');
    $('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
