@@ -7,6 +7,7 @@
 .btn-login{ min-width: 200px; min-height: 40px; display:inline-block;}
 .seperator{ border-bottom: 1px solid black; text-align: center; margin-bottom:20px;}
 .seperator span{ position:relative; top:1rem; background-color:white; padding:10px;}
+.dropdown-item{ cursor:pointer; }
 ul.ul-messages{ }
 ul.ul-messages li{}
 </style>
@@ -45,7 +46,21 @@ ul.ul-messages li{}
                {%block loginFlds-blk%}<section name="loginFlds">
                   <div class="field form-group">
                      <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
-                     <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:user.username}}" placeholder="{%trans 'username'%}" required="required" {%if user and user.is_authenticated%}disabled="disabled"{%endif%}/>
+                     <div class="input-group">
+                        <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:user.username}}" placeholder="{%trans 'username'%}" required="required" {%if user and user.is_authenticated%}disabled="disabled"{%endif%}/>
+                        <div class="input-group-append">
+                           {%trans 'authenticator.unspecified' as unspecified%}
+                           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                              {%blocktrans with authenticator=unspecified%}authenticator:{{authenticator}}{%endblocktrans%}
+                           </button>
+                           <ul class="dropdown-menu dropdown-menu-right" id="authenticatorSelector">
+                              <input type="hidden" name="authenticator" value=""/>
+                              <li class="dropdown-item" value="">{{unspecified}} <i class="fas fa-check mx-1"></i></li>
+                              <li class="dropdown-item" value="cross-platform">{%trans 'authenticator.crossPlatform'%}</li>
+                              <li class="dropdown-item" value="platform">{%trans 'authenticator.platform'%}</li>
+                           </ul> 
+                        </div>
+                     </div>
                   </div>
                   <div class="field form-group">
                      <label for="displayNameFld" class="desktop-only">{%trans 'displayName'%}</label>

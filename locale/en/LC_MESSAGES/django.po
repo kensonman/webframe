@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-17 09:56+0000\n"
+"POT-Creation-Date: 2022-08-22 14:03+0000\n"
 "PO-Revision-Date: 2019-04-18 23:07+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: English\n"
@@ -837,7 +837,7 @@ msgid "Authenticated, verification in progress."
 msgstr ""
 
 #: templates/webframe/login.html:24
-#: templates/webframe/webauthn-registration.html:19
+#: templates/webframe/webauthn-registration.html:20
 msgid "Got server verification result"
 msgstr ""
 
@@ -882,8 +882,8 @@ msgstr "IPAddr"
 #: templates/webframe/pubkey.html:32 templates/webframe/pubkey.html:33
 #: templates/webframe/resetPassword.html:24 templates/webframe/user.html:32
 #: templates/webframe/user.html:33
-#: templates/webframe/webauthn-registration.html:47
 #: templates/webframe/webauthn-registration.html:48
+#: templates/webframe/webauthn-registration.html:50
 msgid "username"
 msgstr "Username"
 
@@ -904,7 +904,7 @@ msgid "resetPassword"
 msgstr "Reset Password"
 
 #: templates/webframe/login.html:96
-#: templates/webframe/webauthn-registration.html:56
+#: templates/webframe/webauthn-registration.html:71
 msgid "registration"
 msgstr "Registration"
 
@@ -1172,44 +1172,61 @@ msgid "pagination.last"
 msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 
 #: templates/webframe/webauthn-registration.html:3
-#: templates/webframe/webauthn-registration.html:33
-#: templates/webframe/webauthn-registration.html:37
+#: templates/webframe/webauthn-registration.html:34
+#: templates/webframe/webauthn-registration.html:38
 msgid "login-webauthn-registration"
 msgstr "Registration"
 
-#: templates/webframe/webauthn-registration.html:16
+#: templates/webframe/webauthn-registration.html:17
 msgid "Getting the challenge and related information from server..."
 msgstr ""
 
-#: templates/webframe/webauthn-registration.html:17
+#: templates/webframe/webauthn-registration.html:18
 msgid "Got server generated Authentication Options, authenticating..."
 msgstr ""
 
-#: templates/webframe/webauthn-registration.html:18
+#: templates/webframe/webauthn-registration.html:19
 msgid "Got authentication credential, verifying..."
 msgstr ""
 
-#: templates/webframe/webauthn-registration.html:20
+#: templates/webframe/webauthn-registration.html:21
 msgid "Registration successful, the page will be redirected soon..."
 msgstr ""
 
-#: templates/webframe/webauthn-registration.html:21
+#: templates/webframe/webauthn-registration.html:22
 msgid "Registration failure"
 msgstr "Registration failure"
 
-#: templates/webframe/webauthn-registration.html:22
+#: templates/webframe/webauthn-registration.html:23
 msgid "Error: Authenticator was probably already registered by user"
 msgstr ""
 
-#: templates/webframe/webauthn-registration.html:23
+#: templates/webframe/webauthn-registration.html:24
 #, python-format
 msgid ""
 "The user is already registered. Please select another one or <a href="
 "\"%%(loginUrl)s\" target=\"_self\">Login</a> to register the new public key'"
 msgstr ""
 
-#: templates/webframe/webauthn-registration.html:51
 #: templates/webframe/webauthn-registration.html:52
+msgid "authenticator.unspecified"
+msgstr "Unspecified"
+
+#: templates/webframe/webauthn-registration.html:54
+#, python-format
+msgid "authenticator:%(authenticator)s"
+msgstr "Authenticator: %(authenticator)s"
+
+#: templates/webframe/webauthn-registration.html:59
+msgid "authenticator.crossPlatform"
+msgstr "Cross Platform"
+
+#: templates/webframe/webauthn-registration.html:60
+msgid "authenticator.platform"
+msgstr "Platform (TPM)"
+
+#: templates/webframe/webauthn-registration.html:66
+#: templates/webframe/webauthn-registration.html:67
 msgid "displayName"
 msgstr "Device Name"
 
@@ -1259,6 +1276,7 @@ msgid "ResetPassword.notEffective"
 msgstr "Token expired"
 
 #: views.py:708
+#, python-format
 msgid "Cannot found the user: %(username)s"
 msgstr "Cannot found the user: %(username)s"
 
@@ -1281,8 +1299,8 @@ msgid ""
 "%(id)s"
 msgstr ""
 "You didn't setup an email in the system. Please contact your system-"
-"administrator and let them known <keyword>your username</keyword> and the reference number: "
-"<keyword>%(id)s</keyword>"
+"administrator and let them known <keyword>your username</keyword> and the "
+"reference number: <keyword>%(id)s</keyword>"
 
 #: views.py:751
 msgid "The password has been updated successfully."

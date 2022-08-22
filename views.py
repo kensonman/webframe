@@ -145,14 +145,22 @@ class WebAuthnRegistration( View ):
       params=dict()
       if req.headers.get('Accept')=='application/json':
          from webauthn import generate_registration_options, options_to_json
+         from webauthn.helpers.structs import AuthenticatorSelectionCriteria, AuthenticatorAttachment, ResidentKeyRequirement
          username=req.GET.get('username')
          displayName=req.GET.get('displayName', username)
+         authenticator=req.GET.get('authenticator', '')
+         if authenticator and authenticator=='cross-platform':
+            authenticator=AuthenticatorSelectionCriteria(authenticator_attachment=AuthenticatorAttachment.CROSS_PLATFORM, resident_key=ResidentKeyRequirement.REQUIRED)
+         else:
+            authenticator=AuthenticatorSelectionCriteria(authenticator_attachment=AuthenticatorAttachment.PLATFORM, resident_key=ResidentKeyRequirement.REQUIRED)
          opts=generate_registration_options(
               rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
             , rp_name=getattr(settings, 'WEBAUTHN_RP_NAME', 'webframe')
             , user_id=username
             , user_display_name=displayName
-            , user_name=username)
+            , user_name=username
+            , authenticator_selection=authenticator
+            )
          req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8') #Due to opts.challenge is bytes array which is not serializable
          u=get_user_model().objects.filter(username=username)
          rst=options_to_json(opts)

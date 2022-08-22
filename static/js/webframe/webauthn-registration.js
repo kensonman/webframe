@@ -48,7 +48,6 @@ function register( opts ){
       }).catch(err=>{throw err});
    });
 }
-
 function focus(ele){
    window.setTimeout(`$('${ele}').focus().select()`, 500);
 }
@@ -66,6 +65,7 @@ $(document).ready(function(){
             $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME);
          data['username']=$(this).find('input[name=username]').val();
          data['displayName']=$(this).find('input[name=displayName]').val();
+         data['authenticator']=$(this).find('input[name=authenticator]').val();
          showMsg(gettext('Getting the challenge and related information from server...'), true);
          axios.get($(this).attr('action'), {params: data, headers:{'Accept': 'application/json'}})
             .then(rep=>{
@@ -108,5 +108,14 @@ $(document).ready(function(){
    $('input[name=displayName').on('keyup', function(evt){
       if(evt.keycode==13)
          $(this).parents('form:first').submit();
+   });
+   $('#authenticatorSelector').find('li[value]').on('click', function(evt){
+      evt.preventDefault();
+      $('#authenticatorSelector')
+         .find('i').remove().end()
+         .find('input').val($(this).attr('value')).end()
+         .parents('.input-group:first').find('button').text(interpolate(gettext('authenticator:%(authenticator)s'), {'authenticator':$(this).text()}, true))
+         ;
+      $(this).append($('<i></i>').addClass('fas fa-check mx-1'));
    });
 });
