@@ -27,13 +27,12 @@ var confirmDelete=function(evt){
 }
 $(document).ready(function(){
    $('navbar[href]').wfnavbar();
-	$('tr[username]')
-		.hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer')
-		.click(function(){
-			window.location.href="{%url 'webframe:user' user='_userId_'%}".replace('_userId_', $(this).attr('username'));
-		});
    $('#WebAuthnPubkeyTbl')
-      .find('tr[id]').hover(function(){$(this).addClass(hoverClass);}, function(){$(this).removeClass(hoverClass);}).end()
+      .find('tr[ipaddr]')
+         .hover(function(){$(this).addClass(hoverClass);}, function(){$(this).removeClass(hoverClass);})
+         .css('cursor', 'pointer')
+         .on('click', function(){ window.open('{%url "webframe:ipgeo" ipaddr="__ipaddr__"%}'.replaceAll('__ipaddr__', $(this).attr('ipaddr'))); })
+      .end()
       .find('.deleteBtn').on('click', confirmDelete).end()
       ;
 });
@@ -46,7 +45,7 @@ $(document).ready(function(){
     {%render_table target%}
     <div class="pnl pnl-btns">
         {%for b in btns%}<a href="{{b.href}}" class="btn btn-{{b.lv|default:'info'}}">{{b.label}}</a>{%endfor%}
-        {%if perms.auth.add_user%}<a href="{%url 'webframe:user' user='add'%}" class="btn btn-primary"><i class="fas fa-user-plus"></i> {%trans 'User.actions.new'%}</a>{%endif%}
+        {%if perms.auth.add_webauthnpubkey%}<a href="{%url 'webframe:webauthn-registration'%}" class="btn btn-outline-primary"><i class="fas fa-key"></i> {%trans 'WebAuthnPubkey.actions.new'%}</a>{%endif%}
     </div>
     <form id="deleteFrm" method="DELETE" action="">
       {%csrf_token%}

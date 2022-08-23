@@ -250,11 +250,6 @@ class WebAuthnAuthentication( View ):
          from webauthn import generate_authentication_options, options_to_json, base64url_to_bytes as b64bytes
          from webauthn.helpers.structs import UserVerificationRequirement, PublicKeyCredentialDescriptor, AuthenticatorSelectionCriteria, AuthenticatorAttachment, ResidentKeyRequirement
          allowedCredentials=None
-         authenticator=req.GET.get('authenticator', '')
-         if authenticator and authenticator=='cross-platform':
-            authenticator=AuthenticatorSelectionCriteria(authenticator_attachment=AuthenticatorAttachment.CROSS_PLATFORM, resident_key=ResidentKeyRequirement.REQUIRED)
-         else:
-            authenticator=AuthenticatorSelectionCriteria(authenticator_attachment=AuthenticatorAttachment.PLATFORM, resident_key=ResidentKeyRequirement.REQUIRED)
          if 'username' in req.GET:
             allowedCredentials=list()
             u=User.objects.filter(username=req.GET['username'])
@@ -268,7 +263,6 @@ class WebAuthnAuthentication( View ):
               rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
             , allow_credentials=allowedCredentials
             , user_verification=UserVerificationRequirement.REQUIRED
-            , authenticator_selection=authenticator
          )
          req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8')
          rep.write(options_to_json(opts))
@@ -301,6 +295,7 @@ class WebAuthnAuthentication( View ):
          )
          logger.debug('Verificated!!!')
          pubkey.lastSignin=datetime.now()
+         pubkey.ipaddr=getClientIP(req)
          pubkey.save()
          auth_login(req, pubkey.owner)
          logger.debug('Saved the login into session!')
@@ -336,6 +331,11 @@ class WebAuthnPubkeyView( LoginRequiredMixin, View ):
       rep.headers['Content-Type']='text/json'
       rep.write(json.dumps({'result': True}))
       return rep
+
+def ipgeo(req, ipaddr):
+   url=getattr(settings, 'IPADDR_GEO_LOCATOR', 'https://tools.keycdn.com/geo?host={0}');
+   url=url.format(ipaddr);
+   return redirect(url)
       
 def logout(req):
    '''

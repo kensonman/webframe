@@ -83,7 +83,6 @@ const loginUrl='{%url "webframe:login"%}';
                         <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:''}}" placeholder="{%trans 'username'%}" required="required"/>
                         <input type="hidden" name="authenticator" class="platform"/>
                         <div class="input-group-append">
-                           <button type="button" class="btn btn-info" title="{%trans 'login thru platform'%}" id="platformBtn"><i class="fab " id="os-icon"></i></button>
                            <button type="button" class="btn btn-outline-warning" title="{%trans 'thru password login'%}" id="loginWithPwdBtn"><i class="fas fa-key"></i></button>
                            <button type="reset" class="btn btn-outline-secondary"><i class="fas fa-undo"></i></button>
                         </div>

@@ -15,6 +15,7 @@ urlpatterns=[
    re_path(r'^authenticate/?$', views.WebAuthnAuthentication.as_view(), name='webauthn-authentication'),
    re_path(r'^pubkeys/?$', views.WebAuthnPubkeysView.as_view(), name='pubkeys'),
    re_path(r'^pubkeys/(?P<id>[^/]+)/?$', views.WebAuthnPubkeyView.as_view(), name='pubkey'),
+   re_path(r'^ipgeo/(?P<ipaddr>[^/]+)/?$', views.ipgeo, name='ipgeo'),
 
    re_path(r'^users/?$', views.users, name='users'),
    re_path(r'^users/(?P<user>[^/]*)/?$', views.user, name='user'),

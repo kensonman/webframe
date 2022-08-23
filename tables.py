@@ -43,12 +43,13 @@ class UserTable(tables.Table):
 class WebAuthnPubkeyTable(tables.Table):
    actions=tables.TemplateColumn(verbose_name=_('actions'), template_name='webframe/pubkeys-actionsColumn.html', orderable=False) # orderable not sortable
    pkey=tables.Column(accessor=A('pubkey'))
+   ipaddr=tables.LinkColumn('webframe:ipgeo', args=[A('ipaddr')])
 
    class Meta(object):
       model=WebAuthnPubkey
-      fields=('displayName', 'pkey', 'lastSignin', 'cb', 'cd')
+      fields=('displayName', 'pkey', 'lastSignin', 'ipaddr', 'cb', 'cd')
       attrs={  'class':'table', 'id':'WebAuthnPubkeyTbl'}
-      row_attrs={ 'id': lambda record: record.id }
+      row_attrs={ 'id': lambda record:record.id, 'ipaddr':lambda record:record.ipaddr }
 
    def render_pkey(self, value):
       if value==None:

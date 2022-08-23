@@ -175,10 +175,10 @@ class TranslateAdmin(admin.ModelAdmin):
 
 @admin.register(WebAuthnPubkey)
 class WebAuthnPubkeyAdmin(admin.ModelAdmin):
-   fields=('id', 'displayName', 'lastSignin', 'pubkey', 'tipe', 'owner', 'cb', 'cd', 'lmb', 'lmd')
-   list_display=('id', 'displayName', 'owner__username', 'owner__fullname', 'tipe', 'lastSignin', 'lmb', 'lmd')
-   lsit_filter=('owner__username', 'displayName')
-   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'pubkey', 'tipe', 'owner')
+   fields=('id', 'displayName', 'lastSignin', 'ipaddr', 'pubkey', 'tipe', 'owner', 'cb', 'cd', 'lmb', 'lmd')
+   list_display=('id', 'displayName', 'owner__username', 'owner__fullname', 'tipe', 'lastSignin', 'ipaddr', 'lmb', 'lmd')
+   list_filter=('owner__username', 'displayName')
+   readonly_fields=('id', 'cb', 'cd', 'lmb', 'lmd', 'pubkey', 'tipe', 'owner', 'ipaddr', 'lastSignin')
    ordering=('owner', 'displayName',)
    search_fields=('key', 'locale')
 

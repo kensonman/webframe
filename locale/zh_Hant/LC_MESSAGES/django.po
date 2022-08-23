@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-22 15:44+0000\n"
+"POT-Creation-Date: 2022-08-23 08:33+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -599,7 +599,7 @@ msgid "WebAuthnPubkey"
 msgstr "登入公鑰"
 
 #: models.py:1189 templates/webframe/pubkeys.html:3
-#: templates/webframe/pubkeys.html:45
+#: templates/webframe/pubkeys.html:44
 msgid "WebAuthnPubkeies"
 msgstr "登入公鑰"
 
@@ -647,75 +647,87 @@ msgstr "跟據 WebAuthn API Guide"
 msgid "WebAuthnPubkey.lastSignin"
 msgstr "上次登入日期"
 
-#: models.py:1202
+#: models.py:1196
+msgid "WebAuthnPubkey.lastSignin.helptext"
+msgstr "上次用於登入的日期"
+
+#: models.py:1197
+msgid "WebAuthnPubkey.ipaddr"
+msgstr "IP 地址"
+
+#: models.py:1197
+msgid "WebAuthnPubkey.ipaddr.helptext"
+msgstr "上次登入的 IP 地址"
+
+#: models.py:1203
 msgid "WebAuthnPubkey.owner"
 msgstr "擁有者"
 
-#: models.py:1203
+#: models.py:1204
 msgid "WebAuthnPubkey.owner.helptext"
 msgstr "持有這對公／私鑰的使用者"
 
-#: models.py:1208 templates/webframe/resetPassword.html:28
+#: models.py:1209 templates/webframe/resetPassword.html:28
 msgid "ResetPassword"
 msgstr "重設密碼"
 
-#: models.py:1209
+#: models.py:1210
 msgid "ResetPasswords"
 msgstr "重設密碼"
 
-#: models.py:1214
+#: models.py:1215
 msgid "ResetPassword.key"
 msgstr "KEY"
 
-#: models.py:1214
+#: models.py:1215
 msgid "ResetPassword.key.helptext"
 msgstr "由系統自動產生的重設密碼"
 
-#: models.py:1219
+#: models.py:1220
 msgid "ResetPassword.user"
 msgstr "所屬的使用者"
 
-#: models.py:1220
+#: models.py:1221
 msgid "ResetPassword.user.helptext"
 msgstr "擁有者"
 
-#: models.py:1222
+#: models.py:1223
 msgid "ResetPasssword.request_by"
 msgstr "重設密碼者"
 
-#: models.py:1222
+#: models.py:1223
 msgid "ResetPassword.request_by.helptext"
 msgstr "要求重設密碼者的 IP 地址"
 
-#: models.py:1223
+#: models.py:1224
 msgid "ResetPasssword.complete_by"
 msgstr "完成者"
 
-#: models.py:1223
+#: models.py:1224
 msgid "ResetPassword.complete_by.helptext"
 msgstr "完成重設密碼者的 IP 地址"
 
-#: models.py:1224
+#: models.py:1225
 msgid "ResetPassword.complete_date"
 msgstr "完成日期"
 
-#: models.py:1224
+#: models.py:1225
 msgid "ResetPassword.complete_date.helptext"
 msgstr "完成重設密碼的日期"
 
-#: models.py:1240
+#: models.py:1241
 msgid "TokenDetail"
 msgstr "Token Detail"
 
-#: models.py:1241
+#: models.py:1242
 msgid "TokenDetails"
 msgstr "Token Details"
 
-#: models.py:1244
+#: models.py:1245
 msgid "TokenDetail.name"
 msgstr "Token/裝置名稱"
 
-#: models.py:1244
+#: models.py:1245
 msgid "TokenDetail.name.helptext"
 msgstr "使用這個 Token 登入的裝置名稱"
 
@@ -807,7 +819,7 @@ msgstr "個人設定"
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:99
+#: templates/webframe/header-sample.html:32 templates/webframe/login.html:98
 msgid "login"
 msgstr "登入"
 
@@ -879,26 +891,22 @@ msgid "username"
 msgstr "用戶名稱"
 
 #: templates/webframe/login.html:86
-msgid "login thru platform"
-msgstr "使用（內/外）部裝置進行"
-
-#: templates/webframe/login.html:87
 msgid "thru password login"
 msgstr "使用密碼登入"
 
-#: templates/webframe/login.html:93 templates/webframe/login.html:94
+#: templates/webframe/login.html:92 templates/webframe/login.html:93
 #: templates/webframe/pubkey.html:36 templates/webframe/pubkey.html:37
 #: templates/webframe/resetPassword.html:21 templates/webframe/user.html:36
 #: templates/webframe/user.html:37
 msgid "password"
 msgstr "密碼"
 
-#: templates/webframe/login.html:97 templates/webframe/resetPassword.html:3
+#: templates/webframe/login.html:96 templates/webframe/resetPassword.html:3
 #: templates/webframe/resetPassword.html:10 views.py:738 views.py:767
 msgid "resetPassword"
 msgstr "重設密碼"
 
-#: templates/webframe/login.html:98
+#: templates/webframe/login.html:97
 #: templates/webframe/webauthn-registration.html:71
 msgid "registration"
 msgstr "登記"
@@ -1135,9 +1143,9 @@ msgstr "存儲使用者"
 msgid "WebAuthnPubkey.confirmDelete %(id)s"
 msgstr "你確認刪除這個公鑰：%(id)s"
 
-#: templates/webframe/pubkeys.html:49 templates/webframe/users.html:33
-msgid "User.actions.new"
-msgstr "新增使用者"
+#: templates/webframe/pubkeys.html:48
+msgid "WebAuthnPubkey.actions.new"
+msgstr "登記新的登入方法"
 
 #: templates/webframe/resetPassword.html:20
 msgid "email"
@@ -1166,6 +1174,10 @@ msgstr "<i class=\"fas fa-angle-right\"></i>"
 #: templates/webframe/tables.html:10
 msgid "pagination.last"
 msgstr "<i class=\"fas fa-angle-double-right\"></i>"
+
+#: templates/webframe/users.html:33
+msgid "User.actions.new"
+msgstr "新增使用者"
 
 #: templates/webframe/webauthn-registration.html:3
 #: templates/webframe/webauthn-registration.html:34
@@ -1301,3 +1313,6 @@ msgstr ""
 #: views.py:765
 msgid "The password has been updated successfully."
 msgstr ""
+
+#~ msgid "login thru platform"
+#~ msgstr "使用（內/外）部裝置進行"
