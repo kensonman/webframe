@@ -13,7 +13,7 @@ from django.contrib.auth.models import *
 from django.contrib.auth.signals import user_logged_in
 from django.db.models import Q
 from django.utils.timezone import utc
-from django.utils.translation import ugettext_lazy as _, ugettext as __
+from django.utils.translation import gettext_lazy as _, ugettext as __
 from django.utils import timezone as tz
 from webframe.functions import getBool
 from webframe.models import Preference, Profile

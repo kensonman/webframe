@@ -8,14 +8,14 @@
 from django_tables2 import A
 from django.contrib.auth.models import User
 from django.utils.html import mark_safe, escape 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from .models import *
 
 import django_tables2 as tables, logging
 logger=logging.getLogger('webframe.tables')
 
 class PreferenceTable(tables.Table):
-   name=tables.LinkColumn('webframe:pref', args=[A('owner.username'), A('id.hex')])
+   name=tables.LinkColumn('webframe:pref', args=[A('owner__username'), A('id__hex')])
 
    class Meta(object):
       model=Preference

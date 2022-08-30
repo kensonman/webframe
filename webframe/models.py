@@ -14,7 +14,7 @@ from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404 as getObj
 from django.utils import timezone as tz
-from django.utils.translation import ngettext, get_language, ugettext_lazy as _
+from django.utils.translation import ngettext, get_language, gettext_lazy as _
 from json import JSONEncoder
 from pathlib import Path
 from rest_framework.authtoken.models import Token
@@ -866,7 +866,7 @@ class AbstractPreference(OrderableValueObject):
       elif tipe is None:
          tipe=AbstractPreference.TYPE_TEXT
       if tipe==AbstractPreference.TYPE_EMAIL: 
-         self.regex='^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
+         self.regex=r'^[a-zA-Z0-9\._]+@[a-zA-Z0-9\._]{2,}$'
       self._tipe=int(tipe)
 
    @property

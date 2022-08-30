@@ -9,7 +9,7 @@ from ajax_select.fields import AutoCompleteSelectField
 from django import forms
 from django.contrib import admin
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, ugettext
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django_json_widget.widgets import JSONEditorWidget

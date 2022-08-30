@@ -19,7 +19,7 @@ from django.shortcuts import render, redirect, get_object_or_404 as getObj
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.translation import ugettext_lazy as _, ugettext as gettext, activate
+from django.utils.translation import gettext_lazy as _, ugettext as gettext, activate
 from django.urls import reverse
 from django_tables2 import RequestConfig
 from rest_framework import authentication, permissions
@@ -659,7 +659,7 @@ class HeaderView(APIView):
    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
       
    def get(self, req, format=None):
-      logger.warn(req.method)
+      logger.warning(req.method)
       qs=MenuItem.objects.filter(parent__isnull=True)
       if req.user.is_authenticated:
          qs=qs.filter(models.Q(user__isnull=True)|models.Q(user=req.user)).order_by('-user')
