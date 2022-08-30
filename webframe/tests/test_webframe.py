@@ -32,25 +32,25 @@ class HeaderApiTest(TestCase):
       logger.info('Running index url without authentication: {0}...'.format(url))
       rep=client.get(url, follow=True)
       logger.debug('response code: {0}'.format(rep.status_code))
-      self.assertTrue(200 <= rep.status_code < 300)
-      self.assertEquals(rep.json()['name'], 'Generated NavBar')
+      assert 200 <= rep.status_code < 300
+      assert rep.json()['name']=='Generated NavBar'
 
       user=self.super
       client=Client(HTTP_AUTHORIZATION='Token {0}'.format(user.token))
       logger.info('Running index url with authentication({1}): {0}...'.format(url, user.username))
       rep=client.get(url, follow=True)
       logger.debug('response code: {0}'.format(rep.status_code))
-      self.assertTrue(200 <= rep.status_code < 300)
-      self.assertEquals(rep.json()['name'], 'Generated NavBar')
-      self.assertTrue(str(rep.content).index(reverse('admin:index'))>=0)
+      assert 200 <= rep.status_code < 300
+      assert rep.json()['name']=='Generated NavBar'
+      assert str(rep.content).index(reverse('admin:index'))>=0
 
       user=self.normal
       client=Client(HTTP_AUTHORIZATION='Token {0}'.format(user.token))
       logger.info('Running index url with authentication({1}): {0}...'.format(url, user.username))
       rep=client.get(url, follow=True)
       logger.debug('response code: {0}'.format(rep.status_code))
-      self.assertTrue(200 <= rep.status_code < 300)
-      self.assertEquals(rep.json()['name'], 'Generated NavBar')
+      assert 200 <= rep.status_code < 300
+      assert rep.json()['name']=='Generated NavBar'
       try:
          rep.content.decode('ascii').index(reverse('admin:index'))
          self.fail('Found the admin-url')
@@ -87,26 +87,30 @@ class FunctionsTestCase(TestCase):
       self.logger.warning('test_getSecretKeyFromPassword')
       from webframe.functions import getSecretKeyFromPassword
 
-      self.assertEquals(getSecretKeyFromPassword('abc'), getSecretKeyFromPassword('abc'))
-      self.assertNotEquals(getSecretKeyFromPassword('abc'), getSecretKeyFromPassword('abcd'))
+      assert getSecretKeyFromPassword('abc')==getSecretKeyFromPassword('abc')
+      assert getSecretKeyFromPassword('abc')!=getSecretKeyFromPassword('abcd')
 
    def test_getRandomPassword(self):
       self.logger.warning('test_getRandomPassword')
       from webframe.functions import getRandomPassword as pwd
-      self.assertEquals(len(pwd()), 128)
-      self.assertEquals(len(pwd(30)), 30)
+      assert len(pwd())==128
+      assert len(pwd(30))==30
       self.logger.info('One of the randome password: {0}'.format(pwd()))
 
    def test_getSecretKey(self):
       self.logger.warning('test_getSecretKey')
-      from webframe.functions import getSecretKey
+      from webframe.functions import getSecretKey, getSecretKeyPath
       import os
 
-      keyfile=getattr(settings, 'SECRET_KEY_FILE', 'secret.key')
-      if not os.path.isabs(keyfile): keyfile=os.path.join(os.path.dirname(__file__), keyfile)
-      self.assertTrue(not os.path.isfile(keyfile))
-      self.logger.warning('The random password: {0}'.format(getSecretKey()))
-      self.assertTrue(os.path.isfile(keyfile))
+      keyfile=getSecretKeyPath()
+      try:
+         if not os.path.isabs(keyfile): keyfile=os.path.join(os.path.dirname(__file__), keyfile)
+         self.logger.warning('The keyfile is located at: {0}'.format(keyfile))
+         assert not os.path.isfile(keyfile)
+         secret=getSecretKey()
+         assert os.path.isfile(keyfile)
+      finally:
+         if os.path.isfile(keyfile): os.remove(keyfile)
 
    def test_encryption(self):
       self.logger.warning('test_encryption')
@@ -118,10 +122,10 @@ class FunctionsTestCase(TestCase):
       self.logger.warning('The random password: {0}'.format(pwd))
       enc=encrypt(src, pwd)
       self.logger.warning('The encrypted data: {0}'.format(enc))
-      self.assertNotEquals(src, enc)
+      assert src!=enc
       dec=decrypt(enc, pwd)
       self.logger.warning('The decrypted data: {0}'.format(dec))
-      self.assertEquals(src, dec)
+      assert src==dec
       try:
          decrypt(enc, 'wrong password')
          self.fail('Wrong password should get the error instead')

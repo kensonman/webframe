@@ -405,8 +405,12 @@ def getSecretKeyFromPassword(password):
 
    According to [this article](https://stackoverflow.com/questions/42568262/how-to-encrypt-text-with-a-password-in-python)::password_to_key(str)
    '''
-   from Crypto.Hash import SHA256
-   return SHA256.new(password.encode('utf-8')).digest()
+   try:
+      from Crypto.Hash import SHA256
+      return SHA256.new(password.encode('utf-8')).digest()
+   except ImportError:
+      logger.critical('Cannot import the Crypto related feature, please install pycryptodemo library first: `pip install pycryptodome`')
+      raise
 
 def getRandomPassword(length=None):
    '''
@@ -418,22 +422,32 @@ def getRandomPassword(length=None):
    for i in range(length):
       pwd.append(random.choice(string.ascii_letters))
    pwd=''.join(pwd)
+   logger.warning('random password: {0}'.format(pwd))
    return pwd
+
+def getSecretKeyPath(keyfile=None):
+   '''
+   Get the secret-key-path.
+   '''
+   if not keyfile:
+      keyfile=getattr(settings, 'SECRET_KEY_FILE', 'secret.key')
+   if not os.path.isabs(keyfile): keyfile=os.path.join(os.path.dirname(__file__), keyfile)
+   return keyfile
 
 def getSecretKey(keyfile=None):
    '''
    Loading the keyfile. If the keyfile is not exists, generate a new one with random password (the length can be defined by settings.SECRET_KEY_LENGTH).
    '''
-   if not keyfile:
-      keyfile=getattr(settings, 'SECRET_KEY_FILE', 'secret.key')
-      if not os.path.isabs(keyfile): keyfile=os.path.join(os.path.dirname(__file__), keyfile)
+   from base64 import b64encode as enc, b64decode as dec
+   keyfile=getSecretKeyPath(keyfile)
 
    if os.path.isfile(keyfile):
-      return open(keyfile, 'rb').read().decode('utf-8')
+      return getSecretKeyFromPassword(open(keyfile, 'r').read())
 
    pwd=getRandomPassword()
-   with open(keyfile, 'wb') as f:
-      f.write(getSecretKeyFromPassword(pwd))
+   logger.warning('random password: {0}'.format(pwd))
+   with open(keyfile, 'w') as f:
+      f.write(pwd)
    os.chmod(keyfile, 0o600)
    logger.warning('Generated the secret-key at {0}. Please ***BACKUP*** and keep it carefully!'.format(keyfile))
    return getSecretKeyFromPassword(pwd)
@@ -445,21 +459,24 @@ def encrypt( source, password=None ):
    @param source     The data to be encrypted;
    @param password   The password for encryption;
    '''
-   import base64
-   from Crypto.Cipher import AES
-   from Crypto.Hash import SHA256
-   from Crypto import Random
-   source=str(source).encode('utf-8')
-   if not password: password=getSecretKey()
-   if isinstance(password, str): password=getSecretKeyFromPassword(password)
+   try:
+      from Crypto.Cipher import AES
+      from Crypto.Hash import SHA256
+      from Crypto import Random
+      source=str(source).encode('utf-8')
+      if not password: password=getSecretKey()
+      if isinstance(password, str): password=getSecretKeyFromPassword(password)
 
-   key = SHA256.new(password).digest()  # use SHA-256 over our key to get a proper-sized AES key
-   IV = Random.new().read(AES.block_size)  # generate IV
-   encryptor = AES.new(key, AES.MODE_CBC, IV)
-   padding = AES.block_size - len(source) % AES.block_size  # calculate needed padding
-   source += bytes([padding]) * padding  # Python 2.x: source += chr(padding) * padding
-   data = IV + encryptor.encrypt(source)  # store the IV at the beginning and encrypt
-   return '{0}{1}'.format(ENCRYPTED_PREFIX, base64.b64encode(data).decode('utf-8'))
+      key = SHA256.new(password).digest()  # use SHA-256 over our key to get a proper-sized AES key
+      IV = Random.new().read(AES.block_size)  # generate IV
+      encryptor = AES.new(key, AES.MODE_CBC, IV)
+      padding = AES.block_size - len(source) % AES.block_size  # calculate needed padding
+      source += bytes([padding]) * padding  # Python 2.x: source += chr(padding) * padding
+      data = IV + encryptor.encrypt(source)  # store the IV at the beginning and encrypt
+      return '{0}{1}'.format(ENCRYPTED_PREFIX, base64.b64encode(data).decode('utf-8'))
+   except ImportError:
+      logger.critical('Cannot import the Crypto related feature, please install pycryptodemo library first: `pip install pycryptodome`')
+      raise
 
 def decrypt( source, password=None ):
    '''
@@ -468,26 +485,29 @@ def decrypt( source, password=None ):
    @param source     The data to be decrypted;
    @param password   The password for encryption;
    '''
-   import base64
-   from Crypto.Cipher import AES
-   from Crypto.Hash import SHA256
-   from Crypto import Random
-   source=str(source)
-   logger.warning({'source': source, 'password': password})
-   if not password: password=getSecretKey()
-   if isinstance(password, str): password=getSecretKeyFromPassword(password)
-   if source.startswith(ENCRYPTED_PREFIX): source=source[len(ENCRYPTED_PREFIX):]
-   source=base64.b64decode(source.encode('utf-8'))
-   
-   key = SHA256.new(password).digest()  # use SHA-256 over our key to get a proper-sized AES key
-   IV = source[:AES.block_size]  # extract the IV from the beginning
-   decryptor = AES.new(key, AES.MODE_CBC, IV)
-   data = decryptor.decrypt(source[AES.block_size:])  # decrypt
-   padding = data[-1]  # pick the padding value from the end; Python 2.x: ord(data[-1])
-   if data[-padding:] != bytes([padding]) * padding:  # Python 2.x: chr(padding) * padding
-      raise ValueError("Cannot decrypt the data, may be due to invalid source or password provided.")
-   data=data[:-padding].decode('utf-8')  # remove the padding
-   return data
+   try:
+      from Crypto.Cipher import AES
+      from Crypto.Hash import SHA256
+      from Crypto import Random
+      source=str(source)
+      logger.warning({'source': source, 'password': password})
+      if not password: password=getSecretKey()
+      if isinstance(password, str): password=getSecretKeyFromPassword(password)
+      if source.startswith(ENCRYPTED_PREFIX): source=source[len(ENCRYPTED_PREFIX):]
+      source=base64.b64decode(source.encode('utf-8'))
+      
+      key = SHA256.new(password).digest()  # use SHA-256 over our key to get a proper-sized AES key
+      IV = source[:AES.block_size]  # extract the IV from the beginning
+      decryptor = AES.new(key, AES.MODE_CBC, IV)
+      data = decryptor.decrypt(source[AES.block_size:])  # decrypt
+      padding = data[-1]  # pick the padding value from the end; Python 2.x: ord(data[-1])
+      if data[-padding:] != bytes([padding]) * padding:  # Python 2.x: chr(padding) * padding
+         raise ValueError("Cannot decrypt the data, may be due to invalid source or password provided.")
+      data=data[:-padding].decode('utf-8')  # remove the padding
+      return data
+   except ImportError:
+      logger.critical('Cannot import the Crypto related feature, please install pycryptodemo library first: `pip install pycryptodome`')
+      raise
 
 #According to [Python Logging Codebook](https://docs.python.org/3/howto/logging-cookbook.html#formatting-styles)
 class LogMessage(object):

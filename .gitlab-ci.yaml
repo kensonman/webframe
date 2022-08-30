@@ -76,21 +76,33 @@ testing:
       DBMS: django.db.backends.sqlite3
       DBNAME: /tmp/testing.db
    before_script:
-      - > 
-         echo "B4 script on `pwd`..."
-         && ./dependencies.sh
+      - >
+         echo "Installing the dependencies..." && \
+         pip install --upgrade pip && \
+         apk add --upgrade --no-cache bash gettext build-base jpeg-dev nginx python3-dev openldap-dev libressl-dev musl-dev libffi-dev postgresql-dev gcc python3-dev musl-dev jpeg-dev zlib-dev vim openssl-dev py3-lxml py3-pyldap && \
+         pip install . && \
+         pip install pycryptodome pytest pytest-django
+      - >
+         django-admin startproject conf && \
+         mv conf tempproj && \
+         mv tempproj/* . && \
+         rmdir tempproj && \
+         ln -s ../webframe conf/webframe && \
+         echo 'INSTALLED_APPS+=["django_summernote"]' >> conf/settings.py && \
+         echo 'INSTALLED_APPS+=["webframe"]' >> conf/settings.py && \
+         echo 'INSTALLED_APPS+=["rest_framework.authtoken"]' >> conf/settings.py && \
+         echo 'from django.urls import include' >> conf/urls.py && \
+         echo 'urlpatterns += [path("webframe/", include("webframe.urls")),]' >>conf/urls.py
    script:
       - >
-         echo "Testing on `pwd`..."
-         && cd ..
-         && django-admin startproject testproj
-         && mv testproj proj
-         && mv proj/* .
-         && rmdir proj
-         && echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py
-         && echo "from django.urls import path, re_path, include" >> testproj/urls.py
-         && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
-         && ./manage.py test
+         echo "Testing..." && \
+         pytest --junitxml=test-results.xml
+   artifacts:
+      when: always
+      paths:
+      - test-results.xml
+      reports:
+         junit: test-results.xml
 
 # Building the binary/output according to the string. It may be the docker image
 building:
