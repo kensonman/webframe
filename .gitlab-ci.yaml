@@ -43,18 +43,18 @@ prepare:
    image: "kensonman/versioning:1.0.7-build.6"
    script:
       - >
-         echo "Preparing the CI/CD environment: `pwd`..."
-         && git config --global --add safe.directory `pwd`
-         && echo "   > Detecting the versioning pattern: `version.py getVersionPattern`"
-         && echo "   > Getting the last version..."
-         && echo "     > Last version artifact url: `version.py getLastVersionArtifactUrl`"
-         && export VERSION=`version.py getLastVersion`
-         && echo "     > Last version: ${VERSION}"
-         && export VERSION=`version.py getNextVersion`
-         && echo "   > Next version: ${VERSION}"
-         && echo "   > Exporting..."
-         && echo "VERSION=${VERSION}" > VERSION.env
-         && echo "${VERSION}" > VERSION
+         echo "Preparing the CI/CD environment: `pwd`..." && \
+         git config --global --add safe.directory `pwd` && \
+         echo "   > Detecting the versioning pattern: `version.py getVersionPattern`" && \
+         echo "   > Getting the last version..." && \
+         echo "     > Last version artifact url: `version.py getLastVersionArtifactUrl`" && \
+         export VERSION=`version.py getLastVersion` && \
+         echo "     > Last version: ${VERSION}" && \
+         export VERSION=`version.py getNextVersion` && \
+         echo "   > Next version: ${VERSION}" && \
+         echo "   > Exporting..." && \
+         echo "VERSION=${VERSION}" > VERSION.env && \
+         echo "${VERSION}" > VERSION
    artifacts:
       reports:
          # Put the version into env for sharing the variable between job
@@ -81,16 +81,16 @@ testing:
          && ./dependencies.sh
    script:
       - >
-         echo "Testing on `pwd`..."
-         && cd ..
-         && django-admin startproject testproj
-         && mv testproj proj
-         && mv proj/* .
-         && rmdir proj
-         && echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py
-         && echo "from django.urls import path, re_path, include" >> testproj/urls.py
-         && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
-         && ./manage.py test
+         echo "Testing on `pwd`..." && \
+         cd .. && \
+         django-admin startproject testproj && \
+         mv testproj proj && \
+         mv proj/* . && \
+         rmdir proj && \
+         echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py && \
+         echo "from django.urls import path, re_path, include" >> testproj/urls.py && \
+         echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py && \
+         ./manage.py test
 
 # Building the binary/output according to the string. It may be the docker image
 building:
@@ -110,21 +110,21 @@ building:
          && ./dependencies.sh
    script:
       - >
-         echo "Building on `pwd`..."
-         && cd ..
-         && django-admin startproject testproj
-         && mv testproj proj
-         && mv proj/* .
-         && rmdir proj
-         && echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py
-         && echo "from django.urls import path, re_path, include" >> testproj/urls.py
-         && echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py
-         && echo 
-         && cd webframe
-         && ../manage.py compilemessages
-         && cd ..
-         && echo "STATIC_ROOT=`pwd`/webframe/static" >> testproj/settings.py
-         && ./manage.py collectstatic
+         echo "Building on `pwd`..." && \
+         cd .. && \
+         django-admin startproject testproj && \
+         mv testproj proj && \
+         mv proj/* . && \
+         rmdir proj && \
+         echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> testproj/settings.py && \
+         echo "from django.urls import path, re_path, include" >> testproj/urls.py && \
+         echo "urlpatterns += [path('webframe/', include('webframe.urls', namespace='webframe')),]" >> testproj/urls.py && \
+         echo  && \
+         cd webframe && \
+         ../manage.py compilemessages && \
+         cd .. && \
+         echo "STATIC_ROOT=`pwd`/webframe/static" >> testproj/settings.py && \
+         ./manage.py collectstatic
    artifacts:
       paths:
          - locale/
