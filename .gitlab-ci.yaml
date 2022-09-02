@@ -135,6 +135,10 @@ building:
          echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> conf/settings.py
          echo 'from django.urls import include' >> conf/urls.py
          echo 'urlpatterns += [path("webframe/", include("webframe.urls")),]' >>conf/urls.py
+         apk add ncftp
+         if [ -z "${DEPLOY_FTP_PORT}" ]; then
+            export DEPLOY_FTP_PORT=21
+         fi
    script:
       - |
          cd webframe
@@ -146,16 +150,22 @@ building:
          DNAME=$(python setup.py --fullname)
          python setup.py build
          python setup.py bdist --format=gztar
-         echo "DIST_URL=${CI_JOB_URL}/artifacts/raw/dist/${DNAME}.linux-x86_64.tar.gz" > URL.txt
+         echo "DIST_URL=ftp://${DEPLOY_FTP_USERNAME}:${DEPLOY_FTP_PASSWORD}@${DEPLOY_FTP_HOST}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${DNAME}.linux-x86_64.tar.gz" > URL.txt
          echo "DIST_FULLNAME=$DNAME" >> URL.txt
+         echo "Uploading the binrary file to FTP ${DEPLOY_FTP_HOST}"
+         DEPLOY_FTP_USERNAME=$(echo $DEPLOY_FTP_USERNAME | base64 -d)
+         #echo "ncftpput -u ${DEPLOY_FTP_USERNAME} -p ${DEPLOY_FTP_PASSWORD} -m -P ${DEPLOY_FTP_PORT} ${DEPLOY_FTP_HOST} ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${DNAME}.linux-x86_64.tar.gz ${DNAME}.linux-x86_64.tar.gz"
+         DEPLOY_FTP_PASSWORD=$(echo $DEPLOY_FTP_PASSWORD | base64 -d)
+         ncftpput -u ${DEPLOY_FTP_USERNAME} -p ${DEPLOY_FTP_PASSWORD} -m -P ${DEPLOY_FTP_PORT} \
+            ${DEPLOY_FTP_HOST} \
+            ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${DNAME}.linux-x86_64.tar.gz \
+            build/${DNAME}.linux-x86_64.tar.gz
    artifacts:
       reports:
          # Put the version into env for sharing the variable between job
          dotenv: URL.txt
       paths:
-         - dist/
          - URL.txt
-      public: true
 
 # Releasing the binary/output. Usually push the docker image into the registry
 releasing:
@@ -192,7 +202,7 @@ releasing:
    release:
       name: "Release - $VERSION"
       description: "$CI_COMMIT_REF_NAME - $CI_COMMIT_MESSAGE"
-      tag_name: "$VERSION"
+      tag_name: "releases/$VERSION"
       ref: '$CI_COMMIT_REF_NAME'
       assets:
          links:
