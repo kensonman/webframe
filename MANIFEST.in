@@ -1,0 +1,6 @@
+recursive-include webframe *
+exclude webframe/test*
+prune djs_playground
+
+global-exclude *.pyc
+global-exclude .ropeproject/*

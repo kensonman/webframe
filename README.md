@@ -5,10 +5,32 @@ WEBFRAME is the the web-app template to start the development of the web-applica
 
 Installation
 ----
-- Download the zip file and extract to your project folder. Then do the configuration;
-- Checkout as a submodule in GIT. Then do the configuration;
+1. Download the latest version from FTP;
+```
+HOST=ftp://home.kenson.idv.hk/kenson/webframe/
+Username=readonly
+Password=read1234
+```
 
-      git submodule add http://repos.kenson.idv.hk/kenson/webframe.git src/webframe
+2. Install the package
+```
+pip install --upgrade <Downloaded_Package>.whl
+```
+
+3. Migration and CollectStatic
+```
+#Start a new project
+django-admin startproject proj
+
+#Configure
+echo "INSTALLED_APPS+=['webframe', 'django_summernote', 'rest_framework.authtoken']" >> <proj>/<proj>/settings.py
+echo "STATIC_ROOT='static'" >> <proj>/<proj>/settings.py
+
+#Migration and collect-static
+cd <proj>
+./manage.py migrate
+./manage.py collectstatic
+```
 
 Configuration
 ----

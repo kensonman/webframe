@@ -3,6 +3,9 @@ from setuptools.command.install import install
 import warnings
 import sys
 
+MODULE_NAME = 'webframe'
+PACKAGE_DATA = list()
+
 class CustomInstall(install):                                                       
    def run(self):                                                                  
       msg='WARNING: Install pycryptodome for Crypto related features'
@@ -21,6 +24,7 @@ setup(
     license='Apache 2.0',
     packages=find_packages('.', exclude=['tests']),
     cmdclass={'install': CustomInstall},
+    include_package_data=True,
     install_requires=[
 		'amqp>=5.1.1',
 		'asgiref>=3.5.2',

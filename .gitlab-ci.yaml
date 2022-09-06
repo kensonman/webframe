@@ -122,7 +122,7 @@ building:
    before_script:
       - |
          echo "Installing the dependencies..."
-         pip install --upgrade pip
+         pip install --upgrade pip build
          apk add --upgrade --no-cache bash gettext build-base jpeg-dev nginx python3-dev openldap-dev libressl-dev musl-dev libffi-dev postgresql-dev gcc python3-dev musl-dev jpeg-dev zlib-dev vim openssl-dev py3-lxml py3-pyldap
          pip install . 
          export PWD=$(pwd)
@@ -147,19 +147,18 @@ building:
          echo "STATIC_ROOT=\"${PWD}/webframe/static\"" >> conf/settings.py
          ./manage.py collectstatic --noinput
          sed -i "s/version=.*/version='${VERSION}',/g" setup.py
-         DNAME=$(python setup.py --fullname)
-         python setup.py build
-         python setup.py bdist --format=gztar
-         echo "DIST_URL=ftp://${DEPLOY_FTP_USERNAME}:${DEPLOY_FTP_PASSWORD}@${DEPLOY_FTP_HOST}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${DNAME}.linux-x86_64.tar.gz" > URL.txt
-         echo "DIST_FULLNAME=$DNAME" >> URL.txt
-         echo "Uploading the binrary file to FTP ${DEPLOY_FTP_HOST}"
-         DEPLOY_FTP_USERNAME=$(echo $DEPLOY_FTP_USERNAME | base64 -d)
-         #echo "ncftpput -u ${DEPLOY_FTP_USERNAME} -p ${DEPLOY_FTP_PASSWORD} -m -P ${DEPLOY_FTP_PORT} ${DEPLOY_FTP_HOST} ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${DNAME}.linux-x86_64.tar.gz ${DNAME}.linux-x86_64.tar.gz"
-         DEPLOY_FTP_PASSWORD=$(echo $DEPLOY_FTP_PASSWORD | base64 -d)
-         ncftpput -u ${DEPLOY_FTP_USERNAME} -p ${DEPLOY_FTP_PASSWORD} -m -P ${DEPLOY_FTP_PORT} \
+         echo "Building wheel..."
+         python -m build --wheel
+         TARGET_FILE=$(ls dist | grep '.*\.whl$')
+         echo "DIST_URL=ftp://readonly:read1234@${DEPLOY_FTP_HOST}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${TARGET_FILE}" > URL.txt
+         echo "Uploading the binrary file ($TARGET_FILE) to FTP server (${DEPLOY_FTP_HOST}) ..."
+         FTP_USERNAME=$(echo $DEPLOY_FTP_USERNAME | base64 -d)
+         FTP_PASSWORD=$(echo $DEPLOY_FTP_PASSWORD | base64 -d)
+         ncftpput -u ${FTP_USERNAME} -p ${FTP_PASSWORD} -m -P ${DEPLOY_FTP_PORT} \
             ${DEPLOY_FTP_HOST} \
-            ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${DNAME}.linux-x86_64.tar.gz \
-            build/${DNAME}.linux-x86_64.tar.gz
+            ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${TARGET_FILE} \
+            dist/${TARGET_FILE}
+         echo "DONE"
    artifacts:
       reports:
          # Put the version into env for sharing the variable between job
