@@ -1,5 +1,5 @@
 recursive-include webframe *
-exclude webframe/test*
+exclude webframe/test* webframe/scss
 prune djs_playground
 
 global-exclude *.pyc

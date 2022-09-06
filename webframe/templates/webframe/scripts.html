@@ -29,18 +29,18 @@ The line number is aligned with "./loading.html". You can view it by belows comm
 
 
 
-<link rel="stylesheet" href="{%static 'css/webframe/bootstrap-treeview.min.css'%}"/>
+<link rel="stylesheet" href="{%static 'webframe/css/bootstrap-treeview.min.css'%}"/>
 
 <script type="text/javascript" src="https://unpkg.com/http-vue-loader"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
 
 
 {%comment "EndSyncLineNumber"%}{%endcomment%}
-<link rel="stylesheet" href="{%static 'css/webframe/messages.css'%}"/>
-<link rel="stylesheet" href="{%static 'css/webframe/basic.css'%}"/>
-<link rel="stylesheet" href="{%static 'css/webframe/bootstrap4-switches.css'%}"/>
+<link rel="stylesheet" href="{%static 'webframe/css/messages.css'%}"/>
+<link rel="stylesheet" href="{%static 'webframe/css/basic.css'%}"/>
+<link rel="stylesheet" href="{%static 'webframe/css/bootstrap4-switches.css'%}"/>
 {%block themes%}
-   {%static 'css/webframe/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
+   {%static 'webframe/css/base-theme.css' as THEME%}{%pref 'THEME' defval=THEME as THEME%}
 	<link rel="stylesheet" href="{{THEME}}?"/> <!-- File changing frequencely, force to reload -->
 	<style type="text/css">
    /*Pref:STYLES*/
