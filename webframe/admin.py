@@ -153,7 +153,7 @@ class NumberingAdmin(admin.ModelAdmin):
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-   fields=('id', 'user', 'parent', 'sequence', 'name', 'label', 'icon', 'image', 'effDate', 'expDate', 'onclick', 'mousein', 'mouseout', 'props', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
+   fields=('id', 'user', 'parent', 'sequence', 'name', 'label', 'icon', 'image', 'effDate', 'expDate', 'props', 'enabled', 'cb', 'cd', 'lmb', 'lmd')
    formfield_overrides = {
       models.JSONField: {'widget': JSONEditorWidget},
    }

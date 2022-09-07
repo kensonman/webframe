@@ -33,7 +33,7 @@ from .functions import getBool, isUUID, LogMessage as lm, getClientIP, getTime
 from .models import *
 from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
-import hashlib, logging, json, sys
+import hashlib, logging, json, sys, io
 
 CONFIG_KEY='ConfigKey'
 SESSION_WEBAUTHN_CHALLENGE='webauthn-challenge'
@@ -615,37 +615,45 @@ def prefsDoc(req):
    return render(req, 'webframe/prefsDoc.html', params)
 
 def help_menuitem(req):
+   from django.template.loader import get_template as tmpl
    params=dict()
+   with open(str(tmpl('webframe/header-sample.html').origin), 'r') as fp:
+      params['header_sample_html']=fp.read()
+   with open(str(tmpl('webframe/header-sample.json').origin), 'r') as fp:
+      params['header_sample_json']=fp.read()
    return render(req, 'webframe/menuitem.html', params)
 
 @login_required
 @permission_required('webframe.add_menuitem')
 def help_create_menuitem(req):
+   from django.template.loader import get_template as tmpl
    if req.method=='POST':
-      root=MenuItem(name='/', label=_('appName'), props={'href': 'index'})
-      root.save()
-      lm=MenuItem(name='/L', parent=root)
-      lm.save()
-      lroot=MenuItem(name='/L/Root', label='Goto Root', parent=lm, props={'href': 'index'})
-      lroot.save()
-      rm=MenuItem(name='/R', parent=root, props={'class': 'navbar-right'})
-      rm.save()
-      lang=MenuItem(name='/R/locale', parent=rm, icon='fa-globe')
-      lang.save()
-      hi=MenuItem(name='/R/Hi', parent=rm, label='Hi, {username}')
-      hi.save()
-      register=MenuItem(name='/R/Hi/register', parent=hi, label='register', props={'href': reverse('webframe:webauthn-register')})
-      register.save()
-      logout=MenuItem(name='/R/Hi/Logout', parent=hi, label='Logout', props={'href': reverse('webframe:logout')})
-      logout.save()
-      activate('en')
-      en=MenuItem(name='/R/locale/en', parent=lang, label=_('english'), props={'href':reverse('index')})
-      en.save()
-      activate('zh-hant')
-      zht=MenuItem(name='/R/locale/zht', parent=lang, label=_('zh-hant'), props={'href':reverse('index')})
-      zht.save()
+      def genMenuItem( data, parent ):
+         result=MenuItem( name=data.get('name', None), label=data.get('label', None), props=data.get('props', None), icon=data.get('icon', None), image=data.get('image', None), parent=parent )
+         result.save()
+         props=json.dumps(result.props)
+         if props.find('__id__')>=0:
+            props=props.replace('__id__', str(result.id))
+            result.props=json.loads(props)
+            result.save()
+         if data.get('childs', None) and len(data.get('childs'))>0:
+            for mi in data.get('childs'):
+               genMenuItem(mi, result)
+         return result
+
+      with transaction.atomic():
+         with open(str(tmpl('webframe/header-sample.json').origin), 'r') as fp:
+            src=fp.read()
+         src=json.loads(src)
+         genMenuItem(src, None)
+
       return redirect('admin:webframe_menuitem_changelist')
    return HttpResponseForbidden()
+
+def urlreverse(req):
+   args=req.GET.get('url').split(',')
+   url=args.pop(0)
+   return JsonResponse(reverse(url, args=args), safe=False)
 
 class WhoAmIView(APIView):
    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]

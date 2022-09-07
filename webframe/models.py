@@ -1030,7 +1030,7 @@ class MenuItem(OrderableValueObject, AliveObject):
          ['parent', 'user', 'name']
       ]
 
-   DEFAULT_PROPS=dict({'title':None,'target':None,'class':None,'style':None})
+   DEFAULT_PROPS=dict({'title':None,'target':None,'class':None,'style':None,'onclick':'window.location.href=this.data.props.href?this.data.props.href:"#";'})
 
    def __getImageLocation__(self, filename):
       filename=os.path.basename(filename)
@@ -1044,21 +1044,6 @@ class MenuItem(OrderableValueObject, AliveObject):
    label                   = models.CharField(blank=True, null=True, max_length=1024, verbose_name=_('MenuItem.label'), help_text=_('MenuItem.label.helptext'))
    image                   = models.ImageField(blank=True, null=True, upload_to=__getImageLocation__,verbose_name=_('MenuItem.image'), help_text=_('MenuItem.image.helptext'))
    props                   = models.JSONField(blank=True, null=True, default=DEFAULT_PROPS , verbose_name=_('MenuItem.props'), help_text=_('MenuItem.props.help')) #HTML properties
-   onclick                 = models.TextField(max_length=2048, 
-      default='window.location.href=this.data.props.href?this.data.props.href:"#";', 
-      verbose_name=_('MenuItem.onclick'), 
-      help_text=_('MenuItem.onclick.helptext')
-   )
-   mousein                 = models.TextField(max_length=1024, 
-      blank=True, null=True,
-      verbose_name=_('MenuItem.mousein'), 
-      help_text=_('MenuItem.mousein.helptext')
-   )
-   mouseout                 = models.TextField(max_length=1024, 
-      blank=True, null=True,
-      verbose_name=_('MenuItem.mouseout'), 
-      help_text=_('MenuItem.mouseout.helptext')
-   )
 
    def __str__(self):
       return '{0}:{1}@{2}'.format(
@@ -1081,41 +1066,42 @@ class MenuItem(OrderableValueObject, AliveObject):
       rst=list()
       for item in qs:
          approved=True
-         #Checking specified permissions
-         if 'permissions' in item.props and len(item.props['permissions'])>0:
-            approved=approved and user.has_perm(item.props['permissions'])
+         if item.props is not  None:
+            #Checking specified permissions
+            if 'permissions' in item.props and len(item.props['permissions'])>0:
+               approved=approved and user.has_perm(item.props['permissions'])
 
-         #Checking if superuser required
-         if item.props.get('is_superuser', False):
-            approved=approved and user.is_superuser
+            #Checking if superuser required
+            if item.props.get('is_superuser', False):
+               approved=approved and user.is_superuser
 
-         #Checking if staff required
-         if item.props.get('is_staff', False):
-            approved=approved and user.is_staff
+            #Checking if staff required
+            if item.props.get('is_staff', False):
+               approved=approved and user.is_staff
 
-         #Checking if anonymous required
-         if item.props.get('is_anonymous', False):
-            approved=approved and not user.is_authenticated
+            #Checking if anonymous required
+            if item.props.get('is_anonymous', False):
+               approved=approved and not user.is_authenticated
 
-         #Checking if authenticated required
-         if item.props.get('is_authenticated', False):
-            approved=approved and user.is_authenticated
+            #Checking if authenticated required
+            if item.props.get('is_authenticated', False):
+               approved=approved and user.is_authenticated
 
-         #Checking for custom authentication script
-         if item.props.get('authenization', None):
-            try:
-               params={'user':user, 'this':item, 'date':Date()}
-               exec(item.props['authentication'], params)
-               approved=approved and params.get('result', False)
-            except:
-               approved=False
+            #Checking for custom authentication script
+            if item.props.get('authenization', None):
+               try:
+                  params={'user':user, 'this':item, 'date':Date()}
+                  exec(item.props['authentication'], params)
+                  approved=approved and params.get('result', False)
+               except:
+                  approved=False
 
-         # reverse the url if "href" exists in props
-         if 'href' in item.props and not item.props['href'].startswith('/'): 
-            try:
-               item.props['href']=reverse(item.props['href'])
-            except:
-               pass
+            # reverse the url if "href" exists in props
+            if 'href' in item.props and not item.props['href'].startswith('/'): 
+               try:
+                  item.props['href']=reverse(item.props['href'])
+               except:
+                  pass
          if approved: rst.append(item)
          item.childs=MenuItem.filter(item.childs, user)
       return rst

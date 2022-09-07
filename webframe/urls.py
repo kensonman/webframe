@@ -32,6 +32,7 @@ urlpatterns=[
 
    re_path(r'headers/?$', views.HeaderView.as_view(), name='headers'),
    re_path(r'whoami/?$', views.WhoAmIView.as_view(), name='whoami'),
+   re_path(r'url/?$', views.urlreverse, name='urlreverse'),
 
    re_path('jsi18n/', JavaScriptCatalog.as_view(domain='django', packages=['webframe',]), name='js'),
 ] 

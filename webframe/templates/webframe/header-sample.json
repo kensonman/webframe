@@ -1,0 +1,39 @@
+{
+    "name": "Generated NavBar",
+    "label": "NavBar",
+    "props": {
+        "onclick": "window.location.href=this.data.props.href?this.data.props.href:\"#\";"
+    },
+    "childs": [
+        {
+            "name": "/L",
+            "childs": [
+                {
+                    "name": "/L/help",
+                    "label": "MenuItem Help",
+                    "props": {
+                        "href": "admin:webframe_menuitem_change,__id__"
+                    },
+                    "childs": []
+                }
+            ]
+        },
+        {
+            "name": "/R",
+            "props": {
+                "onclick": "window.location.href=this.data.props.href?this.data.props.href:\"#\";"
+            },
+            "childs": [
+                {
+                    "name": "/R/admin",
+                    "icon": "fa-cogs",
+                    "label": "Admin Tools",
+                    "props": {
+                        "href": "admin:index"
+                    },
+                    "childs": []
+                }
+            ]
+        }
+    ]
+}

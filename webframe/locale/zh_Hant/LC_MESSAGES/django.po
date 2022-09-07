@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-23 08:33+0000\n"
+"POT-Creation-Date: 2022-09-07 10:07+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -454,7 +454,7 @@ msgstr "設定帳戶"
 msgid "Profile.helptext"
 msgstr "這個帳戶的說明"
 
-#: models.py:1027 models.py:1065
+#: models.py:1027 models.py:1050
 msgid "MenuItem"
 msgstr "菜單"
 
@@ -518,216 +518,192 @@ msgstr "屬性"
 msgid "MenuItem.props.help"
 msgstr "將會附加於 MenuItem"
 
-#: models.py:1049
-msgid "MenuItem.onclick"
-msgstr "On Click"
-
-#: models.py:1050
-msgid "MenuItem.onclick.helptext"
-msgstr "當使用者點選時執行的腳本"
-
-#: models.py:1054
-msgid "MenuItem.mousein"
-msgstr "Mouse In"
-
-#: models.py:1055
-msgid "MenuItem.mousein.helptext"
-msgstr "當使用者滑鼠進入時報行的腳本"
-
-#: models.py:1059
-msgid "MenuItem.mouseout"
-msgstr "Mouse Out"
-
-#: models.py:1060
-msgid "MenuItem.mouseout.helptext"
-msgstr "當使用者滑鼠離開時報行的腳本"
-
-#: models.py:1164
+#: models.py:1149
 msgid "Translation"
 msgstr "翻釋"
 
-#: models.py:1165
+#: models.py:1150
 msgid "Translations"
 msgstr "翻釋"
 
-#: models.py:1171 views.py:642
+#: models.py:1156 views.py:642
 msgid "english"
 msgstr "English"
 
-#: models.py:1172 views.py:645
+#: models.py:1157 views.py:645
 msgid "zh-hant"
 msgstr "繁體中文"
 
-#: models.py:1173
+#: models.py:1158
 msgid "zh-hans"
 msgstr "简体中文"
 
-#: models.py:1176
+#: models.py:1161
 msgid "Translation.key"
 msgstr "索引"
 
-#: models.py:1176
+#: models.py:1161
 msgid "Translation.key.helptext"
 msgstr "用於程式找到所需的翻釋"
 
-#: models.py:1177
+#: models.py:1162
 msgid "Translation.locale"
 msgstr "語言"
 
-#: models.py:1177
+#: models.py:1162
 msgid "Translation.locale.helptext"
 msgstr "這個翻釋的所屬語言"
 
-#: models.py:1178
+#: models.py:1163
 msgid "Translation.msg"
 msgstr "文字"
 
-#: models.py:1178
+#: models.py:1163
 msgid "Translation.msg.helptext"
 msgstr "文字翻釋"
 
-#: models.py:1179
+#: models.py:1164
 msgid "Translation.pmsg"
 msgstr "眾數文字"
 
-#: models.py:1179
+#: models.py:1164
 msgid "Translation.pmsg.helptext"
 msgstr "眾數文字翻釋"
 
-#: models.py:1188
+#: models.py:1173
 msgid "WebAuthnPubkey"
 msgstr "登入公鑰"
 
-#: models.py:1189 templates/webframe/pubkeys.html:3
+#: models.py:1174 templates/webframe/pubkeys.html:3
 #: templates/webframe/pubkeys.html:44
 msgid "WebAuthnPubkeies"
 msgstr "登入公鑰"
 
-#: models.py:1191
+#: models.py:1176
 msgid "WebAuthnPubkey.id"
 msgstr "ID"
 
-#: models.py:1191
+#: models.py:1176
 msgid "WebAuthnPubkey.id.helptext"
 msgstr "用作系統識別"
 
-#: models.py:1192
+#: models.py:1177
 msgid "WebAuthnPubkey.displayName"
 msgstr "裝置名稱"
 
-#: models.py:1192
+#: models.py:1177
 msgid "WebAuthnPubkey.displayName.helptext"
 msgstr "公／私鑰對的名稱，用於該使用者識別"
 
-#: models.py:1193
+#: models.py:1178
 msgid "WebAuthnPubkey.pubkey"
 msgstr "公鑰"
 
-#: models.py:1193
+#: models.py:1178
 msgid "WebAuthnPubkey.pubkey.helptext"
 msgstr "公鑰 in base64"
 
-#: models.py:1194
+#: models.py:1179
 msgid "WebAuthnPubkey.tipe"
 msgstr "類別"
 
-#: models.py:1194
+#: models.py:1179
 msgid "WebAuthnPubkey.tipe.helptext"
 msgstr "通常為 public-key"
 
-#: models.py:1195
+#: models.py:1180
 msgid "WebAuthnPubkey.signCount"
 msgstr "SignCount"
 
-#: models.py:1195
+#: models.py:1180
 msgid "WebAuthnPubkey.signCount.helptext"
 msgstr "跟據 WebAuthn API Guide"
 
-#: models.py:1196
+#: models.py:1181
 msgid "WebAuthnPubkey.lastSignin"
 msgstr "上次登入日期"
 
-#: models.py:1196
+#: models.py:1181
 msgid "WebAuthnPubkey.lastSignin.helptext"
 msgstr "上次用於登入的日期"
 
-#: models.py:1197
+#: models.py:1182
 msgid "WebAuthnPubkey.ipaddr"
 msgstr "IP 地址"
 
-#: models.py:1197
+#: models.py:1182
 msgid "WebAuthnPubkey.ipaddr.helptext"
 msgstr "上次登入的 IP 地址"
 
-#: models.py:1203
+#: models.py:1188
 msgid "WebAuthnPubkey.owner"
 msgstr "擁有者"
 
-#: models.py:1204
+#: models.py:1189
 msgid "WebAuthnPubkey.owner.helptext"
 msgstr "持有這對公／私鑰的使用者"
 
-#: models.py:1209 templates/webframe/resetPassword.html:28
+#: models.py:1194 templates/webframe/resetPassword.html:28
 msgid "ResetPassword"
 msgstr "重設密碼"
 
-#: models.py:1210
+#: models.py:1195
 msgid "ResetPasswords"
 msgstr "重設密碼"
 
-#: models.py:1215
+#: models.py:1200
 msgid "ResetPassword.key"
 msgstr "KEY"
 
-#: models.py:1215
+#: models.py:1200
 msgid "ResetPassword.key.helptext"
 msgstr "由系統自動產生的重設密碼"
 
-#: models.py:1220
+#: models.py:1205
 msgid "ResetPassword.user"
 msgstr "所屬的使用者"
 
-#: models.py:1221
+#: models.py:1206
 msgid "ResetPassword.user.helptext"
 msgstr "擁有者"
 
-#: models.py:1223
+#: models.py:1208
 msgid "ResetPasssword.request_by"
 msgstr "重設密碼者"
 
-#: models.py:1223
+#: models.py:1208
 msgid "ResetPassword.request_by.helptext"
 msgstr "要求重設密碼者的 IP 地址"
 
-#: models.py:1224
+#: models.py:1209
 msgid "ResetPasssword.complete_by"
 msgstr "完成者"
 
-#: models.py:1224
+#: models.py:1209
 msgid "ResetPassword.complete_by.helptext"
 msgstr "完成重設密碼者的 IP 地址"
 
-#: models.py:1225
+#: models.py:1210
 msgid "ResetPassword.complete_date"
 msgstr "完成日期"
 
-#: models.py:1225
+#: models.py:1210
 msgid "ResetPassword.complete_date.helptext"
 msgstr "完成重設密碼的日期"
 
-#: models.py:1241
+#: models.py:1226
 msgid "TokenDetail"
 msgstr "Token Detail"
 
-#: models.py:1242
+#: models.py:1227
 msgid "TokenDetails"
 msgstr "Token Details"
 
-#: models.py:1245
+#: models.py:1230
 msgid "TokenDetail.name"
 msgstr "Token/裝置名稱"
 
-#: models.py:1245
+#: models.py:1230
 msgid "TokenDetail.name.helptext"
 msgstr "使用這個 Token 登入的裝置名稱"
 
@@ -1211,8 +1187,9 @@ msgstr "證記錯誤，可能這使用者已登記..."
 
 #: templates/webframe/webauthn-registration.html:24
 msgid ""
-"The user is already registered. Please select another one or <a href="
-"\"%%(loginUrl)s\" target=\"_self\">Login</a> to register the new public key'"
+"The user is already registered. Please select another one or <a "
+"href=\"%%(loginUrl)s\" target=\"_self\">Login</a> to register the new public "
+"key'"
 msgstr ""
 "這個使用者名稱已被使用，請重新選取另一個名稱，或請先<a href=\"%(loginUrl)s\" "
 "target=\"_self\">登入</a>，再登記公/私鑰。"
@@ -1313,6 +1290,24 @@ msgstr ""
 #: views.py:765
 msgid "The password has been updated successfully."
 msgstr ""
+
+#~ msgid "MenuItem.onclick"
+#~ msgstr "On Click"
+
+#~ msgid "MenuItem.onclick.helptext"
+#~ msgstr "當使用者點選時執行的腳本"
+
+#~ msgid "MenuItem.mousein"
+#~ msgstr "Mouse In"
+
+#~ msgid "MenuItem.mousein.helptext"
+#~ msgstr "當使用者滑鼠進入時報行的腳本"
+
+#~ msgid "MenuItem.mouseout"
+#~ msgstr "Mouse Out"
+
+#~ msgid "MenuItem.mouseout.helptext"
+#~ msgstr "當使用者滑鼠離開時報行的腳本"
 
 #~ msgid "login thru platform"
 #~ msgstr "使用（內/外）部裝置進行"
