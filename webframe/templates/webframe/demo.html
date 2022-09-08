@@ -3,7 +3,16 @@
 {%block content%}
 <div class="container-fluid"><div class="row">
    <div class="mx-auto col-8">
-      <h1>Demo</h1>
+      <div class="accordion accordion-flush" id="Components">
+         {%include 'webframe/demo-item.html' with comp='accordion'%}
+         {%include 'webframe/demo-item.html' with comp='alerts'%}
+         {%include 'webframe/demo-item.html' with comp='badge'%}
+         {%include 'webframe/demo-item.html' with comp='breadcrumb'%}
+         {%include 'webframe/demo-item.html' with comp='buttons'%}
+         {%include 'webframe/demo-item.html' with comp='button-group'%}
+         {%include 'webframe/demo-item.html' with comp='card'%}
+         {%include 'webframe/demo-item.html' with comp='carousel'%}
+      </div>
    </div>
 </div></div>
 {%endblock%}
