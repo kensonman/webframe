@@ -90,9 +90,14 @@ function wf_loadNavBar( qsResult ){
                classes:data.props['class'], 
                styles:data.props['styles'], 
                attrs: [{'id':`${data.id}-brand`, 'href':data.props.href?data.props.href:'/'}, data.props]
-               }, elem)
-            brand.classList.add('navbar-brand')
+               }, elem);
+            brand.classList.add('navbar-brand');
+            if(data.icon)wf_createElement('i', {classes: `fas ${data.icon} mx-1`}, brand);
             let lbl=wf_createElement('label', {attrs: {'for':data.id}, text:data.label}, brand);
+            if(data.image){
+               lbl.innerText='';
+               wf_createElement('img', {attrs:{src:data.image, title:data.label}, classes:'webframe-navbar-image'}, lbl);
+            }
             let toggle=wf_createElement('button', {
                attrs: {
                   'type': 'button', 

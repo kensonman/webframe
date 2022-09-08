@@ -3,6 +3,7 @@
  * Author:     Kenson Man <kenson.idv.hk@gmail.com>
  * Date:       2018-10-26 20:57
  * Desc:       Used to compile the theme for webframe package.
+ * Compile:    docker run --rm -v $(pwd):$(pwd) -w $(pwd) jbergknoff/sass base-theme.scss > ../static/webframe/css/base-theme.css
  */
 @import url("typeahead.css");
 #pnl_root {
@@ -16,6 +17,12 @@
 
 .navbar {
   margin-bottom: 0px; }
+
+keyword {
+  font-weight: bold; }
+
+img.webframe-navbar-image {
+  max-height: 3rem; }
 
 div.field .desc {
   color: gray;
@@ -206,6 +213,3 @@ ol.breadcrumb {
 
 .symbol-dropdown {
   margin-left: 30px; }
-
-keyword{
-  font-weight: bold; }
