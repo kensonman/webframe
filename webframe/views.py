@@ -33,7 +33,7 @@ from .functions import getBool, isUUID, LogMessage as lm, getClientIP, getTime
 from .models import *
 from .serializers import APIResult, MenuItemSerializer, UserSerializer
 from .tables import *
-import hashlib, logging, json, sys, io
+import hashlib, logging, json, sys, io, os
 
 CONFIG_KEY='ConfigKey'
 SESSION_WEBAUTHN_CHALLENGE='webauthn-challenge'
@@ -827,3 +827,16 @@ class RegisterView(View):
          tokenDetail.save()
       logger.debug({'token': token.key, 'status': 'created' if created else 'retrieved', 'deviceName': deviceName, 'username':user.username})
       return JsonResponse({'token': 'ENC:{0}'.format(token.key[::-1]), 'status': 'created' if created else 'retrieved', 'username':user.username})
+
+def bsdemo(req):
+   from django.template.loader import get_template as tmpl
+   params=dict()
+   params['demos']=list()
+   tmpldir=os.path.dirname(str(tmpl('webframe/demo.html').origin))
+   p=re.compile(r'demo-.*\.html$')
+   for root, dirs, files in os.walk(tmpldir):
+      for f in files:
+         if p.match(f):
+            params['demos'].append(f[5:-5])
+   params['demos'].sort()
+   return render(req, 'webframe/demo.html', params)
