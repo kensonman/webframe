@@ -11,30 +11,25 @@
 var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
 var confirmDelete=function(evt){
    let msg='{%blocktrans with id="%(id)s"%}WebAuthnPubkey.confirmDelete {{id}}{%endblocktrans%}';
-   let id=$(this).parents('tr[id]:first').attr('id');
+   let id=wf_getParent(evt.target, 'tr[id]').attributes.id;
    if(confirm(interpolate(msg, {'id':id}, true))){
-      $('#deleteFrm')
-         .attr('action', '{%url "webframe:pubkey" id="__id__"%}'.replace('__id__', id))
-         .find('input[name=id]').val(id).end().ajaxSubmit({
-            'method': 'DELETE',
-            'headers': {'X-CSRFToken': Cookies.get('csrftoken')},
-            'success':function(data){
-               window.location.reload();
-            }, 
-            'error':function(xhr, txtstatus, err){console.error(txtstatus); console.error(err);}
-         });
+      let frm=document.querySelector('#deleteFrm');
+      frm.attributes.action='{%url "webframe:pubkey" id="__id__"%}'.replace('__id__', id);
+      frm.querySelector('input[name=id]').value=id;
+      axios.delete(frm.attributes.action, new FormData(frm), {method:'DELETE', headers:{'X-CSRFToken': Cookies.get('csrftoken')}})
+         .then(rep=>{ window.location.reload(); })
+         .catch(erro=>{ console.error(err); });
    }
 }
-$(document).ready(function(){
+document.addEventListener('DOMContentLoaded', ()=>{
    $('navbar[href]').wfnavbar();
-   $('#WebAuthnPubkeyTbl')
-      .find('tr[ipaddr]')
-         .hover(function(){$(this).addClass(hoverClass);}, function(){$(this).removeClass(hoverClass);})
-         .css('cursor', 'pointer')
-         .on('click', function(){ window.open('{%url "webframe:ipgeo" ipaddr="__ipaddr__"%}'.replaceAll('__ipaddr__', $(this).attr('ipaddr'))); })
-      .end()
-      .find('.deleteBtn').on('click', confirmDelete).end()
-      ;
+   document.querySelector('#WebAuthnPubkeyTbl').querySelectorAll('tr[ipaddr]').forEach(tr=>{
+      tr.addEventListener('mouseover', evt=>{ evt.target.classList.add(hoverClass) });
+      tr.addEventListener('mouseout',  evt=>{ evt.target.classList.remove(hoverClass });
+      tr.style.cursor='pointer';
+      tr.addEventListener('click', evt=>{ window.open('{%url "webframe:ipgeo" ipaddr="__ipaddr__"%}'.replace('__ipaddr__', tr.attributes.ipaddr)); });
+   });
+   document.querySelector('#WebAuthnPubkeyTbl').querySelector('.deleteBtn').addEventListener('click', confirmDelete);
 });
 //--></script>
 {%endblock%}

@@ -5,13 +5,11 @@
 {%block scripts%}{{block.super}}
 <script type="text/javascript" src="{% url 'webframe:js' %}"></script>
 <script type="text/javascript"><!--
-$(document).ready(function(){
-	$('input[type=checkbox].switch').bootstrapSwitch();
-	$('#deleteBtn').click(function(){
+document.addEventListener('DOMContentLoaded', ()=>{
+   document.querySelector('#deleteBtn').addEventListener(evt=>{
 		if(confirm(gettext('User.msg.confirmDelete'))){
-			$(this).parents('form:first')
-				.find('input[name=_method]').val('DELETE').end()
-				.submit();
+         wf_getParent(evt.target, 'form').querySelectorAll('input[name=_method]').forEach(input=>{ input.value='DELETE' });
+         wf_getParent(evt.target, 'form').submit();
 		};
 	});
 });
@@ -56,15 +54,15 @@ $(document).ready(function(){
       {%if perms.auth%}{%if perms.auth.add_user or perms.auth.change_user%}
       <div class="field">
          <div><label for="is_activeFld">{%trans 'active'%}</label></div>
-         <input type="checkbox" name="is_active" class="switch" value="True"{%if target.is_active%} checked="checked"{%endif%}/>
+         <div class="form-check form-switch"><input type="checkbox" name="is_active" value="True"{%if target.is_active%} checked="checked"{%endif%}/></div>
       </div>
       <div class="field">
          <div><label for="is_staffFld">{%trans 'staff status'%}</label></div>
-         <input type="checkbox" name="is_staff" class="switch" value="True"{%if target.is_staff%} checked="checked"{%endif%}/>
+         <div class="form-check form-switch"><input type="checkbox" name="is_staff" value="True"{%if target.is_staff%} checked="checked"{%endif%}/></div>
       </div>
       <div class="field">
          <div><label for="is_superuserFld">{%trans 'superuser status'%}</label></div>
-         <input type="checkbox" name="is_superuser" class="switch" value="True"{%if target.is_superuser%} checked="checked"{%endif%}/>
+         <div class="form-check form-switch"><input type="checkbox" name="is_superuser" value="True"{%if target.is_superuser%} checked="checked"{%endif%}/></div>
       </div>
       {%endif%}{%endif%}
 
@@ -77,9 +75,9 @@ $(document).ready(function(){
             <span class="form-control">{{g.name}}</span>
          </div>{%endfor%}
          <script type="text/javascript"><!--
-            $(document).ready(function(){
+            document.addEventListener('DOMContentLoadded', evt=>{
                //ForEach Group, do the following{%for g in target.groups.all%}
-               $('input#group_{{g.id}}').attr('checked','checked');
+               document.querySelectorAll('input#group_{{g.id}}').forEach(inp=>{ inp.attributes['checked']='checked' });
                //{%endfor%}End
             });
          //--></script>

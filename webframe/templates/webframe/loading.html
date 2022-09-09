@@ -96,23 +96,32 @@ const OSName=function(){
 }
 //END
 
-$(document).ready(function(){
+document.addEventListener('DOMContentLoaded', ()=>{
    console.warn('{{VERSION|default:"beta or VERSION is not ready; Add webframe.providers.absolute_path into context_processors"}}');
-   $('#pnl_root').css('display', 'block').addClass('animated').addClass('{{entrances|default:"fadeIn"}}');
+   new Promise((resolve,reject)=>{resolve(document.querySelector('#pnl_root'));})
+      .then( elem=>{ elem.style.display='block'; return elem; } )
+      .then( elem=>{ 'animate__animated animate__fadeIn'.split(' ').forEach(cls=>{elem.classList.add(cls);}); return elem; });
 
    //File component
-   $('input[type=file]').on('change', function(){
-      $('label[for='+$(this).prop('id')+']').text($(this).val());
+   document.querySelectorAll('input[type=file]').forEach(elem=>{ 
+      elem.addEventListener('change', ()=>{
+         document.querySelectorAll(`label[for="${elem.attributes.id}"]`).forEach(lbl=>{ lbl.innerText=elem.value; });
+      });
    });
 
    //Mandatory Indicator
    if(typeof(_AutoRequiredIndicator)=='undefined' || _AutoRequiredIndicator){
-      $('form').find('.field').each(function(){
-         $(this).find('input[required],textarea[required],select[required]').each(function(){
-            $(this).parents('.field:first').find('label:first')
-               .find('.mandatory').remove().end()
-               .append('{{INDICATOR_MANDATORY|safe}}')
-            ;
+      document.querySelectorAll('form').forEach(frm=>{ 
+         frm.querySelectorAll('input[required],textarea[required],select[required]').forEach(fld=>{
+            if(fld.attributes.id && document.querySelectorAll(`label[for=${fld.attributes.id}]`).length>0){
+               document.querySelectorAll(`label[for=${fld.attributes.id}]`).forEach(lbl=>{ lbl.innerHTML='{{INDICATOR_MANDATORY|safe}}' });
+            }else{
+               let parent=fld;
+               do{ parent=parent.parentElement; }
+               while( parent!=null && !parent.classList.contains('field') );
+               if(parent!=null)
+                  parent.querySelector('label').innerHTML='{{INDICATOR_MANDATORY|safe}}';
+            }
          });
       });
    };
@@ -120,4 +129,19 @@ $(document).ready(function(){
 
 //2022-09-07 15:26, Kenson Man
 const WEBFRAME_URL_API="{%url 'webframe:urlreverse'%}";
+
+//2022-09-08 13:43, Kenson Man: Provide the samiler function of $(this).parents(':first')
+const wf_getParent=function( elem, selector='*', cb=function(parent){} ){
+   if(elem===undefined)
+      elem=document;
+   let parent=elem;
+   do{
+      if(parent.parentElement==null)break;
+      parent=parent.parentElement;
+      if(parent.matches(selector))break;
+   }while(parent!=null);
+   if(parent==null)parent=document;
+   new Promise((res,rej)=>{res(parent);}).then(cb);
+   return parent;
+}
 //--></script>

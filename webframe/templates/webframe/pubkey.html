@@ -5,13 +5,14 @@
 {%block scripts%}{{block.super}}
 <script type="text/javascript" src="{% url 'webframe:js' %}"></script>
 <script type="text/javascript"><!--
-$(document).ready(function(){
-	$('input[type=checkbox].switch').bootstrapSwitch();
-	$('#deleteBtn').click(function(){
+document.addEventListener('DOMContentLoaded', ()=>{
+	//$('input[type=checkbox].switch').bootstrapSwitch();
+   document.querySelector('#deleteBtn').addEventListener('click', (evt)=>{
 		if(confirm(gettext('User.msg.confirmDelete'))){
-			$(this).parents('form:first')
-				.find('input[name=_method]').val('DELETE').end()
-				.submit();
+         wf_getParent(evt.target, 'form', p=>{
+            p.querySelectorAll('input[name=_method]').forEach(input=>{ input.value='DELETE' });
+            p.submit();
+         });
 		};
 	});
 });
@@ -77,9 +78,9 @@ $(document).ready(function(){
             <span class="form-control">{{g.name}}</span>
          </div>{%endfor%}
          <script type="text/javascript"><!--
-            $(document).ready(function(){
+            document.addEventListener('DOMContentLoaded', ()=>{
                //ForEach Group, do the following{%for g in target.groups.all%}
-               $('input#group_{{g.id}}').attr('checked','checked');
+               document.querySelectorAll('input#group_{{g.id}}').attributes['checked']='checked';
                //{%endfor%}End
             });
          //--></script>

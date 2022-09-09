@@ -29,28 +29,31 @@
 </div>
 <script type="text/javascript"><!--
 if(typeof(gotoPage)=='undefined'){
-   var gotoPage=function( page ){
-      if(typeof(page)=='undefined') page=$(this).attr('page');
-      if(typeof(page)=='undefined') page=$(this).attr('goto');
-      if(typeof(page)=='undefined'){
-         console.log('Cannot found which page to go');
+   const gotoPage=function(evt){
+      evt.preventDefault();
+      let page=evt.target.attributes.page;
+      if(page===undefined)page=evt.target.attributes['goto'];
+      if(page===undefined){
+         console.warn('Cannot found which page to go');
          alert('Cannot found which page to go');
          return;
       }
-      frm=$(this).parents('form:first')
-      if(frm.length>0){//found the form, use the form for pagination
-         if($(frm).find('input[name=page]').length<1){
-            $('<input/>').attr({'name':'page','type':'hidden'}).val('1').appendTo(frm);
-         }
-         $(frm)
-            .find('input[name=page]').val(page).end()
-            .submit();
+      let frm=wf_getParent(evt.target, 'form');
+      if(frm){//found the form, use the form for pagination
+         if(frm.querySelector('input[name=page]')==null)
+            frm.appendChild('<input name="page" type="hidden" value="1"/>');
+         frm.querySelector('input[name=page]').value=page;
+         frm.submit();
       }else{
          window.location.href='?page='+page;
       }
       return false;//Return fasle for the linkage
    };
 
-   $(document).ready(function(){$('ul.pagination').find('a[goto]').click(gotoPage);});
+   document.addEventListener('DOMContentLoaded', evt=>{
+      document.querySelectorAll('ul.pagination').forEach(ul=>{
+         ul.querySelectorAll('a[goto]').forEach(p=>{ p.addEventListener('click', gotoPage) });
+      });
+   });
 }
 //--></script>

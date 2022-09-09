@@ -14,12 +14,13 @@
 </style>
 <script type="text/javascript"><!--
 var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
-$(document).ready(function(){
-	$('tr[username]')
-		.hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer')
-		.click(function(){
-			window.location.href="{%url 'webframe:user' user='_userId_'%}".replace('_userId_', $(this).attr('username'));
-		});
+document.addEventListener('DOMContentLoaded', ()=>{
+   document.querySelectorAll('tr[username]').forEach(tr=>{
+      tr.addEventListener('mouseover', ()=>{ tr.classList.add(hoverClass); });
+      tr.addEventListener('mouseout', ()=>{ tr.classList.remove(hoverClass); });
+      tr.style.cursor='pointer';
+      tr.addEventListener('click', ()=>{ window.location.href="{%url 'webframe:user' user=='__userId__'%}".replace('__userId__', tr.attributes.username); });
+   });
 });
 //--></script>
 {%endblock%}

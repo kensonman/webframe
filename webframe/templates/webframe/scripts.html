@@ -60,7 +60,7 @@ axios.get('{%url "webframe:whoami"%}')
    .catch(err=>{ 
       USER=null;
       window.localStorage.setItem('USER', null);
-      console.warn('Cannot get the session user from server');
+      console.info('Cannot get the session user from server');
       console.debug(err);
    })
 ;

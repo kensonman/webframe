@@ -5,13 +5,23 @@
 {%block scripts%}{{block.super}}
 <script type="text/javascript"><!--
 var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
-$(document).ready(function(){
-	$('#confContainer').find('tr[prefId]').hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer').click(function(){
-		window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}?config=True".replace('_prefId_', $(this).attr('prefId'));
-	});
-	$('#prefContainer').find('tr[prefId]').hover(function(){ $(this).addClass(hoverClass); }, function(){ $(this).removeClass(hoverClass); }).css('cursor', 'pointer').click(function(){
-		window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', $(this).attr('prefId'));
-	});
+document.addEventListener('DOMContentLoaded', ()=>{
+   document.querySelector('#confContainer').querySelectorAll('tr[prefId]').forEach(tr=>{
+      tr.addEventListener('mosueover', evt=>{ evt.target.classList.add(hoverClass) });
+      tr.addEventListener('mosueout', evt=>{ evt.target.classList.remove(hoverClass) });
+      tr.style.cursor='pointer';
+      tr.addEventListener('click', evt=>{
+         window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}?config=True".replace('_prefId_', evt.target.attributes.prefId);
+      });
+   });
+   document.querySelector('#prefContainer').querySelectorAll('tr[prefId]').forEach(tr=>{
+      tr.addEventListener('mosueover', evt=>{ evt.target.classList.add(hoverClass) });
+      tr.addEventListener('mosueout', evt=>{ evt.target.classList.remove(hoverClass) });
+      tr.style.cursor='pointer';
+      tr.addEventListener('click', evt=>{
+         window.location.href="{%url 'webframe:pref' user=currentuser.username prefId='_prefId_'%}".replace('_prefId_', evt.target.attributes.prefId);
+      });
+   });
    $('#changePwdFrm').validate();
 });
 //--></script>

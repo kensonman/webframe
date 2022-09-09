@@ -1,3 +1,4 @@
+<div id="btn-pnl">
 <button type="button" class="btn btn-primary">Primary</button>
 <button type="button" class="btn btn-secondary">Secondary</button>
 <button type="button" class="btn btn-success">Success</button>
@@ -6,5 +7,18 @@
 <button type="button" class="btn btn-info">Info</button>
 <button type="button" class="btn btn-light">Light</button>
 <button type="button" class="btn btn-dark">Dark</button>
-
 <button type="button" class="btn btn-link">Link</button>
+</div>
+
+<script type="text/javascript"><!--
+document.addEventListener('DOMContentLoaded', ()=>{
+   document.querySelector('#btn-pnl').querySelectorAll('.btn').forEach(btn=>{
+      btn.addEventListener('click', (evt)=>{
+         console.debug(evt);
+         console.debug(evt.target);
+      });
+   });
+});
+//--></script>
+
+
