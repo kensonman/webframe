@@ -38,7 +38,7 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 {%comment "EndSyncLineNumber"%}{%endcomment%}
 
 <script type="text/javascript" src="{%static 'webframe/js/actionlink.js'%}"></script>
-<script type="text/javascript" src="{%static 'webframe/js/jquery.dropdown.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/dropdown.js'%}"></script>
 <script type="text/javascript" src="{%static 'webframe/js/jquery.fileupload.js'%}"></script>
 <script type="text/javascript" src="{%static 'webframe/js/pydatefmt.js'%}"></script>
 <script type="text/javascript" src="{%static 'webframe/js/numformat.js'%}"></script>
@@ -142,5 +142,16 @@ const wf_getParent=function( elem, selector='*', cb=function(parent){} ){
    if(parent==null)parent=document;
    new Promise((res,rej)=>{res(parent);}).then(cb);
    return parent;
+}
+
+const wf_nodeList=function( elems ){
+   if(elems===undefined)throw 'elems cannot be undefined';
+   if(elems instanceof Node){
+      elems.setAttribute('__wf_nodeList_temp__', true);
+      let rst=document.querySelectorAll('[__wf_nodeList_temp__]');
+      elems.removeAttribute('__wf_nodeList_temp__');
+      elems=rst;
+   }
+   return elems;
 }
 //--></script>

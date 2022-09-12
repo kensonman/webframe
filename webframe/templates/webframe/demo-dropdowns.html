@@ -1,10 +1,39 @@
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Dropdown button
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">Action</a></li>
-    <li><a class="dropdown-item" href="#">Another action</a></li>
-    <li><a class="dropdown-item" href="#">Something else here</a></li>
-  </ul>
+{%load static%}
+<div class="dropdown-demo">
+   <div class="dropdown dropdown-1">
+     <input type="hidden" />
+     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-- Please Select --</button>
+     <ul class="dropdown-menu">
+       <li><a class="dropdown-item" href="#">Action</a></li>
+       <li><a class="dropdown-item" href="#">Another action</a></li>
+       <li><a class="dropdown-item" href="#">Something else here</a></li>
+     </ul>
+   </div>
+
+
+   <a href="{%static 'webframe/js/dropdown-data-sample.json'%}">dropdown-data-sample.json</a>
+   <div class="dropdown dropdown-2">
+     <input type="hidden" />
+     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-- Please Select (with Javascript data) --</button>
+     <ul class="dropdown-menu"></ul>
+   </div>
+
+   <div class="dropdown dropdown-3" ajax="{%static 'webframe/js/dropdown-data-sample.json'%}">
+     <input type="hidden" />
+     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">-- Please Select (with AJAX data) --</button>
+     <ul class="dropdown-menu"></ul>
+   </div>
 </div>
+
+<script type="text/javascript"><!--
+document.addEventListener('DOMContentLoaded', evt=>{
+   wf_dropdown(document.querySelector('.dropdown-1'));
+   wf_dropdown(document.querySelector('.dropdown-2'), {required: true, data:function(){ return [
+         {"value":"05574364-e97d-4b39-87e5-f3c6428a41e0", "label":"Opt1"}, 
+         {"value":"aef1d4ca-5bda-42d1-8b52-64e2575e9d0e", "label":"Opt2"}, 
+         {"value":"30dcac3c-dc5e-4bf5-a1a2-ea5bf3f46e57", "label":"Opt3"}, 
+      ];
+   }});
+   wf_dropdown(document.querySelector('.dropdown-3'));
+});
+//--></script>
