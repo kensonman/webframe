@@ -10,7 +10,7 @@
 */
 
 const wf_fileupload=function(elems){
-   elems=wf_noteList(elems);
+   elems=wf_nodeList(elems);
    elems.forEach(e=>{
       e.addEventListener('change', evt=>{
          let val=evt.target.value;
@@ -19,6 +19,7 @@ const wf_fileupload=function(elems){
             container=container.querySelector('.form-control');
             container.value=val;
             container.innerText=val;
+         }
       });
    });
 };

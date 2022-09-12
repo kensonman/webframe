@@ -12,10 +12,8 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.1.2/build/js/tempusdominus-bootstrap-4.min.js"></script>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js"></script>
-<script type="text/javascript" src="{%static 'webframe/js/jqueryvalidation.date.js'%}"></script>
-<script type="text/javascript" src="{%static 'webframe/js/jqueryvalidation.regex.js'%}"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pristinejs@0.1.9/dist/pristine.min.js"></script>
+<script type="text/javascript" src="{%static 'webframe/js/pristine-custom-rules.js'%}"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-form@4.3.0/dist/jquery.form.min.js"></script>
 
@@ -39,7 +37,7 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 
 <script type="text/javascript" src="{%static 'webframe/js/actionlink.js'%}"></script>
 <script type="text/javascript" src="{%static 'webframe/js/dropdown.js'%}"></script>
-<script type="text/javascript" src="{%static 'webframe/js/jquery.fileupload.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/fileupload.js'%}"></script>
 <script type="text/javascript" src="{%static 'webframe/js/pydatefmt.js'%}"></script>
 <script type="text/javascript" src="{%static 'webframe/js/numformat.js'%}"></script>
 <script type="text/javascript" src="{%static 'webframe/js/getQueryParams.js'%}"></script>
@@ -124,6 +122,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
          });
       });
    };
+
+   //Auto validate
+   document.querySelectorAll('form').forEach(frm=>{
+      frm.addEventListener('submit', evt=>{
+         let pristine = new Pristine(evt.target);
+         return pristine.validate();
+      });
+   });
 });
 
 //2022-09-07 15:26, Kenson Man
