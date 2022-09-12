@@ -1,19 +1,12 @@
 /*
 **Date** 2017-03-22 18:08
-**File** jquery.dropdown.js
+**File** dropdown.js
 **Version** v2.1
-**Desc** The jquery plugin for dropdown widget.
+**Desc** The VanillaJS for dropdown widget.
 **License** BSD 
 
 #Usage
    $('selector').wfdropdown(Options);
-
-# Options
-**item** The jquery selector to find the item. Once the item was clicked, the onclick action will be fired; Default is "a.item";
-
-**onclick** The function to handle the item clicking; Default is jQuery.fn.wfdropdown.onclick;
-
-**value** The jQuery selector to find the input. Default is "input:first";
 
 # Basic Example
    <div class="dropdown" target="[name=field-name]" label="button">
