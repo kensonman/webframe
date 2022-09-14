@@ -8,8 +8,8 @@
 document.addEventListener('DOMContentLoaded', ()=>{
    document.querySelector('#deleteBtn').addEventListener(evt=>{
 		if(confirm(gettext('User.msg.confirmDelete'))){
-         wf_getParent(evt.target, 'form').querySelectorAll('input[name=_method]').forEach(input=>{ input.value='DELETE' });
-         wf_getParent(evt.target, 'form').submit();
+         Webframe().getFirstMatchedParent(evt.target, 'form').querySelectorAll('input[name=_method]').forEach(input=>{ input.value='DELETE' });
+         Webframe().getFirstMatchedParent(evt.target, 'form').submit();
 		};
 	});
 });

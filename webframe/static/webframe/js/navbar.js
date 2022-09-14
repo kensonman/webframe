@@ -24,7 +24,7 @@ function wf_createElement( tagName, props={classes:null, styles:null, attrs:null
          Object.keys(attrs).forEach(name=>{ 
             elem.setAttribute(name, attrs[name]) 
             if(name=='href' && !attrs[name].startsWith('/'))
-               axios.get(`${WEBFRAME_URL_API}?url=${attrs[name]}`).then(url=>{ elem.setAttribute('href', url.data); });
+               axios.get(`${Webframe().URL_API}?url=${attrs[name]}`).then(url=>{ elem.setAttribute('href', url.data); });
          });
       });
    }

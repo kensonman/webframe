@@ -67,7 +67,7 @@
 */
 const wf_dropdown_onclick=function(evt){
    evt.preventDefault();
-   let self=wf_getParent(evt.target, '.dropdown');
+   let self=Webframe().getFirstMatchedParent(evt.target, '.dropdown');
    let val=evt.target.attributes.val===undefined?evt.target.innerText:evt.target.attributes.val;
    let lbl=evt.target.attributes.label===undefined?evt.target.innerText:evt.target.attributes.label;
    let input=self.attributes.target===undefined?'input':self.attributes.target;
@@ -96,7 +96,7 @@ const wf_dropdown_additem=function(elem, value, label=null, prepend=false){
 const wf_dropdown=function( elems, options={} ){
    if(elems===undefined)throw 'No element(s) found';
    let opts=Object.assign({required:false}, options);
-   elems=wf_nodeList(elems);
+   elems=Webframe().getNodeList(elems);
    elems.forEach(e=>{
       let data=opts.data;
       if(data===undefined && typeof(e.attributes.ajax)!='undefined')

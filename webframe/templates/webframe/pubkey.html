@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 	//$('input[type=checkbox].switch').bootstrapSwitch();
    document.querySelector('#deleteBtn').addEventListener('click', (evt)=>{
 		if(confirm(gettext('User.msg.confirmDelete'))){
-         wf_getParent(evt.target, 'form', p=>{
+         Webframe().getFirstMatchedParent(evt.target, 'form', p=>{
             p.querySelectorAll('input[name=_method]').forEach(input=>{ input.value='DELETE' });
             p.submit();
          });

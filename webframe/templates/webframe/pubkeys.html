@@ -11,7 +11,7 @@
 var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
 var confirmDelete=function(evt){
    let msg='{%blocktrans with id="%(id)s"%}WebAuthnPubkey.confirmDelete {{id}}{%endblocktrans%}';
-   let id=wf_getParent(evt.target, 'tr[id]').attributes.id;
+   let id=Webframe().getFirstMatchedParent(evt.target, 'tr[id]').attributes.id;
    if(confirm(interpolate(msg, {'id':id}, true))){
       let frm=document.querySelector('#deleteFrm');
       frm.attributes.action='{%url "webframe:pubkey" id="__id__"%}'.replace('__id__', id);

@@ -17,8 +17,8 @@ document.querySelector.addEventListener('DOMContentLoaded', ()=>{
       document.querySelectorAll('#deleteBtn').forEach(btn=>{
          btn.addEventListener('click', evt=>{
          if(confirm(gettext('Preference.msg.confirmDelete'))){
-            wf_getParent(evt.target, 'form').querySelectorAll('input[name=_method]').forEach(fld=>{ fld.value='DELETE' });
-            wf_getParent(evt.target, 'form').submit();
+            Webframe().getFirstMatchedParent(evt.target, 'form').querySelectorAll('input[name=_method]').forEach(fld=>{ fld.value='DELETE' });
+            Webframe().getFirstMatchedParent(evt.target, 'form').submit();
          }
       });
    //{%endif%}End Delete Logic

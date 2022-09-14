@@ -38,7 +38,7 @@ if(typeof(gotoPage)=='undefined'){
          alert('Cannot found which page to go');
          return;
       }
-      let frm=wf_getParent(evt.target, 'form');
+      let frm=Webframe().getFirstMatchedParent(evt.target, 'form');
       if(frm){//found the form, use the form for pagination
          if(frm.querySelector('input[name=page]')==null)
             frm.appendChild('<input name="page" type="hidden" value="1"/>');
