@@ -9,5 +9,5 @@
 
 
 document.addEventListener('DOMContentLoaded', evt=>{
-   Webframe().fileupload(document.querySelectorAll('input[type=file]'));
+   Webframe.fileupload(document.querySelectorAll('input[type=file]'));
 });

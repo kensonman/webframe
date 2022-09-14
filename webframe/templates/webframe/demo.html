@@ -28,11 +28,11 @@
 </div></div>
 {%endblock%}
 
-{%block scripts-blk%}
+{%block loading-blk%}
 <script type="text/javascript" src="{%static 'webframe/js/navbar.js'%}"></script>
 <script type="text/javascript"><!--
 document.addEventListener('DOMContentLoaded', ()=>{
-   wf_loadNavBar(document.querySelectorAll('navbar[href]'));
+   Webframe.loadNavBar(document.querySelectorAll('navbar[href]'));
 });
 //--></script>
 {%endblock%}

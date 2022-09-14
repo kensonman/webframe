@@ -65,7 +65,7 @@
       {"value":"30dcac3c-dc5e-4bf5-a1a2-ea5bf3f46e57", "label":"Opt3"}, 
    ]
 */
-const wf_dropdown_onclick=function(evt){
+Webframe._dropdown_onclick=function(evt){
    evt.preventDefault();
    let self=Webframe().getFirstMatchedParent(evt.target, '.dropdown');
    let val=evt.target.attributes.val===undefined?evt.target.innerText:evt.target.attributes.val;
@@ -77,7 +77,7 @@ const wf_dropdown_onclick=function(evt){
    self.dispatchEvent(new Event('change'));
 };
 
-const wf_dropdown_additem=function(elem, value, label=null, prepend=false){
+Webframe._dropdown_additem=function(elem, value, label=null, prepend=false){
    if(label==null)label=value;
    let dropmenu=elem.querySelector('.dropdown-menu');
    let ditem=document.createElement('li');
@@ -90,10 +90,10 @@ const wf_dropdown_additem=function(elem, value, label=null, prepend=false){
       dropmenu.prepend(ditem);
    else
       dropmenu.appendChild(ditem);
-   a.addEventListener('click', wf_dropdown_onclick);
+   a.addEventListener('click', Webframe._dropdown_onclick);
 };
 
-const wf_dropdown=function( elems, options={} ){
+Webframe.dropdown=function( elems, options={} ){
    if(elems===undefined)throw 'No element(s) found';
    let opts=Object.assign({required:false}, options);
    elems=Webframe().getNodeList(elems);
@@ -101,18 +101,18 @@ const wf_dropdown=function( elems, options={} ){
       let data=opts.data;
       if(data===undefined && typeof(e.attributes.ajax)!='undefined')
          data=(e)=>axios.get(e.attributes.ajax.value);
-      if(!opts.required)wf_dropdown_additem(e, '', e.querySelector('button').innerText, true);
+      if(!opts.required)Webframe._dropdown_additem(e, '', e.querySelector('button').innerText, true);
       if(data===undefined){
-         e.querySelectorAll('li').forEach(li=>{ li.querySelector('a').addEventListener('click', wf_dropdown_onclick) });
+         e.querySelectorAll('li').forEach(li=>{ li.querySelector('a').addEventListener('click', Webframe._dropdown_onclick) });
       }else{
          while(typeof(data)=='function')data=data(e);
          let dropmenu=e.querySelector('.dropdown-menu');
          if(typeof(data)==='object' && typeof(data.then)==='function') //if Promise
             data
-               .then(rep=>{ rep.data.forEach(item=>{ wf_dropdown_additem(e, item.value, item.label) }); })
+               .then(rep=>{ rep.data.forEach(item=>{ Webframe._dropdown_additem(e, item.value, item.label) }); })
                .catch(err=>{ console.error(err) });
          else
-            data.forEach(item=>{ wf_dropdown_additem(e, item.value, item.label) });
+            data.forEach(item=>{ Webframe._dropdown_additem(e, item.value, item.label) });
       }
    });
 };

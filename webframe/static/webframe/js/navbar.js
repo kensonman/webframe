@@ -10,7 +10,7 @@
  *                {classes: 'btn-outline-info btn-info', styles: 'cursor: pointer; font-weight:bold', attrs: {onmouseout: '', onclick:''}}
  * @param parent  The parent element. (Optional). It will append this element automatically.
  */
-function wf_createElement( tagName, props={classes:null, styles:null, attrs:null, text:null, html:null}, parent=null){
+Webframe.createElement=function ( tagName, props={classes:null, styles:null, attrs:null, text:null, html:null}, parent=null){
    let elem=document.createElement(tagName);
    if(props.classes){
       if(typeof(props.classes)==='string') props.classes=props.classes.split(' ');
@@ -24,7 +24,7 @@ function wf_createElement( tagName, props={classes:null, styles:null, attrs:null
          Object.keys(attrs).forEach(name=>{ 
             elem.setAttribute(name, attrs[name]) 
             if(name=='href' && !attrs[name].startsWith('/'))
-               axios.get(`${Webframe().URL_API}?url=${attrs[name]}`).then(url=>{ elem.setAttribute('href', url.data); });
+               axios.get(`${Webframe.URL_API}?url=${attrs[name]}`).then(url=>{ elem.setAttribute('href', url.data); });
          });
       });
    }
@@ -34,14 +34,14 @@ function wf_createElement( tagName, props={classes:null, styles:null, attrs:null
    return elem;
 }
 
-function wf_generateMenu( data, menubar ){
-   let menu=wf_createElement('ul', {classes:'navbar-nav', attrs:{'id':data.id}}, menubar);
-   data.childs.forEach(mi=>{ wf_generateMenuitem(mi, menu); });
+Webframe._generateNavbarMenu=function( data, menubar ){
+   let menu=Webframe.createElement('ul', {classes:'navbar-nav', attrs:{'id':data.id}}, menubar);
+   data.childs.forEach(mi=>{ Webframe._generateNavbarMenuItem(mi, menu); });
    return menu;
 }
 
-function wf_generateMenuitem( data, menu ){
-   let item=wf_createElement('li', {
+Webframe._generateNavbarMenuItem=function( data, menu ){
+   let item=Webframe.createElement('li', {
       classes: 'nav-item',
       attrs: {id: data.id},
    }, menu);
@@ -49,7 +49,7 @@ function wf_generateMenuitem( data, menu ){
    let a;
    if(data.childs && data.childs.length>0){
       item.classList.add('dropdown');
-      a=wf_createElement('a', {classes: 'nav-link dropdown-toggle', attrs:[
+      a=Webframe.createElement('a', {classes: 'nav-link dropdown-toggle', attrs:[
          data.props,
          {
             id: `${data.id}-dropdownTrigger`,
@@ -57,24 +57,24 @@ function wf_generateMenuitem( data, menu ){
             'data-toggle':'dropdown',
             'aria-expanded': false,
          }]}, item);
-      let dl=wf_createElement('ul', {classes:'dropdown-menu', attrs:{id:`${data.id}-dropdown`}}, item);
-      data.childs.forEach(child=>{ wf_generateMenuitem(child, dl); });
+      let dl=Webframe.createElement('ul', {classes:'dropdown-menu', attrs:{id:`${data.id}-dropdown`}}, item);
+      data.childs.forEach(child=>{ Webframe._generateNavbarMenuItem(child, dl); });
    }else{
-      let txt=wf_createElement('span', {classes: 'webframe-navitem', attrs:{id:`${data.id}-txt`}}, item);
-      a=wf_createElement('a', {classes:'nav-link', attrs:[{id:`${data.id}-lnk`}, data.props]}, txt);
+      let txt=Webframe.createElement('span', {classes: 'webframe-navitem', attrs:{id:`${data.id}-txt`}}, item);
+      a=Webframe.createElement('a', {classes:'nav-link', attrs:[{id:`${data.id}-lnk`}, data.props]}, txt);
    }
-   if(data.icon)wf_createElement('i', {classes:`fas ${data.icon}`}, a);
+   if(data.icon)Webframe.createElement('i', {classes:`fas ${data.icon}`}, a);
    if(data.label){
       let txt=data.label;
       txt=txt.replace(/\{(\w+)\}/, '%($1)s');
       txt=interpolate(txt, USER, true);
-      wf_createElement('span', {text:txt}, a);
+      Webframe.createElement('span', {text:txt}, a);
    }
    return item;
 }
 
-function wf_loadNavBar( qsResult ){
-   if(!qsResult) return wf_loadNavBar(document.querySelectorAll('navbar[href]'));
+Webframe.loadNavBar=function( qsResult ){
+   if(!qsResult) return Webframe.loadNavBar(document.querySelectorAll('navbar[href]'));
 
    qsResult.forEach( elem => {
       elem.innerText='Loading...'
@@ -85,20 +85,20 @@ function wf_loadNavBar( qsResult ){
             let data=rep.data;
             console.debug(data);
             elem.innerHTML=''; //Clear all elements
-            elem=wf_createElement('div', {classes:'container-fluid'}, elem);
-            let brand=wf_createElement('a', {
+            elem=Webframe.createElement('div', {classes:'container-fluid'}, elem);
+            let brand=Webframe.createElement('a', {
                classes:data.props['class'], 
                styles:data.props['styles'], 
                attrs: [{'id':`${data.id}-brand`, 'href':data.props.href?data.props.href:'/'}, data.props]
                }, elem);
             brand.classList.add('navbar-brand');
-            if(data.icon)wf_createElement('i', {classes: `fas ${data.icon} mx-1`}, brand);
-            let lbl=wf_createElement('label', {attrs: {'for':data.id}, text:data.label}, brand);
+            if(data.icon)Webframe.createElement('i', {classes: `fas ${data.icon} mx-1`}, brand);
+            let lbl=Webframe.createElement('label', {attrs: {'for':data.id}, text:data.label}, brand);
             if(data.image){
                lbl.innerText='';
-               wf_createElement('img', {attrs:{src:data.image, title:data.label}, classes:'webframe-navbar-image'}, lbl);
+               Webframe.createElement('img', {attrs:{src:data.image, title:data.label}, classes:'webframe-navbar-image'}, lbl);
             }
-            let toggle=wf_createElement('button', {
+            let toggle=Webframe.createElement('button', {
                attrs: {
                   'type': 'button', 
                   'data-toggle': 'collapse',
@@ -110,11 +110,11 @@ function wf_loadNavBar( qsResult ){
                classes: 'navbar-toggler',
                html: '<span class="navbar-toggler-icon"></span>',
             }, elem);
-            let menubar=wf_createElement('div', {
+            let menubar=Webframe.createElement('div', {
                attrs: {'id': data.id},
                classes: 'collapse navbar-collapse justify-content-between',
             }, elem);
-            data.childs.forEach(menu=>{ wf_generateMenu( menu, menubar ); });
+            data.childs.forEach(menu=>{ Webframe._generateNavbarMenu( menu, menubar ); });
             menubar.querySelector('.navbar-nav:last-child').classList.add('mr-auto');
          })
          .catch(err=>{

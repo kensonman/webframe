@@ -3,9 +3,11 @@
  * Author:     Kenson Man <kenson@mansonsolutions.hk>
  * Date:       2020-06-10 16:21
  * Desc:       Provide the getQueryParam(name) and getQueryParams() javascript function.
+ *
+ * Date:       2022-09-14 13:37
+ * Desc:       Move the function into Webframe namespace
  */
-
-function getQueryParams(qs=null) {
+Webframe.getQueryParams=function (qs=null) {
    if(qs==null)qs=window.location.search;
    params={};
    if(qs){
@@ -29,6 +31,6 @@ function getQueryParams(qs=null) {
    return params
 };
 
-function getQueryParam( name, queryStr=null ){
-   return getQueryParams(queryStr)[name];
+Webframe.getQueryParam=function ( name, queryStr=null ){
+   return Webframe.getQueryParams(queryStr)[name];
 };

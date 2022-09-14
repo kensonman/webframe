@@ -14,28 +14,28 @@ function showMsg(msg, empty=false, details=null){
    document.querySelector('#msgPnl').appendChild(elem);
 }
 function toggleFrm(enabled=true){
-   if(enabled)
-      $('#registerFrm')
-         .find('input,select,textarea').removeAttr('readonly').end()
-         .find('#registerBtn').removeAttr('readonly').end()
-      ;
-      if(USER)$('#registerFrm').find('input[name=username]').val(USER.username).attr('readonly');
-   else
-      $('#registerFrm')
-         .find('input,select,textarea').attr('readonly', 'readonly').end()
-         .find('#registerBtn').attr('readonly', 'readonly').end()
-      ;
+   if(enabled){
+      document.querySelector('#registerFrm').querySelectorAll('input,select,textarea').forEach(elem=>{ elem.removeAttribute('readonly') });
+      document.querySelector('#registerFrm').querySelectorAll('#registerBtn').forEach(elem=>{ elem.removeAttribute('readonly') });
+      if(USER){
+         document.querySelector('#registerFrm').querySelector('input[name=username]').value=USER.username;
+         document.querySelector('#registerFrm').querySelector('input[name=username]').setAttribute('readonly', 'readonly');
+      }
+   }else{
+      document.querySelector('#registerFrm').querySelectorAll('input,select,textarea').forEach(elem=>{ elem.setAttribute('readonly', true) });
+      document.querySelector('#registerFrm').querySelectorAll('#registerBtn').forEach(elem=>{ elem.setAttribute('readonly', true) });
+   }
 }
 function register( opts ){
    startRegistration(opts).then(cred=>{
       showMsg(gettext('Got authentication credential, verifying...'), false, cred);
-      cred.username=$('#registerFrm').find('input[name=username]').val();
+      cred.username=document.querySelector('#registerFrm').querySelector('input[name=username]').value;
       if(USER){
          cred.username=USER.username;
-         $('#registerFrm').find('input[name=username]').val(cred.username);
+         document.querySelector('#registerFrm').querySelector('input[name=username]').value=cred.username;
       }
-      cred.displayName=$('#registerFrm').find('input[name=displayName]').val();
-      axios.post($('#registerFrm').attr('action'), JSON.stringify(cred), {'headers':{'X-CSRFToken': Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
+      cred.displayName=document.querySelector('#registerFrm').querySelector('input[name=displayName]').value;
+      axios.post(document.querySelector('#registerFrm').attributes.action, JSON.stringify(cred), {'headers':{'X-CSRFToken':Cookies.get('csrftoken'), 'Content-Type':'application/json'}}).then(rep=>{
          let data=rep.data;
          showMsg(gettext('Got server verification result'), false, data)
          if(data.verified){
@@ -49,10 +49,10 @@ function register( opts ){
    });
 }
 function focus(ele){
-   window.setTimeout(`$('${ele}').focus().select()`, 500);
+   window.setTimeout(`document.querySelector('${ele}').select(); document.querySelector('${ele}').focus();`, 500);
 }
 
-$(document).ready(function(){
+document.addEventListener('DOMContentLoaded', evt=>{
    focus('input[name=username]');
    $(this).find('input[name=displayName]').val(DEFAULT_DEVICE_NAME).attr('value', DEFAULT_DEVICE_NAME);
    $('#registerFrm')

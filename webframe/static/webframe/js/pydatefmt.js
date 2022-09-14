@@ -37,7 +37,7 @@ const pyToJSDateFormats = Object.freeze({
  * @param:  formatStr is the python format string
  * @return: the javascript format string
  */
-function pydatefmt(formatStr){
+Webframe.pydatefmt=function(formatStr){
   for(let key in pyToJSDateFormats){
     formatStr = formatStr.split(key).join(pyToJSDateFormats[key]);
   }

@@ -27,13 +27,13 @@
 
 <script type="text/javascript"><!--
 document.addEventListener('DOMContentLoaded', evt=>{
-   wf_dropdown(document.querySelector('.dropdown-1'));
-   wf_dropdown(document.querySelector('.dropdown-2'), {required: true, data:function(){ return [
+   Webframe.dropdown(document.querySelector('.dropdown-1'));
+   Webframe.dropdown(document.querySelector('.dropdown-2'), {required: true, data:function(){ return [
          {"value":"05574364-e97d-4b39-87e5-f3c6428a41e0", "label":"Opt1"}, 
          {"value":"aef1d4ca-5bda-42d1-8b52-64e2575e9d0e", "label":"Opt2"}, 
          {"value":"30dcac3c-dc5e-4bf5-a1a2-ea5bf3f46e57", "label":"Opt3"}, 
       ];
    }});
-   wf_dropdown(document.querySelector('.dropdown-3'));
+   Webframe.dropdown(document.querySelector('.dropdown-3'));
 });
 //--></script>

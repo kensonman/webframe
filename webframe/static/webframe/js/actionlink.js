@@ -4,17 +4,18 @@
 // Description:
 //    Rewrite the actionlink module with VanillaJS
 // Usage:
-//    wf_actionlink(document.querySelectorAll('a[action]'), <opts>)
+//    Webframe.actionlink(document.querySelectorAll('a[action]'), <opts>)
 
-const wf_actionlink=(elems, options={href:null,action:null,target:null})=>{
-   let opts=Object.assign({href:null,action:null,target:null}, opts);
-   elems.forEach( lnk=>{
-      if(opts.href)lnk.attributes.href=opts.href;
-      if(opts.action)lnk.attributes.action=opts.action;
-      if(opts.target)lnk.attributes.target=opts.target;
+Webframe.actionlink=function(elems, options=null)=>{
+   let opts=Object.assign({href:null,action:null,target:null,preventDefault:true}, options);
+   Webframe.nodeList(elems).forEach( lnk=>{
+      if(opts.href)lnk.setAttribute('href', opts.href);
+      if(opts.action)lnk.setAttribute('action', opts.action);
+      if(opts.target)lnk.setAttribute('target', opts.target);
+      if(opts.preventDefault)lnk.setAttribute('preventDefault', opts.preventDefault);
 
       lnk.addEventListener(evt=>{
-         evt.preventDefault();
+         if(evt.target.attributes['preventDefault']==='true')evt.preventDefault();
          console.debug(`action link clicked:`);
          console.debug(evt.target);
          let action=evt.target.attributes.action;
