@@ -95,7 +95,7 @@ const OSName=function(){
 
 document.addEventListener('DOMContentLoaded', ()=>{
    console.warn('{{VERSION|default:"beta or VERSION is not ready; Add webframe.providers.absolute_path into context_processors"}}');
-   new Promise((resolve,reject)=>{resolve(document.querySelector('#pnl_root'));})
+   new Promise((res,rej)=>{res(document.querySelector('#pnl_root'));})
       .then( elem=>{ elem.style.display='block'; return elem; } )
       .then( elem=>{ 'animate__animated animate__fadeIn'.split(' ').forEach(cls=>{elem.classList.add(cls);}); return elem; });
 
@@ -110,8 +110,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
    if(typeof(_AutoRequiredIndicator)=='undefined' || _AutoRequiredIndicator){
       document.querySelectorAll('form').forEach(frm=>{ 
          frm.querySelectorAll('input[required],textarea[required],select[required]').forEach(fld=>{
-            if(fld.attributes.id && document.querySelectorAll(`label[for=${fld.attributes.id}]`).length>0){
-               document.querySelectorAll(`label[for=${fld.attributes.id}]`).forEach(lbl=>{ lbl.innerHTML='{{INDICATOR_MANDATORY|safe}}' });
+            if(fld.attributes.id && document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).length>0){
+               document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).forEach(lbl=>{ lbl.innerHTML='{{INDICATOR_MANDATORY|safe}}' });
             }else{
                let parent=fld;
                do{ parent=parent.parentElement; }

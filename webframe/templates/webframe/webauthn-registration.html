@@ -26,7 +26,7 @@ ul.ul-messages li{}
 //--></script>
 {%endblock%}
 
-{%block body%}
+{%block content%}
 <div class="jumbotron">
 	<div class="row">
 		<div class="col-md-6 offset-md-3 col-12">
@@ -39,26 +39,24 @@ ul.ul-messages li{}
 
                <input type="hidden" name="next" value="{{next|default:'/'}}"/>
 
-               <div><ul class="ul-messages" id="msgPnl">{%block messages%}{%if messages%}{%for msg in messages%}
-                   <li class="animated flash"><span class="alert alert-{{msg.tags|default:''}}">{{msg}}</span></li>
-               {%endfor%}{%endif%}{%endblock%}</ul></div>
-               
                {%block loginFlds-blk%}<section name="loginFlds">
+                  <div id="msgPnlHere"></div>
+               
                   <div class="field form-group">
                      <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
                      <div class="input-group">
                         <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:user.username}}" placeholder="{%trans 'username'%}" required="required" {%if user and user.is_authenticated%}disabled="disabled"{%endif%}/>
-                        <div class="input-group-append">
+                        <div class="dropdown fld-authenticator">
                            {%trans 'authenticator.unspecified' as unspecified%}
-                           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                           <input type="hidden" name="authenticator" value=""/>
+                           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" default="{%blocktrans with authenticator=unspecified%}authenticator:{{authenticator}}{%endblocktrans%}">
                               {%blocktrans with authenticator=unspecified%}authenticator:{{authenticator}}{%endblocktrans%}
                            </button>
-                           <ul class="dropdown-menu dropdown-menu-right" id="authenticatorSelector">
-                              <input type="hidden" name="authenticator" value=""/>
-                              <li class="dropdown-item" value="">{{unspecified}} <i class="fas fa-check mx-1"></i></li>
-                              <li class="dropdown-item" value="cross-platform">{%trans 'authenticator.crossPlatform'%}</li>
-                              <li class="dropdown-item" value="platform">{%trans 'authenticator.platform'%}</li>
-                           </ul> 
+                           <ul class="dropdown-menu dropdown-menu-end">
+                              <li><a class="dropdown-item" href="#" val="">{{unspecified}}</a></li>
+                              <li><a class="dropdown-item" href="#" val="cross-platform">{%trans 'authenticator.crossPlatform'%}</a></li>
+                              <li><a class="dropdown-item" href="#" val="platform">{%trans 'authenticator.platform'%}</a></li>
+                           </ul>
                         </div>
                      </div>
                   </div>
@@ -88,7 +86,9 @@ ul.ul-messages li{}
 
 {%block loading-blk%}
 <script type="text/javascript"><!--
+Webframe.URL_LOGIN='{%url "webframe:login"%}';
+Webframe.URL_REGISTRATION='{%url "webframe:webauthn-registration"%}';
 const URL_LOGIN='{%url "webframe:login"%}';
 //--></script>
-<script type="text/javascript" src="{%static 'js/webframe/webauthn-registration.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/webauthn-registration.js'%}"></script>
 {%endblock%}
