@@ -1,0 +1,130 @@
+{%load static pref%}
+{%comment "SyncLineNumber"%}
+The line number is aligned with "./scripts.html". You can view it by belows commands:
+
+      vim -o scripts.html loading.html -c "set nowrap"
+{%endcomment%}
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/datejs/1.0/date.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/humanize/0.0.9/humanize.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.1.2/build/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pristinejs@0.1.9/dist/pristine.min.js"></script>
+<script type="text/javascript" src="{%static 'webframe/js/pristine-custom-rules.js'%}"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-form@4.3.0/dist/jquery.form.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote.min.js"></script>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeahead.js@0.11.1/dist/typeahead.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typeahead.js@0.11.1/dist/bloodhound.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap5-treeview@1.3.3/dist/bootstrap-treeview.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.js"></script>
+
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+<script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+{%comment "EndSyncLineNumber"%}{%endcomment%}
+
+<script type="text/javascript" src="{%static 'webframe/js/webframe.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/dropdown.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/fileupload.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/pydatefmt.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/numformat.js'%}"></script>
+<script type="text/javascript" src="{%static 'webframe/js/getQueryParams.js'%}"></script>
+<script type="text/javascript" src="{% url 'webframe:js' %}"></script>
+<script type="text/javascript"><!--
+//2022-09-07 15:26, Kenson Man
+Webframe.URL_API='{%url "webframe:urlreverse"%}';
+Webframe.REQUIRED_INDICATOR='{{INDICATOR_MANDATORY|safe}}';
+
+//2019-10-11 13:51 by Kenson: Fixing the DateTimePicker for Font Awesome 5
+//  Reference: https://tempusdominus.github.io/bootstrap-4/Options/
+$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+icons: {
+   time: 'fas fa-clock',
+   date: 'fas fa-calendar',
+   up: 'fas fa-arrow-up',
+   down: 'fas fa-arrow-down',
+   previous: 'fas fa-chevron-left',
+   next: 'fas fa-chevron-right',
+   today: 'fas fa-calendar-check-o',
+   clear: 'fas fa-trash',
+   close: 'fas fa-times'
+} });
+//END
+
+//2020-06-19 13:50 by Kenson: Add the Array.remove( value )
+//   Reference: https://stackoverflow.com/questions/3954438/how-to-remove-item-from-array-by-value
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+//END
+
+//2022-08-22 15:56 by Kenson: Add the function to retrieve the OSName
+const OSName=function(){
+   var  userAgent = navigator.userAgent || navigator.vendor || window.opera;
+   if(navigator.userAgent.match(/Android/i))
+      return "Android";
+   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)
+      return "iOS";
+   if (navigator.appVersion.indexOf("Win")!=-1)
+      return "Windows";
+   if (navigator.appVersion.indexOf("Mac")!=-1)
+      return "MacOS";
+   if (navigator.appVersion.indexOf("Linux")!=-1)
+      return "Linux";
+   if (navigator.appVersion.indexOf("X11")!=-1)
+      return "UNIX";
+   else
+      return "Unknown OS";
+}
+//END
+
+document.addEventListener('DOMContentLoaded', ()=>{
+   console.warn('{{VERSION|default:"beta or VERSION is not ready; Add webframe.providers.absolute_path into context_processors"}}');
+   new Promise((res,rej)=>{res(document.querySelector('#pnl_root'));})
+      .then( elem=>{ elem.style.display='block'; return elem; } )
+      .then( elem=>{ elem.classList.add('animate__animated', 'animate__fadeIn'); return elem; })
+   ;
+
+   //File component
+   document.querySelectorAll('input[type=file]').forEach(elem=>{ 
+      elem.addEventListener('change', ()=>{
+         document.querySelectorAll(`label[for="${elem.attributes.id}"]`).forEach(lbl=>{ lbl.innerText=elem.value; });
+      });
+   });
+
+   //Mandatory Indicator
+   if(typeof(_AutoRequiredIndicator)=='undefined' || _AutoRequiredIndicator){
+      document.querySelectorAll('form').forEach(frm=>{ 
+         frm.querySelectorAll('input,textarea,select').forEach(fld=>{fld.addEventListener('required', Webframe.handleRequiredIndicator)});
+         frm.querySelectorAll('input[required],textarea[required],select[required]').forEach(fld=>{fld.dispatchEvent(new Event('required'))});
+      });
+   };
+
+   //Auto validate
+   document.querySelectorAll('form').forEach(frm=>{
+      frm.addEventListener('submit', evt=>{
+         let pristine = new Pristine(evt.target);
+         return pristine.validate();
+      });
+   });
+});
+//--></script>

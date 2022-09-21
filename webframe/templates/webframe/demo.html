@@ -1,0 +1,38 @@
+{%extends TMPL_BASE%}{%load static concat%}
+
+{%block title%}Bootstrap 5 Demo{%endblock%}
+
+{%block content%}
+<div class="container-fluid"><div class="row">
+   <div class="mx-auto col-8">
+      <div class="accordion accordion-flush" id="Components">
+         {%for comp in demos%}<div class="accordion-item">
+            <h2 class="accordion-header" id="flush-accordion">
+               <button class="accordion-button collapsed text-capitalize" type="button" data-bs-toggle="collapse" data-bs-target="#flush-comp-{{comp}}" aria-expanded="false" aria-controls="flush-comp-{{comp}}">
+                  {{comp}}
+               </button>
+            </h2>
+            <div id="flush-comp-{{comp}}" class="accordion-collapse collapse p-2 bg-light" aria-labelledby="flush-accordion" data-bs-parent="#Components">
+               <a href="https://getbootstrap.com/docs/5.2/components/{{comp}}/" target="bootstrap">Doc</a><br/>
+               {%include 'webframe/demo-'|concat:comp|concat:'.html'%}
+            </div>
+         </div>{%endfor%}
+      </div>
+   </div>
+</div></div>
+{%endblock%}
+
+{%block footer%}
+<div class="container-fluid"><div class="row">
+   <div class="mx-auto col-8">{%include TMPL_FOOTER%}</div>
+</div></div>
+{%endblock%}
+
+{%block loading-blk%}
+<script type="text/javascript" src="{%static 'webframe/js/navbar.js'%}"></script>
+<script type="text/javascript"><!--
+document.addEventListener('DOMContentLoaded', ()=>{
+   Webframe.loadNavBar(document.querySelectorAll('navbar[href]'));
+});
+//--></script>
+{%endblock%}

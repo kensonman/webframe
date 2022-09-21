@@ -1,0 +1,59 @@
+{%load i18n%}
+<div class="paginator">
+   {%if target.paginator%}
+      {%if target.paginator.count > 0%}
+         <nav aria-label="Page navigation" class="float-left">
+            <ul class="pagination" style="margin-bottom: 0px">
+               {%if target.number > 6%}
+				   <li class="page-item"><a href="javascript:gotoPage(1)" class="page-link"><i class="fas fa-step-backward"></i></a></li>
+               {%endif%}
+
+               {%for n in target.paginator.page_range%}{%if n >= target.number|add:-2 and n <= target.number|add:2 %}
+               <li class="page-item {%if n == target.number%}active{%endif%}"><a class="page-link" href="javascript:gotoPage({{n}})">{{n}}</a></li>
+               {%endif%}{%endfor%}
+
+           
+               {%if target.number < target.paginator.num_pages|add:-2%}
+                  <li><a class="page-link" href="javascript:gotoPage({{target.paginator.num_pages}})"><i class="fas fa-step-forward"></i></a></li>
+               {%endif%}
+           </ul>
+         </nav>
+
+         <div class="float-right">{%blocktrans with x=target.number y=target.paginator.num_pages total=target.paginator.count size=target.paginator.per_page%}Showing {{size}} of {{total}}; Page {{x}} of {{y}}{%endblocktrans%}</div>
+      {%else%}
+         <div class="norecord">{%trans 'pagination-norecord'%}</div>
+      {%endif%}
+   {%else%}
+      <div class="nopaginator">target is not an instance of Page</div>
+   {%endif%}
+</div>
+<script type="text/javascript"><!--
+if(typeof(gotoPage)=='undefined'){
+   const gotoPage=function(evt){
+      evt.preventDefault();
+      let page=evt.target.attributes.page;
+      if(page===undefined)page=evt.target.attributes['goto'];
+      if(page===undefined){
+         console.warn('Cannot found which page to go');
+         alert('Cannot found which page to go');
+         return;
+      }
+      let frm=Webframe().getFirstMatchedParent(evt.target, 'form');
+      if(frm){//found the form, use the form for pagination
+         if(frm.querySelector('input[name=page]')==null)
+            frm.appendChild('<input name="page" type="hidden" value="1"/>');
+         frm.querySelector('input[name=page]').value=page;
+         frm.submit();
+      }else{
+         window.location.href='?page='+page;
+      }
+      return false;//Return fasle for the linkage
+   };
+
+   document.addEventListener('DOMContentLoaded', evt=>{
+      document.querySelectorAll('ul.pagination').forEach(ul=>{
+         ul.querySelectorAll('a[goto]').forEach(p=>{ p.addEventListener('click', gotoPage) });
+      });
+   });
+}
+//--></script>

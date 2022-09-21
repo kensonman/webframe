@@ -1,0 +1,90 @@
+{%extends 'webframe/base.html'%}{%load i18n static pref%}
+
+{%block title%}{%trans 'login-webauthn-registration'%}{%endblock%}
+
+{%block scripts%}{{block.super}}
+<style type="text/css">
+.btn-login{ min-width: 200px; min-height: 40px; display:inline-block;}
+.seperator{ border-bottom: 1px solid black; text-align: center; margin-bottom:20px;}
+.seperator span{ position:relative; top:1rem; background-color:white; padding:10px;}
+.dropdown-item{ cursor:pointer; }
+ul.ul-messages{ }
+ul.ul-messages li{}
+</style>
+<script type="text/javascript"><!--
+/* Translation - make sure the translation is ready for javascript*/
+/* 
+ * {%trans 'Getting the challenge and related information from server...'%}
+ * {%trans 'Got server generated Authentication Options, authenticating...'%}
+ * {%trans 'Got authentication credential, verifying...'%}
+ * {%trans 'Got server verification result'%}
+ * {%trans 'Registration successful, the page will be redirected soon...'%}
+ * {%trans 'Registration failure'%}
+ * {%trans 'Error: Authenticator was probably already registered by user'%}
+ * {%blocktrans with loginUrl='/webframe/login'%}The user is already registered. Please select another one or <a href="%(loginUrl)s" target="_self">Login</a> to register the new public key'{%endblocktrans%}
+ */
+//--></script>
+{%endblock%}
+
+{%block content%}
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-md-6 offset-md-3 col-12">
+         <form method="POST" id="registerFrm" class="card card-danger" action="{%url 'webframe:webauthn-registration'%}">
+            <div class="card-header bg-danger">{%trans 'login-webauthn-registration'%}</div>
+            <div class="card-body">
+               {%csrf_token%}
+               
+               {%block login-title%}{%trans 'login-webauthn-registration' as title%}{{title|default:''|safe}}{%endblock%}
+
+               <input type="hidden" name="next" value="{{next|default:'/'}}"/>
+
+               {%block loginFlds-blk%}<section name="loginFlds">
+                  <div id="msgPnlHere"></div>
+               
+                  <div class="field form-group">
+                     <label for="usernameFld" class="desktop-only">{%trans 'username'%}</label>
+                     <div class="input-group">
+                        <input type="text" name="username" id="usernameFld" class="form-control" autocomplete="username" value="{{username|default:user.username}}" placeholder="{%trans 'username'%}" required="required" {%if user and user.is_authenticated%}disabled="disabled"{%endif%}/>
+                        <div class="dropdown fld-authenticator">
+                           {%trans 'authenticator.unspecified' as unspecified%}
+                           <input type="hidden" name="authenticator" value=""/>
+                           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" default="{%blocktrans with authenticator=unspecified%}authenticator:{{authenticator}}{%endblocktrans%}">
+                              {%blocktrans with authenticator=unspecified%}authenticator:{{authenticator}}{%endblocktrans%}
+                           </button>
+                           <ul class="dropdown-menu dropdown-menu-end">
+                              <li><a class="dropdown-item" href="#" val="">{{unspecified}}</a></li>
+                              <li><a class="dropdown-item" href="#" val="cross-platform">{%trans 'authenticator.crossPlatform'%}</a></li>
+                              <li><a class="dropdown-item" href="#" val="platform">{%trans 'authenticator.platform'%}</a></li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="field form-group">
+                     <label for="displayNameFld" class="desktop-only">{%trans 'displayName'%}</label>
+                     <input type="text" name="displayName" id="displayNameFld" class="form-control" autocomplete="displayName" value="{{displayName|default:''}}" placeholder="{%trans 'displayName'%}"/>
+                  </div>
+                  <div class="pnl-btns">
+                     <button class="btn btn-warning" type="reset"><i class="fas fa-undo"></i></button>
+                     <button class="btn btn-success" disabled="disabled" id="registerBtn">{%trans 'registration'%}</button>
+                  </div>
+               </section>{%endblock%}
+
+               {%block resetPwd-blk%}{%endblock%}
+
+               {%block registration-blk%}{%endblock%}
+            </div>
+            <div class="card-footer"></div>
+         </form>
+      </div>
+	</div>
+</div>
+{%endblock%}
+
+{%block loading-blk%}
+<script type="text/javascript"><!--
+Webframe.URL_LOGIN='{%url "webframe:login"%}';
+Webframe.URL_REGISTRATION='{%url "webframe:webauthn-registration"%}';
+//--></script>
+<script type="text/javascript" src="{%static 'webframe/js/webauthn-registration.js'%}"></script>
+{%endblock%}

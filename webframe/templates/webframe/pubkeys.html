@@ -1,0 +1,51 @@
+{%extends TMPL_BASE%}{%load i18n django_tables2 pref static%}
+
+{%block title%}{%trans 'WebAuthnPubkeies'%}{%endblock%}
+
+{%block scripts-blk%}
+{%endblock%}
+
+{%block loading-blk%}
+<script type="text/javascript" src="{%static 'js/webframe/navbar.js'%}"></script>
+<script type="text/javascript"><!--
+var hoverClass="{%pref 'HOVER_CLASS' defval='bg-secondary text-white' returnValue=True%}"; 
+var confirmDelete=function(evt){
+   let msg='{%blocktrans with id="%(id)s"%}WebAuthnPubkey.confirmDelete {{id}}{%endblocktrans%}';
+   let id=Webframe().getFirstMatchedParent(evt.target, 'tr[id]').attributes.id;
+   if(confirm(interpolate(msg, {'id':id}, true))){
+      let frm=document.querySelector('#deleteFrm');
+      frm.attributes.action='{%url "webframe:pubkey" id="__id__"%}'.replace('__id__', id);
+      frm.querySelector('input[name=id]').value=id;
+      axios.delete(frm.attributes.action, new FormData(frm), {method:'DELETE', headers:{'X-CSRFToken': Cookies.get('csrftoken')}})
+         .then(rep=>{ window.location.reload(); })
+         .catch(erro=>{ console.error(err); });
+   }
+}
+document.addEventListener('DOMContentLoaded', ()=>{
+   $('navbar[href]').wfnavbar();
+   document.querySelector('#WebAuthnPubkeyTbl').querySelectorAll('tr[ipaddr]').forEach(tr=>{
+      tr.addEventListener('mouseover', evt=>{ evt.target.classList.add(hoverClass) });
+      tr.addEventListener('mouseout',  evt=>{ evt.target.classList.remove(hoverClass });
+      tr.style.cursor='pointer';
+      tr.addEventListener('click', evt=>{ window.open('{%url "webframe:ipgeo" ipaddr="__ipaddr__"%}'.replace('__ipaddr__', tr.attributes.ipaddr)); });
+   });
+   document.querySelector('#WebAuthnPubkeyTbl').querySelector('.deleteBtn').addEventListener('click', confirmDelete);
+});
+//--></script>
+{%endblock%}
+
+{%block content%}<div class="card card-secondary">
+<div class="card-body">
+    <h1>{%trans 'WebAuthnPubkeies'%}</h1><hr/>
+    {%render_table target%}
+    <div class="pnl pnl-btns">
+        {%for b in btns%}<a href="{{b.href}}" class="btn btn-{{b.lv|default:'info'}}">{{b.label}}</a>{%endfor%}
+        {%if perms.auth.add_webauthnpubkey%}<a href="{%url 'webframe:webauthn-registration'%}" class="btn btn-outline-primary"><i class="fas fa-key"></i> {%trans 'WebAuthnPubkey.actions.new'%}</a>{%endif%}
+    </div>
+    <form id="deleteFrm" method="DELETE" action="">
+      {%csrf_token%}
+      <input type="hidden" name="_method" value="DELETE"/>
+      <input type="hidden" name="id" value=""/>
+   </form>
+</div>
+</div>{%endblock%}

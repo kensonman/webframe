@@ -21,6 +21,9 @@ default:
       - if: $CI_COMMIT_TAG =~ /^release(s)?\//
         when: never
 
+      - if: $CI_PIPELINE_SOURCE == 'pipeline'
+        when: never
+
 .on-versioning-branch:
    rules:
       - !reference [.default-rules, rules]
@@ -37,32 +40,31 @@ prepare:
    rules:
       - !reference [.default-rules, rules]
       - when: always
-   image: "kensonman/versioning:2.0.0"
+   image: "kensonman/versioning:2.0.1"
    script:
-      - >
-         echo "Preparing the CI/CD environment: `pwd`..." && \
-         echo "   > CI_COMMIT_BRANCH: ${CI_COMMIT_BRANCH}" && \
-         echo "   > CI_COMMIT_TAG: ${CI_COMMIT_TAG}" && \
-         echo "   > CI_COMMIT_MESSAGE: ${CI_COMMIT_MESSAGE}" && \
-         echo "   > CI_COMMIT_REF_PROTECTED: ${CI_COMMIT_REF_PROTECTED}" && \
-         echo "   > Getting the next version..." && \
-         export VERSION=`versioning.py getVersion` && \
-         echo "   > Next version: ${VERSION}" && \
-         export DOCKERIZED_VERSION=`versioning.py --option ${VERSION} toDockerized` && \
-         echo "   > Dockerized next version: ${DOCKERIZED_VERSION}" && \
-         echo "   > Exporting..." && \
-         echo "VERSION=${VERSION}" > VERSION.env && \
-         echo "DOCKERIZED_VERSION=${DOCKERIZED_VERSION}" >> VERSION.env && \
-         echo "${VERSION}" > VERSION && \
-         echo "VERSION.env:" && \
-         cat  VERSION.env
+      - |
+         export PWD=$(pwd)
+         echo "Preparing the CI/CD environment: ${PWD} ..."
+         echo "   > CI_COMMIT_BRANCH: ${CI_COMMIT_BRANCH}"
+         echo "   > CI_COMMIT_TAG: ${CI_COMMIT_TAG}"
+         echo "   > CI_COMMIT_MESSAGE: ${CI_COMMIT_MESSAGE}"
+         echo "   > CI_COMMIT_REF_PROTECTED: ${CI_COMMIT_REF_PROTECTED}"
+         echo "   > CI_PIPELINE_SOURCE: ${CI_PIPELINE_SOURCE}"
+         echo "   > Getting the next version..."
+         export VERSION=$(versioning.py getVersion)
+         echo "   > Next version: ${VERSION}"
+         export DOCKERIZED_VERSION=$(versioning.py getVersion toDockerized)
+         echo "   > Dockerized next version: ${DOCKERIZED_VERSION}"
+         echo "   > Exporting..."
+         echo "VERSION=${VERSION}" > VERSION.txt
+         echo "DOCKERIZED_VERSION=${DOCKERIZED_VERSION}" >> VERSION.txt
    artifacts:
       reports:
          # Put the version into env for sharing the variable between job
-         dotenv: VERSION.env
+         dotenv: VERSION.txt
       paths:
          # Put the VERSION as an artifact for futer development
-         - VERSION
+         - VERSION.txt
 
 # Teting the binary/output which builded by "building" job.
 testing:
@@ -77,26 +79,26 @@ testing:
       DBMS: django.db.backends.sqlite3
       DBNAME: /tmp/testing.db
    before_script:
-      - >
-         echo "Installing the dependencies..." && \
-         pip install --upgrade pip && \
-         apk add --upgrade --no-cache bash gettext build-base jpeg-dev nginx python3-dev openldap-dev libressl-dev musl-dev libffi-dev postgresql-dev gcc python3-dev musl-dev jpeg-dev zlib-dev vim openssl-dev py3-lxml py3-pyldap && \
-         pip install . && \
+      - |
+         echo "Installing the dependencies..."
+         pip install --upgrade pip
+         apk add --upgrade --no-cache bash gettext build-base jpeg-dev nginx python3-dev openldap-dev libressl-dev musl-dev libffi-dev postgresql-dev gcc python3-dev musl-dev jpeg-dev zlib-dev vim openssl-dev py3-lxml py3-pyldap
+         pip install . 
          pip install pycryptodome pytest pytest-django
-      - >
-         django-admin startproject conf && \
-         mv conf tempproj && \
-         mv tempproj/* . && \
-         rmdir tempproj && \
-         ln -s ../webframe conf/webframe && \
-         echo 'INSTALLED_APPS+=["django_summernote"]' >> conf/settings.py && \
-         echo 'INSTALLED_APPS+=["webframe"]' >> conf/settings.py && \
-         echo 'INSTALLED_APPS+=["rest_framework.authtoken"]' >> conf/settings.py && \
-         echo 'from django.urls import include' >> conf/urls.py && \
+      - |
+         django-admin startproject conf
+         mv conf tempproj
+         mv tempproj/* .
+         rmdir tempproj
+         ln -s ../webframe conf/webframe
+         echo 'INSTALLED_APPS+=["django_summernote"]' >> conf/settings.py
+         echo 'INSTALLED_APPS+=["webframe"]' >> conf/settings.py
+         echo 'INSTALLED_APPS+=["rest_framework.authtoken"]' >> conf/settings.py
+         echo 'from django.urls import include' >> conf/urls.py
          echo 'urlpatterns += [path("webframe/", include("webframe.urls")),]' >>conf/urls.py
    script:
-      - >
-         echo "Testing..." && \
+      - |
+         echo "Testing..."
          pytest --junitxml=test-results.xml
    artifacts:
       when: always
@@ -118,36 +120,51 @@ building:
    variables:
       VERSION: value-from-prepare
    before_script:
-      - > 
-         echo "B4 script on `pwd`..."
-         && ./dependencies.sh
+      - |
+         echo "Installing the dependencies..."
+         pip install --upgrade pip build
+         apk add --upgrade --no-cache bash gettext build-base jpeg-dev nginx python3-dev openldap-dev libressl-dev musl-dev libffi-dev postgresql-dev gcc python3-dev musl-dev jpeg-dev zlib-dev vim openssl-dev py3-lxml py3-pyldap
+         pip install . 
+         export PWD=$(pwd)
+         echo "Building on ${PWD}..."
+         django-admin startproject conf
+         mv conf tempproj
+         mv tempproj/* .
+         rmdir tempproj
+         ln -s ../webframe conf/webframe
+         echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> conf/settings.py
+         echo 'from django.urls import include' >> conf/urls.py
+         echo 'urlpatterns += [path("webframe/", include("webframe.urls")),]' >>conf/urls.py
+         apk add ncftp
+         if [ -z "${DEPLOY_FTP_PORT}" ]; then
+            export DEPLOY_FTP_PORT=21
+         fi
    script:
-      - >
-         echo "Building on `pwd`..." && \
-         django-admin startproject conf && \
-         mv conf tempproj && \
-         mv tempproj/* . && \
-         rmdir tempproj && \
-         ln -s ../webframe conf/webframe && \
-         echo "INSTALLED_APPS += ['webframe', 'rest_framework', 'rest_framework.authtoken', 'django_summernote']" >> conf/settings.py && \
-         echo 'from django.urls import include' >> conf/urls.py && \
-         echo 'urlpatterns += [path("webframe/", include("webframe.urls")),]' >>conf/urls.py && \
-         cd webframe && \
-         ../manage.py compilemessages && \
-         cd .. && \
-         echo "STATIC_ROOT=`pwd`/webframe/static" >> conf/settings.py && \
-         ./manage.py collectstatic && \
-         sed -i "s/version=.*/version='${VERSION}',/g" setup.py && \
-         python setup.py build && \
-         python setup.py bdist && \
-         echo "DIST_URL=\"https://repos.kenson.idv.hk/kenson/webframe/-/jobs/artifacts/${CI_JOB_ID}/browse\"" > URL.env
+      - |
+         cd webframe
+         ../manage.py compilemessages
+         cd ..
+         echo "STATIC_ROOT=\"${PWD}/webframe/static\"" >> conf/settings.py
+         ./manage.py collectstatic --noinput
+         sed -i "s/version=.*/version='${VERSION}',/g" setup.py
+         echo "Building wheel..."
+         python -m build --wheel
+         TARGET_FILE=$(ls dist | grep '.*\.whl$')
+         echo "DIST_URL=ftp://readonly:read1234@${DEPLOY_FTP_HOST}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${TARGET_FILE}" > URL.txt
+         echo "Uploading the binrary file ($TARGET_FILE) to FTP server (${DEPLOY_FTP_HOST}) ..."
+         FTP_USERNAME=$(echo $DEPLOY_FTP_USERNAME | base64 -d)
+         FTP_PASSWORD=$(echo $DEPLOY_FTP_PASSWORD | base64 -d)
+         ncftpput -u ${FTP_USERNAME} -p ${FTP_PASSWORD} -m -P ${DEPLOY_FTP_PORT} \
+            ${DEPLOY_FTP_HOST} \
+            ${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/${TARGET_FILE} \
+            dist/${TARGET_FILE}
+         echo "DONE"
    artifacts:
       reports:
          # Put the version into env for sharing the variable between job
-         dotenv: URL.env
+         dotenv: URL.txt
       paths:
-         - dist/
-
+         - URL.txt
 
 # Releasing the binary/output. Usually push the docker image into the registry
 releasing:
@@ -156,6 +173,7 @@ releasing:
    needs:
       - job: building
         artifacts: true
+      - job: prepare
    dependencies:
       - prepare
       - building
@@ -166,21 +184,30 @@ releasing:
    variables:
       VERSION: value-from-prepare 
       DOCKERIZED_VERSION: value-from-prepare
+      DIST_URL: value-from-building
+      DIST_FULLNAME: value-from-building
       #Don't pull the source code
       GIT_STRATEGY: none
       DIST_URL: value-from-building
    script: 
-      - > 
-         echo "Creating release: $VERSION..."
+      - |
+         echo "Creating release: Release - $VERSION with"
+         echo "   description: $CI_COMMIT_REF_NAME - $CI_COMMIT_MESSAGE"
+         echo "   tag_name:    $VERSION"
+         echo "   ref:         $CI_COMMIT_REF_NAME"
+         echo "   assets:"
+         echo "      links:"
+         echo "      - name: Python Egg"
+         echo "        url: $DIST_URL"
    release:
       name: "Release - $VERSION"
       description: "$CI_COMMIT_REF_NAME - $CI_COMMIT_MESSAGE"
-      tag_name: "$VERSION"
+      tag_name: "releases/$VERSION"
       ref: '$CI_COMMIT_REF_NAME'
       assets:
          links:
-            - name: Python Egg
-              url: ${DIST_URL}
+            - name: '${DIST_FULLNAME}'
+              url: '${DIST_URL}'
 
 # Cleaning the CI/CD
 clean:
