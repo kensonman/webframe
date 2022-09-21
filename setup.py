@@ -16,7 +16,7 @@ class CustomInstall(install):
 
 setup(
     name='webframe',
-    version='2.12.3',    
+    version='3.0.0',
     description='My django framework',
     url='https://repos.kenson.idv.hk/kenson/webframe',
     author='Kenson Man',
