@@ -88,3 +88,32 @@ Webframe.actionlink=function(elems, options){
       });
    });
 };
+
+Webframe.handleRequiredIndicator=function(evt){
+   let fld=evt.target;
+   let required=evt.detail===undefined?true:evt.detail;
+   if(required){
+      //Add required and related indicator
+      fld.setAttribute('required', 'required');
+      if(fld.attributes.id && document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).length>0){
+         document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).forEach(lbl=>{ lbl.insertAdjacentHTML('afterbegin', Webframe.REQUIRED_INDICATOR) });
+      }else{
+         let parent=fld;
+         do{ parent=parent.parentElement; }
+         while( parent!=null && !parent.classList.contains('field') );
+         if(parent!=null)
+            parent.querySelector('label').insertAdjacentHTML('afterbegin', Webframe.REQUIRED_INDICATOR);
+      }
+   }else{
+      fld.removeAttribute('required');
+      if(fld.attributes.id && document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).length>0){
+         document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).forEach(lbl=>{ lbl.querySelectorAll('span.mandatory.indicator-icon').forEach(ele=>{ ele.parentNode.removeChild(ele);console.debug(ele) }) });
+      }else{
+         let parent=fld;
+         do{ parent=parent.parentElement; }
+         while( parent!=null && !parent.classList.contains('field') );
+         if(parent!=null)
+            parent.querySelectorAll('label').forEach(lbl=>{ lbl.querySelectorAll('span.mandatory.indicator-icon').forEach(ele=>{ ele.parentNode.removeChild(ele);console.debug(ele) }) });
+      }
+   }
+}

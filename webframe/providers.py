@@ -96,5 +96,5 @@ def fmt_injection(req):
     RST['FMT_JSDATETIME']=convertDateformat(RST['FMT_DATETIME'], format='javascript')
     RST['FMT_JSDATETIME_SHORT']=convertDateformat(RST['FMT_DATETIME_SHORT'], format='javascript')
 
-    RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required"><i class="fas fa-shield-alt"></i></span>')
+    RST['INDICATOR_MANDATORY']=getattr(settings, 'INDICATOR_MANDATORY', '<span class="mandatory required indicator-icon"><i class="fas fa-shield-alt"></i></span>')
     return RST

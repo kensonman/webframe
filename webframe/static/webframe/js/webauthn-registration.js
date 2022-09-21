@@ -10,6 +10,7 @@ const registerFrm=document.querySelector('#registerFrm');
 const showMsg=(msg, empty=false, details=null)=>{ document.querySelector('#msgPnl').dispatchEvent(new CustomEvent('msg', {detail:{msg:msg, empty:empty, details:details}})) }
 
 document.addEventListener('DOMContentLoaded', evt=>{
+   document.querySelector('.card-footer').appendChild(document.querySelector('#pnl_footer'));
    document.querySelector('input[name=displayName]').value=DEFAULT_DISPLAY_NAME;
    Webframe.dropdown(document.querySelector('.fld-authenticator'), {required: true});
    let pristine=new Pristine(registerFrm);

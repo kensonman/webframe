@@ -74,21 +74,17 @@ ul.ul-messages li{}
 
                {%block registration-blk%}{%endblock%}
             </div>
+            <div class="card-footer"></div>
          </form>
-
-         <div class="pnl-footer">{%block login_footer%}{%endblock%}
       </div>
 	</div>
-	
 </div>
-{%block footer%}{%include TMPL_FOOTER%}{%endblock%}
 {%endblock%}
 
 {%block loading-blk%}
 <script type="text/javascript"><!--
 Webframe.URL_LOGIN='{%url "webframe:login"%}';
 Webframe.URL_REGISTRATION='{%url "webframe:webauthn-registration"%}';
-const URL_LOGIN='{%url "webframe:login"%}';
 //--></script>
 <script type="text/javascript" src="{%static 'webframe/js/webauthn-registration.js'%}"></script>
 {%endblock%}

@@ -27,20 +27,22 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .tasks import sendEmail
+from .authentications import SESSION_WEBAUTHN_CHALLENGE
 from .decorators import is_enabled
 from .functions import getBool, isUUID, LogMessage as lm, getClientIP, getTime
 from .models import *
 from .serializers import APIResult, MenuItemSerializer, UserSerializer
+from .tasks import sendEmail
 from .tables import *
 import hashlib, logging, json, sys, io, os
 
 CONFIG_KEY='ConfigKey'
-SESSION_WEBAUTHN_CHALLENGE='webauthn-challenge'
 logger=logging.getLogger('webframe.views')
 
-#Make sure the translation
+#Make sure the translation is ready
 _('django.contrib.auth.backends.ModelBackend')
+_('webframe.authentications.EffectiveUserAuthenticationBackend')
+_('webframe.authentications.WebAuthnBackend')
 _('django_auth_ldap.backend.LDAPBackend')
 _('nextPage')
 _('thisPage:%(page)s')
@@ -61,84 +63,6 @@ def getAbsoluteUrl(req):
       ''' url.index('%s') will raise the ValueError if string not found '''
       pass
    return url
-
-class Login( View ):
-   def __loadDefault__(self, req):
-      params=dict()
-      try:
-         params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
-         if params['next']==reverse('webframe:login'):
-            raise ValueError #Make sure do not loopback the login page.
-         if params['next']==reverse('webframe:logout'):
-            raise ValueError #Make sure do not loopback the login page.
-      except:
-         params['next']=req.POST.get('next', req.GET.get('next', reverse('index')))
-      params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
-      params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
-      params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
-      params['socialLogin_google']=hasattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-      req.session['next']=params['next']
-      logger.debug('Next URL: {0}'.format(params['next']))
-      logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
-      params['backends']=[_(b) for b in settings.AUTHENTICATION_BACKENDS]
-      return params
-
-   def get(self, req):
-      'Return the login form'
-      params=self.__loadDefault__(req)
-      params['allow_registration']=getattr(settings, 'WEBAUTHN_ALLOW_REGISTRATION', False)
-      return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
-
-   def login(self, req, username, password):
-      params=self.__loadDefault__(req)
-
-      User=get_user_model()
-      if User.objects.exclude(username=getattr(settings, 'ANONYMOUS_USER_NAME', 'AnonymousUser')).count()<1:
-         ## 2017-09-30 10:44, Kenson Man
-         ## Let the first login user be the system administrator
-         u=User()
-         u.username=username
-         u.first_name='System'
-         u.last_name='Administrator'
-         u.is_staff=True
-         u.is_superuser=True
-         u.set_password(password)
-         u.save()
-         messages.warning(req, 'Created the first user %s as system administroator'%username)
-
-      try:
-         u=authenticate(req, username=username, password=password)
-         if not u: raise AttributeError
-         if not hasattr(u, 'profile'): raise TypeError
-         if u.profile:
-            if not u.profile.alive:
-               raise Error(lm('User[{0}] is expired! {1}~{2}', u.id, u.profile.effDate, u.profile.expDate))
-      except AttributeError:
-         logger.debug(lm('User<{0}> cannot be found, or the password is incorrect.', username))
-      except (User.profile.RelatedObjectDoesNotExist, TypeError):
-         logger.debug(lm('User<{0}> does not have the related profile, ignore the effective checking!', username))
-      except:
-         logger.debug('Failed to login', exc_info=True)
-         u=None
-      return u
-
-   def post(self, req):
-      params=self.__loadDefault__(req)
-      username=req.POST['username']
-      password=req.POST['current-password']
-      u=self.login(req, username, password)
-      if u:
-         auth_login(req, u)
-         nextUrl=params.get('next', reverse('index'))
-         return redirect(nextUrl)
-      if getattr(settings, 'WF_DEFAULT_LOGIN_WARNINGS', True): messages.warning(req, gettext('Invalid username or password'))
-      params['username']=username
-      return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'), params)
-      
-   def delete(self, req):
-      auth_logout(req)
-      next=req.POST.get('next', req.GET.get('next', '/'))
-      return redirect(next)
 
 class WebAuthnRegistration( View ):
    def get(self, req):
@@ -171,9 +95,9 @@ class WebAuthnRegistration( View ):
          rep.headers['Content-Type']='application/json'
          rep.write(json.dumps(rst))
          return rep
-      if getattr(settings, 'WEBAUTHN_ALLOW_REGISTRATION', False):
+      if getattr(settings, 'WEBFRAME_ALLOW_REGISTRATION', False):
          return render(req, getattr(settings, 'TMPL_WEBAUTHN_REGISTRATION', 'webframe/webauthn-registration.html'), params)
-      logger.warning('The configuration is not accept the registration. Use "WEBAUTHN_ALLOW_REGISTRATION=True" in settings.py to turn on')
+      logger.warning('The configuration is not accept the registration. Use "WEBFRAME_ALLOW_REGISTRATION=True" in settings.py to turn on')
       rep=HttpResponse(status=406)
       rep.write('SERVER IS NOT ACCEPT REGISTRATION')
       return rep
@@ -242,65 +166,84 @@ class WebAuthnRegistration( View ):
       return rep
 
 class WebAuthnAuthentication( View ):
+   def __loadDefault__(self, req):
+      params=dict()
+      try:
+         params['next']=req.POST.get('next', req.GET.get('next', None))
+         if params['next'] is None: params['next']=req.session.pop('next', '/')
+         if params['next']==reverse('webframe:login'): raise ValueError #Make sure do not loopback the login page.
+         if params['next']==reverse('webframe:logout'): raise ValueError #Make sure do not loopback the login page.
+      except:
+         params['next']=req.POST.get('next', req.GET.get('next', None))
+         if params['next'] is None: params['next']=req.session.pop('next', '/')
+      params['socialLogin_facebook']=hasattr(settings, 'SOCIAL_AUTH_FACEBOOK_KEY')
+      params['socialLogin_twitter']=hasattr(settings, 'SOCIAL_AUTH_TWITTER_KEY')
+      params['socialLogin_github']=hasattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
+      params['socialLogin_google']=hasattr(settings, 'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+      req.session['next']=params['next']
+      logger.debug('Next URL: {0}'.format(params['next']))
+      logger.debug('Login templates: %s'%getattr(settings, 'TMPL_LOGIN', 'webframe/login.html'))
+      params['backends']=[_(b) for b in settings.AUTHENTICATION_BACKENDS]
+      return params
+
+   def _get_with_json(self, req):
+      params=dict()
+      rep=HttpResponse()
+      rep.headers['Content-Type']='application/json'
+      from webauthn import generate_authentication_options, options_to_json, base64url_to_bytes as b64bytes
+      from webauthn.helpers.structs import UserVerificationRequirement, PublicKeyCredentialDescriptor, AuthenticatorSelectionCriteria, AuthenticatorAttachment, ResidentKeyRequirement
+      allowedCredentials=None
+      if 'username' in req.GET:
+         allowedCredentials=list()
+         u=get_user_model().objects.filter(username=req.GET['username'])
+         if len(u)==1:
+            for pubkey in WebAuthnPubkey.objects.filter(owner=u[0]):
+               logger.debug('Allowed Credential: {0}'.format(pubkey.id))
+               allowedCredentials.append(PublicKeyCredentialDescriptor(id=b64bytes(pubkey.id)))
+         else:
+            raise RuntimeError('Cannot found the specified user: {0}'.format(req.GET['username']))
+      opts = generate_authentication_options(
+           rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
+         , allow_credentials=allowedCredentials
+         , user_verification=UserVerificationRequirement.REQUIRED
+      )
+      req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8')
+      rep.write(options_to_json(opts))
+      return rep
+
    def get(self, req):
       params=dict()
       rep=HttpResponse()
       if req.headers.get('Accept')=='application/json':
-         rep.headers['Content-Type']='application/json'
-         from webauthn import generate_authentication_options, options_to_json, base64url_to_bytes as b64bytes
-         from webauthn.helpers.structs import UserVerificationRequirement, PublicKeyCredentialDescriptor, AuthenticatorSelectionCriteria, AuthenticatorAttachment, ResidentKeyRequirement
-         allowedCredentials=None
-         if 'username' in req.GET:
-            allowedCredentials=list()
-            u=User.objects.filter(username=req.GET['username'])
-            if len(u)==1:
-               for pubkey in WebAuthnPubkey.objects.filter(owner=u[0]):
-                  logger.debug('Allowed Credential: {0}'.format(pubkey.id))
-                  allowedCredentials.append(PublicKeyCredentialDescriptor(id=b64bytes(pubkey.id)))
-            else:
-               raise RuntimeError('Cannot found the exatcly user: {0}'.format(req.GET['username']))
-         opts = generate_authentication_options(
-              rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
-            , allow_credentials=allowedCredentials
-            , user_verification=UserVerificationRequirement.REQUIRED
-         )
-         req.session[SESSION_WEBAUTHN_CHALLENGE]=b64enc(opts.challenge).decode('utf-8')
-         rep.write(options_to_json(opts))
-         return rep
-      rep.status_code=405
-      rep.write('Unsupported Content-Type: {0}'.format(req.headers.get('Accept', 'text/html')))
-      return rep
+         return self._get_with_json(req)
+
+      #Return the WebForm for login
+      params=self.__loadDefault__(req)
+      params['WEBFRAME_ALLOW_REGISTRATION']=getattr(settings, 'WEBFRAME_ALLOW_REGISTRATION', False)
+      params['next']=req.GET.get('next', req.session.get('next', None))
+      return render(req, getattr(settings, 'TMPL_LOGIN', 'webframe/webauthn-authentication.html'), params)
+
+   def delete(self, req):
+      auth_logout(req)
+      next=req.POST.get('next', req.GET.get('next', '/'))
+      return redirect(next)
 
    @transaction.atomic
-   def post(self, req):
+   def _post_with_json(self, req):
+      '''
+      Post with json, the server will trying to login the user with WebAuthn Pubkey authentication.
+      '''
       rep=HttpResponse()
       rep.headers['Content-Type']='application/json'
       result=dict()
       try:
-         from webauthn import verify_authentication_response, options_to_json, base64url_to_bytes as b64bytes
-         from webauthn.helpers.structs import AuthenticationCredential
-         logger.debug(req.body)
-         challenge=b64dec(req.session[SESSION_WEBAUTHN_CHALLENGE])
-         pubkey=WebAuthnPubkey.objects.get(id=json.loads(req.body.decode('utf-8'))['id'])
-         origin=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk')
-         if not origin.startswith('http'): origin='https://{0}'.format(origin)
-         verification = verify_authentication_response(
-            credential=AuthenticationCredential.parse_raw(req.body),
-            expected_challenge=challenge,
-            expected_rp_id=getattr(settings, 'WEBAUTHN_RP_ID', 'webframe.kenson.idv.hk'),
-            expected_origin=origin,
-            credential_public_key=b64bytes(pubkey.pubkey),
-            credential_current_sign_count=pubkey.signCount,
-            require_user_verification=True,
-         )
-         logger.debug('Verificated!!!')
-         pubkey.lastSignin=datetime.now()
-         pubkey.ipaddr=getClientIP(req)
-         pubkey.save()
-         auth_login(req, pubkey.owner)
+         u=authenticate(req, cred=req.body)
+         if not u: raise get_user_model().DoesNotExist
+         auth_login(req, u)
          logger.debug('Saved the login into session!')
          result['verified']=True
-      except WebAuthnPubkey.DoesNotExist:
+      except (get_user_model().DoesNotExist, WebAuthnPubkey.DoesNotExist):
+         logger.warning('credential not found', exc_info=True)
          result['verified']=False
          result['error']='credential not found'
          result['message']='The specified credential not found, please register before login'
@@ -311,6 +254,28 @@ class WebAuthnAuthentication( View ):
          if SESSION_WEBAUTHN_CHALLENGE in req.session: del req.session[SESSION_WEBAUTHN_CHALLENGE]
          rep.write(json.dumps(result))
       return rep
+
+   def _post_with_formdata(self, req):
+      params=self.__loadDefault__(req)
+      username=req.POST['username']
+      password=req.POST['current-password']
+      u=authenticate(req, username=username, password=password)
+      if u:
+         auth_login(req, u)
+         nextUrl=params.get('next', reverse('index'))
+         return JsonResponse({'result':True, 'next':nextUrl})
+
+      if getattr(settings, 'WF_DEFAULT_LOGIN_WARNINGS', True): messages.warning(req, gettext('Invalid username or password'))
+      params['username']=username
+      rep=JsonResponse({'result':False, 'message':gettext('Invalid username or password')})
+      rep.status_code=401
+      return rep
+      
+   def post(self, req):
+      if req.headers.get('Content-Type')=='application/json':
+         return self._post_with_json(req)
+      else:
+         return self._post_with_formdata(req)
 
 class WebAuthnPubkeysView( LoginRequiredMixin, View ):
    def get(self, req):
@@ -341,7 +306,15 @@ def logout(req):
    '''
    Logout the session.
    '''
-   return Login().delete(req)
+   return WebAuthnAuthentication().delete(req)
+
+def login(req):
+   '''
+   Login alias
+   '''
+   nextUrl=req.GET.get('next', None)
+   if nextUrl: req.session['next']=nextUrl
+   return redirect('webframe:webauthn-authentication')
 
 @login_required
 def users(req):

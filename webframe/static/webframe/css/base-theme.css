@@ -37,6 +37,9 @@ div.pnl-btns {
   div.pnl-btns .btn {
     margin: 0px 5px; }
 
+.indicator-icon {
+  margin-right: 1rem; }
+
 div.pnl-lbtns {
   margin: 20px 10px; }
 

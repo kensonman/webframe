@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: webframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-07 10:07+0000\n"
+"POT-Creation-Date: 2022-09-21 13:49+0000\n"
 "PO-Revision-Date: 2019-04-18 23:03+0800\n"
 "Last-Translator: Kenson Man <kenson@kenson.idv.hk>\n"
 "Language-Team: Traditional Chinese\n"
@@ -71,14 +71,14 @@ msgstr "被歸類"
 msgid "webframe.models.Preference.expand"
 msgstr "展開"
 
-#: admin.py:120 templates/webframe/preference.html:138
-#: templates/webframe/preference.html:139
+#: admin.py:120 templates/webframe/preference.html:142
+#: templates/webframe/preference.html:143
 #: templates/webframe/prefsDoc-each.html:51
 msgid "webframe.models.Preference.value"
 msgstr "值"
 
-#: admin.py:126 templates/webframe/preference.html:125
-#: templates/webframe/preference.html:126
+#: admin.py:126 templates/webframe/preference.html:129
+#: templates/webframe/preference.html:130
 #: templates/webframe/prefsDoc-each.html:31
 msgid "webframe.models.Preference.parent"
 msgstr "歸類"
@@ -103,17 +103,17 @@ msgstr "使用者"
 msgid "TokenDetail.token"
 msgstr "Token"
 
-#: authentications.py:62
+#: authentications.py:59
+msgid "invalid username or password"
+msgstr "使用者名稱或密碼有誤"
+
+#: authentications.py:74
 msgid "Your account is not effective"
 msgstr "你的帳戶未生效"
 
-#: authentications.py:70
+#: authentications.py:82
 msgid "Your account is not configured correctly"
 msgstr "你的帳戶並未設定正確，請與系統管理員聯絡"
-
-#: authentications.py:80
-msgid "invalid username or password"
-msgstr "使用者名稱或密碼有誤"
 
 #: models.py:31
 msgid "null"
@@ -518,192 +518,192 @@ msgstr "屬性"
 msgid "MenuItem.props.help"
 msgstr "將會附加於 MenuItem"
 
-#: models.py:1149
+#: models.py:1150
 msgid "Translation"
 msgstr "翻釋"
 
-#: models.py:1150
+#: models.py:1151
 msgid "Translations"
 msgstr "翻釋"
 
-#: models.py:1156 views.py:642
+#: models.py:1157
 msgid "english"
 msgstr "English"
 
-#: models.py:1157 views.py:645
+#: models.py:1158
 msgid "zh-hant"
 msgstr "繁體中文"
 
-#: models.py:1158
+#: models.py:1159
 msgid "zh-hans"
 msgstr "简体中文"
 
-#: models.py:1161
+#: models.py:1162
 msgid "Translation.key"
 msgstr "索引"
 
-#: models.py:1161
+#: models.py:1162
 msgid "Translation.key.helptext"
 msgstr "用於程式找到所需的翻釋"
 
-#: models.py:1162
+#: models.py:1163
 msgid "Translation.locale"
 msgstr "語言"
 
-#: models.py:1162
+#: models.py:1163
 msgid "Translation.locale.helptext"
 msgstr "這個翻釋的所屬語言"
 
-#: models.py:1163
+#: models.py:1164
 msgid "Translation.msg"
 msgstr "文字"
 
-#: models.py:1163
+#: models.py:1164
 msgid "Translation.msg.helptext"
 msgstr "文字翻釋"
 
-#: models.py:1164
+#: models.py:1165
 msgid "Translation.pmsg"
 msgstr "眾數文字"
 
-#: models.py:1164
+#: models.py:1165
 msgid "Translation.pmsg.helptext"
 msgstr "眾數文字翻釋"
 
-#: models.py:1173
+#: models.py:1174
 msgid "WebAuthnPubkey"
 msgstr "登入公鑰"
 
-#: models.py:1174 templates/webframe/pubkeys.html:3
-#: templates/webframe/pubkeys.html:44
+#: models.py:1175 templates/webframe/pubkeys.html:3
+#: templates/webframe/pubkeys.html:39
 msgid "WebAuthnPubkeies"
 msgstr "登入公鑰"
 
-#: models.py:1176
+#: models.py:1177
 msgid "WebAuthnPubkey.id"
 msgstr "ID"
 
-#: models.py:1176
+#: models.py:1177
 msgid "WebAuthnPubkey.id.helptext"
 msgstr "用作系統識別"
 
-#: models.py:1177
+#: models.py:1178
 msgid "WebAuthnPubkey.displayName"
 msgstr "裝置名稱"
 
-#: models.py:1177
+#: models.py:1178
 msgid "WebAuthnPubkey.displayName.helptext"
 msgstr "公／私鑰對的名稱，用於該使用者識別"
 
-#: models.py:1178
+#: models.py:1179
 msgid "WebAuthnPubkey.pubkey"
 msgstr "公鑰"
 
-#: models.py:1178
+#: models.py:1179
 msgid "WebAuthnPubkey.pubkey.helptext"
 msgstr "公鑰 in base64"
 
-#: models.py:1179
+#: models.py:1180
 msgid "WebAuthnPubkey.tipe"
 msgstr "類別"
 
-#: models.py:1179
+#: models.py:1180
 msgid "WebAuthnPubkey.tipe.helptext"
 msgstr "通常為 public-key"
 
-#: models.py:1180
+#: models.py:1181
 msgid "WebAuthnPubkey.signCount"
 msgstr "SignCount"
 
-#: models.py:1180
+#: models.py:1181
 msgid "WebAuthnPubkey.signCount.helptext"
 msgstr "跟據 WebAuthn API Guide"
 
-#: models.py:1181
+#: models.py:1182
 msgid "WebAuthnPubkey.lastSignin"
 msgstr "上次登入日期"
 
-#: models.py:1181
+#: models.py:1182
 msgid "WebAuthnPubkey.lastSignin.helptext"
 msgstr "上次用於登入的日期"
 
-#: models.py:1182
+#: models.py:1183
 msgid "WebAuthnPubkey.ipaddr"
 msgstr "IP 地址"
 
-#: models.py:1182
+#: models.py:1183
 msgid "WebAuthnPubkey.ipaddr.helptext"
 msgstr "上次登入的 IP 地址"
 
-#: models.py:1188
+#: models.py:1189
 msgid "WebAuthnPubkey.owner"
 msgstr "擁有者"
 
-#: models.py:1189
+#: models.py:1190
 msgid "WebAuthnPubkey.owner.helptext"
 msgstr "持有這對公／私鑰的使用者"
 
-#: models.py:1194 templates/webframe/resetPassword.html:28
+#: models.py:1195 templates/webframe/resetPassword.html:28
 msgid "ResetPassword"
 msgstr "重設密碼"
 
-#: models.py:1195
+#: models.py:1196
 msgid "ResetPasswords"
 msgstr "重設密碼"
 
-#: models.py:1200
+#: models.py:1201
 msgid "ResetPassword.key"
 msgstr "KEY"
 
-#: models.py:1200
+#: models.py:1201
 msgid "ResetPassword.key.helptext"
 msgstr "由系統自動產生的重設密碼"
 
-#: models.py:1205
+#: models.py:1206
 msgid "ResetPassword.user"
 msgstr "所屬的使用者"
 
-#: models.py:1206
+#: models.py:1207
 msgid "ResetPassword.user.helptext"
 msgstr "擁有者"
 
-#: models.py:1208
+#: models.py:1209
 msgid "ResetPasssword.request_by"
 msgstr "重設密碼者"
 
-#: models.py:1208
+#: models.py:1209
 msgid "ResetPassword.request_by.helptext"
 msgstr "要求重設密碼者的 IP 地址"
 
-#: models.py:1209
+#: models.py:1210
 msgid "ResetPasssword.complete_by"
 msgstr "完成者"
 
-#: models.py:1209
+#: models.py:1210
 msgid "ResetPassword.complete_by.helptext"
 msgstr "完成重設密碼者的 IP 地址"
 
-#: models.py:1210
+#: models.py:1211
 msgid "ResetPassword.complete_date"
 msgstr "完成日期"
 
-#: models.py:1210
+#: models.py:1211
 msgid "ResetPassword.complete_date.helptext"
 msgstr "完成重設密碼的日期"
 
-#: models.py:1226
+#: models.py:1227
 msgid "TokenDetail"
 msgstr "Token Detail"
 
-#: models.py:1227
+#: models.py:1228
 msgid "TokenDetails"
 msgstr "Token Details"
 
-#: models.py:1230
+#: models.py:1231
 msgid "TokenDetail.name"
 msgstr "Token/裝置名稱"
 
-#: models.py:1230
+#: models.py:1231
 msgid "TokenDetail.name.helptext"
 msgstr "使用這個 Token 登入的裝置名稱"
 
@@ -718,7 +718,7 @@ msgstr "系統維護中"
 
 #: templates/webframe/errorpages/503.html:3
 #: templates/webframe/header-sample.html:3 templates/webframe/menuitem.html:3
-#: templates/webframe/meta.html:3 views.py:625 views.py:672
+#: templates/webframe/meta.html:3 views.py:653
 msgid "appName"
 msgstr ""
 
@@ -775,9 +775,9 @@ msgid "health.models.Categories"
 msgstr "類型"
 
 #: templates/webframe/header-sample.html:21 templates/webframe/pubkey.html:3
-#: templates/webframe/pubkey.html:23 templates/webframe/user.html:3
-#: templates/webframe/user.html:23 templates/webframe/users.html:3
-#: templates/webframe/users.html:29
+#: templates/webframe/pubkey.html:24 templates/webframe/user.html:3
+#: templates/webframe/user.html:21 templates/webframe/users.html:3
+#: templates/webframe/users.html:30
 msgid "users"
 msgstr "使用者"
 
@@ -795,97 +795,10 @@ msgstr "個人設定"
 msgid "logout"
 msgstr "登出"
 
-#: templates/webframe/header-sample.html:32 templates/webframe/login.html:98
+#: templates/webframe/header-sample.html:32
+#: templates/webframe/webauthn-authentication.html:96
 msgid "login"
 msgstr "登入"
-
-#: templates/webframe/login.html:3 templates/webframe/login.html:39
-msgid "Login Required"
-msgstr "請先登入"
-
-#: templates/webframe/login.html:21
-msgid "Loading authentication options from server..."
-msgstr "正在從伺服器取得登入資訊..."
-
-#: templates/webframe/login.html:22
-msgid "Got authentication options, authenticating..."
-msgstr "已取得登入資訊，正在驗證..."
-
-#: templates/webframe/login.html:23
-msgid "Authenticated, verification in progress."
-msgstr "已驗證，正在上傳結果到伺服器..."
-
-#: templates/webframe/login.html:24
-#: templates/webframe/webauthn-registration.html:20
-msgid "Got server verification result"
-msgstr "已取得伺服器回覆"
-
-#: templates/webframe/login.html:25
-msgid "Authentication successful, the page will be redirected soon..."
-msgstr "登入成功，正在跳到下一步頁面..."
-
-#: templates/webframe/login.html:26
-#, python-format
-msgid "Authentication failure: %(error)s"
-msgstr "登入錯誤: %(error)s"
-
-#: templates/webframe/login.html:47
-msgid "login-facebook"
-msgstr "Facebook 登入"
-
-#: templates/webframe/login.html:50
-msgid "login-twitter"
-msgstr "Twitter 登入"
-
-#: templates/webframe/login.html:53
-msgid "login-github"
-msgstr "GitHub 登入"
-
-#: templates/webframe/login.html:56
-msgid "login-google"
-msgstr "Google 登入"
-
-#: templates/webframe/login.html:61
-msgid "OR"
-msgstr "使用者登入"
-
-#: templates/webframe/login.html:69
-msgid "Authentication Backends"
-msgstr "可使用登入方法"
-
-#: templates/webframe/login.html:77
-msgid "IPAddr"
-msgstr "IP 地址"
-
-#: templates/webframe/login.html:81 templates/webframe/login.html:83
-#: templates/webframe/pubkey.html:32 templates/webframe/pubkey.html:33
-#: templates/webframe/resetPassword.html:24 templates/webframe/user.html:32
-#: templates/webframe/user.html:33
-#: templates/webframe/webauthn-registration.html:48
-#: templates/webframe/webauthn-registration.html:50
-msgid "username"
-msgstr "用戶名稱"
-
-#: templates/webframe/login.html:86
-msgid "thru password login"
-msgstr "使用密碼登入"
-
-#: templates/webframe/login.html:92 templates/webframe/login.html:93
-#: templates/webframe/pubkey.html:36 templates/webframe/pubkey.html:37
-#: templates/webframe/resetPassword.html:21 templates/webframe/user.html:36
-#: templates/webframe/user.html:37
-msgid "password"
-msgstr "密碼"
-
-#: templates/webframe/login.html:96 templates/webframe/resetPassword.html:3
-#: templates/webframe/resetPassword.html:10 views.py:738 views.py:767
-msgid "resetPassword"
-msgstr "重設密碼"
-
-#: templates/webframe/login.html:97
-#: templates/webframe/webauthn-registration.html:71
-msgid "registration"
-msgstr "登記"
 
 #: templates/webframe/pagination.html:22 templates/webframe/tables.html:12
 #, python-format
@@ -897,13 +810,13 @@ msgstr ""
 msgid "pagination-norecord"
 msgstr "沒有相關資料"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:93
-#: templates/webframe/preference.html:101
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:97
+#: templates/webframe/preference.html:105
 msgid "Preference.new"
 msgstr "新的設定"
 
-#: templates/webframe/preference.html:3 templates/webframe/preference.html:93
-#: templates/webframe/preference.html:101
+#: templates/webframe/preference.html:3 templates/webframe/preference.html:97
+#: templates/webframe/preference.html:105
 #, python-format
 msgid "%(pref)s - Preferences"
 msgstr "%(pref)s - 喜好"
@@ -912,143 +825,143 @@ msgstr "%(pref)s - 喜好"
 msgid "brand"
 msgstr "WebFrame"
 
-#: templates/webframe/preference.html:74
+#: templates/webframe/preference.html:78
 msgid "Preference.value.validation.uuid"
 msgstr "不是正確的 UUID 格式. 請輸入以 豆號 分隔的 UUIDs"
 
-#: templates/webframe/preference.html:103
+#: templates/webframe/preference.html:107
 msgid "Config.new"
 msgstr "新增設定"
 
-#: templates/webframe/preference.html:103
+#: templates/webframe/preference.html:107
 #, python-format
 msgid "%(pref)s - Configuration"
 msgstr "%(pref)s - 設定"
 
-#: templates/webframe/preference.html:111
+#: templates/webframe/preference.html:115
 #: templates/webframe/prefsDoc-each.html:8
 #: templates/webframe/prefsDoc-each.html:26
 msgid "webframe.models.Preference.tipe"
 msgstr "類型"
 
-#: templates/webframe/preference.html:114
+#: templates/webframe/preference.html:118
 msgid "-- Please Select --"
 msgstr "-- 請選擇 --"
 
-#: templates/webframe/preference.html:121
-#: templates/webframe/preference.html:122
+#: templates/webframe/preference.html:125
+#: templates/webframe/preference.html:126
 msgid "webframe.models.Preference.id"
 msgstr "ID"
 
-#: templates/webframe/preference.html:129
-#: templates/webframe/preference.html:130
+#: templates/webframe/preference.html:133
+#: templates/webframe/preference.html:134
 #: templates/webframe/prefsDoc-each.html:6
 msgid "webframe.models.Preference.owner"
 msgstr "擁有人"
 
-#: templates/webframe/preference.html:134
-#: templates/webframe/preference.html:135
+#: templates/webframe/preference.html:138
+#: templates/webframe/preference.html:139
 #: templates/webframe/prefsDoc-each.html:5
 msgid "webframe.models.Preference.name"
 msgstr "設定名稱"
 
-#: templates/webframe/preference.html:142
-#: templates/webframe/preference.html:143
+#: templates/webframe/preference.html:146
+#: templates/webframe/preference.html:147
 #: templates/webframe/prefsDoc-each.html:7
 #: templates/webframe/prefsDoc-each.html:36
 msgid "webframe.models.Preference.sequence"
 msgstr "排序"
 
-#: templates/webframe/preference.html:146
+#: templates/webframe/preference.html:150
 msgid "Preference.actions.delete"
 msgstr "刪除設定"
 
-#: templates/webframe/preference.html:147
+#: templates/webframe/preference.html:151
 msgid "Preference.actions.save"
 msgstr "存儲設定"
 
-#: templates/webframe/preference.html:152
+#: templates/webframe/preference.html:156
 msgid "Preference.childs"
 msgstr "歸類到這個設定的設定"
 
-#: templates/webframe/preference.html:156
+#: templates/webframe/preference.html:160
 msgid "Preference.actions.addChild"
 msgstr "新增一個歸類到這個設定的設定"
 
-#: templates/webframe/preference.html:156
+#: templates/webframe/preference.html:160
 msgid "Config.actions.addChild"
 msgstr "新增一個歸類到這個設定的設定"
 
-#: templates/webframe/preferences.html:3 templates/webframe/preferences.html:21
+#: templates/webframe/preferences.html:3 templates/webframe/preferences.html:31
 #, python-format
 msgid "%(user)s's preferences"
 msgstr "我<!--%(user)s-->的設定"
 
-#: templates/webframe/preferences.html:27
+#: templates/webframe/preferences.html:37
 msgid "Preference.sections.changePassword"
 msgstr "設定密碼"
 
-#: templates/webframe/preferences.html:31
-#: templates/webframe/preferences.html:32
+#: templates/webframe/preferences.html:41
+#: templates/webframe/preferences.html:42
 msgid "BTUser.old-password"
 msgstr "舊密碼"
 
-#: templates/webframe/preferences.html:36
-#: templates/webframe/preferences.html:37
+#: templates/webframe/preferences.html:46
+#: templates/webframe/preferences.html:47
 msgid "BTUser.password"
 msgstr "密碼"
 
-#: templates/webframe/preferences.html:40
-#: templates/webframe/preferences.html:41
+#: templates/webframe/preferences.html:50
+#: templates/webframe/preferences.html:51
 msgid "BTUser.re-password"
 msgstr "確認密碼"
 
-#: templates/webframe/preferences.html:44
+#: templates/webframe/preferences.html:54
 msgid "Preference.actions.changePassword"
 msgstr "更新密碼"
 
-#: templates/webframe/preferences.html:55
+#: templates/webframe/preferences.html:65
 msgid "Preference.sections.pin"
 msgstr "個人資料"
 
-#: templates/webframe/preferences.html:58
-#: templates/webframe/preferences.html:59 templates/webframe/pubkey.html:49
-#: templates/webframe/pubkey.html:50 templates/webframe/user.html:49
-#: templates/webframe/user.html:50
+#: templates/webframe/preferences.html:68
+#: templates/webframe/preferences.html:69 templates/webframe/pubkey.html:50
+#: templates/webframe/pubkey.html:51 templates/webframe/user.html:47
+#: templates/webframe/user.html:48
 msgid "first name"
 msgstr "名字"
 
-#: templates/webframe/preferences.html:62
-#: templates/webframe/preferences.html:63 templates/webframe/pubkey.html:53
-#: templates/webframe/pubkey.html:54 templates/webframe/user.html:53
-#: templates/webframe/user.html:54
+#: templates/webframe/preferences.html:72
+#: templates/webframe/preferences.html:73 templates/webframe/pubkey.html:54
+#: templates/webframe/pubkey.html:55 templates/webframe/user.html:51
+#: templates/webframe/user.html:52
 msgid "last name"
 msgstr "姓氏"
 
-#: templates/webframe/preferences.html:66
-#: templates/webframe/preferences.html:67 templates/webframe/pubkey.html:45
-#: templates/webframe/pubkey.html:46 templates/webframe/user.html:45
-#: templates/webframe/user.html:46
+#: templates/webframe/preferences.html:76
+#: templates/webframe/preferences.html:77 templates/webframe/pubkey.html:46
+#: templates/webframe/pubkey.html:47 templates/webframe/user.html:43
+#: templates/webframe/user.html:44
 msgid "email address"
 msgstr "電郵地址"
 
-#: templates/webframe/preferences.html:70
+#: templates/webframe/preferences.html:80
 msgid "User.actions.update"
 msgstr "更新使用者"
 
-#: templates/webframe/preferences.html:80
+#: templates/webframe/preferences.html:90
 msgid "Preference.sections.preference"
 msgstr "個人設定"
 
-#: templates/webframe/preferences.html:84
+#: templates/webframe/preferences.html:94
 msgid "Preference.actions.addPref"
 msgstr "新增個人設定"
 
-#: templates/webframe/preferences.html:92
+#: templates/webframe/preferences.html:102
 msgid "Preference.sections.config"
 msgstr "系統設定"
 
-#: templates/webframe/preferences.html:96
+#: templates/webframe/preferences.html:106
 msgid "Preference.actions.addConfig"
 msgstr "新增系統設定"
 
@@ -1060,57 +973,75 @@ msgstr "正則表達式"
 msgid "prefDoc.title"
 msgstr "設定說明"
 
-#: templates/webframe/pubkey.html:3 templates/webframe/pubkey.html:23
-#: templates/webframe/user.html:3 templates/webframe/user.html:23
+#: templates/webframe/pubkey.html:3 templates/webframe/pubkey.html:24
+#: templates/webframe/user.html:3 templates/webframe/user.html:21
 msgid "User.new"
 msgstr "新的用戶"
 
-#: templates/webframe/pubkey.html:28 templates/webframe/user.html:28
+#: templates/webframe/pubkey.html:29 templates/webframe/user.html:26
 msgid "id"
 msgstr "ID"
 
-#: templates/webframe/pubkey.html:38 templates/webframe/user.html:38
+#: templates/webframe/pubkey.html:33 templates/webframe/pubkey.html:34
+#: templates/webframe/resetPassword.html:24 templates/webframe/user.html:30
+#: templates/webframe/user.html:31
+#: templates/webframe/webauthn-authentication.html:81
+#: templates/webframe/webauthn-authentication.html:83
+#: templates/webframe/webauthn-registration.html:46
+#: templates/webframe/webauthn-registration.html:48
+msgid "username"
+msgstr "用戶名稱"
+
+#: templates/webframe/pubkey.html:37 templates/webframe/pubkey.html:38
+#: templates/webframe/resetPassword.html:21 templates/webframe/user.html:34
+#: templates/webframe/user.html:35
+#: templates/webframe/webauthn-authentication.html:90
+#: templates/webframe/webauthn-authentication.html:91
+msgid "password"
+msgstr "密碼"
+
+#: templates/webframe/pubkey.html:39 templates/webframe/user.html:36
 msgid "input to change password"
 msgstr "如需更變密碼，請在這裏輸入新密碼"
 
-#: templates/webframe/pubkey.html:40 templates/webframe/pubkey.html:41
-#: templates/webframe/user.html:40 templates/webframe/user.html:41
+#: templates/webframe/pubkey.html:41 templates/webframe/pubkey.html:42
+#: templates/webframe/user.html:38 templates/webframe/user.html:39
 msgid "confirm password"
 msgstr "確認密碼"
 
-#: templates/webframe/pubkey.html:42 templates/webframe/user.html:42
+#: templates/webframe/pubkey.html:43 templates/webframe/user.html:40
 msgid "reinput password to re-confirm"
 msgstr "請再輸入一次新密碼，以確認無誤"
 
-#: templates/webframe/pubkey.html:58 templates/webframe/user.html:58
+#: templates/webframe/pubkey.html:59 templates/webframe/user.html:56
 msgid "active"
 msgstr "Active"
 
-#: templates/webframe/pubkey.html:62 templates/webframe/user.html:62
+#: templates/webframe/pubkey.html:63 templates/webframe/user.html:60
 msgid "staff status"
 msgstr "是否員工"
 
-#: templates/webframe/pubkey.html:66 templates/webframe/user.html:66
+#: templates/webframe/pubkey.html:67 templates/webframe/user.html:64
 msgid "superuser status"
 msgstr "是否超及用戶"
 
-#: templates/webframe/pubkey.html:72 templates/webframe/user.html:72
+#: templates/webframe/pubkey.html:73 templates/webframe/user.html:70
 msgid "user.group"
 msgstr "所屬群組"
 
-#: templates/webframe/pubkey.html:89 templates/webframe/user.html:89
+#: templates/webframe/pubkey.html:90 templates/webframe/user.html:87
 msgid "impersonate-start"
 msgstr "扮演此使用者"
 
-#: templates/webframe/pubkey.html:90 templates/webframe/user.html:90
+#: templates/webframe/pubkey.html:91 templates/webframe/user.html:88
 msgid "Group Admin"
 msgstr "管理群組"
 
-#: templates/webframe/pubkey.html:92 templates/webframe/user.html:92
+#: templates/webframe/pubkey.html:93 templates/webframe/user.html:90
 msgid "User.actions.delete"
 msgstr "刪除使用者"
 
-#: templates/webframe/pubkey.html:93 templates/webframe/user.html:93
+#: templates/webframe/pubkey.html:94 templates/webframe/user.html:91
 msgid "User.actions.save"
 msgstr "存儲使用者"
 
@@ -1119,9 +1050,15 @@ msgstr "存儲使用者"
 msgid "WebAuthnPubkey.confirmDelete %(id)s"
 msgstr "你確認刪除這個公鑰：%(id)s"
 
-#: templates/webframe/pubkeys.html:48
+#: templates/webframe/pubkeys.html:43
 msgid "WebAuthnPubkey.actions.new"
 msgstr "登記新的登入方法"
+
+#: templates/webframe/resetPassword.html:3
+#: templates/webframe/resetPassword.html:10
+#: templates/webframe/webauthn-authentication.html:94 views.py:719 views.py:748
+msgid "resetPassword"
+msgstr "重設密碼"
 
 #: templates/webframe/resetPassword.html:20
 msgid "email"
@@ -1151,9 +1088,81 @@ msgstr "<i class=\"fas fa-angle-right\"></i>"
 msgid "pagination.last"
 msgstr "<i class=\"fas fa-angle-double-right\"></i>"
 
-#: templates/webframe/users.html:33
+#: templates/webframe/users.html:34
 msgid "User.actions.new"
 msgstr "新增使用者"
+
+#: templates/webframe/webauthn-authentication.html:3
+#: templates/webframe/webauthn-authentication.html:40
+msgid "Login Required"
+msgstr "請先登入"
+
+#: templates/webframe/webauthn-authentication.html:21
+msgid "Loading authentication options from server..."
+msgstr "正在從伺服器取得登入資訊..."
+
+#: templates/webframe/webauthn-authentication.html:22
+msgid "Got authentication options, authenticating..."
+msgstr "已取得登入資訊，正在驗證..."
+
+#: templates/webframe/webauthn-authentication.html:23
+msgid "Authenticated, verification in progress..."
+msgstr "已驗證，正在上傳結果到伺服器..."
+
+#: templates/webframe/webauthn-authentication.html:24
+#: templates/webframe/webauthn-registration.html:20
+msgid "Got server verification result"
+msgstr "已取得伺服器回覆"
+
+#: templates/webframe/webauthn-authentication.html:25
+msgid "Authentication successful, the page will be redirected soon..."
+msgstr "登入成功，正在跳到下一步頁面..."
+
+#: templates/webframe/webauthn-authentication.html:26
+msgid "It may be username/password mismatched"
+msgstr ""
+
+#: templates/webframe/webauthn-authentication.html:27
+#, python-format
+msgid "Authentication failure: %(error)s"
+msgstr "登入錯誤: %(error)s"
+
+#: templates/webframe/webauthn-authentication.html:48
+msgid "login-facebook"
+msgstr "Facebook 登入"
+
+#: templates/webframe/webauthn-authentication.html:51
+msgid "login-twitter"
+msgstr "Twitter 登入"
+
+#: templates/webframe/webauthn-authentication.html:54
+msgid "login-github"
+msgstr "GitHub 登入"
+
+#: templates/webframe/webauthn-authentication.html:57
+msgid "login-google"
+msgstr "Google 登入"
+
+#: templates/webframe/webauthn-authentication.html:62
+msgid "OR"
+msgstr "使用者登入"
+
+#: templates/webframe/webauthn-authentication.html:68
+msgid "Authentication Backends"
+msgstr "可使用登入方法"
+
+#: templates/webframe/webauthn-authentication.html:77
+msgid "IPAddr"
+msgstr "IP 地址"
+
+#: templates/webframe/webauthn-authentication.html:85
+msgid "thru password login"
+msgstr "使用密碼登入"
+
+#: templates/webframe/webauthn-authentication.html:95
+#: templates/webframe/webauthn-registration.html:69
+msgid "registration"
+msgstr "登記"
 
 #: templates/webframe/webauthn-registration.html:3
 #: templates/webframe/webauthn-registration.html:34
@@ -1187,32 +1196,32 @@ msgstr "證記錯誤，可能這使用者已登記..."
 
 #: templates/webframe/webauthn-registration.html:24
 msgid ""
-"The user is already registered. Please select another one or <a "
-"href=\"%%(loginUrl)s\" target=\"_self\">Login</a> to register the new public "
-"key'"
+"The user is already registered. Please select another one or <a href="
+"\"%%(loginUrl)s\" target=\"_self\">Login</a> to register the new public key'"
 msgstr ""
 "這個使用者名稱已被使用，請重新選取另一個名稱，或請先<a href=\"%(loginUrl)s\" "
 "target=\"_self\">登入</a>，再登記公/私鑰。"
 
-#: templates/webframe/webauthn-registration.html:52
+#: templates/webframe/webauthn-registration.html:50
 msgid "authenticator.unspecified"
 msgstr "Unspecified"
 
-#: templates/webframe/webauthn-registration.html:54
+#: templates/webframe/webauthn-registration.html:52
+#: templates/webframe/webauthn-registration.html:53
 #, python-format
 msgid "authenticator:%(authenticator)s"
 msgstr "Authenticator: %(authenticator)s"
 
-#: templates/webframe/webauthn-registration.html:59
+#: templates/webframe/webauthn-registration.html:57
 msgid "authenticator.crossPlatform"
 msgstr "Cross Platform"
 
-#: templates/webframe/webauthn-registration.html:60
+#: templates/webframe/webauthn-registration.html:58
 msgid "authenticator.platform"
 msgstr "Platform (TPM)"
 
-#: templates/webframe/webauthn-registration.html:66
-#: templates/webframe/webauthn-registration.html:67
+#: templates/webframe/webauthn-registration.html:64
+#: templates/webframe/webauthn-registration.html:65
 msgid "displayName"
 msgstr "裝置名稱"
 
@@ -1221,63 +1230,71 @@ msgid "django.contrib.auth.backends.ModelBackend"
 msgstr "標準 Username 和 Password"
 
 #: views.py:44
+msgid "webframe.authentications.EffectiveUserAuthenticationBackend"
+msgstr "標準 Username 和 Password （必需為已啟用的有效用戶）"
+
+#: views.py:45
+msgid "webframe.authentications.WebAuthnBackend"
+msgstr "跟據 WebAuthn FIDO2 制度，使用指紋、安全金鑰來認證"
+
+#: views.py:46
 msgid "django_auth_ldap.backend.LDAPBackend"
 msgstr "LDAP 或 Active Directory 登入"
 
-#: views.py:45
+#: views.py:47
 msgid "nextPage"
 msgstr "下一頁 <i class=\"fas fa-angle-double-right\"></i>"
 
-#: views.py:46
+#: views.py:48
 #, python-format
 msgid "thisPage:%(page)s"
 msgstr "此頁: %(page)s"
 
-#: views.py:47
+#: views.py:49
 msgid "prevPage"
 msgstr "<i class=\"fas fa-angle-double-left\"></i> 下一頁"
 
-#: views.py:134
+#: views.py:268 views.py:270
 msgid "Invalid username or password"
 msgstr "使用者名稱或密碼有誤"
 
-#: views.py:401
+#: views.py:374
 msgid "User.msg.confirmDelete"
 msgstr "你確認要刪除這個使用者？請注意，這個動作不能取消！"
 
-#: views.py:569
+#: views.py:542
 msgid "Preference.msg.confirmDelete"
 msgstr "你確認要刪除這個設定？請注意，這個動作不能取消！"
 
-#: views.py:692 views.py:773
+#: views.py:673 views.py:754
 msgid "ResetPassword.tokenNotFound"
 msgstr "找到到有效的 Token"
 
-#: views.py:694 views.py:775
+#: views.py:675 views.py:756
 msgid "ResetPassword.userNotFound"
 msgstr "找不到使用者"
 
-#: views.py:696 views.py:777
+#: views.py:677 views.py:758
 msgid "ResetPassword.notEffective"
 msgstr "不是有效的 Token"
 
-#: views.py:722
+#: views.py:703
 #, python-format
 msgid "Cannot found the user: %(username)s"
 msgstr "找不到這個使用者: %(username)s"
 
-#: views.py:729
+#: views.py:710
 msgid "Too many times to reset password"
 msgstr "嘗試太多次了。請於一小時後再試。"
 
-#: views.py:744
+#: views.py:725
 #, python-format
 msgid ""
 "The reset password instruction has been email to %(email)s. Please follow "
 "the instruction to reset your password"
 msgstr ""
 
-#: views.py:746
+#: views.py:727
 #, python-format
 msgid ""
 "You didn't setup an email in the system. Please contact your system-"
@@ -1287,7 +1304,7 @@ msgstr ""
 "你沒有設定/確認電郵地址。請你聯絡系統管理員，並告知他（們）你的<keyword>使用"
 "者名稱</keyword>和這個參考編號：<keyword>%(id)s</keyword>。"
 
-#: views.py:765
+#: views.py:746
 msgid "The password has been updated successfully."
 msgstr ""
 

@@ -43,6 +43,10 @@ The line number is aligned with "./scripts.html". You can view it by belows comm
 <script type="text/javascript" src="{%static 'webframe/js/getQueryParams.js'%}"></script>
 <script type="text/javascript" src="{% url 'webframe:js' %}"></script>
 <script type="text/javascript"><!--
+//2022-09-07 15:26, Kenson Man
+Webframe.URL_API='{%url "webframe:urlreverse"%}';
+Webframe.REQUIRED_INDICATOR='{{INDICATOR_MANDATORY|safe}}';
+
 //2019-10-11 13:51 by Kenson: Fixing the DateTimePicker for Font Awesome 5
 //  Reference: https://tempusdominus.github.io/bootstrap-4/Options/
 $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
@@ -97,7 +101,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
    console.warn('{{VERSION|default:"beta or VERSION is not ready; Add webframe.providers.absolute_path into context_processors"}}');
    new Promise((res,rej)=>{res(document.querySelector('#pnl_root'));})
       .then( elem=>{ elem.style.display='block'; return elem; } )
-      .then( elem=>{ 'animate__animated animate__fadeIn'.split(' ').forEach(cls=>{elem.classList.add(cls);}); return elem; });
+      .then( elem=>{ elem.classList.add('animate__animated', 'animate__fadeIn'); return elem; })
+   ;
 
    //File component
    document.querySelectorAll('input[type=file]').forEach(elem=>{ 
@@ -109,17 +114,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
    //Mandatory Indicator
    if(typeof(_AutoRequiredIndicator)=='undefined' || _AutoRequiredIndicator){
       document.querySelectorAll('form').forEach(frm=>{ 
-         frm.querySelectorAll('input[required],textarea[required],select[required]').forEach(fld=>{
-            if(fld.attributes.id && document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).length>0){
-               document.querySelectorAll(`label[for=${fld.attributes.id.value}]`).forEach(lbl=>{ lbl.innerHTML='{{INDICATOR_MANDATORY|safe}}' });
-            }else{
-               let parent=fld;
-               do{ parent=parent.parentElement; }
-               while( parent!=null && !parent.classList.contains('field') );
-               if(parent!=null)
-                  parent.querySelector('label').innerHTML='{{INDICATOR_MANDATORY|safe}}';
-            }
-         });
+         frm.querySelectorAll('input,textarea,select').forEach(fld=>{fld.addEventListener('required', Webframe.handleRequiredIndicator)});
+         frm.querySelectorAll('input[required],textarea[required],select[required]').forEach(fld=>{fld.dispatchEvent(new Event('required'))});
       });
    };
 
@@ -131,7 +127,4 @@ document.addEventListener('DOMContentLoaded', ()=>{
       });
    });
 });
-
-//2022-09-07 15:26, Kenson Man
-Webframe.URL_API='{%url "webframe:urlreverse"%}';
 //--></script>

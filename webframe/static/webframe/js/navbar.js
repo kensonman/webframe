@@ -79,7 +79,7 @@ Webframe.loadNavBar=function( qsResult ){
    qsResult.forEach( elem => {
       elem.innerText='Loading...'
       console.debug(`Loading navbar from ${elem.attributes['href'].value} ...`);
-      'navbar navbar-expand-lg navbar-light bg-light webframe-navbar'.split(' ').forEach( cls=>elem.classList.add(cls) );
+      elem.classList.add('navbar', 'navbar-expand-lg', 'navbar-light', 'bg-light', 'webframe-navbar');
       axios.get(elem.attributes['href'].value)
          .then(rep=>{
             let data=rep.data;
